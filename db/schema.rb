@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_21_200653) do
+ActiveRecord::Schema.define(version: 2021_02_22_131033) do
 
   create_table "accounts", charset: "utf8mb4", force: :cascade do |t|
     t.string "orgainization_name"
@@ -18,6 +18,8 @@ ActiveRecord::Schema.define(version: 2021_02_21_200653) do
     t.string "account_type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "domain"
+    t.string "subdomain"
   end
 
   create_table "action_mailbox_inbound_emails", charset: "utf8mb4", force: :cascade do |t|
@@ -414,6 +416,7 @@ ActiveRecord::Schema.define(version: 2021_02_21_200653) do
     t.decimal "taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.boolean "store_owner_notification_delivered"
+    t.integer "account_id"
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"
@@ -548,6 +551,7 @@ ActiveRecord::Schema.define(version: 2021_02_21_200653) do
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "promotionable", default: true
     t.string "meta_title"
+    t.integer "account_id"
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_products_on_discontinue_on"
@@ -1025,6 +1029,8 @@ ActiveRecord::Schema.define(version: 2021_02_21_200653) do
     t.string "new_order_notifications_email"
     t.integer "checkout_zone_id"
     t.string "seo_robots"
+    t.string "admin_email"
+    t.integer "account_id"
     t.index ["code"], name: "index_spree_stores_on_code", unique: true
     t.index ["default"], name: "index_spree_stores_on_default"
     t.index ["url"], name: "index_spree_stores_on_url"
@@ -1131,6 +1137,7 @@ ActiveRecord::Schema.define(version: 2021_02_21_200653) do
     t.string "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
+    t.integer "account_id"
     t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
     t.index ["email"], name: "email_idx_unique", unique: true

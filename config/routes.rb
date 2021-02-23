@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   mount Spree::Core::Engine, at: '/'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  Spree::Core::Engine.routes.prepend do
+   Spree::Core::Engine.routes.draw do
     namespace :admin do
       resources :accounts
       end

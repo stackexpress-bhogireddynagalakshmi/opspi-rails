@@ -16,13 +16,6 @@
     </ul>
   <% end %>
 
-
- <% if can?(:admin, Spree::ReturnAuthorization) || can?(:admin, Spree::CustomerReturn) %>
-    <ul class="nav nav-sidebar border-bottom" id="sidebarReturn">
-      <%= main_menu_tree Spree.t(:accounts), icon: "returns.svg", sub_menu: "returns", url: "#sidebar-returns" %>
-    </ul>
-  <% end %>
-
   <% if can?(:admin, Spree::ReturnAuthorization) || can?(:admin, Spree::CustomerReturn) %>
     <ul class="nav nav-sidebar border-bottom" id="sidebarReturn">
       <%= main_menu_tree Spree.t(:returns), icon: "returns.svg", sub_menu: "returns", url: "#sidebar-returns" %>

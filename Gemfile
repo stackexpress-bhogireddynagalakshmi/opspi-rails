@@ -60,4 +60,6 @@ gem 'spree_gateway', '~> 3.9'
 gem 'sassc', github: 'sass/sassc-ruby', branch: 'master'
 # gem 'spree_shared', github: 'spree-contrib/spree_shared', branch: 'master'
 gem 'acts_as_tenant'
+gem 'spree_i18n', github: 'spree-contrib/spree_i18n', branch: 'master'
+
 

@@ -13,6 +13,8 @@ Spree.config do |config|
   # Example:
   # Uncomment to stop tracking inventory levels in the application
   # config.track_inventory_levels = false
+  # config.menu_items << config.class::MenuItem.new([:accounts], 'icon-name', url: '/admin/accounts')
+
 
 end
 
@@ -32,4 +34,11 @@ end
 Spree.user_class = "Spree::User"
 
 Spree::BackendConfiguration::ORDER_TABS << :my_custom_orders
+
+
+
+# Spree::BackendConfiguration.configure do |config|
+#   config.locale = 'en'
+#   config.menu_items << config.class::MenuItem.new([:accounts], 'file', url: :admin_accounts_path)
+# end
 

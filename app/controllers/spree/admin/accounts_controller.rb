@@ -1,4 +1,4 @@
-class Spree::Admin::AccountsController < Spree::Admin::ResourceController
+class Spree::Admin::AccountsController < Spree::Admin::BaseController
 	
 
 end
