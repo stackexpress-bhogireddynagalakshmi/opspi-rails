@@ -24,7 +24,7 @@ module OpsPi
     config.load_defaults 6.1
     config.hosts = nil
 
-    
+    # config.assets.precompile += %w( store/all.js store/all.css admin/all.js admin/all.css)
 
     # Configuration for the application, engines, and railties goes here.
     #
