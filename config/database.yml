@@ -13,14 +13,14 @@ default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  host: <%= ENV['DEV_DATABASE_HOST'] %>
-  username: <%= ENV['DEV_DATABASE_USERNAME'] %> 
-  password: <%= ENV['DEV_DATABASE_PASSWORD'] %>
   socket: /var/run/mysqld/mysqld.sock
 
 development:
   <<: *default
-  database: ops_pi_development
+  database: <%= ENV['DEV_DATABASE_NAME'] %>
+  host: <%= ENV['DEV_DATABASE_HOST'] %>
+  username: <%= ENV['DEV_DATABASE_USERNAME'] %> 
+  password: <%= ENV['DEV_DATABASE_PASSWORD'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -52,6 +52,7 @@ test:
 production:
   <<: *default
   host: <%= ENV['PROD_DATABASE_HOST'] %>
+  database: <%= ENV['PROD_DATABASE_NAME'] %>
   username: <%= ENV['PROD_DATABASE_USERNAME'] %> 
   password: <%= ENV['PROD_DATABASE_PASSWORD'] %>
   password: <%= ENV['PROD_DATABASE_PASSWORD'] %>
