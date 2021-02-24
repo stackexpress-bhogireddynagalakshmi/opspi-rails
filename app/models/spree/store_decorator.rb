@@ -1,7 +1,7 @@
 module Spree
 	module StoreDecorator
 	  def self.prepended(base)
-	    base.after_commit :create_account_and_admin_user, on: [:create, :update]
+	    base.after_commit :create_account_and_admin_user, on: [:create]
 	    base.acts_as_tenant :account
 	    base.validates :url, uniqueness: true
 	  end
@@ -35,7 +35,6 @@ module Spree
 		        role = Spree::Role.find_or_create_by({:name=>'admin'})
 		        admin.spree_roles << role
 		        admin.save
-
 
 		      end
 		    end

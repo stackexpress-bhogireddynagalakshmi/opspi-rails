@@ -37,7 +37,7 @@ class CreateStoreFromPreferences < ActiveRecord::Migration[4.2]
         end
         s.default_currency = preference_store.get('spree/app_configuration/currency') { 'USD' }
         s.code             = 'spree'
-      end.save!
+      end.save! rescue ''
     end
   end
 end
