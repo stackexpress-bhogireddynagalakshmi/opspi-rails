@@ -7,15 +7,13 @@ module Spree
 	  end
 
 	  protected
-
 	  	def create_account_and_admin_user
 	  		ActiveRecord::Base.transaction do
 		      email =  self.admin_email
 		      password = "admin#123"
 
 		      account = ::Account.find_or_create_by({:orgainization_name=>self.name,
-		      	:store_id=>self.id
-		      	
+		      	:store_id=>self.id  	
 		      })
 
 		      account.update({
@@ -28,17 +26,15 @@ module Spree
 
 		      unless Spree::User.find_by_email(email)
 		        admin = Spree::User.create(:password => password,
-		                            :password_confirmation => password,
-		                            :email => email,
-		                            :login => email,
-		                            :account_id => account.id)
+	                :password_confirmation => password,
+	                :email => email,
+	                :login => email,
+	                :account_id => account.id)
 		        role = Spree::Role.find_or_create_by({:name=>'admin'})
 		        admin.spree_roles << role
 		        admin.save
-
 		      end
 		    end
-		   
 	  	end
 	end
 end
