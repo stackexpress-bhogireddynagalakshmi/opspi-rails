@@ -50,8 +50,11 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  host: <%= ENV['PROD_DATABASE_HOST'] %>
-  database: <%= ENV['PROD_DATABASE_NAME'] %>
-  username: <%= ENV['PROD_DATABASE_USERNAME'] %> 
-  password: <%= ENV['PROD_DATABASE_PASSWORD'] %>
+  database: <%= ENV['DB_NAME'] %>
+  adapter: mysql2
+  encoding: utf8mb4
+  pool: 5
+  host: <%= ENV['DB_HOST'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  port: <%= ENV['DB_PORT'] %>
