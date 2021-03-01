@@ -1,0 +1,85 @@
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: Container-Scanning.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+    #- template: Code-Quality.gitlab-ci.yml
+
+variables:
+  # App Specific Variables
+  APP_NAME: "ops_pi"
+  APP_URL_PATH: ""
+
+#Base CI/CD Run image
+image: ubuntu:latest
+
+stages:
+  - build
+  - test
+  - deploy_staging
+  - deploy_production
+
+
+docker-build-production:
+  # Official docker image.
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH" -t "$CI_REGISTRY_IMAGE:production" .
+    - docker push "$CI_REGISTRY_IMAGE"
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH"
+    - docker push "$CI_REGISTRY_IMAGE:production"
+  only:
+    - master
+
+docker-build-staging:
+  # Official docker image.
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+  only:
+    - merge_requests
+    - dev
+  except:
+    - master
+
+deploy-staging:
+  stage: deploy_staging
+  variables:
+    APP_NAME: ops_pi
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+    - eval $(ssh-agent -s)
+
+    ##
+    ## We're using tr to fix line endings which makes ed25519 keys work
+    ## without extra base64 encoding.
+    ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
+    ##
+    - echo "$GITLAB_CI_OPSPI_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+    # - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    # - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT docker version
+    - scp -r -P $APP_SERVER_SSH_PORT docker-compose.yml $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST:/srv/docker-apps/game/
+    - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT "bash -c ' cd /srv/docker-apps/game && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
+  only:
+    - dev
+  when: manual
+
