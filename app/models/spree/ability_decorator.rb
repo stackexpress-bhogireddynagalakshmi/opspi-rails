@@ -1,4 +1,4 @@
-module OpsPi
+
 	module Spree
 		module AbilityDecorator
 		  def abilities_to_register
@@ -6,5 +6,6 @@ module OpsPi
 		  end
 		end
 	end
-end
-::Spree::Ability.prepend(OpsPi::Spree::AbilityDecorator)
+
+::Spree::Ability.prepend(Spree::AbilityDecorator)
+

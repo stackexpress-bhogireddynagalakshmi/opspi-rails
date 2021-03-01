@@ -30,7 +30,7 @@ module Spree
 	                :email => email,
 	                :login => email,
 	                :account_id => account.id)
-		        role = Spree::Role.find_or_create_by({:name=>'admin'})
+		        role = Spree::Role.find_or_create_by({:name=>'store_admin'})
 		        admin.spree_roles << role
 		        admin.save
 		      end
