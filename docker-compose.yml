@@ -1,7 +1,7 @@
 version: "3"
 services:
 
-  paylanes-api:
+  opspi:
     container_name: opspi
     image: "${APP_IMAGE}"
     env_file: .env
