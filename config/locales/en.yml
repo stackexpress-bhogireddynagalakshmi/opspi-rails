@@ -31,3 +31,8 @@
 
 en:
   hello: "Hello world"
+
+  spree:
+    plan_type: 'Plan Type'
+    ssl_support: 'SSL Support'
+    auto_daily_malware_scan: 'Automatic Daily Malware Scan'

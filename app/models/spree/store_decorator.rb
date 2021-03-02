@@ -1,7 +1,7 @@
 module Spree
 	module StoreDecorator
 	  def self.prepended(base)
-	    base.after_commit :create_account_and_admin_user, on: [:create]
+	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
 	    base.acts_as_tenant :account
 	    base.validates :url, uniqueness: true
 	  end
@@ -11,19 +11,16 @@ module Spree
 	  		ActiveRecord::Base.transaction do
 		      email =  self.admin_email
 		      password = "admin#123"
-
-		      account = ::Account.find_or_create_by({:orgainization_name=>self.name,
-		      	:store_id=>self.id  	
-		      })
+		      account = ::Account.find_or_create_by({:store_id=>self.id })
 
 		      account.update({
+		      	:orgainization_name=>self.name,
 		      	:domain=> self.url,
 		      	:subdomain=> self.url,
 		      })
 
-		      self.account_id = account.id
-		      self.save
-
+		      self.update_column :account_id, account.id
+		     
 		      unless Spree::User.find_by_email(email)
 		        admin = Spree::User.create(:password => password,
 	                :password_confirmation => password,

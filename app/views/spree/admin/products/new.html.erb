@@ -1,0 +1,190 @@
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
+
+<% content_for :page_title do %>
+  <%= link_to Spree.t(:products), spree.admin_products_url %> /
+  <%= Spree.t(:new_product) %>
+<% end %>
+
+<%= form_for [:admin, @product], html: { multipart: true } do |f| %>
+  <fieldset data-hook="new_product">
+    <%= f.field_container :name, class: ['form-group'] do %>
+      <%= f.label :name, Spree.t(:name) %> <span class="required">*</span>
+      <%= f.text_field :name, class: 'form-control title', required: :required %>
+      <%= f.error_message_on :name %>
+    <% end %>
+
+   <%= f.field_container :plan_type, class: ['form-group'] do %>
+      <%= f.label :plan_type, raw(Spree.t(:plan_type) + required_span_tag) %>
+      <%= f.select :plan_type, options_for_select(Spree::Product::PLAN_TYPE,f.object.plan_type),{},class: 'form-control title' %>
+      <%= f.error_message_on :plan_type %>
+    <% end %>
+
+    <div class="row">
+      <div class="col-md-4">
+        <%= f.field_container :no_of_website, class: ['form-group'] do %>
+          <%= f.label :no_of_website, raw(Spree.t(:no_of_website) ) %>
+          <%= f.number_field :no_of_website, class: 'form-control title' %>
+          <%= f.error_message_on :no_of_website %>
+        <% end %>  
+      </div>
+
+       <div class="col-md-4">
+        <%= f.field_container :storage, class: ['form-group'] do %>
+          <%= f.label :storage, raw(Spree.t(:storage) + required_span_tag) %>
+           <%= f.select :storage, options_for_select([['1 GB',1],['2 GB',2],['5 GB',5],['10 GB',10],['30 GB',30],['50 GB',50]],f.object.ssl_support),{},class: 'form-control title' %>
+          <%= f.error_message_on :storage %>
+        <% end %>  
+      </div>
+
+       <div class="col-md-4">
+        <%= f.field_container :ssl_support, class: ['form-group'] do %>
+          <%= f.label :ssl_support, raw(Spree.t(:ssl_support) + required_span_tag) %>
+           <%= f.select :ssl_support, options_for_select([['NO',false],['Yes',true]],f.object.ssl_support),{},class: 'form-control title' %>
+          
+          <%= f.error_message_on :ssl_support %>
+        <% end %>  
+      </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-4">
+        <%= f.field_container :domain, class: ['form-group'] do %>
+          <%= f.label :domain, raw(Spree.t(:domain)) %>
+          <%= f.number_field :domain, class: 'form-control title' %>
+          <%= f.error_message_on :domain %>
+        <% end %>  
+      </div>
+
+       <div class="col-md-4">
+        <%= f.field_container :subdomain, class: ['form-group'] do %>
+          <%= f.label :subdomain, raw(Spree.t(:subdomain)) %>
+           <%= f.number_field :subdomain, class: 'form-control title' %>
+          <%= f.error_message_on :subdomain %>
+        <% end %>  
+      </div>
+
+       <div class="col-md-4">
+        <%= f.field_container :parked_domain, class: ['form-group'] do %>
+          <%= f.label :parked_domain, raw(Spree.t(:parked_domain)) %>
+           <%= f.number_field :parked_domain, class: 'form-control title' %>
+          
+          <%= f.error_message_on :parked_domain %>
+        <% end %>  
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <%= f.field_container :mailbox, class: ['form-group'] do %>
+          <%= f.label :mailbox, raw(Spree.t(:mailbox) + required_span_tag) %>
+          <%= f.text_field :mailbox, class: 'form-control title', required: :required %>
+          <%= f.error_message_on :mailbox %>
+        <% end %>  
+      </div>
+
+      <div class="col-md-4">
+        <%= f.field_container :auto_daily_malware_scan, class: ['form-group'] do %>
+          <%= f.label :auto_daily_malware_scan, raw(Spree.t(:auto_daily_malware_scan) + required_span_tag) %>
+           <%= f.select :auto_daily_malware_scan, options_for_select([['NO',false],['Yes',true]],f.object.auto_daily_malware_scan),{},class: 'form-control title' %>
+
+          <%= f.error_message_on :auto_daily_malware_scan %>
+        <% end %>  
+      </div>
+
+
+      <div class="col-md-4">
+        <%= f.field_container :email_order_confirmation, class: ['form-group'] do %>
+          <%= f.label :email_order_confirmation, raw(Spree.t(:email_order_confirmation) + required_span_tag) %>
+           <%= f.select :email_order_confirmation, options_for_select([['NO',false],['Yes',true]],f.object.email_order_confirmation),{},class: 'form-control title' %>
+          <%= f.error_message_on :email_order_confirmation %>
+        <% end %>  
+      </div>
+
+      
+    </div>
+    
+    <div data-hook="new_product_attrs" class="row">
+      <% unless @product.has_variants? %>
+        <div data-hook="new_product_sku" class="col-12 col-md-4">
+          <%= f.field_container :sku, class: ['form-group'] do %>
+            <%= f.label :sku, Spree.t(:sku) %>
+            <%= f.text_field :sku, size: 16, class: 'form-control' %>
+            <%= f.error_message_on :sku %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div data-hook="new_product_prototype" class="col-12 col-md-4">
+        <%= f.field_container :prototype, class: ['form-group'] do %>
+          <%= f.label :prototype_id, Spree.t(:prototype) %>
+          <%= f.collection_select :prototype_id, Spree::Prototype.all, :id, :name, { include_blank: true }, { class: 'select2-clear w-100' } %>
+        <% end %>
+      </div>
+
+      <div data-hook="new_product_price" class="col-12 col-md-4">
+        <%= f.field_container :price, class: ['form-group'] do %>
+          <%= f.label :price, Spree.t(:master_price) %> <span class="required">*</span>
+          <%= f.text_field :price, value: number_to_currency(@product.price, unit: ''), class: 'form-control', required: :required %>
+          <%= f.error_message_on :price %>
+        <% end %>
+      </div>
+
+      <div data-hook="new_product_available_on" class="col-12 col-md-4">
+        <%= f.field_container :available_on, class: ['form-group'] do %>
+          <%= f.label :available_on, Spree.t(:available_on) %>
+          <%= f.error_message_on :available_on %>
+
+          <div class="input-group datepicker"
+               data-wrap="true"
+               data-alt-format="<%= Spree.t(:fpr_human_friendly_date_format, scope: 'date_picker', default: 'M j, Y') %>">
+            <%= f.text_field :available_on,
+                             value: datepicker_field_value(@product.available_on),
+                             placeholder: Spree.t(:select_a_date),
+                             class: 'form-control shadow-none',
+                             'data-input':'' %>
+
+            <%= render partial: 'spree/admin/shared/cal_close' %>
+          </div>
+        <% end %>
+      </div>
+
+      <div data-hook="new_product_shipping_category" class="col-12 col-md-4">
+        <%= f.field_container :shipping_category, class: ['form-group'] do %>
+          <%= f.label :shipping_category_id, Spree.t(:shipping_categories) %><span class="required">*</span>
+          <%= f.collection_select(:shipping_category_id, @shipping_categories, :id, :name, { include_blank: Spree.t('match_choices.none') }, { class: 'select2 w-100' }) %>
+          <%= f.error_message_on :shipping_category_id %>
+        <% end %>
+      </div>
+
+    </div>
+
+    <div data-hook="product-from-prototype" id="product-from-prototype">
+      <%= render template: 'spree/admin/prototypes/show' if @prototype %>
+    </div>
+
+    <%= render partial: 'spree/admin/shared/new_resource_links' %>
+
+  </fieldset>
+<% end %>
+
+<script type="text/javascript">
+//<![CDATA[
+  (function($){
+    var base_url = "<%= spree.admin_prototypes_url %>";
+    var prototype_select = $('#product_prototype_id');
+    prototype_select.change(function() {
+      var id = prototype_select.val();
+      if (id.length) {
+        var url = new Uri(base_url);
+        url.setPath(url.path() + '/' + id);
+        $('#product-from-prototype').load(url.toString());
+      } else {
+        $('#product-from-prototype').empty();
+      }
+    })
+    if (prototype_select.html() == "") {
+      prototype_select.change();
+    }
+  })(jQuery);
+//]]>
+</script>
