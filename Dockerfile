@@ -23,4 +23,5 @@ RUN bundle install
 COPY . /project
 EXPOSE 3000
 RUN RAILS_ENV=production bundle exec rake assets:precompile
-CMD [ "bundle", "exec", "rails", "server" ]
+#CMD [ "bundle", "exec", "rails", "server" ]
+CMD ["bin/run-docker-production.sh"]
