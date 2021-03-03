@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
 
 	class DomainCheck
 		def self.check_domain request
-			whitelisted_domains = Account.pluck(:subdomain) + Account.pluck(:domain)
+			whitelisted_domains = Spree::Store.pluck(:url)
 			whitelisted_domains << 'test01.dev.opspi.com'
 			whitelisted_domains << 'localhost'
 		    whitelisted_domains.include? (request.host)
