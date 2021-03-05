@@ -9,10 +9,20 @@ Rails.application.routes.draw do
   # the default of "spree".
   mount Spree::Core::Engine, at: '/'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  
+  # Spree::Core::Engine.routes.draw do
+  #   namespace :admin do
+  #     resources :accounts
+  #     end
+  #   end
 
-   Spree::Core::Engine.routes.draw do
-    namespace :admin do
-      resources :accounts
-      end
+
+  get 'hosting/:slug', :controller=> 'hosting',:action=> "hosting_page"
+  get 'servers/:slug', :controller=> 'hosting',:action=> "servers"
+
+  resources :hosting,:only=>[:index] do 
+
   end
+
+
 end

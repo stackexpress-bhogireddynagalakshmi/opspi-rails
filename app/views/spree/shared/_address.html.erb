@@ -1,28 +1,28 @@
 <div class="address vcard">
-  <div class="fn"><%= address.full_name %></div>
-  <% unless address.company.blank? %>
+  <div class="fn"><%= address.try(:full_name) %></div>
+  <% unless address.try(:company).blank? %>
     <div class="org">
-      <%= address.company %>
+      <%= address.try(:company) %>
     </div>
   <% end %>
   <div class="adr">
     <div class="street-address">
       <div class="street-address-line">
-        <%= address.address1 %>
+        <%= address.try(:address1) %>
       </div>
-      <% unless address.address2.blank? %>
+      <% unless address.try(:address2).blank? %>
         <div class="street-address-line">
-          <%= address.address2 %>
+          <%= address.try(:address2) %>
         </div>
       <% end %>
     </div>
     <div class="local">
-      <span class="locality"><%= address.city %></span>
+      <span class="locality"><%= address.try(:city) %></span>
       <% if Spree::Config[:address_requires_state] %>
-        <span class="region"><%= address.state_text %></span>
+        <span class="region"><%= address.try(:state_text) %></span>
       <% end %>
-      <span class="postal-code"><%= address.zipcode %></span>
-      <div class="country-name"><%= address.country.try(:name) %></div>
+      <span class="postal-code"><%= address.try(:zipcode) %></span>
+      <div class="country-name"><%= address.try(:country).try(:name) %></div>
     </div>
   </div>
 </div>

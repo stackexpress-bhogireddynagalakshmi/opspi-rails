@@ -11,6 +11,10 @@ module Spree
 		     #  	redirect_to :admin_stores 
 	      # 	end
 	      # end
+
+	      def account_link
+	      	byebug
+	      end
 	      
 	    end
 	 end

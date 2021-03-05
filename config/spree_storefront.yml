@@ -1,67 +1,53 @@
 default:
   navigation:
-    - title: Women
+    - title: Hosting
       subtitle: Categories
-      url: /t/women
+      url: /hosting
       items:
-        - :title: Skirts
-          :url: /t/women/skirts
-        - :title: Dresses
-          :url: /t/women/dresses
-        - :title: Shirts and Blouses
-          :url: /t/women/shirts-and-blouses
-        - :title: Sweaters
-          :url: /t/women/sweaters
-        - :title: Tops and T-shirts
-          :url: /t/women/tops-and-t-shirts
-        - :title: Jackets and Coats
-          :url: /t/women/jackets-and-coats
+        - :title: Shared Hosting
+          :url: /hosting/shared-hosting
+        - :title: VPS Hosting
+          :url: /hosting/vps-hosting
+        - :title: Dedicated Hosting
+          :url: /hosting/dedicated-hosting
       promo_banners:
-        - subtitle: New collection
-          title: Summer 2021
-          url: /t/new-collection/summer-2021
-          image: 'meganav/promo_banner_left-first-category.jpg'
-        - subtitle: Special Offers
-          title: Get up to 30% off
-          url: /t/special-offers/30-percent-off
-          image: 'meganav/promo_banner_right-first-category.jpg'
-    - title: Men
+        # - subtitle: New collection
+        #   title: Summer 2021
+        #   url: /t/new-collection/summer-2021
+        #   image: 'meganav/promo_banner_left-first-category.jpg'
+        # - subtitle: Special Offers
+        #   title: Get up to 30% off
+        #   url: /t/special-offers/30-percent-off
+        #   image: 'meganav/promo_banner_right-first-category.jpg'
+    - title: Servers
       subtitle: Categories
-      url: /t/men
+      url: /servers
       items:
-        - :title: Shirts
-          :url: /t/men/shirts
-        - :title: T-shirts
-          :url: /t/men/t-shirts
-        - :title: Sweaters
-          :url: /t/men/sweaters
-        - :title: Jackets and Coats
-          :url: /t/men/jackets-and-coats
+        - :title: Linux Dedicated Servers
+          :url: /servers/linux-dedicated-servers
+        - :title: Windows Dedicated Servers
+          :url: /servers/windows-dedicated-servers
       promo_banners:
-        - subtitle: New collection
-          title: Summer 2021
-          url: /t/new-collection/summer-2021
-          image: 'meganav/promo_banner_left-second-category.jpg'
-        - subtitle: Special Offers
-          title: Get up to 30% off
-          url: /t/special-offers/30-percent-off
-          image: 'meganav/promo_banner_right-second-category.jpg'
-    - title: Sportswear
+        # - subtitle: New collection
+        #   title: Summer 2021
+        #   url: /t/new-collection/summer-2021
+        #   image: 'meganav/promo_banner_left-second-category.jpg'
+        # - subtitle: Special Offers
+        #   title: Get up to 30% off
+        #   url: /t/special-offers/30-percent-off
+        #   image: 'meganav/promo_banner_right-second-category.jpg'
+    - title: Cloud
       subtitle: Categories
-      url: /t/sportswear
+      url: /cloud
       items:
-        - :title: Tops
-          :url: /t/sportswear/tops
-        - :title: Sweatshirts
-          :url: /t/sportswear/sweatshirts
-        - :title: Pants
-          :url: /t/sportswear/pants
+        - :title: Cloud Hosting
+          :url: /servers/cloud-hosting
       promo_banners:
-        - subtitle: New collection
-          title: Summer 2021
-          url: /t/new-collection/summer-2021
+        - subtitle: Cloud Servers
+          title: Cloud
+          url: /servers/cloud-hosting
           image: 'meganav/promo_banner_left-third-category.jpg'
-        - subtitle: Special Offers
-          title: Get up to 30% off
-          url: /t/special-offers/30-percent-off
-          image: 'meganav/promo_banner_right-third-category.jpg'
+        # - subtitle: Special Offers
+        #   title: Get up to 30% off
+        #   url: /t/special-offers/30-percent-off
+        #   image: 'meganav/promo_banner_right-third-category.jpg'
