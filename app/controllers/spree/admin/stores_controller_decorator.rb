@@ -12,9 +12,6 @@ module Spree
 	      # 	end
 	      # end
 
-	      def account_link
-	      	byebug
-	      end
 	      
 	    end
 	 end
