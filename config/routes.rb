@@ -24,5 +24,11 @@ Rails.application.routes.draw do
 
   end
 
+  resources :account,:only=>[] do
+    collection do
+       get :subscription
+    end
+  end
+
 
 end

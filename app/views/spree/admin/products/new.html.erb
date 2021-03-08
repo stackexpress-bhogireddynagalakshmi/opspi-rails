@@ -19,6 +19,15 @@
       <%= f.error_message_on :plan_type %>
     <% end %>
 
+    <div data-hook="admin_product_form_plan_type">
+        <%= f.field_container :subscribable, class: ['form-group'] do %>
+        <%= f.label :subscribable, raw(Spree.t(:subscribable) + required_span_tag) %>
+        <%= f.check_box :subscribable%>
+        <%= f.error_message_on :subscribable %>
+      <% end %>
+
+      </div>
+
     <div class="row">
       <div class="col-md-4">
         <%= f.field_container :no_of_website, class: ['form-group'] do %>

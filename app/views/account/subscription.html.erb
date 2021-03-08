@@ -1,0 +1,33 @@
+<div class="container account-page">
+  <h3 class="text-uppercase spree-mb-large spree-mt-large spree-header">Subscription</h3>
+
+  <table class="table mb-5">
+        <thead class="active">
+          <tr>
+            <th class="text-uppercase text-secondary"><%=Spree.t(:subscription)%></th>
+              <th class="text-uppercase text-secondary"><%=Spree.t(:plan_type)%></th>
+            <th class="text-uppercase text-secondary"><%= Spree.t(:status) %></th>
+            <th class="text-uppercase text-secondary"><%= Spree.t(:date) %></th>
+            <th class="text-uppercase text-secondary"><%= Spree.t(:end_date) %></th>
+            <th class="text-uppercase text-secondary"><%= Spree.t(:amount) %></th>
+          </tr>
+        </thead>
+        <tbody>
+         <%spree_current_user.susbscription.each do |subscription|%>
+         
+            <tr>
+              <td class="account-page-order-number"><%=subscription.plan.name%></td>
+              <td class="account-page-order-number"><%=subscription.plan.plan_type.titleize%></td>
+              <td class="account-page-order-date"><%=subscription.status? ? 'Active': 'In-Active'%></td>
+              <td class="account-page-order-status"><%=subscription.start_date%></td>
+              <td class="account-page-order-payment-state"><%=subscription.end_date%></td>
+              <td class="account-page-order-payment-state"><%=number_to_currency(subscription.price)%></td>
+            </tr>
+
+            <%end%>
+         
+        </tbody>
+      </table>
+</div>
+
+
