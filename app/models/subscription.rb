@@ -7,17 +7,23 @@ class Subscription < ApplicationRecord
 	def self.subscribe!(opts)
 		existing_subscription = self.where(status: true).first
 	    if existing_subscription
-	     	# 
+	     	existing_subscription.update({status: false,end_date: Date.today})
+	     	self.create_fresh_subscription(opts)
 	    else
-	     	self.create do |s|
-		      s.product_id      =  opts[:product].try(:id)
-		      s.user_id = opts[:user].try(:id)
-		      s.start_date = Date.today
-		      s.end_date = Date.today + 1.year
-		      s.price = opts[:product].price
-		      s.status = true
-		      s.frequency = 'ANNUAL'
-		    end
+	    	self.create_fresh_subscription(opts)
 	    end
+	end
+
+
+	def self.create_fresh_subscription(opts)
+		self.create({
+    		product_id: opts[:product].try(:id),
+    		user_id: opts[:user].try(:id),
+    		start_date: Date.today,
+		    end_date: Date.today + 1.year,
+		    price:  opts[:product].price,
+		    status:  true,
+		    frequency:  'ANNUAL'
+    	})
 	end
 end

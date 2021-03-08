@@ -13,7 +13,7 @@
           </tr>
         </thead>
         <tbody>
-         <%spree_current_user.susbscription.each do |subscription|%>
+         <%spree_current_user.susbscription.order('created_at desc').each do |subscription|%>
          
             <tr>
               <td class="account-page-order-number"><%=subscription.plan.name%></td>
