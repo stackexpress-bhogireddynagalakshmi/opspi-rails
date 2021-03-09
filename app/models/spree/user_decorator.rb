@@ -2,6 +2,9 @@ module Spree
 	module UserDecorator
 		def self.prepended(base)
 	    	base.acts_as_tenant :account
+	    	base.has_many :susbscriptions,:class_name=>'Subscription'
+	    	# base.has_one :active_susbscription,->{where(active: true)},:class_name=>'Subscription'
+	    	
 	  	end
 	end
 end

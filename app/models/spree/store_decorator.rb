@@ -4,7 +4,7 @@ module Spree
 	  def self.prepended(base)
 	     
 	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
-	    base.acts_as_tenant :account
+	    base.acts_as_tenant :account,class_name: '::Account'
 	    base.validates :url, uniqueness: true
 
 	  end

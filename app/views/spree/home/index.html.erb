@@ -1,22 +1,55 @@
 <% @body_id = 'home' %>
 
 <div class="homepage-hero-image mb-3 position-relative">
+
+  <div style="z-index: 1">
+    
+
+   <div class="mb-4">
+     <h1 class="display-4">Web Hosting SALE</h1>
+   </div>
+
+   <div class="mb-4">
+     <h3>Free SSL & CloudFlare included</h3>
+   </div>
+
+   <div>
+      <%= link_to 'BUY NOW', '#', class: 'btn btn-primary spree-btn px-5' %>
+   </div>
+
+  </div>
+
   <img class="lazyload hero-image position-absolute"
     data-src="<%= asset_path('homepage/main_banner.jpg') %>"
     data-srcset="<%= image_source_set('homepage/main_banner') %>"
-    alt="Summer Collection">
+    alt="">
 
-  <div class="hero-content">
+ <!--  <div class="hero-content">
     <div class="homepage-hero-image-text mb-2 mx-auto pb-3 pb-md-4">
-      Summer Collection
+      Cloud Hosting
     </div>
     <div>
-      <%= link_to 'SHOP NOW', spree.products_path, class: 'btn btn-primary spree-btn px-5' %>
+      <%#= link_to 'BUY NOW', spree.products_path, class: 'btn btn-primary spree-btn px-5' %>
     </div>
-  </div>
+  </div> -->
 </div>
 
 <div class="container">
+   <div style="display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px 0;">
+      <%=image_tag('wordpress')%>
+      <%=image_tag('google')%>
+      <%=image_tag('cloudflare')%>
+      <%=image_tag('jetpack')%>
+   </div>
+</div>
+
+
+<%=render :partial=>'hosting/plan_cards',:locals=>{:products=>current_store.account.spree_products,:title=>params[:slug].try(:titleize)}%>
+
+<div class="container" style="display: none;">
   <div class="row">
     <div class="col-6">
 
@@ -65,18 +98,17 @@
 
 <div class="homepage-fashion-trends-box mb-3">
   <div class="text-center">
-    <div class="homepage-fashion-trends-box-summer-text mb-1">Summer 2021</div>
-    <div class="homepage-fashion-trends-box-fashion-trends-text mb-2">FASHION TRENDS</div>
+    <div class="homepage-fashion-trends-box-fashion-trends-text mb-2">Our Customers Love Us</div>
     <div class="homepage-fashion-trends-box-description-text text-center mb-3">
-      Want to rock this season’s hottest trend in style? These are the top fashion from Summer 2020 Fashion Weeks that are coming our way this season.
+      If you are not happy with our services for whatever reason, we’ll refund your payment. No hassle, no risk.
     </div>
-    <%= link_to 'READ MORE', spree.nested_taxons_path('trending'), class: 'btn px-5 spree-btn btn-outline-primary' %>
+    <%= link_to 'READ MORE', '#', class: 'btn px-5 spree-btn btn-outline-primary' %>
   </div>
 </div>
 
 <div data-product-carousel data-product-carousel-taxon-id='trending' class="mb-3"></div>
 
-<div class="container">
+<div class="container" style="display: none;">
   <div class="row">
     <div class="col-12 col-lg-6">
       <%= link_to spree.nested_taxons_path('streetstyle') do %>

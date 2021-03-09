@@ -18,7 +18,7 @@ class StoreAdminAbility
     	can :manage, ::Spree::Admin::ReportsController
     	can :manage, ::Spree::Promotion
 
-
+        can :manage, ::Spree::Payment
     	can :read, ::Spree::Country
 	    can :read, ::Spree::OptionType
 	    can :read, ::Spree::OptionValue

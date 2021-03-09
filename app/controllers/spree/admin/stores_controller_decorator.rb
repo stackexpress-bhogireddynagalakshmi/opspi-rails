@@ -11,6 +11,7 @@ module Spree
 		     #  	redirect_to :admin_stores 
 	      # 	end
 	      # end
+
 	      
 	    end
 	 end
