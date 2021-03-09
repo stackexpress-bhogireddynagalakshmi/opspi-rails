@@ -1,7 +1,7 @@
 <div class="container account-page">
   <h3 class="text-uppercase spree-mb-large spree-mt-large spree-header">Subscription</h3>
-
-  <table class="table mb-5">
+   <%if spree_current_user.susbscriptions.present?%>
+  	<table class="table mb-5">
         <thead class="active">
           <tr>
             <th class="text-uppercase text-secondary"><%=Spree.t(:subscription)%></th>
@@ -13,8 +13,7 @@
           </tr>
         </thead>
         <tbody>
-         <%spree_current_user.susbscription.order('created_at desc').each do |subscription|%>
-         
+         <%spree_current_user.susbscriptions.order('created_at desc').each do |subscription|%>
             <tr>
               <td class="account-page-order-number"><%=subscription.plan.name%></td>
               <td class="account-page-order-number"><%=subscription.plan.plan_type.titleize%></td>
@@ -23,11 +22,13 @@
               <td class="account-page-order-payment-state"><%=subscription.end_date%></td>
               <td class="account-page-order-payment-state"><%=number_to_currency(subscription.price)%></td>
             </tr>
-
-            <%end%>
-         
+        <%end%>
+      
         </tbody>
       </table>
+    <%else%>
+           <div class="alert alert-info"><%= Spree.t(:you_have_no_subscription_plans_yet) %></div>
+    <%end%>
 </div>
 
 
