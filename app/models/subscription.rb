@@ -1,7 +1,7 @@
 class Subscription < ApplicationRecord
 	belongs_to :user,:class_name=>'Spree::User'
 	belongs_to :plan,:class_name=>'Spree::Product',:foreign_key=>'product_id'
-	scope :active, -> {where(status: true).last }
+	scope :active, -> {where(status: true) }
 
 
 

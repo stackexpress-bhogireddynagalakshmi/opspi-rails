@@ -28,7 +28,7 @@ module Spree
 
 	  	def valid_plan_subscription?
 	  		product = self.products.select{|x|x.subscribable}.first
-	 		 if self.user.susbscriptions.joins(:plan).pluck(:plan_type).include?(product.plan_type)
+	 		 if self.user.susbscriptions.joins(:plan).active.pluck(:plan_type).include?(product.plan_type)
 	 		 	errors.add(:base, "Your are already subscribed to #{product.plan_type.titleize} Plan. Please check My Subscriptions page for more details")
 	 		 	return false
 	 		 end
