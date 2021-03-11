@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
 	 before_action do
 	 	 if DomainCheck.check_domain(request)
-	 		ActsAsTenant.current_tenant = Account.where('subdomain = ? or domain = ?',request.host,request.host).first
+	 		ActsAsTenant.current_tenant = Account.where('subdomain = ? or domain = ?',request.host,request.host).first unless current_spree_user.present? && current_spree_user.superadmin?
 	 	 else
 	 	 	render :json=>'Sorry, this domain is currently unavailable.'
 	 	 end

@@ -5,22 +5,32 @@
         <thead class="active">
           <tr>
             <th class="text-uppercase text-secondary"><%=Spree.t(:subscription)%></th>
-              <th class="text-uppercase text-secondary"><%=Spree.t(:plan_type)%></th>
-            <th class="text-uppercase text-secondary"><%= Spree.t(:status) %></th>
-            <th class="text-uppercase text-secondary"><%= Spree.t(:date) %></th>
-            <th class="text-uppercase text-secondary"><%= Spree.t(:end_date) %></th>
+<!--               <th class="text-uppercase text-secondary"><%#=Spree.t(:plan_type)%></th>
+ -->            <th class="text-uppercase text-secondary"><%= Spree.t(:status) %></th>
+            <th class="text-uppercase text-secondary" title="Subscription Date"><%= Spree.t(:sub_date) %></th>
+            <th class="text-uppercase text-secondary"><%= Spree.t(:Interval) %></th>
             <th class="text-uppercase text-secondary"><%= Spree.t(:amount) %></th>
+             <th class="text-uppercase text-secondary"><%= Spree.t(:canceled_at) %></th>
+            <th class="text-uppercase text-secondary"><%= Spree.t(:action) %></th>
           </tr>
         </thead>
         <tbody>
          <%spree_current_user.susbscriptions.order('created_at desc').each do |subscription|%>
             <tr>
-              <td class="account-page-order-number"><%=subscription.plan.name%></td>
-              <td class="account-page-order-number"><%=subscription.plan.plan_type.titleize%></td>
+              <td class="account-page-order-number"><%=subscription.plan.name%> 
+              	<br/>
+              	<span class="font-12 grey"><%=subscription.plan.plan_type.titleize%></span>
+              </td>
+              <!-- <td class="account-page-order-number"><%=subscription.plan.plan_type.titleize%></td> -->
               <td class="account-page-order-date"><%=subscription.status? ? 'Active': 'In-Active'%></td>
               <td class="account-page-order-status"><%=subscription.start_date%></td>
-              <td class="account-page-order-payment-state"><%=subscription.end_date%></td>
+              <td class="account-page-order-payment-state"><%=subscription.billing_interval%></td>
               <td class="account-page-order-payment-state"><%=number_to_currency(subscription.price)%></td>
+               <td class="account-page-order-payment-state"><%=subscription.canceled_at%></td>
+              <td>
+              	<%if subscription.active?%>
+              		<%=link_to 'Cancel', subscription_cancel_account_index_path(subscription_id: subscription.id),data: {confirm: 'Are you sure?'} %> </td>
+              	<%end%>
             </tr>
         <%end%>
       

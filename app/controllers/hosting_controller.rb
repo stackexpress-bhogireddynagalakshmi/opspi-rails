@@ -10,7 +10,7 @@ class HostingController < Spree::StoreController
 
 
 	def hosting_page
-		@products = current_store.account.spree_products
+		@products = current_store.try(:account).try(:spree_products) rescue []
 		if params[:slug] == 'shared-hosting'
 			@products = @products.where(plan_type: 'SHARED_HOSTING')
 

@@ -2,12 +2,16 @@ module Spree
 	module PaymentDecorator
 
 		def self.prepended(base)
-		  base.state_machine.after_transition to: :completed, do: :create_subscriptions!
-	  	end
 
+			base.state_machine initial: :checkout do
+		 	   after_transition to: :completed, do: :create_subscriptions!
+		 	end
+	  	end
+	  	
+	  	# Issue in State machine
 
 	  	def create_subscriptions!
-      		self.order.create_subscriptions
+    	 self.order.create_subscriptions
     	end
 	end
 end

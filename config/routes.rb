@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resources :account,:only=>[] do
     collection do
        get :subscription
+       get :subscription_cancel
     end
   end
 

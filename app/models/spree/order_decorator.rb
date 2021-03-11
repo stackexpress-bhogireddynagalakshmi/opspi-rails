@@ -9,20 +9,34 @@ module Spree
 			    go_to_state :confirm, :if => lambda { |order| order.confirmation_required? }
 			    go_to_state :complete
 			end
+
+
 	  	end
 
 	  	def create_subscriptions
-	      line_items.each do |line_item|
-	        if line_item.product.subscribable?
-	          Subscription.subscribe!(
-	           user: self.user,
-	           product: line_item.product	            
-	          )
-	        end
-	      end
-	    end
+	  	
+      		line_items.each do |line_item|
+		        if line_item.product.subscribable?
+		          Subscription.subscribe!(
+		           user: self.user,
+		           product: line_item.product,
+		           order: self	            
+		          )
+		        end
+	      	end
+	  	end
+
+	  	def valid_plan_subscription?
+	  		product = self.products.select{|x|x.subscribable}.first
+	 		 if self.user.susbscriptions.joins(:plan).pluck(:plan_type).include?(product.plan_type)
+	 		 	errors.add(:base, "Your are already subscribed to #{product.plan_type.titleize} Plan. Please check My Subscriptions page for more details")
+	 		 	return false
+	 		 end
+	  	end
 
 	end
 end
+
+Spree::Order.state_machine.before_transition to: :complete, do: :valid_plan_subscription?
 
 ::Spree::Order.prepend Spree::OrderDecorator if ::Spree::Order.included_modules.exclude?(Spree::OrderDecorator)

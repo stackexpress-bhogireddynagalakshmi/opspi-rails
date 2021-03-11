@@ -36,3 +36,6 @@ en:
     plan_type: 'Plan Type'
     ssl_support: 'SSL Support'
     auto_daily_malware_scan: 'Automatic Daily Malware Scan'
+    some_thing_went_wrong: 'Something went wrong. Please try again later.'
+    subscription_canceled: 'Subscription canceled successfully.'
+    sub_date: 'Sub Date'
