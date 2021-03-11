@@ -9,4 +9,16 @@ class AccountController < Spree::StoreController
 
    	end
 
+   	def subscription_cancel
+   		@subscription = Subscription.find(params[:subscription_id])
+   		@subscription.status = false
+   		@subscription.canceled_at = Time.zone.now
+   		if @subscription.save
+   			flash[:success] = Spree.t('subscription_canceled')
+   		else
+   			flash[:error] = Spree.t('some_thing_went_wrong')
+   		end
+   		render "subscription"
+   	end
+
 end

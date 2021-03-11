@@ -1,15 +1,14 @@
 class Subscription < ApplicationRecord
 	belongs_to :user,:class_name=>'Spree::User'
 	belongs_to :plan,:class_name=>'Spree::Product',:foreign_key=>'product_id'
-	scope :active, -> {where(status: true).last }
+	scope :active, -> {where(status: true) }
 
 
 
 	def self.subscribe!(opts)
-		existing_subscription = self.where(status: true,user_id: opts[:user].try(:id)).first
+		existing_subscription = self.where(status: true,user_id: opts[:user].try(:id),product_id: opts[:product].try(:id)).first
 	    if existing_subscription.present?
-	     	existing_subscription.update({status: false,end_date: Date.today})
-	     	self.create_fresh_subscription(opts)
+	     	existing_subscription.update({status: true})
 	    else
 	    	self.create_fresh_subscription(opts)
 	    end
@@ -26,5 +25,14 @@ class Subscription < ApplicationRecord
 		    status:  true,
 		    frequency:  'ANNUAL'
     	})
+	end
+
+
+	def active?
+		status
+	end
+
+	def billing_interval
+		frequency
 	end
 end

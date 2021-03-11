@@ -14,8 +14,8 @@ Spree.config do |config|
   # Uncomment to stop tracking inventory levels in the application
   # config.track_inventory_levels = false
   # config.menu_items << config.class::MenuItem.new([:accounts], 'icon-name', url: '/admin/accounts')
-
-
+  config.allow_guest_checkout = false
+  config.logo = 'OpsPi-logo.png'
 end
 
 # Configure Spree Dependencies
