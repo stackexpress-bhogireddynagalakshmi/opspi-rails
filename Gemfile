@@ -64,7 +64,7 @@ gem 'spree_i18n', github: 'spree-contrib/spree_i18n', branch: 'master'
 # gem 'spree_mail_settings', github: 'spree-contrib/spree_mail_settings'
 
 #gem 'spree_braintree_vzero', '~> 3.5'
- gem 'spree_paypal_express', github: 'spree-contrib/better_spree_paypal_express'
+gem 'spree_paypal_express', github: 'spree-contrib/better_spree_paypal_express'
 
 gem 'httparty'
 gem 'hashie'
