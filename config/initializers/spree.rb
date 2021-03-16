@@ -16,6 +16,7 @@ Spree.config do |config|
   # config.menu_items << config.class::MenuItem.new([:accounts], 'icon-name', url: '/admin/accounts')
   config.allow_guest_checkout = false
   config.logo = 'OpsPi-logo.png'
+  config.admin_interface_logo = 'OpsPi-logo.png'
 end
 
 # Configure Spree Dependencies
