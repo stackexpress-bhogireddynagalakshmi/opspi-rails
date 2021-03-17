@@ -1,4 +1,14 @@
 GIT
+  remote: git://github.com/spree-contrib/better_spree_paypal_express
+  revision: 49c579ac7eb968bba67b97126bd4473f709174ad
+  specs:
+    spree_paypal_express (3.3.0)
+      paypal-sdk-merchant
+      spree_auth_devise (>= 3.1.0, < 5.0)
+      spree_core (>= 3.1.0, < 5.0)
+      spree_extension
+
+GIT
   remote: https://github.com/sass/sassc-ruby.git
   revision: 4fce2b635ca5d616a8b1381c64846410bc785ea4
   branch: master
@@ -140,6 +150,11 @@ GEM
       railties (>= 5)
     erubi (1.10.0)
     execjs (2.7.0)
+    faraday (1.3.0)
+      faraday-net_http (~> 1.0)
+      multipart-post (>= 1.2, < 3)
+      ruby2_keywords
+    faraday-net_http (1.0.1)
     ffaker (2.17.0)
     ffi (1.14.2)
     flatpickr (4.6.6.0)
@@ -148,8 +163,12 @@ GEM
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     glyphicons (1.0.2)
+    hashie (4.1.0)
     highline (2.0.3)
     htmlentities (4.3.4)
+    httparty (0.18.1)
+      mime-types (~> 3.0)
+      multi_xml (>= 0.5.2)
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
     i18n_data (0.13.0)
@@ -195,6 +214,9 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
+    mime-types (3.3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2021.0225)
     mimemagic (0.3.5)
     mini_magick (4.11.0)
     mini_mime (1.0.2)
@@ -204,6 +226,9 @@ GEM
     money (6.14.0)
       i18n (>= 0.6.4, <= 2)
     msgpack (1.4.2)
+    multi_json (1.15.0)
+    multi_xml (0.6.0)
+    multipart-post (2.1.1)
     mysql2 (0.5.3)
     nio4r (2.5.5)
     nokogiri (1.11.1-x86_64-linux)
@@ -211,6 +236,11 @@ GEM
     orm_adapter (0.5.0)
     paranoia (2.4.3)
       activerecord (>= 4.0, < 6.2)
+    paypal-sdk-core (0.3.4)
+      multi_json (~> 1.0)
+      xml-simple
+    paypal-sdk-merchant (1.117.2)
+      paypal-sdk-core (~> 0.3.0)
     popper_js (1.16.0)
     premailer (1.14.2)
       addressable
@@ -278,6 +308,7 @@ GEM
     rexml (3.2.4)
     ruby-vips (2.0.17)
       ffi (~> 1.9)
+    ruby2_keywords (0.0.4)
     rubyzip (2.3.0)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
@@ -292,6 +323,16 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (2.3.1)
+    sentry-rails (4.2.2)
+      rails (>= 5.0)
+      sentry-ruby-core (~> 4.2.0)
+    sentry-ruby (4.2.2)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      faraday (>= 1.0)
+      sentry-ruby-core (= 4.2.2)
+    sentry-ruby-core (4.2.2)
+      concurrent-ruby
+      faraday
     spree (4.2.0.rc5)
       spree_api (= 4.2.0.rc5)
       spree_backend (= 4.2.0.rc5)
@@ -411,6 +452,7 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    xml-simple (1.1.8)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.4.2)
@@ -423,6 +465,8 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   capybara (>= 3.26)
+  hashie
+  httparty
   jbuilder (~> 2.7)
   listen (~> 3.3)
   mysql2 (~> 0.5)
@@ -432,10 +476,13 @@ DEPENDENCIES
   sass-rails (>= 6)
   sassc!
   selenium-webdriver
+  sentry-rails
+  sentry-ruby
   spree (~> 4.2.0.rc5)
   spree_auth_devise (~> 4.3)
   spree_gateway (~> 3.9)
   spree_i18n!
+  spree_paypal_express!
   spring
   turbolinks (~> 5)
   tzinfo-data
