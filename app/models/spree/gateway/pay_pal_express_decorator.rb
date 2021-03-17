@@ -13,7 +13,7 @@ module Spree
  	end
 end
 
-# ::Spree::Gateway::PayPalExpress.prepend Spree::Gateway::PayPalExpressDecorator if ::Spree::Gateway::PayPalExpress.included_modules.exclude?(Spree::Gateway::PayPalExpressDecorator)
+::Spree::Gateway::PayPalExpress.prepend Spree::Gateway::PayPalExpressDecorator if ::Spree::Gateway::PayPalExpress.included_modules.exclude?(Spree::Gateway::PayPalExpressDecorator)
 
 
 
