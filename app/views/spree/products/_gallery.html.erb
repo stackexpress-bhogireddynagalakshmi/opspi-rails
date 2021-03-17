@@ -1,11 +1,55 @@
 <div class="col-12 col-md-7 col-lg-7" data-hook="product_left_part">
-  <% if @product_images.size > 0 %>
-    <div
+
+<h3 class="pt-4 font-weight-bold text-uppercase product-details-subtitle">Plan Summary</h3>
+
+
+  <table class="table">
+     <tr>
+      <td>Plan Name</td>
+      <td><%=@product.name%></td>
+    </tr>
+     <tr>
+      <td>Plan Type</td>
+      <td><%=@product.plan_type.try(:titleize)%></td>
+    </tr>
+     
+    <tr>
+      <td>No of Website</td>
+      <td><%=@product.no_of_website%></td>
+    </tr>
+    <tr>
+      <td>Storage</td>
+      <td><%=@product.storage%> GB</td>
+    </tr>
+    <tr>
+      <td>Domain</td>
+      <td><%=@product.domain%></td>
+    </tr>
+    <tr>
+      <td>Subdomain</td>
+      <td><%=@product.subdomain%></td>
+    </tr>
+    <tr>
+      <td>Parked Domain</td>
+      <td><%=@product.parked_domain%></td>
+    </tr>
+    <tr>
+      <td>Mailbox</td>
+      <td><%=@product.mailbox%></td>
+    </tr>
+     <tr>
+      <td>SSL Support</td>
+      <td><%=@product.ssl_support? ? "Yes" : "No"%></td>
+    </tr>
+  </table>
+
+  <%# if @product_images.size > 0 %>
+    <!-- <div
       class="w-100 d-flex align-self-start justify-content-between product-details-images"
       data-hook="product_left_part_wrap">
 
       <div class="d-none d-md-block product-details-thumbnails" data-hook="product_thumbnails">
-        <%= render 'spree/shared/carousel/thumbnails',
+        <%#= render 'spree/shared/carousel/thumbnails',
                   images: @product_images,
                   group_id: 'main-product-carousel',
                   id: 'productThumbnailsCarousel',
@@ -13,13 +57,13 @@
                   per_page: 5 %>
       </div>
       <div class="product-details-single" data-hook="product_images">
-        <%= render 'spree/shared/carousel/single',
+        <%#= render 'spree/shared/carousel/single',
                   images: @product_images,
                   group_id: 'main-product-carousel',
                   id: 'productCarousel',
                   trigger_id: 'productCarousel',
                   zoomed: false %>
       </div>
-    </div>
-  <% end %>
+    </div> -->
+  <%# end %>
 </div>
