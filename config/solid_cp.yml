@@ -1,0 +1,27 @@
+development:
+  base_url: http://jodocppanel.infiops.com:9001/Default.aspx
+  username: <%= ENV["SOLID_CP_USERNAME"]%>
+  password: <%= ENV["SOLID_CP_PASSWORD"]%>
+  timeout: 30
+  log: true
+  register_users: true
+
+staging:
+  base_url: http://jodocppanel.infiops.com:9001/Default.aspx
+  username: 
+  password: 
+  register_users: false
+
+test:
+  base_url: http://jodocppanel.infiops.com:9001/Default.aspx
+  username: 
+  password: 
+  register_users: false
+  
+production:
+  base_url: http://jodocppanel.infiops.com:9001/Default.aspx
+  username: <%= ENV["SOLID_CP_USERNAME"]%>
+  password: <%= ENV["SOLID_CP_PASSWORD"]%>
+  timeout: 30
+  log: false
+  register_users: true

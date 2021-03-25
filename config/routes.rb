@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     collection do
        get :subscription
        get :subscription_cancel
+       get :create_solidcp_account
     end
   end
 
