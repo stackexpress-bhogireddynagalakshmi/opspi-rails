@@ -22,7 +22,8 @@ stages:
 
 docker-build-production:
   # Official docker image.
-  image: docker:latest
+  image: docker:stable
+  privileged: true
   stage: build
   services:
     - docker:dind
