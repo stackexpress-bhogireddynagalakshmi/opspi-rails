@@ -27,7 +27,10 @@ docker-build-production:
   services:
     - docker:dind
   before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+      echo "$CI_REGISTRY_USER"
+      echo "$CI_REGISTRY_PASSWORD"
+      echo "$CI_REGISTRY"
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH" -t "$CI_REGISTRY_IMAGE:production" .
     - docker push "$CI_REGISTRY_IMAGE"
