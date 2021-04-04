@@ -37,15 +37,17 @@
 
     <%= f.field_container :admin_email, class: ['form-group'] do %>
       <%= f.label :admin_email, raw(Spree.t(:admin_email) + required_span_tag) %>
-      <%= f.text_field :admin_email, class: 'form-control', required: true %>
+      <%= f.text_field :admin_email, class: 'form-control', required: true,data: {orignal_email: f.object.admin_email} %>
       <%= f.error_message_on :admin_email %>
     <% end %>
 
-    <%= f.field_container :admin_password, class: ['form-group'] do %>
-      <%= f.label :admin_password, raw(Spree.t(:admin_password) + required_span_tag) %>
-      <%= f.password_field :admin_password, class: 'form-control', required: true %>
-      <%= f.error_message_on :admin_password %>
-    <% end %>
+
+      <%= f.field_container :admin_password, class: ['form-group'] do %>
+        <%= f.label :admin_password, raw(Spree.t(:admin_password)) %>
+        <%= f.password_field :admin_password, class: 'form-control', required: f.object.admin_email.blank? %>
+        <%= f.error_message_on :admin_password %>
+      <% end %>
+
 
     <%= f.field_container :code, class: ['form-group'] do %>
       <%= f.label :code, raw(Spree.t(:code) + required_span_tag) %>
@@ -262,3 +264,4 @@
     <% end %>
   </div>
 </div>
+

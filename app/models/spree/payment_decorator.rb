@@ -11,7 +11,7 @@ module Spree
 	  	# Issue in State machine
 
 	  	def create_subscriptions!
-    	 self.order.create_subscriptions
+    	 self.order.create_subscriptions(self)
     	end
 	end
 end
