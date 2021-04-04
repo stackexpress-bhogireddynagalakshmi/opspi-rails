@@ -51,4 +51,13 @@
       <%= main_menu_tree Spree.t(:configurations), icon: "settings.svg", sub_menu: "configuration", url: "#sidebar-configuration" %>
     </ul>
   <% end %>
+
+   <% if can? :admin, Spree::Admin::ReportsController %>
+    <ul class="nav nav-sidebar border-bottom" id="sidebarReport">
+      <%= tab *Spree::BackendConfiguration::SOLIDCP_TABS, icon: 'report.svg' %>
+    </ul>
+  <% end %>
+
+
+
 </nav>
