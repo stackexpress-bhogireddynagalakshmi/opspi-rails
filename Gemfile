@@ -70,7 +70,7 @@ gem 'spree_paypal_express', git: 'git://github.com/spree-contrib/better_spree_pa
 # gem 'hashie'
 
 gem 'savon', '~> 2.12.0'
-
+gem 'sidekiq'
 
 
 
