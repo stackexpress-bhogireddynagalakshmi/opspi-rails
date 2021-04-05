@@ -2,7 +2,7 @@ default:
   navigation:
     - title: Hosting
       subtitle: Categories
-      url: /hosting
+      url: /#
       items:
         - :title: Shared Hosting
           :url: /hosting/shared-hosting
@@ -21,7 +21,7 @@ default:
         #   image: 'meganav/promo_banner_right-first-category.jpg'
     - title: Servers
       subtitle: Categories
-      url: /servers
+      url: /#
       items:
         - :title: Linux Dedicated Servers
           :url: /servers/linux-dedicated-servers
@@ -38,7 +38,7 @@ default:
         #   image: 'meganav/promo_banner_right-second-category.jpg'
     - title: Cloud
       subtitle: Categories
-      url: /cloud
+      url: /#
       items:
         - :title: Cloud Hosting
           :url: /servers/cloud-hosting

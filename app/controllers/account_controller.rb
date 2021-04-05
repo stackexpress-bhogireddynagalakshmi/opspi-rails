@@ -21,4 +21,14 @@ class AccountController < Spree::StoreController
    		render "subscription"
    	end
 
+
+    def create_solidcp_account
+      ProvisioningJob.perform_later(spree_current_user.id)
+      # if response[:success] == true
+      #   flash[:success] = response[:message]
+      # else
+      #   flash[:error] = response[:message]
+      # end
+    end
+
 end

@@ -1,4 +1,13 @@
 <div class="form-group mb-5">
+  <%= f.text_field :first_name, class: 'spree-flat-input', placeholder: Spree.t(:first_name) %>
+</div>
+
+<div class="form-group mb-5">
+  <%= f.text_field :last_name, class: 'spree-flat-input', placeholder: Spree.t(:last_name) %>
+</div>
+
+
+<div class="form-group mb-5">
   <%= f.email_field :email, class: 'spree-flat-input', placeholder: Spree.t(:email) %>
 </div>
 

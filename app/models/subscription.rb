@@ -11,6 +11,7 @@ class Subscription < ApplicationRecord
 	     	existing_subscription.update({status: true})
 	    else
 	    	self.create_fresh_subscription(opts)
+	    	ProvisioningJob.perform_later(opts[:user].try(:id),opts[:product].try(:id))
 	    end
 	end
 

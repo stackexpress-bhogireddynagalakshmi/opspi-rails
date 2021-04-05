@@ -24,7 +24,9 @@ module Spree
 
 		       self.update_column :account_id, account.id
 		     
-		        admin = Spree::User.find_by({email: email})		        
+
+		        admin = Spree::User.find_by({email: email})		
+
 		       	admin = Spree::User.create({email: email,:password=>password,:password_confirmation=>password}) if admin.blank?
  	
 		        admin.update(:login => email,
@@ -33,8 +35,8 @@ module Spree
 		        role = Spree::Role.find_or_create_by({:name=>'store_admin'})
 		        admin.spree_roles << role if !admin.spree_roles.include?(role)
 		        admin.save
-		      end
-		
+
+		    end
 	  	end
 	end
 end
