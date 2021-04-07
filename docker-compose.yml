@@ -7,5 +7,5 @@ services:
     env_file: .env
     ports:
       - '3000:3000'
-    command: bash -c "bundle exec sidekiq && bundle exec rails server -b 0.0.0.0" 
+    #command: bash -c "bundle exec sidekiq && bundle exec rails server -b 0.0.0.0" 
     restart: unless-stopped
