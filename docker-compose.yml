@@ -12,7 +12,8 @@ services:
     #command: bash -c "bundle exec sidekiq && bundle exec rails server -b 0.0.0.0"
     restart: unless-stopped
   sidekiq:
-    build: .
+    container_name: sidekiq
+    image: "${APP_IMAGE}"
     env_file: .env
     #volumes:
     #  - .:/myapp
