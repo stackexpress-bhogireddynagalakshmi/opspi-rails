@@ -9,7 +9,7 @@ services:
       - '3000:3000'
     volumes:
       - /var/log/opspi/:/project/log/
-    #command: bash -c "bundle exec sidekiq && bundle exec rails server -b 0.0.0.0"
+    command: bundle exec rails server -b 0.0.0.0
     restart: unless-stopped
   sidekiq:
     container_name: sidekiq
