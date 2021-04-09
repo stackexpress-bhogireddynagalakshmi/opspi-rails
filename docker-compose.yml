@@ -17,5 +17,5 @@ services:
     #volumes:
     #  - .:/myapp
     links:
-      - app
+      - opspi
     command: bundle exec sidekiq
