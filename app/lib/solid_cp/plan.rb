@@ -23,13 +23,23 @@ module SolidCp
 	    end
 
 
-	    def add_hosting_plan
-	    	# ServerId
+	    def self.get_hosting_plans
 
+	    	response = super(message: { user_id: 1  })
+	    end
+
+
+	    def get_hosting_plans
+	    	response = super(message: { user_id: user.solid_cp_id  })
+	    end
+
+
+	    def add_hosting_plan
+	    	# ServerId will be used to create master plan
 	    	if plan.solid_cp_plan_id.blank?
 	    		
-	    		user.solid_cp.package.add_package if user.packages.blank?
-	    		
+	    		user.solid_cp.package.add_package(plan.solid_cp_master_plan_id)	   		
+	
 				response = super(message: { 
 			   		plan: {
 			   			"PackageId" => user.packages.first.try(:solid_cp_package_id),
@@ -41,12 +51,12 @@ module SolidCp
 				   		"RecurringPrice" =>0.0000,
 				   		"RecurrenceUnit"=> 2,
 				   		"RecurrenceLength" =>1,
+				   		"Groups" => get_hosting_plan_groups_info,
+				   		"Quotas" => get_hosting_plan_quotas_info,
 				   		"UserId"=>user.solid_cp_id	   		
 			   		}
 			   	 })
-				# "Groups" => {
-
-				#    		},
+				
 
 				if response.success? && response.body[:add_hosting_plan_response][:add_hosting_plan_result].to_i > 0 
 					plan.solid_cp_plan_id = response.body[:add_hosting_plan_response][:add_hosting_plan_result].to_i
@@ -57,7 +67,59 @@ module SolidCp
 			else
 					{:success=>true,:message=> "Plan Already exists.",response: response}
 			end
+	    end
 
+
+	    def get_hosting_plan_groups_info
+	    	group_hash = {}
+	        arr = plan.plan_quota_groups.collect do |quota_group| 
+	    	 	{
+	   				"GroupId" => quota_group.solid_cp_quota_group_id,
+	   				"Enabled" => quota_group.enabled,
+	   				"CalculateDiskSpace" => quota_group.calculate_diskspace,
+	   				"CalculateBandwidth" => quota_group.calculate_bandwidth
+   				}
+	    	end
+	    	group_hash["HostingPlanGroupInfo"] = arr
+	    	group_hash
+	    end
+
+	    def get_hosting_plan_quotas_info
+	    	quota_hash = {}
+	    	arr = plan.plan_quotas.uniq(&:solid_cp_quota_id).collect do |plan_quota|
+		    	{
+		    		"QuotaId" => plan_quota.solid_cp_quota_id,
+		    		"QuotaValue" => plan_quota.quota_value
+		    	}
+		    	
+	    	end
+	    	quota_hash["HostingPlanQuotaInfo"] = arr
+	    	quota_hash
+	    end
+
+	   
+
+	    def self.get_hosting_plan_quotas(plan_id)
+	    	response = super(message: { plan_id: plan_id })
+	    end
+
+	     #syncronous api call
+	    def get_hosting_plan_quotas
+	    	response = super(message: { plan_id: plan.solid_cp_plan_id })
+	    end
+
+	    #syncronous api call
+	    def self.master_plans_dropdown
+	
+	    	response = SolidCp::Plan.get_hosting_plans
+	    	begin
+				plans  = response.body[:get_hosting_plans_response][:get_hosting_plans_result][:diffgram][:new_data_set][:table]	
+	    		
+	    	rescue Exception => e
+	    		plans = [] 
+	    	end	
+	    	plans.collect{|x| [x[:plan_name],x[:plan_id]]}
+	     # static_plan_ids = [["Mishal_TEST", "7"], ["New Plan 01", "31"], ["New Reseller Test Plan", "33"], ["Red Hat Hosting", "10"], ["test", "3"], ["Test Window Hostig", "4"], ["Win-Basic", "2"], ["Windows Premium Hosting", "30"]]
 	    end
 
 	end

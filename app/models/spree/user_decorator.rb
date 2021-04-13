@@ -6,7 +6,7 @@ module Spree
 	    	base.has_many :susbscriptions,:class_name=>'Subscription'
 	    	base.has_many :plans,through: :susbscriptions,:class_name=>'Spree::Product' 
 	    	base.has_many :packages,:class_name=>'Package'
-
+	    	base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
 	    	base.has_one :shared_hosting,->{joins(:plans).where(:plan_type=>'SHARED_HOSTING')}, :class_name=>'Subscription'
 	    	base.after_commit :add_to_solid_cp, on: [:create]
 	  	end

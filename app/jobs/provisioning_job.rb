@@ -32,8 +32,10 @@ class ProvisioningJob < ApplicationJob
   # this will provision the store Admin/Reseller Account and also creates hosting space for the reseller on solidcp panel
   def provision_store_admin_account(user,product_id)
     response = user.solid_cp.add_user('Reseller',RESELLER_ROLE_ID)
+    
+    solid_cp_master_plan_id = user.spree_store.solid_cp_master_plan_id || RESELLER_ROLE_ID
     if response[:success] == true
-     subscribe_to_solidcp_plan(user,RESELLER_PLAN_ID) if user.packages.count <= 1
+     subscribe_to_solidcp_plan(user,solid_cp_master_plan_id) if user.packages.count <= 1
     else
       raise StandardError.new response[:message] 
     end

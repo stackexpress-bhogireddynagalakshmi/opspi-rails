@@ -4,6 +4,8 @@ module Spree
 	  def self.prepended(base)
 	     
 	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
+	    # base.after_commit :provision_hosting_space,on: :create
+
 	    base.acts_as_tenant :account,class_name: '::Account'
 	    base.validates :url, uniqueness: true
 
@@ -38,10 +40,15 @@ module Spree
 
 		    end
 	  	end
+
+	  	# def provision_hosting_space
+	  	# 	admin = Spree::User.find_by({email: email})
+	  	# end
 	end
 end
 
 ::Spree::Store.prepend ::Spree::StoreDecorator if ::Spree::Store.included_modules.exclude?(::Spree::StoreDecorator)
 Spree::PermittedAttributes.store_attributes.push << :admin_email
 Spree::PermittedAttributes.store_attributes.push << :admin_password
+Spree::PermittedAttributes.store_attributes.push << :solid_cp_master_plan_id
 

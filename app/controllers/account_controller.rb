@@ -24,11 +24,15 @@ class AccountController < Spree::StoreController
 
     def create_solidcp_account
       ProvisioningJob.perform_later(spree_current_user.id)
-      # if response[:success] == true
-      #   flash[:success] = response[:message]
-      # else
-      #   flash[:error] = response[:message]
-      # end
     end
 
+    def get_hosting_plan_quotas
+      solid_cp_plan_id = current_store.solid_cp_master_plan_id || 10
+      response = SolidCp::Plan.get_hosting_plan_quotas(solid_cp_plan_id)
+      groups  = response.body[:get_hosting_plan_quotas_response][:get_hosting_plan_quotas_result][:diffgram][:new_data_set][:table]  
+      groups = groups.select{|x| x[:enabled]}
+      quotas  = response.body[:get_hosting_plan_quotas_response][:get_hosting_plan_quotas_result][:diffgram][:new_data_set][:table1]     
+      render :partial=> 'spree/admin/products/solid_cp_quota_groups',:locals=>{quota_groups: groups,quotas: quotas},:layout=>false
+    end
+    
 end
