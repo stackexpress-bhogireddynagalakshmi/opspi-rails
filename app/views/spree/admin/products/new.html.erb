@@ -19,13 +19,19 @@
       <%= f.error_message_on :plan_type %>
     <% end %>
 
+
+   
     <div data-hook="admin_product_form_plan_type">
         <%= f.field_container :subscribable, class: ['form-group'] do %>
+        <%= f.check_box :subscribable,class: 'mr-2'%>
         <%= f.label :subscribable, raw(Spree.t(:subscribable) + required_span_tag) %>
-        <%= f.check_box :subscribable%>
         <%= f.error_message_on :subscribable %>
       <% end %>
+    </div>
 
+    <div id="product_quota_groups">
+       <%#= render :partial=>'solid_cp_quota_groups',:locals=>{quota_groups: [],form: f}%>
+       <%=render_hosting_plan_quota_partial(f,@product)%>
     </div>
 
     <div class="row">
@@ -86,7 +92,7 @@
       <div class="col-md-4">
         <%= f.field_container :mailbox, class: ['form-group'] do %>
           <%= f.label :mailbox, raw(Spree.t(:mailbox) + required_span_tag) %>
-          <%= f.text_field :mailbox, class: 'form-control title', required: :required %>
+          <%= f.text_field :mailbox, class: 'form-control title'%>
           <%= f.error_message_on :mailbox %>
         <% end %>  
       </div>
@@ -204,5 +210,17 @@
       prototype_select.change();
     }
   })(jQuery);
+
+
+  $(document).ready(function (argument) {
+    $('#product_solid_cp_master_plan_id').on('change',function(){
+       var solidcpPlanId = $(this).val();
+
+        $.get('/account/get_hosting_plan_quotas?solid_cp_plan_id='+solidcpPlanId,function(data){
+          $('#product_quota_groups').html(data);
+        });
+    });
+  });
+
 //]]>
 </script>

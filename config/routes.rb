@@ -38,6 +38,7 @@ Rails.application.routes.draw do
        get :subscription
        get :subscription_cancel
        get :create_solidcp_account
+       get :get_hosting_plan_quotas
     end
   end
 

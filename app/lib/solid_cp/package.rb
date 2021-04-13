@@ -30,22 +30,28 @@ module SolidCp
 	    
 	    def  add_package(plan_id=10)
 
-	    	response  = super(message: {
-		    	 user_id: user.solid_cp_id,
-		    	 plan_id: plan_id,
-		    	 package_name: "#{user.account.orgainization_name.snakecase}_hosting_space_#{plan_id}",
-		    	 package_comments: "Hosting space for #{user.full_name}",
-		    	 status_id: 1,
-		    	 purchase_date: Time.now.strftime('%Y-%m-%dT%H:%M:%S.%L'),
-	    	})
-
-	    
-	    	if response.success? && response.body[:add_package_response][:add_package_result][:result].to_i > 0
-	    		user.packages.create({:solid_cp_package_id=>response.body[:add_package_response][:add_package_result][:result]})
-	    		{:success=>true, :message=>'SolidCP Package created successfully',response: response}
-	    	else
-	    		{:success=>true, :message=>'Something went wrong. Please try again.',response: response}
-	    	end
+	    	if user.packages.where(solid_cp_master_plan_id: plan_id).first.blank?
+		    	response  = super(message: {
+			    	 user_id: user.solid_cp_id,
+			    	 plan_id: plan_id,
+			    	 package_name: "#{user.account.orgainization_name.snakecase}_hosting_space_#{plan_id}",
+			    	 package_comments: "Hosting space for #{user.full_name}",
+			    	 status_id: 1,
+			    	 purchase_date: Time.now.strftime('%Y-%m-%dT%H:%M:%S.%L'),
+		    	})
+		    
+		    	if response.success? && response.body[:add_package_response][:add_package_result][:result].to_i > 0
+		    		user.packages.create({:solid_cp_package_id=>response.body[:add_package_response][:add_package_result][:result],
+		    			solid_cp_master_plan_id: plan_id})
+		    		{:success=>true, :message=>'SolidCP Package created successfully',response: response}
+		    	else
+		    		{:success=>true, :message=>'Something went wrong. Please try again.',response: response}
+		    	end
+		    else
+		    	{:success=>true, :message=>'SolidCP Package already exists'}
+		    end
 	    end
+
+
 	end
 end

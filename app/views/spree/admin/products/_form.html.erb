@@ -29,11 +29,16 @@
 	      <%= f.error_message_on :plan_type %>
 	       <% end %>
 
+
         <%= f.field_container :subscribable, class: ['form-group'] do %>
-          <%= f.label :subscribable, raw(Spree.t(:subscribable) + required_span_tag) %>
           <%= f.check_box :subscribable%>
+          <%= f.label :subscribable, raw(Spree.t(:subscribable) + required_span_tag) %>
           <%= f.error_message_on :subscribable %>
         <% end %>
+         <div id="product_quota_groups">
+           <%#= render :partial=>'solid_cp_quota_groups',:locals=>{quota_groups: [],form: f}%>
+           <%=render_hosting_plan_quota_partial(f,@product)%>
+        </div>
     
       	 <%= f.field_container :no_of_website, class: ['form-group'] do %>
           <%= f.label :no_of_website, raw(Spree.t(:no_of_website) ) %>
