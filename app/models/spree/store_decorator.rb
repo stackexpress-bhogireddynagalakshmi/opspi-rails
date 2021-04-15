@@ -1,6 +1,6 @@
 module Spree
 	module StoreDecorator
-	  attr_accessor :admin_password
+	  attr_accessor :admin_password,:solid_cp_password
 	  def self.prepended(base)
 	     
 	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
@@ -30,7 +30,9 @@ module Spree
 		        admin = Spree::User.find_by({email: email})		
 
 		       	admin = Spree::User.create({email: email,:password=>password,:password_confirmation=>password}) if admin.blank?
- 	
+
+		       	Sidekiq.redis{|conn|conn.set("spree_user_id_#{admin.id}", solid_cp_password)} if solid_cp_password.present?
+
 		        admin.update(:login => email,
 	                :account_id => account.id)
 
@@ -41,14 +43,14 @@ module Spree
 		    end
 	  	end
 
-	  	# def provision_hosting_space
-	  	# 	admin = Spree::User.find_by({email: email})
-	  	# end
 	end
 end
 
 ::Spree::Store.prepend ::Spree::StoreDecorator if ::Spree::Store.included_modules.exclude?(::Spree::StoreDecorator)
 Spree::PermittedAttributes.store_attributes.push << :admin_email
 Spree::PermittedAttributes.store_attributes.push << :admin_password
+Spree::PermittedAttributes.store_attributes.push << :solid_cp_password
 Spree::PermittedAttributes.store_attributes.push << :solid_cp_master_plan_id
+
+
 

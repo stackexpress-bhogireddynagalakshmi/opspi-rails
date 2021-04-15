@@ -35,65 +35,12 @@
     </div>
 
     <div class="row">
-      <div class="col-md-4">
-        <%= f.field_container :no_of_website, class: ['form-group'] do %>
-          <%= f.label :no_of_website, raw(Spree.t(:no_of_website) ) %>
-          <%= f.number_field :no_of_website, class: 'form-control title' %>
-          <%= f.error_message_on :no_of_website %>
-        <% end %>  
-      </div>
-
-       <div class="col-md-4">
-        <%= f.field_container :storage, class: ['form-group'] do %>
-          <%= f.label :storage, raw(Spree.t(:storage) + required_span_tag) %>
-           <%= f.select :storage, options_for_select([['1 GB',1],['2 GB',2],['5 GB',5],['10 GB',10],['30 GB',30],['50 GB',50]],f.object.ssl_support),{},class: 'form-control title' %>
-          <%= f.error_message_on :storage %>
-        <% end %>  
-      </div>
-
        <div class="col-md-4">
         <%= f.field_container :ssl_support, class: ['form-group'] do %>
           <%= f.label :ssl_support, raw(Spree.t(:ssl_support) + required_span_tag) %>
            <%= f.select :ssl_support, options_for_select([['NO',false],['Yes',true]],f.object.ssl_support),{},class: 'form-control title' %>
           
           <%= f.error_message_on :ssl_support %>
-        <% end %>  
-      </div>
-    </div>
-
-     <div class="row">
-      <div class="col-md-4">
-        <%= f.field_container :domain, class: ['form-group'] do %>
-          <%= f.label :domain, raw(Spree.t(:domain)) %>
-          <%= f.number_field :domain, class: 'form-control title' %>
-          <%= f.error_message_on :domain %>
-        <% end %>  
-      </div>
-
-       <div class="col-md-4">
-        <%= f.field_container :subdomain, class: ['form-group'] do %>
-          <%= f.label :subdomain, raw(Spree.t(:subdomain)) %>
-           <%= f.number_field :subdomain, class: 'form-control title' %>
-          <%= f.error_message_on :subdomain %>
-        <% end %>  
-      </div>
-
-       <div class="col-md-4">
-        <%= f.field_container :parked_domain, class: ['form-group'] do %>
-          <%= f.label :parked_domain, raw(Spree.t(:parked_domain)) %>
-           <%= f.number_field :parked_domain, class: 'form-control title' %>
-          
-          <%= f.error_message_on :parked_domain %>
-        <% end %>  
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-4">
-        <%= f.field_container :mailbox, class: ['form-group'] do %>
-          <%= f.label :mailbox, raw(Spree.t(:mailbox) + required_span_tag) %>
-          <%= f.text_field :mailbox, class: 'form-control title'%>
-          <%= f.error_message_on :mailbox %>
         <% end %>  
       </div>
 
@@ -115,9 +62,10 @@
         <% end %>  
       </div>
 
-      
+
     </div>
-    
+
+
     <div data-hook="new_product_attrs" class="row">
       <% unless @product.has_variants? %>
         <div data-hook="new_product_sku" class="col-12 col-md-4">

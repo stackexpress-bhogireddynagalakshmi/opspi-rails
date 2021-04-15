@@ -1,6 +1,7 @@
 module Spree
 	module UserDecorator
 
+
 		def self.prepended(base)
 	    	base.acts_as_tenant :account,:class_name=>'::Account'
 	    	base.has_many :susbscriptions,:class_name=>'Subscription'
@@ -24,18 +25,18 @@ module Spree
 	  	end
 
 	  	def add_to_solid_cp
-	  		set_solid_cp_credentials
-	  		ProvisioningJob.perform_later(self.id)
+	  		# set_solid_cp_credentials
+	  		ProvisioningJob.set(wait: 3.second).perform_later(self.id)
+	  		#ProvisioningJob.perform_later(self.id)
 	  	end
 
-	  	def set_solid_cp_credentials
-	  		self.solid_cp_password = SolidCp::Misc.password_generator
-      		save!
-	  	end
 
+	  	# def set_solid_cp_credentials
+	  	# 	self.solid_cp_password = SolidCp::Misc.password_generator
+    	#   save!
+	  	# end
 
 	  	# Solid CP Concerns
-	  	
 	  	def company_name
 	  		account.orgainization_name
 	  	end
