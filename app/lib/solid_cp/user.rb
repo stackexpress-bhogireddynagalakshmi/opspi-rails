@@ -52,10 +52,8 @@ module SolidCp
 	    def add_user(user_type='User',role_id=3)
 	    
 	    	if user.solid_cp_id.blank?
-	    		if user.solid_cp_password.blank?
-	    			user.solid_cp_password = SolidCp::Misc.password_generator
-	    			user.save 
-	    		end
+	    		set_solid_cp_password if get_solid_cp_password.blank? 
+	    			
 			   	response = super(message: { 
 			   		user: {
 			   			"RoleId" => role_id,
@@ -71,7 +69,7 @@ module SolidCp
 				   		"Email"=> user.email,
 				   		"CompanyName" => user.company_name,
 				   	    "HtmlMail"=> false,
-			   		},password: user.solid_cp_password
+			   		},password: get_solid_cp_password
 			   	 })
 
 			   	if response.success? && response.body[:add_user_response][:add_user_result].to_i > 0 
@@ -128,6 +126,20 @@ module SolidCp
 	   	def plan(product)
 	   		@plan ||= SolidCp::Plan.new(user,product)
 	   	end
+
+	   	def get_solid_cp_password
+	   		Sidekiq.redis{|conn|conn.get("spree_user_id_#{user.id}")}
+	   	end
+
+	   	def set_solid_cp_password(password=nil)
+	   		password = SolidCp::Misc.password_generator if password.blank?
+	   		Sidekiq.redis{|conn|conn.set("spree_user_id_#{user.id}", password)}
+	   	end
+
+	   	def remove_passoword_key
+	   		Sidekiq.redis{|conn|conn.del("spree_user_id_#{user.id}")}
+	   	end
+
 	end
 end
 
