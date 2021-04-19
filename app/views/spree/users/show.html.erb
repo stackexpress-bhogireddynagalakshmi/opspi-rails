@@ -66,12 +66,19 @@
               <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
 
               <%if spree_current_user.store_admin?%>
-               
-               <div class="info-box-content">
-                  <span class="info-box-text">Users</span>
-                  <span class="info-box-number">
-                      <%=link_to current_tenant&.users&.count, spree.admin_users_path, class: 'dropdown-item' if spree.respond_to?(:account_path)%>
-                  </span>
+                 <div class="info-box-content">
+                    <span class="info-box-text">Users</span>
+                    <span class="info-box-number">
+                        <%=link_to current_tenant&.users&.count, spree.admin_users_path, class: 'dropdown-item' if spree.respond_to?(:account_path)%>
+                    </span>
+                  </div>
+               <%elsif spree_current_user.superadmin?%>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Resellers</span>
+                    <span class="info-box-number">
+                        <%=link_to Spree::Store.all.size, spree.admin_stores_path, class: 'dropdown-item'%>
+                    </span>
                 </div>
 
               <%else%>
@@ -80,12 +87,25 @@
                   <span class="info-box-number"><%=spree_current_user.susbscriptions.active.count%></span>
                 </div>
                 <%end%>
-
-
               <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
           </div>
+
+          <% if spree_current_user.superadmin?%>
+
+          <div class="col-md-3 col-sm-6 col-xs-12">
+             <div class="info-box">
+                 <div class="info-box-content">
+                    <span class="info-box-text">Users</span>
+                    <span class="info-box-number">
+                        <%=link_to Spree::User.all.count,spree.admin_users_path, class: 'dropdown-item' if spree.respond_to?(:account_path)%>
+                    </span>
+                  </div>               
+             </div>
+          </div>
+          <%end%>
+
           <!-- /.col -->
           <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box">
@@ -99,7 +119,15 @@
                     </span>
                 </div>
 
-                
+            <%elsif spree_current_user.superadmin? %>
+                <div class="info-box-content">
+                  <span class="info-box-text">Orders</span>
+                  <span class="info-box-number">
+                    <%=link_to Spree::Order.all.count,spree.admin_orders_path%>
+                   </span>
+                </div>
+
+
               <%else%>
 
                 <div class="info-box-content">

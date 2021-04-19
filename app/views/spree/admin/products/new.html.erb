@@ -34,38 +34,6 @@
        <%=render_hosting_plan_quota_partial(f,@product)%>
     </div>
 
-    <div class="row">
-       <div class="col-md-4">
-        <%= f.field_container :ssl_support, class: ['form-group'] do %>
-          <%= f.label :ssl_support, raw(Spree.t(:ssl_support) + required_span_tag) %>
-           <%= f.select :ssl_support, options_for_select([['NO',false],['Yes',true]],f.object.ssl_support),{},class: 'form-control title' %>
-          
-          <%= f.error_message_on :ssl_support %>
-        <% end %>  
-      </div>
-
-      <div class="col-md-4">
-        <%= f.field_container :auto_daily_malware_scan, class: ['form-group'] do %>
-          <%= f.label :auto_daily_malware_scan, raw(Spree.t(:auto_daily_malware_scan) + required_span_tag) %>
-           <%= f.select :auto_daily_malware_scan, options_for_select([['NO',false],['Yes',true]],f.object.auto_daily_malware_scan),{},class: 'form-control title' %>
-
-          <%= f.error_message_on :auto_daily_malware_scan %>
-        <% end %>  
-      </div>
-
-
-      <div class="col-md-4">
-        <%= f.field_container :email_order_confirmation, class: ['form-group'] do %>
-          <%= f.label :email_order_confirmation, raw(Spree.t(:email_order_confirmation) + required_span_tag) %>
-           <%= f.select :email_order_confirmation, options_for_select([['NO',false],['Yes',true]],f.object.email_order_confirmation),{},class: 'form-control title' %>
-          <%= f.error_message_on :email_order_confirmation %>
-        <% end %>  
-      </div>
-
-
-    </div>
-
-
     <div data-hook="new_product_attrs" class="row">
       <% unless @product.has_variants? %>
         <div data-hook="new_product_sku" class="col-12 col-md-4">
