@@ -4,10 +4,9 @@ module Spree
 	  def self.prepended(base)
 	     
 	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
-	    # base.after_commit :provision_hosting_space,on: :create
-
 	    base.acts_as_tenant :account,class_name: '::Account'
 	    base.validates :url, uniqueness: true
+	    base.validates_format_of :admin_email, with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
 	  end
 

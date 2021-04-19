@@ -12,16 +12,6 @@
       <td>Plan Type</td>
       <td><%=@product.plan_type.try(:titleize)%></td>
     </tr>
-     
-     <tr>
-      <td>SSL Support</td>
-      <td><%=@product.ssl_support? ? "Yes" : "No"%></td>
-    </tr>
-
-     <tr>
-      <td>SSL Support</td>
-      <td><%=@product.ssl_support? ? "Yes" : "No"%></td>
-    </tr>
   </table>
 
   <%# if @product_images.size > 0 %>
