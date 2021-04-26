@@ -71,6 +71,8 @@ gem 'spree_paypal_express', git: 'git://github.com/spree-contrib/better_spree_pa
 
 gem 'savon', '~> 2.12.0'
 gem 'sidekiq'
+gem 'httparty'
+gem 'hashie'
 
 
 

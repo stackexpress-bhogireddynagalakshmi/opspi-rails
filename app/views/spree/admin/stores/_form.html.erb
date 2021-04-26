@@ -86,7 +86,7 @@
     <% end %>
     <div class="form-group field">
       <label>SolidCP Username</label>
-        <%=text_field_tag 'abc',f.object.admin_email,class: 'form-control title' ,disabled: true,id: 'solid_cp_user_name' %>
+        <%=text_field_tag 'solid_cp_username',f.object.admin_email,class: 'form-control title' ,disabled: true,id: 'solid_cp_user_name' %>
     </div>
 
      <div class="form-group field">
@@ -95,6 +95,32 @@
         <%= f.label :solid_cp_password, 'SolidCP Password' %>
         <%= f.password_field :solid_cp_password, class: 'form-control',id: 'solid_cp_password'%>
         <%= f.error_message_on :solid_cp_password %>
+      <% end %>
+
+    </div>
+
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">
+    <h1 class="card-title mb-0 h5">
+     ISP Config Panel
+    </h1>
+  </div>
+  <div class="card-body">
+   
+    <div class="form-group field">
+      <label>Isp Config Username</label>
+        <%=text_field_tag 'isp_config_username',f.object.admin_email,class: 'form-control title', id: 'solid_cp_user_name' %>
+    </div>
+
+     <div class="form-group field">
+     
+      <%= f.field_container :isp_config_password, class: ['form-group'] do %>
+        <%= f.label :isp_config_password, 'SolidCP Password' %>
+        <%= f.password_field :isp_config_password, class: 'form-control',id: 'isp_config_password'%>
+        <%= f.error_message_on :isp_config_password %>
       <% end %>
 
     </div>
