@@ -15,23 +15,19 @@ module Spree
 	  		ActiveRecord::Base.transaction do
 		      	email =  self.admin_email
 		     	password = self.admin_password
-		      	account = ::Account.find_or_create_by({:store_id=>self.id })
+		     	
 
+		      	account = ::Account.find_or_create_by({:store_id=>self.id })
 			    account.update({
 			      	:orgainization_name=>self.name,
 			      	:domain=> self.url,
 			      	:subdomain=> self.url,
 			    })
 
-		       self.update_column :account_id, account.id
-		     
-
+		        self.update_column :account_id, account.id
 		        admin = Spree::User.find_by({email: email})		
-
 		       	admin = Spree::User.create({email: email,:password=>password,:password_confirmation=>password}) if admin.blank?
-
 		       	Sidekiq.redis{|conn|conn.set("spree_user_id_#{admin.id}", solid_cp_password)} if solid_cp_password.present?
-
 		        admin.update(:login => email,
 	                :account_id => account.id)
 

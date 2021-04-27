@@ -32,6 +32,7 @@ end
     </div>
   </div>
 
+
   <div class="row checkout-content" data-hook="checkout_content">
     <%= form_for @order, url: spree.update_checkout_path(@order.state), html: { id: "checkout_form_#{@order.state}", class: "w-100 d-lg-flex align-items-lg-baseline  flex-wrap position-relative" } do |form| %>
       <div class="<%= if @order.state != 'confirm' then 'col-lg-6' else 'col-md-12' end %>" data-hook="checkout_form_wrapper">
@@ -45,7 +46,15 @@ end
             <%= render partial: 'summary', locals: { order: @order } %>
             <div data-hook="buttons">
               <% submit_label_key = @order.confirm? ? :place_order : :save_and_continue %>
-              <%= submit_tag Spree.t(submit_label_key), class: 'btn btn-primary text-uppercase font-weight-bold w-100 checkout-content-save-continue-button' %>
+
+              <div class="d-none" id="paypal-express-payment-btn">
+                 <%= link_to(Spree.t(submit_label_key), paypal_express_url(:payment_method_id => checkout_available_payment_methods.select{|x|x.method_type == 'check'}.first&.id), :method => :post, class: 'btn btn-primary text-uppercase font-weight-bold w-100 paypal-btn-custom',:id => "paypal_button") %>     
+              </div>
+              
+              <div id="default-payment-btn">
+                <%= submit_tag Spree.t(submit_label_key), class: 'btn btn-primary text-uppercase font-weight-bold w-100 checkout-content-save-continue-button' %>
+              </div>  
+             
             </div>
           </div>
         </div>
