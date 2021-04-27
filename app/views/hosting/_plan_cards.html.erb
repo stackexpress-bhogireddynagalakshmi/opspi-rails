@@ -15,14 +15,12 @@
       <div class="card-body">
         <h1 class="card-title pricing-card-title"><%=number_to_currency(product.price)%> <small class="text-muted">/ mo</small></h1>
         <ul class="list-unstyled mt-3 mb-4">
-          <li><%=product.no_of_website%> website included</li>
-          <%if product.ssl_support%>
-            <li>SSL Support included</li>
+       
+         
+          <li>SSL Support included</li>
+           <%quota_list(product).each do |quota_text|%>
+              <li><%=quota_text%></li>
           <%end%>
-          <li><%=product.storage%> GB of storage</li>
-          <li><%=product.domain%> domain included</li>
-          <li><%=product.subdomain%> subdomain included</li>
-           <li><%=product.mailbox%> mailbox included</li>
           <li>Email support</li>
           <li>Help center access</li>
         </ul>

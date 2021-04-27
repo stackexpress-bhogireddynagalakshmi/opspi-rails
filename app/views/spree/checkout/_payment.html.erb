@@ -7,7 +7,9 @@
     <%= render partial: 'spree/checkout/payment/storecredit' %>
 
     <ul id="payment-method-fields" class="list-unstyled position-relative" data-hook>
-      <% checkout_available_payment_methods.each do |method| %>
+      <%available_methods = @order.send('collect_payment_methods',current_store)%>
+      <!-- checkout_available_payment_methods -->
+      <% available_methods.each do |method| %>
         <li class="radio">
           <%= label_tag '', class: "form-check-label spree-radio-label payment-option", data: { type: method.id == @payment_sources&.first&.payment_method_id ? 'card' : nil } do %>
             <%= radio_button_tag "order[payments_attributes][][payment_method_id]",
@@ -35,3 +37,14 @@
     </div>
   </div>
 </div>
+
+
+<script type="text/javascript">
+  
+  $('#checkout_form_payment button[type=submit]').click(function() {
+      if ($('#order_payments_attributes__payment_method_id_3').is(':checked')) {
+      event.preventDefault();
+      $('a#paypal_button').click();
+      }
+  });
+</script>
