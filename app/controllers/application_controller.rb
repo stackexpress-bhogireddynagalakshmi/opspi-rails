@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
 
 	class DomainCheck
 		def self.check_domain request
-			whitelisted_domains = Spree::Store.pluck(:url) + OpspiHelper.reserved_domains
+			whitelisted_domains = Spree::Store.pluck(:url) + [OpspiHelper.admin_domain]
 		    whitelisted_domains.include? (request.host)
 		end
 	end
