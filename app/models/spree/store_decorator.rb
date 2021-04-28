@@ -1,12 +1,11 @@
 module Spree
 	module StoreDecorator
 	  attr_accessor :admin_password,:solid_cp_password
-	  RESERVED_URL = %w(admin.dev.opspi.com test01.dev.opspi.com localhost 127.0.0.1)
 
 	  def self.prepended(base)
 	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
 	    base.acts_as_tenant :account,class_name: '::Account'
-	    base.validates :url, uniqueness: true,exclusion: { in: RESERVED_URL,message: "%{value} is reserved." }
+	    base.validates :url, uniqueness: true,exclusion: { in: OpspiHelper.reserved_domains,message: "%{value} is reserved." }
 	    base.validates_format_of :admin_email, with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 	  end
 
@@ -30,7 +29,6 @@ module Spree
 		       	Sidekiq.redis{|conn|conn.set("spree_user_id_#{admin.id}", solid_cp_password)} if solid_cp_password.present?
 		        admin.update(:login => email,
 	                :account_id => account.id)
-
 		        role = Spree::Role.find_or_create_by({:name=>'store_admin'})
 		        admin.spree_roles << role if !admin.spree_roles.include?(role)
 		        admin.save
