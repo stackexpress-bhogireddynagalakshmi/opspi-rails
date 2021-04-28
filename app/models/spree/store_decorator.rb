@@ -1,21 +1,21 @@
 module Spree
 	module StoreDecorator
 	  attr_accessor :admin_password,:solid_cp_password
+	  RESERVED_URL = %w(admin.dev.opspi.com test01.dev.opspi.com localhost 127.0.0.1)
+
 	  def self.prepended(base)
-	     
 	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
 	    base.acts_as_tenant :account,class_name: '::Account'
-	    base.validates :url, uniqueness: true
+	    base.validates :url, uniqueness: true,exclusion: { in: RESERVED_URL,message: "%{value} is reserved." }
 	    base.validates_format_of :admin_email, with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-
 	  end
+
 
 	  protected
 	  	def create_account_and_admin_user
 	  		ActiveRecord::Base.transaction do
 		      	email =  self.admin_email
 		     	password = self.admin_password
-		     	
 
 		      	account = ::Account.find_or_create_by({:store_id=>self.id })
 			    account.update({
@@ -37,7 +37,6 @@ module Spree
 
 		    end
 	  	end
-
 	end
 end
 
