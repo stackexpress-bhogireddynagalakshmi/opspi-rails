@@ -110,9 +110,8 @@ module SolidCp
 
 	    #syncronous api call
 	    def self.master_plans_dropdown
-	
-	    	response = SolidCp::Plan.get_hosting_plans
 	    	begin
+	    		response = SolidCp::Plan.get_hosting_plans 
 				plans  = response.body[:get_hosting_plans_response][:get_hosting_plans_result][:diffgram][:new_data_set][:table]	
 	    		
 	    	rescue Exception => e

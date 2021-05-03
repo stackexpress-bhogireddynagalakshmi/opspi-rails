@@ -12,14 +12,12 @@ module IspConfig
 			puts "Adding Client"
 			if user.isp_config_id.blank?
 				set_password('isp_config') if get_password('isp_config').blank? 
-
 				response = query({
 				    :endpoint => '/json.php?client_add',
 				    :method => :GET,
 				    :body => user_hash
 				    
 				})
-				byebug
 				if response.code == "ok"
 					user.isp_config_id = response.response
 					user.save
@@ -112,7 +110,7 @@ module IspConfig
 			    "limit_cron_type": "url",
 			    "limit_cron_frequency": 5,
 			    "limit_traffic_quota": -1,
-			     limit_client: -1,
+			     limit_client: user.get_user_limits,
 			    "parent_client_id": 0,
 			     username: get_username,
 			     password:  get_password('isp_config'),
@@ -123,6 +121,10 @@ module IspConfig
 			    "created_at": 0
             }
         }
+		end
+
+		def get_user_limits
+			user.store_admin? ? -1 : 0
 		end
 
 	end

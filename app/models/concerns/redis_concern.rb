@@ -11,7 +11,8 @@ module RedisConcern
 	   	end
 
 	   	def get_username
-      		user.email[/^[^@]+/]
+	   		return user.isp_config_username if user.isp_config_username.present?
+      		"#{user.email[/^[^@]+/]}_#{user.id}"
     	end
 
 	   	def remove_passoword_key(panel='solid_cp')

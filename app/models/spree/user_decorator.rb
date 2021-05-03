@@ -36,16 +36,14 @@ module Spree
 	  		IspConfigProvisioningJob.set(wait: 3.second).perform_later(self.id)
 	  	end
 
-
 	  	# Solid CP Concerns
 	  	def company_name
-	  		account.orgainization_name
+	  		account&.orgainization_name
 	  	end
 
 	  	def full_name
 	  		"#{first_name} #{last_name}"
 	  	end
-
 
 	  	#for store admin or reseller owner_id will be always 1
 	  	#For normal user ower_id will be the is of Store Admin/Reseller
@@ -57,19 +55,17 @@ module Spree
 	  		end
 	  	end
 
-
 	  	def reseller_id
 	  		if self.store_admin?
 	  			0
 	  		else
-	  			account.store_admin.try(:isp_config_id) || 0
+	  			account&.store_admin.try(:isp_config_id) || 0
 	  		end
 	  	end
 
 	end
 end
 ::Spree::User.prepend Spree::UserDecorator if ::Spree::User.included_modules.exclude?(Spree::UserDecorator)
+
 Spree::PermittedAttributes.user_attributes.push << :first_name
 Spree::PermittedAttributes.user_attributes.push << :last_name
-
-
