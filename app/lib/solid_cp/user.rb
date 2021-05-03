@@ -51,10 +51,8 @@ module SolidCp
 	    # User can be created under any user or reseller so the Owner Id is parent of the current user beimng created
 
 	    def add_user(user_type='User',role_id=3)
-	    
 	    	if user.solid_cp_id.blank?
-	    		set_password if get_password.blank? 
-	    			
+	    		set_password if get_password.blank?
 			   	response = super(message: { 
 			   		user: {
 			   			"RoleId" => role_id,

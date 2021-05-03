@@ -2,7 +2,9 @@ module IspConfig
   class Base
 
     include HTTParty
-    base_uri 'https://173.0.137.83:8080/remote/'
+    # base_uri ''
+    base_uri IspConfig::Config:: base_url
+
     debug_output $stdout
 
     attr_accessor :user
@@ -57,14 +59,15 @@ module IspConfig
     end
 
   
+      
     def login_app
       puts "Login to ISP Config"
       login_hash = {
         :endpoint => '/json.php?login',
         :method => :POST,
         :body => {
-          :username=>'remote_user',
-          :password=>'uJNdM5rq_Lx2Q'
+          :username=>IspConfig::Config.username,
+          :password=>IspConfig::Config.password
         }
       }
       method   = login_hash[:method].to_s.downcase
@@ -72,6 +75,7 @@ module IspConfig
       self.current_session_started = Time.zone.now       
       self.current_session_token = response.parsed_response["response"]
     end
+
 
     def fresh_token?
        current_session_token && current_session_started && current_session_started >= 90.minutes.ago
