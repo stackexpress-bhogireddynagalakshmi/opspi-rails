@@ -1,4 +1,4 @@
-class ProvisioningJob < ApplicationJob
+class SolidCpProvisioningJob < ApplicationJob
   queue_as :default
 
   #constant defined for SolidCP Resources
@@ -66,5 +66,4 @@ class ProvisioningJob < ApplicationJob
   # def solid_cp_response
   #     yield if block_given?
   # end
-
 end

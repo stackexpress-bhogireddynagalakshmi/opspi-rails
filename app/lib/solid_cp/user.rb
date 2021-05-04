@@ -6,12 +6,13 @@ module SolidCp
 		global :open_timeout, SolidCp::Config.timeout
   		global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
 
+  		include RedisConcern
+
 		attr_reader :user,:package
 
 
 	    def initialize user
 	      @user = user
-	    
 	    end
 
 		operations :user_exists, :get_user_by_id,:get_user_by_username, :get_users, :add_user_v_lan, :delete_user_v_lan, :get_raw_users,
@@ -52,7 +53,7 @@ module SolidCp
 	    def add_user(user_type='User',role_id=3)
 	    
 	    	if user.solid_cp_id.blank?
-	    		set_solid_cp_password if get_solid_cp_password.blank? 
+	    		set_password if get_password.blank? 
 	    			
 			   	response = super(message: { 
 			   		user: {
@@ -69,7 +70,7 @@ module SolidCp
 				   		"Email"=> user.email,
 				   		"CompanyName" => user.company_name,
 				   	    "HtmlMail"=> false,
-			   		},password: get_solid_cp_password
+			   		},password: get_password
 			   	 })
 
 			   	if response.success? && response.body[:add_user_response][:add_user_result].to_i > 0 
@@ -82,7 +83,7 @@ module SolidCp
 			   		 
 			   	end
 			else
-				{:success=>true,:message=> "SolidCP user alread exists for this user."}
+				{:success=>true,:message=> "SolidCP account already exists for this user. #{user.email}"}
 			end
 	    end
 
@@ -110,12 +111,7 @@ module SolidCp
 		   	response_hash
 	   	end
 
-	   	#Helper  method to render full_name
-	   	def full_name
-	   		"#{user.first_name} #{user.last_name}"
-	   	end
-
-
+	   
 	   	#Package API interface for the  user/Reseller
 	   	def package
 	   		@package ||= SolidCp::Package.new(user)
@@ -127,18 +123,12 @@ module SolidCp
 	   		@plan ||= SolidCp::Plan.new(user,product)
 	   	end
 
-	   	def get_solid_cp_password
-	   		Sidekiq.redis{|conn|conn.get("spree_user_id_#{user.id}")}
-	   	end
 
-	   	def set_solid_cp_password(password=nil)
-	   		password = SolidCp::Misc.password_generator if password.blank?
-	   		Sidekiq.redis{|conn|conn.set("spree_user_id_#{user.id}", password)}
+	   	#Helper  method to render full_name
+	   	def full_name
+	   		"#{user.first_name} #{user.last_name}"
 	   	end
-
-	   	def remove_passoword_key
-	   		Sidekiq.redis{|conn|conn.del("spree_user_id_#{user.id}")}
-	   	end
+	   		   	
 
 	end
 end

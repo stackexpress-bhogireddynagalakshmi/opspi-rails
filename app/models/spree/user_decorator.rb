@@ -1,7 +1,6 @@
 module Spree
 	module UserDecorator
 
-
 		def self.prepended(base)
 	    	base.acts_as_tenant :account,:class_name=>'::Account'
 	    	base.has_many :susbscriptions,:class_name=>'Subscription'
@@ -10,6 +9,7 @@ module Spree
 	    	base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
 	    	base.has_one :shared_hosting,->{joins(:plans).where(:plan_type=>'SHARED_HOSTING')}, :class_name=>'Subscription'
 	    	base.after_commit :add_to_solid_cp, on: [:create]
+	    	base.after_commit :add_to_isp_config, on: [:create]
 	  	end
 
 	  	def superadmin?
@@ -24,17 +24,18 @@ module Spree
 	  		@solid_cp ||= SolidCp::User.new(self)
 	  	end
 
-	  	def add_to_solid_cp
-	  		# set_solid_cp_credentials
-	  		ProvisioningJob.set(wait: 3.second).perform_later(self.id)
-	  		#ProvisioningJob.perform_later(self.id)
+	  	def isp_config
+	  		@solid_cp ||= IspConfig::User.new(self)
 	  	end
 
+	  	def add_to_solid_cp	  	
+	  		SolidCpProvisioningJob.set(wait: 3.second).perform_later(self.id)
+	  	end
 
-	  	# def set_solid_cp_credentials
-	  	# 	self.solid_cp_password = SolidCp::Misc.password_generator
-    	#   save!
-	  	# end
+	  	def add_to_isp_config	  	
+	  		IspConfigProvisioningJob.set(wait: 3.second).perform_later(self.id)
+	  	end
+
 
 	  	# Solid CP Concerns
 	  	def company_name
@@ -53,6 +54,15 @@ module Spree
 	  			1
 	  		else
 	  			account.store_admin.try(:solid_cp_id) || 1
+	  		end
+	  	end
+
+
+	  	def reseller_id
+	  		if self.store_admin?
+	  			0
+	  		else
+	  			account.store_admin.try(:isp_config_id) || 0
 	  		end
 	  	end
 
