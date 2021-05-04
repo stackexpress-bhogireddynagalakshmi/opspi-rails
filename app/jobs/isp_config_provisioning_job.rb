@@ -16,12 +16,14 @@ class IspConfigProvisioningJob < ApplicationJob
 
   def provision_store_admin_account(user)
   	response  = user.isp_config.create
-  	unless response[:success] == true   raise StandardError.new response[:message]
+  	 return  if response[:success] == true   
+     StandardError.new response[:message]
   end
 
    def provision_user_account(user)
    	 response = user.isp_config.create  
-   	 unless response[:success] == true  raise StandardError.new response[:message]
+   	 return  if nless response[:success] == true 
+     StandardError.new response[:message]
   end
 
 end
