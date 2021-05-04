@@ -13,10 +13,6 @@ module IspConfig
 
     cattr_accessor :current_session_token, :current_session_started
 
-    def isp_config_session_token
-      fresh_token? ? current_session_token : login_app
-    end
-
     def query opts
       method   = opts[:method].to_s.downcase
       header = default_header
@@ -58,8 +54,16 @@ module IspConfig
       end
     end
 
-  
-      
+
+    def isp_config_session_token
+      fresh_token? ? current_session_token : login_app
+    end
+
+    def fresh_token?
+       current_session_token && current_session_started && current_session_started >= 90.minutes.ago
+    end
+
+
     def login_app
       puts "Login to ISP Config"
       login_hash = {
@@ -75,11 +79,7 @@ module IspConfig
       self.current_session_started = Time.zone.now       
       self.current_session_token = response.parsed_response["response"]
     end
-
-
-    def fresh_token?
-       current_session_token && current_session_started && current_session_started >= 90.minutes.ago
-    end
+    
 
   end
 
