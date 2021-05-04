@@ -37,14 +37,14 @@
 
     <%= f.field_container :admin_email, class: ['form-group'] do %>
       <%= f.label :admin_email, raw(Spree.t(:admin_email) + required_span_tag) %>
-      <%= f.text_field :admin_email, class: 'form-control', required: true,data: {orignal_email: f.object.admin_email} %>
+      <%= f.text_field :admin_email, class: 'form-control', required: true,data: {orignal_email: f.object.admin_email},autocomplete: :off %>
       <%= f.error_message_on :admin_email %>
     <% end %>
 
 
       <%= f.field_container :admin_password, class: ['form-group'] do %>
         <%= f.label :admin_password, raw(Spree.t(:admin_password)) %>
-        <%= f.password_field :admin_password, class: 'form-control', required: f.object.admin_email.blank? %>
+        <%= f.password_field :admin_password, class: 'form-control', required: f.object.admin_email.blank?,autocomplete: :off %>
         <%= f.error_message_on :admin_password %>
       <% end %>
 
@@ -79,18 +79,22 @@
     </h1>
   </div>
   <div class="card-body">
+     <div class="form-group field">
+        <%=f.check_box :solid_cp_access,checked: f.object.new_record? ? true : f.object.account&.solid_cp_access?%>
+        <label><%=Spree.t('solid_cp_access')%></label>
+    </div>
+
     <%= f.field_container :solid_cp_master_plan_id, class: ['form-group'] do %>
         <%= f.label :solid_cp_master_plan_id, raw(Spree.t(:solid_cp_plan) + required_span_tag) %>
         <%= f.select :solid_cp_master_plan_id, options_for_select(SolidCp::Plan.master_plans_dropdown,f.object.solid_cp_master_plan_id),{},class: 'form-control title' %>
         <%= f.error_message_on :solid_cp_master_plan_id %>
     <% end %>
     <div class="form-group field">
-      <label>SolidCP Username</label>
-        <%=text_field_tag 'abc',f.object.admin_email,class: 'form-control title' ,disabled: true,id: 'solid_cp_user_name' %>
+      <label><%=Spree.t('solid_cp_username')%></label>
+        <%=text_field_tag 'solid_cp_username',f.object.admin_email,class: 'form-control title' ,disabled: true,id: 'solid_cp_user_name' %>
     </div>
 
      <div class="form-group field">
-     
       <%= f.field_container :solid_cp_password, class: ['form-group'] do %>
         <%= f.label :solid_cp_password, 'SolidCP Password' %>
         <%= f.password_field :solid_cp_password, class: 'form-control',id: 'solid_cp_password'%>
@@ -99,6 +103,34 @@
 
     </div>
 
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">
+    <h1 class="card-title mb-0 h5">
+      <%=Spree.t('isp_config_panel')%>
+    </h1>
+  </div>
+  <div class="card-body">
+
+    <div class="form-group field">
+        <%=f.check_box :isp_config_access,checked: f.object.new_record? ? true : f.object.account&.isp_config_access?%>
+        <label><%=Spree.t('isp_config_access')%></label>
+    </div>
+   
+    <div class="form-group field">
+      <label><%=Spree.t('isp_config_username')%></label>
+        <%=f.text_field 'isp_config_username',value: f.object.account&.store_admin&.isp_config_username,class: 'form-control title', id: 'solid_cp_user_name' %>
+    </div>
+
+     <div class="form-group field">
+      <%= f.field_container :isp_config_password, class: ['form-group'] do %>
+        <%= f.label :isp_config_password, Spree.t('isp_config_password') %>
+        <%= f.password_field :isp_config_password, class: 'form-control',id: 'isp_config_password'%>
+        <%= f.error_message_on :isp_config_password %>
+      <% end %>
+    </div>
   </div>
 </div>
 

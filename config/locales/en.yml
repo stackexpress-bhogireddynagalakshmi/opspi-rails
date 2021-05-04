@@ -42,3 +42,13 @@ en:
     list_of_solid_cp_users: 'List of SolidCP users'
     ist_of_solid_cp_plans: 'List of SolidCP plans'
     solid_cp_plan: 'SolidCP Hosting Plan'
+    solid_cp_access: 'SolidCP Access'
+    solid_cp_panel: 'SolidCP Panel'
+    solid_cp_username: 'SolidCP Username'
+    solid_cp__password: 'SolidCP Password'
+
+    isp_config_access: 'ISP Config Access'
+    isp_config_panel: 'ISP Config Panel'
+    isp_config_username: 'Isp Config Username'
+    isp_config_password: 'ISP Config Password'
+

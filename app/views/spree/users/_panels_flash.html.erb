@@ -1,0 +1,57 @@
+<%if spree_current_user.solid_cp_id.present? %>
+
+  <%if spree_current_user.solid_cp.get_password.present?%>
+  <div class="mt-3">
+    <div style="padding: 20px 10px;background: aliceblue;">
+     <strong> Success!</strong> <br/>
+      Your account on SolidCP created successfully, This is the last time these credentials will be available to view.
+      
+    </div>
+  </div>             
+
+	<div class="mt-3">
+        <strong>SolidCP URL</strong>: <a href="<%=SolidCp::Config.user_url%>" target="_blank"><%=SolidCp::Config.user_url%></a>
+     </div>
+
+    <div class="mt-3">
+      <strong>SolidCP Username</strong>:  <%=spree_current_user.login%>
+    </div>
+
+    <div class="mt-3">
+      <strong>SolidCP Password</strong>:  <%=spree_current_user.solid_cp.get_password%>
+   </div>
+    <%spree_current_user.solid_cp.remove_passoword_key%>
+  <%end%>
+<%else%>
+  <p class="mt-4">Create your SolidCP Account by clicking below link  </p>
+  <%#=link_to 'Cancel', "/account/subscription_cancel?subscription_id=#{subscription.id}",data: {confirm: 'Are you sure?'} %>
+  <%= link_to "Create SolidCP Account", '/account/create_solidcp_account',remote:true, :data=>{:confirm=>'Are you sure you want to create SolidCP Account?'}%>
+<%end%>
+
+ <%if spree_current_user.isp_config_id.present? %>
+
+  <%if spree_current_user.isp_config.get_password('isp_config').present?%>
+  <div class="mt-5">
+    <div style="padding: 20px 10px;background: aliceblue;">
+     <strong> Success!</strong> <br/>
+      Your account on ISP config created successfully, This is the last time these credentials will be available to view.
+    </div>
+  </div>             
+
+  <div class="mt-3">
+    <strong>ISP Config URL</strong>: <a href="<%=IspConfig::Config.user_url%>" target="_blank">
+      <%=IspConfig::Config.user_url%>
+    </a>
+  </div>
+
+  <div class="mt-3">
+      <strong>ISP Config Username</strong>:  <%=spree_current_user.isp_config.get_username%>
+   </div>
+
+    <div class="mt-3">
+      <strong>ISP Config Password</strong>:  <%=spree_current_user.solid_cp.get_password('isp_config')%>
+   </div>
+    <%spree_current_user.solid_cp.remove_passoword_key('isp_config')%>
+  <%end%>
+ 
+<%end%>

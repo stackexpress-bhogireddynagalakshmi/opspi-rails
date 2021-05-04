@@ -1,4 +1,4 @@
-class ProvisioningJob < ApplicationJob
+class SolidCpProvisioningJob < ApplicationJob
   queue_as :default
 
   #constant defined for SolidCP Resources
@@ -14,14 +14,12 @@ class ProvisioningJob < ApplicationJob
   # FOr End User Real Plan ID will be Provided
 
   def perform(user_id,product_id=nil)
-    user = Spree::User.find_by_id(user_id)
-    if user.account.solid_cp_access?
-      if user.store_admin? # reseller
-      	provision_store_admin_account(user,product_id)
-      else
-      	provision_user_account(user,product_id)
-      end
-    end
+    user = Spree::User.find(user_id)
+    if user.store_admin? # reseller
+    	provision_store_admin_account(user,product_id)
+    else
+    	provision_user_account(user,product_id)
+    end if user.account&.solid_cp_access?
   end
 
 
@@ -66,5 +64,4 @@ class ProvisioningJob < ApplicationJob
   # def solid_cp_response
   #     yield if block_given?
   # end
-
 end
