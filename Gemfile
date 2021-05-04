@@ -73,6 +73,7 @@ gem 'savon', '~> 2.12.0'
 gem 'sidekiq'
 gem 'httparty'
 gem 'hashie'
+gem 'dotenv-rails', groups: [:development, :test]
 
 
 
