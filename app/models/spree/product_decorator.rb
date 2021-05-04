@@ -1,7 +1,8 @@
 
 module Spree
 	module ProductDecorator
-		PLAN_TYPE = [['Shared Hosting','SHARED_HOSTING'],['VPS Hosting','VPS_HOSTING'],['Dedicated Hosting','DEDICATED_HOSTING']].freeze
+
+		PLAN_TYPE ||= [['Shared Hosting','SHARED_HOSTING'],['VPS Hosting','VPS_HOSTING'],['Dedicated Hosting','DEDICATED_HOSTING']].freeze
 
 		def self.prepended(base)
 	    	base.acts_as_tenant :account,:class_name=>'::Account'
@@ -12,7 +13,7 @@ module Spree
 	    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => lambda {|a|a[:enabled] == false},allow_destroy: true
 	    	#base.accepts_nested_attributes_for :plan_quotas,:reject_if => lambda {|a|a[:quota_value].blank?},allow_destroy: true
 
-	    	# base.before_update :ensure_no_active_subscription, if: :deleted_at_changed?
+	    	#base.before_update :ensure_no_active_subscription, if: :deleted_at_changed?
 	  	end
 
 

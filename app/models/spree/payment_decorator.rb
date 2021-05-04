@@ -27,4 +27,4 @@ module Spree
 end
 
 ::Spree::Payment.prepend Spree::PaymentDecorator if ::Spree::Order.included_modules.exclude?(Spree::PaymentDecorator)
-
+Spree::PermittedAttributes.payment_attributes.push << :check_number
