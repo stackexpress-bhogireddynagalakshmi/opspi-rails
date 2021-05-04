@@ -8,7 +8,7 @@
 
     <%= f.field_container :account_id, class: ['form-group'] do %>
       <%= f.label :account_id, Spree.t(:store) %>
-     <%= f.select(:account_id, options_from_collection_for_select(Account.all, :id, :orgainization_name), {}, {class: 'select2' }) %>
+     <%= f.select(:account_id, options_from_collection_for_select(Account.all, :id, :orgainization_name,f.object.account_id), {}, {class: 'select2' }) %>
       <%= f.error_message_on :account_id %>
     <% end %>
 

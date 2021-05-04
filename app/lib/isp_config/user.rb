@@ -110,7 +110,7 @@ module IspConfig
 			    "limit_cron_type": "url",
 			    "limit_cron_frequency": 5,
 			    "limit_traffic_quota": -1,
-			     limit_client: user.get_user_limits,
+			     limit_client: get_user_limits,
 			    "parent_client_id": 0,
 			     username: get_username,
 			     password:  get_password('isp_config'),
