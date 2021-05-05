@@ -9,7 +9,7 @@ services:
       - '3000:3000'
     volumes:
       - /var/log/opspi/:/project/log/
-    command: bash -c "rake db:migrate && bin/rails server --port 3000 --binding 0.0.0.0"
+    command: bash -c "rake db:migrate && rake db:seed  && bin/rails server --port 3000 --binding 0.0.0.0"
     restart: unless-stopped
   sidekiq:
     container_name: sidekiq
