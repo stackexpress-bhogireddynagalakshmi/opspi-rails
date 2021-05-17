@@ -13,28 +13,48 @@
       <%= f.error_message_on :name %>
     <% end %>
 
-   <%= f.field_container :plan_type, class: ['form-group'] do %>
+
+    <div data-hook="admin_product_form_plan_type">
+      <%= f.field_container :server_type, class: ['form-group'] do %>
       <%= f.label :plan_type, raw(Spree.t(:plan_type) + required_span_tag) %>
-      <%= f.select :plan_type, options_for_select(Spree::Product::PLAN_TYPE,f.object.plan_type),{},class: 'form-control title' %>
-      <%= f.error_message_on :plan_type %>
+      <%= f.select :server_type, options_for_select(Spree::Product::server_types.keys,f.object.server_type),{},class: 'form-control title' %>
+      <%= f.error_message_on :server_type %>
     <% end %>
 
 
-   
+   <%if current_spree_user.superadmin?%>
+
+      <div data-hook="admin_product_form_plan_type">
+        <%= f.field_container :reseller_product, class: ['form-group'] do %>
+          <%= f.check_box :reseller_product,class: 'mr-2'%>
+          <%= f.label :reseller_product, raw(Spree.t(:reseller_product)) %>
+          <%= f.error_message_on :reseller_product %>
+        <% end %>
+     </div>
+   <%end%>
+
     <div data-hook="admin_product_form_plan_type">
         <%= f.field_container :subscribable, class: ['form-group'] do %>
         <%= f.check_box :subscribable,class: 'mr-2'%>
-        <%= f.label :subscribable, raw(Spree.t(:subscribable) + required_span_tag) %>
+        <%= f.label :subscribable, raw(Spree.t(:subscribable)) %>
         <%= f.error_message_on :subscribable %>
       <% end %>
     </div>
 
-    <div id="product_quota_groups">
-       <%#= render :partial=>'solid_cp_quota_groups',:locals=>{quota_groups: [],form: f}%>
-       <%=render_hosting_plan_quota_partial(f,@product)%>
-    </div>
+    <div id="solid_cp_quota_group_div">
+      <%= f.field_container :solid_cp_master_plan_id, class: ['form-group'] do %>
+          <%= f.label :solid_cp_master_plan_id, raw(Spree.t(:solid_cp_plan) + required_span_tag) %>
+          <%= f.select :solid_cp_master_plan_id, options_for_select(SolidCp::Plan.master_plans_dropdown,f.object.solid_cp_master_plan_id),{},class: 'form-control title' %>
+          <%= f.error_message_on :solid_cp_master_plan_id %>
+      <% end %>    
+  
+      <div id="product_quota_groups">
+         <%=render_hosting_plan_quota_partial(f,@product)%>
+      </div>
 
-    <div data-hook="new_product_attrs" class="row">
+  </div>
+
+  <div data-hook="new_product_attrs" class="row">
       <% unless @product.has_variants? %>
         <div data-hook="new_product_sku" class="col-12 col-md-4">
           <%= f.field_container :sku, class: ['form-group'] do %>
@@ -136,6 +156,23 @@
           $('#product_quota_groups').html(data);
         });
     });
+
+    $('#product_server_type').on('change',function (argument) {
+
+      var type = $(this).val();
+
+        if(type == 'windows') 
+        {
+          window.location.reload();
+        } 
+        else
+        {
+          $('#solid_cp_quota_group_div').remove();
+        }
+        
+      
+    });
+
   });
 
 //]]>

@@ -52,3 +52,5 @@ en:
     isp_config_username: 'Isp Config Username'
     isp_config_password: 'ISP Config Password'
 
+    subdomain: 'Subdomain'
+

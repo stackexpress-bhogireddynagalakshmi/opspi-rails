@@ -19,7 +19,7 @@ class SolidCpProvisioningJob < ApplicationJob
     	provision_store_admin_account(user,product_id)
     else
     	provision_user_account(user,product_id)
-    end if user.account&.solid_cp_access?
+    end 
   end
 
 

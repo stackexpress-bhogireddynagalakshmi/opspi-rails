@@ -9,10 +9,5 @@ class Account < ApplicationRecord
 		users.select{|user| user.store_admin?}.first
 	end
 
-
-	# def solid_cp_access?
-
-	# end
-
 	
 end

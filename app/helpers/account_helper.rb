@@ -15,7 +15,6 @@ module AccountHelper
 	    groups.each do |group|
 	     	group_obj = product.plan_quota_groups.first_or_build({:solid_cp_quota_group_id=>group[:group_id]})
 	     	group_obj.group_name = group[:group_name]
-		   	# build_quota(product,group_obj,quotas)
 		end
     end
 

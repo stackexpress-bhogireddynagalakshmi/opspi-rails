@@ -1,8 +1,8 @@
 module Spree
 	module LineItemDecorator
-		
+
 		def ensure_valid_quantity
-	      	self.quantity = 1 if self.quantity !=1
+	      	self.quantity = 1 if self.quantity !=1 && self.quantity > 0
 	    end
 
 	end

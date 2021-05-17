@@ -7,7 +7,7 @@ class IspConfigProvisioningJob < ApplicationJob
     	provision_store_admin_account(user)
     else
     	provision_user_account(user)
-    end if user.account&.isp_config_access?
+    end 
     
   end
 

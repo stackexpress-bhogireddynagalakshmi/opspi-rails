@@ -75,7 +75,7 @@
 <div class="card mb-4">
   <div class="card-header">
     <h1 class="card-title mb-0 h5">
-     SolidCP Panel
+     <%=Spree.t('solid_cp_panel')%>
     </h1>
   </div>
   <div class="card-body">
@@ -89,6 +89,7 @@
         <%= f.select :solid_cp_master_plan_id, options_for_select(SolidCp::Plan.master_plans_dropdown,f.object.solid_cp_master_plan_id),{},class: 'form-control title' %>
         <%= f.error_message_on :solid_cp_master_plan_id %>
     <% end %>
+    
     <div class="form-group field">
       <label><%=Spree.t('solid_cp_username')%></label>
         <%=text_field_tag 'solid_cp_username',f.object.admin_email,class: 'form-control title' ,disabled: true,id: 'solid_cp_user_name' %>

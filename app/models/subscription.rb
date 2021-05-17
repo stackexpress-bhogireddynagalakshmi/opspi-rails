@@ -4,17 +4,15 @@ class Subscription < ApplicationRecord
 	scope :active, -> {where(status: true) }
 
 
-
 	def self.subscribe!(opts)
 		existing_subscription = self.where(status: true,user_id: opts[:user].try(:id),product_id: opts[:product].try(:id)).first
 	    if existing_subscription.present?
 	     	existing_subscription.update({status: true})
 	    else
 	    	self.create_fresh_subscription(opts)
-	    	ProvisioningJob.perform_later(opts[:user].try(:id),opts[:product].try(:id))
+	    	AppManager::AccountProvisioner.new(self,opts[:product]).call
 	    end
 	end
-
 
 	def self.create_fresh_subscription(opts)
 		self.create({

@@ -65,7 +65,7 @@
             <div class="info-box">
               <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
 
-              <%if spree_current_user.store_admin?%>
+              <%if spree_current_user.store_admin? && !current_admin_tenant?%>
                  <div class="info-box-content">
                     <span class="info-box-text">Users</span>
                     <span class="info-box-number">
@@ -111,7 +111,7 @@
             <div class="info-box">
               <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
 
-             <%if spree_current_user.store_admin?%>
+             <%if spree_current_user.store_admin? && !current_admin_tenant?%>
                <div class="info-box-content">
                   <span class="info-box-text">Orders</span>
                   <span class="info-box-number">

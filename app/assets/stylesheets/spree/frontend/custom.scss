@@ -1,7 +1,5 @@
-.shopping-cart-item-image 
-{	
+.shopping-cart-item-image {	
 	display: none !important;
-
 }
 
 .font-12{
@@ -19,14 +17,28 @@
 	display: none !important;
 }
 
-
-.paypal-btn-custom{
-height: 65px;
+.paypal-btn-custom {
+	height: 65px;
     font-size: 1.375rem;
     line-height: 2.3;
     letter-spacing: 0.55px;
     margin-bottom: 100px;
-    padding: 6px 12px;}
+    padding: 6px 12px;
+}
+
+.new-tenant{
+        background: aliceblue;
+    padding: 15px;
+}
+
+
+@media (min-width: 992px) {
+.spree-flat-input, .spree-flat-select {
+    padding: 15px;
+    font-size: 0.875rem;
+}
+
+}
 
 
 

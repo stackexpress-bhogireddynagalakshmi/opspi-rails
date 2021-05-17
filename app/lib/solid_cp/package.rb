@@ -31,10 +31,12 @@ module SolidCp
 	    def  add_package(plan_id=10)
 
 	    	if user.packages.where(solid_cp_master_plan_id: plan_id).first.blank?
+	    		org_name = TenantManager::TenantHelper.unscoped_query{user.account.orgainization_name}
+	
 		    	response  = super(message: {
 			    	 user_id: user.solid_cp_id,
 			    	 plan_id: plan_id,
-			    	 package_name: "#{user.account.orgainization_name.snakecase}_hosting_space_#{plan_id}",
+			    	 package_name:"#{org_name.snakecase}_hosting_space_#{plan_id}",
 			    	 package_comments: "Hosting space for #{user.full_name}",
 			    	 status_id: 1,
 			    	 purchase_date: Time.now.strftime('%Y-%m-%dT%H:%M:%S.%L'),
