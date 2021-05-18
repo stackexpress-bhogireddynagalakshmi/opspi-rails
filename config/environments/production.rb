@@ -50,7 +50,9 @@ Rails.application.configure do
 
   # Include generic and useful information about system operation, but avoid logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII).
-  config.log_level = :info
+  config.log_level = :debug
+
+  config.active_record.verbose_query_logs = true
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
@@ -117,4 +119,16 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+
+
+  # config.action_mailer.smtp_settings = {
+  #     address:              'smtp.gmail.com',
+  #     port:                 587,
+  #     domain:               'gmail.com',
+  #     user_name:            'xyz@gmail.com',
+  #     password:             'yourpassword',
+  #     authentication:       :plain,
+  #     enable_starttls_auto: true
+  # }
+
 end
