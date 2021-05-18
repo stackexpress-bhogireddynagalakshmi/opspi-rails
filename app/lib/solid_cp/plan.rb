@@ -38,8 +38,8 @@ module SolidCp
 	    	# ServerId will be used to create master plan
 	    	if plan.solid_cp_plan_id.blank?
 	    		
-	    		user.solid_cp.package.add_package(plan.solid_cp_master_plan_id)	   		
-	
+	    		user.solid_cp.package.add_package(plan.solid_cp_master_plan_id)	   	
+	    
 				response = super(message: { 
 			   		plan: {
 			   			"PackageId" => user.packages.first.try(:solid_cp_package_id),
@@ -56,8 +56,7 @@ module SolidCp
 				   		"UserId"=>user.solid_cp_id	   		
 			   		}
 			   	 })
-				
-
+			
 				if response.success? && response.body[:add_hosting_plan_response][:add_hosting_plan_result].to_i > 0 
 					plan.solid_cp_plan_id = response.body[:add_hosting_plan_response][:add_hosting_plan_result].to_i
 					plan.save!
@@ -100,7 +99,7 @@ module SolidCp
 	   
 
 	    def self.get_hosting_plan_quotas(plan_id)
-	    	response = super(message: { plan_id: plan_id })
+	    	response = super(message: { plan_id: plan_id }) rescue []
 	    end
 
 	     #syncronous api call

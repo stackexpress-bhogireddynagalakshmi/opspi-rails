@@ -65,7 +65,7 @@
             <div class="info-box">
               <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
 
-              <%if spree_current_user.store_admin?%>
+              <%if spree_current_user.store_admin? && !current_admin_tenant?%>
                  <div class="info-box-content">
                     <span class="info-box-text">Users</span>
                     <span class="info-box-number">
@@ -111,7 +111,7 @@
             <div class="info-box">
               <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
 
-             <%if spree_current_user.store_admin?%>
+             <%if spree_current_user.store_admin? && !current_admin_tenant?%>
                <div class="info-box-content">
                   <span class="info-box-text">Orders</span>
                   <span class="info-box-number">
@@ -183,7 +183,6 @@
           <thead class="active">
             <tr>
               <th class="text-uppercase text-secondary"><%=Spree.t(:subscription)%></th>
-              <!-- <th class="text-uppercase text-secondary"><%#=Spree.t(:plan_type)%></th>-->
               <th class="text-uppercase text-secondary"><%= Spree.t(:status) %></th>
               <th class="text-uppercase text-secondary" title="Subscription Date"><%= Spree.t(:sub_date) %></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:Interval) %></th>
@@ -197,9 +196,8 @@
                 <tr>
                   <td class="account-page-order-number"><%=subscription.plan.name%> 
                     <br/>
-                    <span class="font-12 grey"><%=subscription.plan.plan_type.titleize%></span>
+                    <span class="font-12 grey"><%=subscription.plan.server_type.titleize%></span>
                   </td>
-                  <!-- <td class="account-page-order-number"><%=subscription.plan.plan_type.titleize%></td> -->
                   <td class="account-page-order-date"><%=subscription.status? ? 'Active': 'In-Active'%></td>
                   <td class="account-page-order-status"><%=subscription.start_date%></td>
                   <td class="account-page-order-payment-state"><%=subscription.billing_interval%></td>

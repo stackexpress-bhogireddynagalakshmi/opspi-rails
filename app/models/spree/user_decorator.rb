@@ -1,15 +1,20 @@
 module Spree
 	module UserDecorator
+		attr_accessor :subdomain,:business_name
 
 		def self.prepended(base)
 	    	base.acts_as_tenant :account,:class_name=>'::Account'
+	    	base.before_create :ensure_unique_subdomain
+
 	    	base.has_many :susbscriptions,:class_name=>'Subscription'
 	    	base.has_many :plans,through: :susbscriptions,:class_name=>'Spree::Product' 
 	    	base.has_many :packages,:class_name=>'Package'
 	    	base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
-	    	base.has_one :shared_hosting,->{joins(:plans).where(:plan_type=>'SHARED_HOSTING')}, :class_name=>'Subscription'
+	    	base.after_commit :ensure_tanent_exists, on: [:create]
 	    	base.after_commit :add_to_solid_cp, on: [:create]
 	    	base.after_commit :add_to_isp_config, on: [:create]
+	    	
+	    	
 	  	end
 
 	  	def superadmin?
@@ -25,16 +30,34 @@ module Spree
 	  	end
 
 	  	def isp_config
-	  		@solid_cp ||= IspConfig::User.new(self)
+	  		@isp_config ||= IspConfig::User.new(self)
 	  	end
 
-	  	def add_to_solid_cp	  	
-	  		SolidCpProvisioningJob.set(wait: 3.second).perform_later(self.id)
+	  	def add_to_solid_cp
+	  		return unless should_provision_account('solid_cp')
+	  		AppManager::AccountProvisioner.new(self).call
+	  		# SolidCpProvisioningJob.set(wait: 3.second).perform_later(self.id)
 	  	end
 
-	  	def add_to_isp_config	  	
-	  		IspConfigProvisioningJob.set(wait: 3.second).perform_later(self.id)
+	  	def add_to_isp_config	
+	  		return unless should_provision_account('isp_config')  	
+	  		# IspConfigProvisioningJob.set(wait: 3.second).perform_later(self.id)
+	  		AppManager::AccountProvisioner.new(self).call
 	  	end
+
+	  	def ensure_tanent_exists
+	  		if  self.reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
+	  			StoreManager::StoreCreator.new(self).call
+	  		end
+	  	end
+
+
+	  	def should_provision_account(panel)
+	  		return true unless self.reseller_signup? # reseller is manually signing up
+	  		return false
+	  	end
+
+
 
 	  	# Solid CP Concerns
 	  	def company_name
@@ -48,24 +71,31 @@ module Spree
 	  	#for store admin or reseller owner_id will be always 1
 	  	#For normal user ower_id will be the is of Store Admin/Reseller
 	  	def owner_id
-	  		if self.store_admin?
-	  			1
-	  		else
-	  			account.store_admin.try(:solid_cp_id) || 1
-	  		end
+	  		self.store_admin? ? 1  : (account.store_admin.try(:solid_cp_id) || 1)
 	  	end
 
 	  	def reseller_id
-	  		if self.store_admin?
-	  			0
-	  		else
-	  			account&.store_admin.try(:isp_config_id) || 0
-	  		end
+	  		self.store_admin? ? 0 : (account&.store_admin.try(:isp_config_id) || 0)
 	  	end
 
+
+	  	def ensure_unique_subdomain
+	  		if ::Account.where(subdomain: subdomain).size > 0
+	  			errors.add(:subdomain, 'is already taken')
+	  			throw :abort
+	  		end
+	  	end
 	end
 end
-::Spree::User.prepend Spree::UserDecorator if ::Spree::User.included_modules.exclude?(Spree::UserDecorator)
 
+::Spree::User.prepend Spree::UserDecorator if ::Spree::User.included_modules.exclude?(Spree::UserDecorator)
 Spree::PermittedAttributes.user_attributes.push << :first_name
 Spree::PermittedAttributes.user_attributes.push << :last_name
+Spree::PermittedAttributes.user_attributes.push << :subdomain
+Spree::PermittedAttributes.user_attributes.push << :reseller_signup
+Spree::PermittedAttributes.user_attributes.push << :business_name
+
+
+
+
+

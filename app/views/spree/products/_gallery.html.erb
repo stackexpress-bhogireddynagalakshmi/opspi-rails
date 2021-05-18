@@ -8,10 +8,13 @@
       <td>Plan Name</td>
       <td><%=@product.name%></td>
     </tr>
-     <tr>
+    
+    <tr>
       <td>Plan Type</td>
-      <td><%=@product.plan_type.try(:titleize)%></td>
+      <td><%=@product.server_type.try(:titleize)%></td>
     </tr>
+
+
   </table>
 
   <%# if @product_images.size > 0 %>
