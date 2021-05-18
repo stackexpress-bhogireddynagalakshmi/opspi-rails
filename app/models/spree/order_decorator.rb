@@ -40,12 +40,15 @@ module Spree
 	  		AppManager::AccountProvisioner.new(TenantManager::TenantHelper.unscoped_query{self.user}).call
 	  	end
 
-
-	  	private
-
-	  	def subscribable_product
-	  		self.products.select{|x|x.subscribable}.first
+	  	def subscribable_products
+	  		self.products.where(subscribable: true)
 	  	end
+	  	
+	  	def subscribable_product
+	  		subscribable_products.first
+	  	end
+
+
 
 	end
 end

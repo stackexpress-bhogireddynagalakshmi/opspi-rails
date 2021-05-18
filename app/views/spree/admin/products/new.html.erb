@@ -14,17 +14,17 @@
     <% end %>
 
 
-    <div data-hook="admin_product_form_plan_type">
+    <div data-hook="admin_product_form_server_type">
       <%= f.field_container :server_type, class: ['form-group'] do %>
       <%= f.label :plan_type, raw(Spree.t(:plan_type) + required_span_tag) %>
-      <%= f.select :server_type, options_for_select(Spree::Product::server_types.keys,f.object.server_type),{},class: 'form-control title' %>
+      <%= f.select :server_type, options_for_select(plan_type_values(current_spree_user),f.object.server_type),{},class: 'form-control title' %>
       <%= f.error_message_on :server_type %>
     <% end %>
 
 
    <%if current_spree_user.superadmin?%>
 
-      <div data-hook="admin_product_form_plan_type">
+      <div data-hook="admin_product_form_reseller_product">
         <%= f.field_container :reseller_product, class: ['form-group'] do %>
           <%= f.check_box :reseller_product,class: 'mr-2'%>
           <%= f.label :reseller_product, raw(Spree.t(:reseller_product)) %>
@@ -33,7 +33,7 @@
      </div>
    <%end%>
 
-    <div data-hook="admin_product_form_plan_type">
+    <div data-hook="admin_product_form_subscribablee">
         <%= f.field_container :subscribable, class: ['form-group'] do %>
         <%= f.check_box :subscribable,class: 'mr-2'%>
         <%= f.label :subscribable, raw(Spree.t(:subscribable)) %>
@@ -42,19 +42,22 @@
     </div>
 
     <div id="solid_cp_quota_group_div">
+     <%if current_spree_user.superadmin?%>
       <%= f.field_container :solid_cp_master_plan_id, class: ['form-group'] do %>
           <%= f.label :solid_cp_master_plan_id, raw(Spree.t(:solid_cp_plan) + required_span_tag) %>
           <%= f.select :solid_cp_master_plan_id, options_for_select(SolidCp::Plan.master_plans_dropdown,f.object.solid_cp_master_plan_id),{},class: 'form-control title' %>
           <%= f.error_message_on :solid_cp_master_plan_id %>
-      <% end %>    
+      <% end %>
+      <%else%>
+        <%=f.hidden_field :solid_cp_master_plan_id,value: current_store.solid_cp_master_plan_id %>
+     <%end%> 
   
       <div id="product_quota_groups">
-         <%=render_hosting_plan_quota_partial(f,@product)%>
+        <%=render_hosting_plan_quota_partial(f,@product) if plan_type_values(current_spree_user).include?('windows')%>
       </div>
+    </div>
 
-  </div>
-
-  <div data-hook="new_product_attrs" class="row">
+    <div data-hook="new_product_attrs" class="row">
       <% unless @product.has_variants? %>
         <div data-hook="new_product_sku" class="col-12 col-md-4">
           <%= f.field_container :sku, class: ['form-group'] do %>

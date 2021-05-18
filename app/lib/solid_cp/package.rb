@@ -32,7 +32,6 @@ module SolidCp
 
 	    	if user.packages.where(solid_cp_master_plan_id: plan_id).first.blank?
 	    		org_name = TenantManager::TenantHelper.unscoped_query{user.account.orgainization_name}
-	
 		    	response  = super(message: {
 			    	 user_id: user.solid_cp_id,
 			    	 plan_id: plan_id,

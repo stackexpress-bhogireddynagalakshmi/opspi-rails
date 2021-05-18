@@ -2,7 +2,6 @@
 module Spree
 	module ProductDecorator
 
-
 		def self.prepended(base)
 	    	base.acts_as_tenant :account,:class_name=>'::Account'
 	    	base.has_many :susbscriptions,:class_name=>'Subscription'
@@ -10,8 +9,6 @@ module Spree
 	    	base.has_many :plan_quotas,:through=>:plan_quota_groups,dependent: :destroy
 	    	base.after_commit :add_to_solid_cp, on: [:create]
 	    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => lambda {|a|a[:enabled] == false},allow_destroy: true
-	    	#base.accepts_nested_attributes_for :plan_quotas,:reject_if => lambda {|a|a[:quota_value].blank?},allow_destroy: true
-	    	#base.before_update :ensure_no_active_subscription, if: :deleted_at_changed?
 	    	base.scope :reseller_products, ->{where(reseller_product: true)}
 
 	    	base.enum server_type: {
@@ -22,13 +19,12 @@ module Spree
 
 
 	  	def add_to_solid_cp
-	  		if self.windows?
-		  		if self.solid_cp_master_plan_id.blank?
-			  		self.solid_cp_master_plan_id = account.spree_store.solid_cp_master_plan_id
-			  		self.save
-			  	end
-		  		HostingPlanJob.perform_later(self.id)
-		  	end
+	  		return if self.linux?
+
+	  		self.update(solid_cp_master_plan_id: account.spree_store.solid_cp_master_plan_id) if self.solid_cp_master_plan_id.blank?
+
+	  		HostingPlanJob.perform_later(self.id)
+	  		
 	  	end
 
 	  	# def ensure_no_active_subscription

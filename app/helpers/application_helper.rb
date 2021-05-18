@@ -19,4 +19,13 @@ module ApplicationHelper
 	        text+=link_to user.account.domain,get_tenant_host_for_resource_path(user), target: '_blank'
 	    end
 	end
+
+	def plan_type_values(user)
+		if user.superadmin?
+			Spree::Product::server_types.keys
+		elsif user.store_admin?
+			TenantManager::TenantHelper.unscoped_query{current_spree_user.orders.collect{|o|o.products.pluck(:server_type)}.flatten}.uniq
+		end
+			
+	end
 end

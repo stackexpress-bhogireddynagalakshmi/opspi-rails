@@ -18,10 +18,12 @@ module TenantManager
   			return if product.blank?
   			return unless TenantManager::TenantHelper.current_admin_tenant?
 
-  			byebug
-			account.update(solid_cp_access: true) if panels_access('solid_cp')
-			account.update(isp_config_access: true) if panels_access('windows')
-  		end
+
+  			account.update(solid_cp_access: true) if panels_access('solid_cp')
+  			account.update(isp_config_access: true) if panels_access('windows')
+        account.spree_store.update(solid_cp_master_plan_id: order.subscribable_products.windows.first.solid_cp_master_plan_id) if  order.subscribable_products.windows.present?
+  		
+      end
 
 
 

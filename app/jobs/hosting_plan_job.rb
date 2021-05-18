@@ -5,8 +5,8 @@ class HostingPlanJob < ApplicationJob
 
   def perform(product_id)
     product = Spree::Product.find(product_id)
-    reseller = product.account.store_admin
-    reseller.solid_cp.plan(product).add_hosting_plan
+    reseller = product.account&.store_admin
+    reseller.solid_cp.plan(product).add_hosting_plan if reseller.present?
   end
   
 end
