@@ -2,18 +2,27 @@
 
 module StoreManager
   class StoreCodeGenerator < ApplicationService
-  	attr_accessor :store
+  	attr_accessor :code
     class ExhaustedError < StandardError; end
 
-
-    def initialize(store, options = {})
-      @store = store
+    def initialize(code, options = {})
+      @code = code
     end
 
-   	#generate the code of the store/reseller
+    def call
+      store_code
+    end
+
+
+    private
+
     def store_code
+      store = Spree::Store.where(code: code).last
+      return code  if store.blank?  
+    
+      "#{code}_1"
 
     end
-
+    
   end
 end

@@ -10,6 +10,8 @@ module StoreManager
 
     def call
   		store = Spree::Store.new(store_params)
+      store_code = StoreManager::StoreCodeGenerator.new(store_admin.business_name&.underscore).call
+      store.code = store_code
   		store.save! 
   		store.reload
       ensure_store_admin_role
@@ -18,8 +20,9 @@ module StoreManager
 
 
     def store_params
+      
     	store_params = {name: store_admin.business_name,admin_email: store_admin.email,url: store_admin.subdomain,
-  					mail_from_address: store_admin.email,code: store_admin.business_name&.underscore,default_currency: 'USD'}
+  					mail_from_address: store_admin.email,default_currency: 'USD'}
 
     end
 
