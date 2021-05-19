@@ -34,21 +34,5 @@ class AccountController < Spree::StoreController
       quotas  = response.body[:get_hosting_plan_quotas_response][:get_hosting_plan_quotas_result][:diffgram][:new_data_set][:table1]     
       render :partial=> 'spree/admin/products/solid_cp_quota_groups',:locals=>{quota_groups: groups,quotas: quotas},:layout=>false
     end
-
-    
-    def logs
-      render json: { success: false, message: "UnAuthorized" }, status: :unauthorized  if !current_spree_user.superadmin?
-
-      lines = params[:lines]
-      
-      if Rails.env == "production"
-        @logs = `tail -n #{lines} log/production.log`
-      else
-        @logs = `tail -n #{lines} log/development.log`
-      end
-
-      render 'log',:layout=>false
-    end
-
     
 end

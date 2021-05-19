@@ -17,7 +17,6 @@ Rails.application.routes.draw do
   
   Spree::Core::Engine.routes.draw do
     namespace :admin do
-      get 'logs/:lines' => "account/#logs", as: "log"
 
       resources :panels do
         collection do 
