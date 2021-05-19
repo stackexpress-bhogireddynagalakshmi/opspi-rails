@@ -13,6 +13,8 @@ module TenantManager
 
   			tenant_service = TenantService.find_by({user_id: resource.id})
   			return if tenant_service.blank? || tenant_service.service_executed?
+
+
   			
   			TenantManager::UserTenantUpdater.new(tenant_service.user,tenant_service.account_id).call
   			TenantManager::StoreTenantUpdater.new(tenant_service.user,tenant_service.account_id).call

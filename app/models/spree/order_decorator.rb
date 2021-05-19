@@ -32,7 +32,7 @@ module Spree
 	  	end
 
 	  	def update_tenant_if_needed
-	  		TenantManager::TenantServiceExecutor.new(self.user).call
+	  		TenantManager::TenantServiceExecutor.new(TenantManager::TenantHelper.unscoped_query{self.user}).call
 	  		TenantManager::TenantUpdater.new(TenantManager::TenantHelper.unscoped_query{self.user.account},order: self,product: subscribable_product).setup_panels_access
 	  	end
 
