@@ -2,6 +2,8 @@ module TenantManager
 	class TenantUpdater
 		attr_reader :account,:order, :product
 
+    #for reseller only
+
 		def initialize(account,options = {})
   			@account = account
   			@product = options[:product]
@@ -18,14 +20,18 @@ module TenantManager
   			return if product.blank?
   			return unless TenantManager::TenantHelper.current_admin_tenant?
 
+        #Solid CP Access to tenant  & Master Plan id set for a spree store
 
-  			account.update(solid_cp_access: true) if panels_access('solid_cp')
-  			account.update(isp_config_access: true) if panels_access('windows')
+        account.update_column :solid_cp_access, true if panels_access('solid_cp')
+        account.spree_store.update_column :solid_cp_access if panels_access('solid_cp')
         account.spree_store.update(solid_cp_master_plan_id: order.subscribable_products.windows.first.solid_cp_master_plan_id) if  order.subscribable_products.windows.present?
+
+         #ISP config Access to tenant & Master Plan id set for a spree store
+        account.update_column :isp_config_access, true if panels_access('isp_config')
+        account.spree_store.update_column :isp_config_access, true if panels_access('isp_config')
+        account.spree_store.update(isp_config_master_template_id: order.subscribable_products.linux.first.isp_config_master_template_id) if  order.subscribable_products.linux.present?
   		
       end
-
-
 
   		private
 

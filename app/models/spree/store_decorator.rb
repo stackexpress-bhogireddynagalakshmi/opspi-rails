@@ -1,6 +1,7 @@
 module Spree
 	module StoreDecorator
-	  attr_accessor :admin_password,:solid_cp_password,:isp_config_username,:isp_config_password,:isp_config_access,:solid_cp_access
+	  attr_accessor :admin_password,:solid_cp_password,:isp_config_username,:isp_config_password
+
 	 
 	  def self.prepended(base)  
 	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
@@ -29,6 +30,6 @@ end
 
 ::Spree::Store.prepend ::Spree::StoreDecorator if ::Spree::Store.included_modules.exclude?(::Spree::StoreDecorator)
 
-[:admin_email,:admin_password,:solid_cp_access,:solid_cp_password,:solid_cp_master_plan_id,:isp_config_access,:isp_config_username,:isp_config_password].each do |attr|
+[:admin_email,:admin_password,:solid_cp_access,:solid_cp_password,:solid_cp_master_plan_id,:isp_config_access,:isp_config_username,:isp_config_password,:isp_config_master_template_id].each do |attr|
 	Spree::PermittedAttributes.store_attributes.push << attr
 end

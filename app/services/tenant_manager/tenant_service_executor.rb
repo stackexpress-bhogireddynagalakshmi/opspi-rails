@@ -2,11 +2,13 @@ module TenantManager
 	class TenantServiceExecutor
 		attr_reader :resource,:service_executed
 
+    #for Reseller Only
 		def initialize(resource,options = {})
   			@resource = resource
   		end
 
   		def call
+
   			return if resource.blank?
   			return unless TenantManager::TenantHelper.current_admin_tenant?
 
@@ -18,6 +20,8 @@ module TenantManager
   			
   			TenantManager::UserTenantUpdater.new(tenant_service.user,tenant_service.account_id).call
   			TenantManager::StoreTenantUpdater.new(tenant_service.user,tenant_service.account_id).call
+
+        AppManager::AccountProvisioner.new(resource).call
 
   			tenant_service.update(service_executed: true)
 

@@ -5,9 +5,22 @@
 	  <%= f.text_field :business_name, class: 'spree-flat-input',required:true,placeholder: "business Name" %>
 	</div>
 
+
 	<div class="form-group mb-4">
-	  <%= f.text_field :subdomain, class: 'spree-flat-input', placeholder: 'example.dev.opspi.com',required:true %>
+		<div class="input-group">
+			<div class="input-group-prepend">
+			    <span class="input-group-text" id="basic-addon3">https://</span>
+			</div>
+
+		   <%= f.text_field :subdomain, class: 'spree-flat-input form-control subdomain-field', placeholder: 'subdomain',required:true %>
+		  
+		  <div class="input-group-append">
+		    <span class="input-group-text" id="basic-addon2">.dev.opspi.com</span>
+		  </div>
+
+		</div>
 	</div>
+
 <%end%>
 
 
