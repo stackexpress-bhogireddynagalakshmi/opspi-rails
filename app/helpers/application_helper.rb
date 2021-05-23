@@ -15,10 +15,6 @@ module ApplicationHelper
 	def render_new_tenant_information(order)
 		if current_admin_tenant?
 			user = TenantManager::TenantHelper.unscoped_query{order.user}
-			text = "Your store created successfully. <br/>"
-			puts "==========================RENDER TENANT======================="
-			puts user.account_id
-			puts user.account.inspect
 	        text+=link_to user.account.domain,get_tenant_host_for_resource_path(user), target: '_blank'
 	    end
 	end

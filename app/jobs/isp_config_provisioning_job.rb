@@ -33,7 +33,7 @@ class IspConfigProvisioningJob < ApplicationJob
         if product.isp_config_template_id.present?
             attach_to_isp_config_tenplate(user,product.isp_config_template_id)
         else
-          raise StandardError.new "SolidCP Plan for this Product:##{product.id}-#{product.name} does not exist. HostingPlanJob started."
+          raise StandardError.new "ISP  Config Template for this Product:##{product.id}-#{product.name} does not exist. HostingPlanJob started."
         end
       end
     else
