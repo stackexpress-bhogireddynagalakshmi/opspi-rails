@@ -29,7 +29,6 @@ module SolidCp
 	    # Creates Hosting Space on SolidCP for a user
 	    
 	    def  add_package(plan_id=10)
-
 	    	if user.packages.where(solid_cp_master_plan_id: plan_id).first.blank?
 	    		org_name = TenantManager::TenantHelper.unscoped_query{user.account.orgainization_name}
 		    	response  = super(message: {
@@ -52,7 +51,6 @@ module SolidCp
 		    	{:success=>true, :message=>'SolidCP Package already exists'}
 		    end
 	    end
-
 
 	end
 end

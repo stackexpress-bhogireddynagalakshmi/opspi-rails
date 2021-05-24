@@ -18,6 +18,5 @@ module StoreManager
     end
 
 
-    
   end
 end

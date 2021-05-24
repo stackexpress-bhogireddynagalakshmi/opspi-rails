@@ -22,10 +22,7 @@
    </div>
     <%spree_current_user.solid_cp.remove_passoword_key%>
   <%end%>
-<%else%>
-  <p class="mt-4">Create your SolidCP Account by clicking below link  </p>
-  <%#=link_to 'Cancel', "/account/subscription_cancel?subscription_id=#{subscription.id}",data: {confirm: 'Are you sure?'} %>
-  <%= link_to "Create SolidCP Account", '/account/create_solidcp_account',remote:true, :data=>{:confirm=>'Are you sure you want to create SolidCP Account?'}%>
+  
 <%end%>
 
  <%if spree_current_user.isp_config_id.present? %>

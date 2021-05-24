@@ -11,10 +11,7 @@ module Spree
 	    	base.has_many :packages,:class_name=>'Package'
 	    	base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
 	    	base.after_commit :ensure_tanent_exists, on: [:create]
-	    	base.after_commit :add_to_solid_cp, on: [:create]
-	    	base.after_commit :add_to_isp_config, on: [:create]
-	    	
-	    	
+	    	base.after_commit :provision_accounts, on: [:create]
 	  	end
 
 	  	def superadmin?
@@ -33,15 +30,7 @@ module Spree
 	  		@isp_config ||= IspConfig::User.new(self)
 	  	end
 
-	  	def add_to_solid_cp
-	  		return unless should_provision_account('solid_cp')
-	  		AppManager::AccountProvisioner.new(self).call
-	  		# SolidCpProvisioningJob.set(wait: 3.second).perform_later(self.id)
-	  	end
-
-	  	def add_to_isp_config	
-	  		return unless should_provision_account('isp_config')  	
-	  		# IspConfigProvisioningJob.set(wait: 3.second).perform_later(self.id)
+	  	def provision_accounts
 	  		AppManager::AccountProvisioner.new(self).call
 	  	end
 
@@ -50,13 +39,6 @@ module Spree
 	  			StoreManager::StoreCreator.new(self).call
 	  		end
 	  	end
-
-
-	  	def should_provision_account(panel)
-	  		return true unless self.reseller_signup? # reseller is manually signing up
-	  		return false
-	  	end
-
 
 
 	  	# Solid CP Concerns

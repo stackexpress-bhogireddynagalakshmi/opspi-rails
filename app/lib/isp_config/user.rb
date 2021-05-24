@@ -1,5 +1,6 @@
 module IspConfig
 	class User < Base
+		attr_accessor :user,:template
 
 		include RedisConcern
 
@@ -50,6 +51,34 @@ module IspConfig
 				{:success=>false,:message=>'IspConfig user account does not exists.'}
 			end
 		end
+
+
+		def attach_template(template_id)
+		    if user.isp_config_id.present?
+				response = query({
+					    :endpoint => '/json.php?client_update',
+					    :method => :GET,
+					    :body => {client_id: user.isp_config_id,params: {template_master: template_id}}
+				})
+				if  response.code == "ok"
+					{:success=>true, :message=>'IspConfig user master template updated successfully',response: response}
+					
+				else
+				 msg = "Something went wrong. IspConfig Error: #{respponse.message}"
+				   		{:success=>false,:message=> msg,response: response}
+				end
+			else
+				{:success=>false,:message=>'IspConfig user account does not exists.'}
+			end
+
+		end
+
+
+	   	#Package API interface for the  user/Reseller
+	   	def template
+	   		@template ||= IspConfig::Template.new(user)
+	   	end
+
 
 
 		private
@@ -116,17 +145,21 @@ module IspConfig
 			     password:  get_password('isp_config'),
 			    "language": "en",
 			    "usertheme": "default",
-			    "template_master": 0,
+			    "template_master": get_master_template_id,
 			    "template_additional": "",
-			    "created_at": 0
+			    "created_at": 0,
+			    reseller: user.store_admin? ? 1 : 0
+			   
             }
         }
 		end
 
 		def get_user_limits
-			user.store_admin? ? -1 : 0
+			user.store_admin? ? 20 : 0
 		end
 
+		def get_master_template_id
+			0
+		end
 	end
-
 end

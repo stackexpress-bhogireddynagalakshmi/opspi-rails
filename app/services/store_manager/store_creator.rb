@@ -20,10 +20,11 @@ module StoreManager
 
 
     def store_params
+      subdomain = store_admin.subdomain.split(".")[0]
+      url = "#{subdomain}.#{ENV.fetch('BASE_DOMAIN','lvh.me')}"
       
-    	store_params = {name: store_admin.business_name,admin_email: store_admin.email,url: store_admin.subdomain,
+    	store_params = {name: store_admin.business_name,admin_email: store_admin.email,url: url,
   					mail_from_address: store_admin.email,default_currency: 'USD'}
-
     end
 
     def ensure_store_admin_role

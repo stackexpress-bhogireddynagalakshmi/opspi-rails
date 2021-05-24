@@ -6,4 +6,8 @@ class OpspiHelper
 	def self.admin_domain
 		ENV.fetch("ADMIN_DOMAIN") rescue nil
 	end
+
+	def self.admin_domain
+		ENV.fetch("BASE_DOMAIN") rescue nil
+	end
 end

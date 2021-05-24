@@ -24,7 +24,7 @@
 
    <%if current_spree_user.superadmin?%>
 
-      <div data-hook="admin_product_form_reseller_product">
+    <div data-hook="admin_product_form_reseller_product">
         <%= f.field_container :reseller_product, class: ['form-group'] do %>
           <%= f.check_box :reseller_product,class: 'mr-2'%>
           <%= f.label :reseller_product, raw(Spree.t(:reseller_product)) %>
@@ -33,7 +33,7 @@
      </div>
    <%end%>
 
-    <div data-hook="admin_product_form_subscribablee">
+    <div data-hook="admin_product_form_subscribable">
         <%= f.field_container :subscribable, class: ['form-group'] do %>
         <%= f.check_box :subscribable,class: 'mr-2'%>
         <%= f.label :subscribable, raw(Spree.t(:subscribable)) %>
@@ -41,6 +41,19 @@
       <% end %>
     </div>
 
+    
+    <div id="isp_config_template_div" class="d-none">
+      <%if current_spree_user.superadmin?%>
+        <%= f.field_container :isp_config_master_template_id, class: ['form-group'] do %>
+          <%= f.label :isp_config_master_template_id, raw(Spree.t(:isp_config_template) + required_span_tag) %>
+          <%= f.select :isp_config_master_template_id, options_for_select(current_spree_user.isp_config.template.master_template_dropdown,f.object.isp_config_master_template_id),{},class: 'form-control title' %>
+          <%= f.error_message_on :isp_config_master_template_id %>
+        <% end %>
+      <%else%>
+           <%=f.hidden_field :isp_config_master_template_id,value: current_store.isp_config_master_template_id %>
+        <%end%>
+    </div>
+    
     <div id="solid_cp_quota_group_div">
      <%if current_spree_user.superadmin?%>
       <%= f.field_container :solid_cp_master_plan_id, class: ['form-group'] do %>
@@ -50,6 +63,7 @@
       <% end %>
       <%else%>
         <%=f.hidden_field :solid_cp_master_plan_id,value: current_store.solid_cp_master_plan_id %>
+
      <%end%> 
   
       <div id="product_quota_groups">
@@ -57,6 +71,7 @@
       </div>
     </div>
 
+   
     <div data-hook="new_product_attrs" class="row">
       <% unless @product.has_variants? %>
         <div data-hook="new_product_sku" class="col-12 col-md-4">
@@ -118,7 +133,6 @@
       </div>
 
       <%end%>
-
     </div>
 
     <div data-hook="product-from-prototype" id="product-from-prototype">
@@ -171,8 +185,9 @@
         else
         {
           $('#solid_cp_quota_group_div').remove();
-        }
-        
+          $('#isp_config_template_div').removeClass('d-none');
+          $('#product_isp_config_master_template_id').attr('required','required');
+        }        
       
     });
 

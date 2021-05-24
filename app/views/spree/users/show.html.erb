@@ -194,7 +194,7 @@
             <tbody>
              <%spree_current_user.susbscriptions.order('created_at desc').each do |subscription|%>
                 <tr>
-                  <td class="account-page-order-number"><%=subscription.plan.name%> 
+                  <td class="account-page-order-number"><%= TenantManager::TenantHelper.unscoped_query{ subscription.plan.name} %> 
                     <br/>
                     <span class="font-12 grey"><%=subscription.plan.server_type.titleize%></span>
                   </td>

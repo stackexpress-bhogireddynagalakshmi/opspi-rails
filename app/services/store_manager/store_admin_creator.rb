@@ -24,8 +24,6 @@ module StoreManager
 
       StoreManager::StoreAdminRoleAssignor.new(admin).call
 
-      # TenantManager::UserTenantUpdater.new(admin,account.id).call
-
     end
     
   end
