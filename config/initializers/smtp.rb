@@ -1,7 +1,7 @@
 ActionMailer::Base.smtp_settings = {
-  domain: 'test01.dev.opspi.com',
-  address:        "smtp.mailgun.org",
-  port:            587,
+  domain:         ENV['ADMIN_DOMAIN'],
+  address:        ENV['SMTP_HOST'],
+  port:            ENV['SMTP_PORT'],
   authentication: :plain,
   user_name:       ENV["SMTP_USER"],
   password:       ENV["SMTP_PASS"],
