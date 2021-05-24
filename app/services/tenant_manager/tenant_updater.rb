@@ -23,7 +23,7 @@ module TenantManager
         #Solid CP Access to tenant  & Master Plan id set for a spree store
 
         account.update_column :solid_cp_access, true if panels_access('solid_cp')
-        account.spree_store.update_column :solid_cp_access if panels_access('solid_cp')
+        account.spree_store.update_column :solid_cp_access,true  if panels_access('solid_cp')
         account.spree_store.update(solid_cp_master_plan_id: order.subscribable_products.windows.first.solid_cp_master_plan_id) if  order.subscribable_products.windows.present?
 
          #ISP config Access to tenant & Master Plan id set for a spree store
