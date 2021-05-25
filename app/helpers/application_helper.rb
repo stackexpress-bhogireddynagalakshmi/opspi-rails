@@ -13,6 +13,7 @@ module ApplicationHelper
 	end
 
 	def render_new_tenant_information(order)
+		text = ""
 		if current_admin_tenant?
 			user = TenantManager::TenantHelper.unscoped_query{order.user}
 	        text+=link_to user.account.domain,get_tenant_host_for_resource_path(user), target: '_blank'

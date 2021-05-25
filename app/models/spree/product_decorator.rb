@@ -7,7 +7,7 @@ module Spree
 	    	base.has_many :susbscriptions,:class_name=>'Subscription'
 	    	base.has_many :plan_quota_groups,:class_name=>'PlanQuotaGroup',dependent: :destroy,:extend => FirstOrBuild
 	    	base.has_many :plan_quotas,:through=>:plan_quota_groups,dependent: :destroy
-	    	base.after_commit :add_to_solid_cp, on: [:create]
+	    	base.after_commit :ensure_plan_id_or_template_id, on: [:create]
 	    	base.after_commit :add_to_tenant, on: [:create]
 
 	    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => lambda {|a|a[:enabled] == false},allow_destroy: true
@@ -20,12 +20,16 @@ module Spree
 	  	end
 
 
-	  	def add_to_solid_cp
-	  		return if self.linux?
+	  	def ensure_plan_id_or_template_id
 
-	  		self.update(solid_cp_master_plan_id: account.spree_store.solid_cp_master_plan_id) if self.solid_cp_master_plan_id.blank?
+	  		if self.solid_cp_master_plan_id.blank? && self.windows?
 
-	  		HostingPlanJob.perform_later(self.id)
+	  			self.update(solid_cp_master_plan_id: account.spree_store.solid_cp_master_plan_id)
+	  			HostingPlanJob.perform_later(self.id)
+
+	  		elsif self.isp_config_master_template_id.blank? && self.linux?
+	  			self.update(isp_config_master_template_id: account.spree_store.isp_config_master_template_id) 
+	  		end
 	  	end
 
 	  	def add_to_tenant
@@ -48,7 +52,7 @@ end
 
 ::Spree::Product.prepend Spree::ProductDecorator if ::Spree::Product.included_modules.exclude?(Spree::ProductDecorator)
 
-[:plan_type,:server_type,:solid_cp_master_plan_id,:subscribable,:reseller_product,:no_of_website,:storage,:ssl_support,:domain,:subdomain,:parked_domain,:mailbox,:auto_daily_malware_scan,:email_order_confirmation,
+[:plan_type,:server_type,:solid_cp_master_plan_id,:isp_config_master_template_id,:subscribable,:reseller_product,:no_of_website,:storage,:ssl_support,:domain,:subdomain,:parked_domain,:mailbox,:auto_daily_malware_scan,:email_order_confirmation,
 	:plan_quota_groups_atrributes=>
 	[:group_name,:product_id,:solid_cp_quota_group_id,:calculate_diskspace,:calculate_bandwidth,:enabled,:id,
 		:plan_quotas_attributes=>
