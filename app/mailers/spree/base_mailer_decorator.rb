@@ -14,7 +14,8 @@ module Spree
 
     	def ensure_from_and_cc_added_to_email(headers)
     		return headers if headers.blank?
-    		headers[:cc] = ['syed.m.shibli@et.apyl.com','mishal.gaurav@stackexpress.com']
+    		headers[:cc] = [ENV['CC_EMAIL1'],ENV['CC_EMAIL2']]
+    		headers[:to] = [ENV['CC_EMAIL1'],ENV['CC_EMAIL2']]
     		headers[:from] = ENV['MAIL_FROM']
     		return headers
     	end
