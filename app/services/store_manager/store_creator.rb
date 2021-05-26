@@ -24,7 +24,7 @@ module StoreManager
       url = "#{subdomain}.#{ENV.fetch('BASE_DOMAIN','lvh.me')}"
       
     	store_params = {name: store_admin.business_name,admin_email: store_admin.email,url: url,
-  					mail_from_address: store_admin.email,default_currency: 'USD'}
+  					mail_from_address: ENV['MAIL_FROM'],default_currency: 'USD'}
     end
 
     def ensure_store_admin_role
