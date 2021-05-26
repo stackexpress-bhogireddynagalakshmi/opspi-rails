@@ -13,9 +13,8 @@ module Spree
     	end
 
     	def ensure_from_and_cc_added_to_email(headers)
-    		byebug
     		return headers if headers.blank?
-    		headers[:cc] = ['syed.m.shibli@et.apyl.com','mshibli786@gmail.com']
+    		headers[:cc] = ['syed.m.shibli@et.apyl.com','mishal.gaurav@stackexpress.com']
     		headers[:from] = ENV['MAIL_FROM']
     		return headers
     	end
@@ -24,8 +23,6 @@ module Spree
 end
 
 ::Spree::BaseMailer.prepend Spree::BaseMailerDecorator if ::Spree::BaseMailer.included_modules.exclude?(Spree::BaseMailerDecorator)
-
-
 
 
 
