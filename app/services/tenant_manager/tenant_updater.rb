@@ -2,9 +2,9 @@ module TenantManager
 	class TenantUpdater
 		attr_reader :account,:order, :product
 
-    #for reseller only
+     #for reseller only
 
-		def initialize(account,options = {})
+		  def initialize(account,options = {})
   			@account = account
   			@product = options[:product]
   			@order = options[:order]
