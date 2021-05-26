@@ -17,7 +17,11 @@ Spree.config do |config|
   config.allow_guest_checkout = false
   config.logo = 'OpsPi-logo.png'
   config.admin_interface_logo = 'OpsPi-logo.png'
+
+
 end
+
+Spree::Auth::Config[:confirmable] = true
 
 # Configure Spree Dependencies
 #
