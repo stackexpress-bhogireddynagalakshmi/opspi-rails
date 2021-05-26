@@ -5,9 +5,6 @@ class DeviseCustomMailer < Devise::Mailer
          
   
  
-  default cc: ['mshibli786@gmail.com']
-
-
   #layout 'mailer'
 
   def confirmation_instructions(record, token, opts={})
