@@ -12,7 +12,7 @@ module StoreManager
     def call
       admin = Spree::User.find_by({email: store.admin_email}) || account.store_admin  
       admin = Spree::User.create({email: store.admin_email,:password=>store.admin_password,:password_confirmation=>store.admin_password}) if admin.blank?
-
+      
       Sidekiq.redis{|conn|conn.set("spree_user_id_#{admin.id}_solid_cp", store.solid_cp_password)} if store.solid_cp_password.present?
       Sidekiq.redis{|conn|conn.set("spree_user_id_#{admin.id}_isp_config", store.solid_cp_password)} if store.isp_config_password.present?
 
@@ -23,6 +23,8 @@ module StoreManager
         )
 
       StoreManager::StoreAdminRoleAssignor.new(admin).call
+
+      admin
 
     end
     
