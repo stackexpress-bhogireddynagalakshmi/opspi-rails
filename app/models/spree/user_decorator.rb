@@ -62,7 +62,7 @@ module Spree
 
 
 	  	def ensure_unique_subdomain
-	  		if ::Account.where(subdomain: subdomain).size > 0
+	  		if self.reseller_signup? && ::Account.where(subdomain: subdomain).size > 0
 	  			errors.add(:subdomain, 'is already taken')
 	  			throw :abort
 	  		end
