@@ -24,7 +24,6 @@ class IspConfigProvisioningJob < ApplicationJob
     end
   end
 
-
   def provision_user_account(user,product_id)
    	response  = user.isp_config.create
     if response[:success] == true   
@@ -45,6 +44,5 @@ class IspConfigProvisioningJob < ApplicationJob
   def attach_to_isp_config_tenplate(user,template_id)
     user.isp_config.attach_template(template_id) 
   end
-
 
 end

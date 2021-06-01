@@ -10,6 +10,11 @@ module TenantManager
 			ActsAsTenant.current_tenant
 		end
 
+		def self.admin_tenant
+			Account.first
+		end
+
+
 		def self.unscoped_query(&block)
 	      	ActsAsTenant.without_tenant do 
 	      	  	yield 

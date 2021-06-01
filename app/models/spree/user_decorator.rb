@@ -10,6 +10,8 @@ module Spree
 	    	base.has_many :plans,through: :susbscriptions,:class_name=>'Spree::Product' 
 	    	base.has_many :packages,:class_name=>'Package'
 	    	base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
+	    	base.has_one :tenant_service
+
 	    	base.after_commit :ensure_tanent_exists, on: [:create]
 	    	base.after_commit :provision_accounts, on: [:create]
 	  	end
@@ -30,14 +32,14 @@ module Spree
 	  		@isp_config ||= IspConfig::User.new(self)
 	  	end
 
-	  	def provision_accounts
-	  		AppManager::AccountProvisioner.new(self).call
-	  	end
-
 	  	def ensure_tanent_exists
 	  		if  self.reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
 	  			StoreManager::StoreCreator.new(self).call
 	  		end
+	  	end
+
+	  	def provision_accounts
+	  		AppManager::AccountProvisioner.new(self.reload).call
 	  	end
 
 

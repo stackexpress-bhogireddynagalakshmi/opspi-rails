@@ -3,13 +3,13 @@ default:
     - title: Hosting
       subtitle: Categories
       url: /#
-      items:
-        - :title: Shared Hosting
-          :url: /hosting/shared-hosting
-        - :title: VPS Hosting
-          :url: /hosting/vps-hosting
-        - :title: Dedicated Hosting
-          :url: /hosting/dedicated-hosting
+      # items:
+      #   - :title: Shared Hosting
+      #     :url: /hosting/shared-hosting
+      #   - :title: VPS Hosting
+      #     :url: /hosting/vps-hosting
+      #   - :title: Dedicated Hosting
+      #     :url: /hosting/dedicated-hosting
       promo_banners:
         # - subtitle: New collection
         #   title: Summer 2021
@@ -24,9 +24,9 @@ default:
       url: /#
       items:
         - :title: Linux Dedicated Servers
-          :url: /servers/linux-dedicated-servers
+          :url: /servers/linux-servers
         - :title: Windows Dedicated Servers
-          :url: /servers/windows-dedicated-servers
+          :url: /servers/windows-servers
       promo_banners:
         # - subtitle: New collection
         #   title: Summer 2021
