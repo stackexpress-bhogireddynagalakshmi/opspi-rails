@@ -9,5 +9,9 @@ class Account < ApplicationRecord
 		users.select{|user| user.store_admin?}.first
 	end
 
+	def admin_tenant?
+		TenantManager::TenantHelper.admin_tenant.id == self.id
+	end
+
 	
 end

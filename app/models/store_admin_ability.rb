@@ -13,10 +13,10 @@ class StoreAdminAbility
     	can :manage, ::Spree::Product
     	can :manage, ::Spree::User
     	
-    	# can :manage, ::Spree::ReturnAuthorization
-    	# can :manage, ::Spree::CustomerReturn
-    	can :manage, ::Spree::Admin::ReportsController
-    	can :manage, ::Spree::Promotion
+    	#can :manage, ::Spree::ReturnAuthorization
+    	#can :manage, ::Spree::CustomerReturn
+    	#can :manage, ::Spree::Admin::ReportsController
+    	#can :manage, ::Spree::Promotion
 
         can :manage, ::Spree::Payment
     	can :read, ::Spree::Country
