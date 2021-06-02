@@ -132,6 +132,10 @@ Rails.application.configure do
   #     authentication:       :plain,
   #     enable_starttls_auto: true
   # }
+  
+  config.enable_mail_delivery = true
+
+  ActionMailer::Base.delivery_method = :smtp 
 
   config.logger = Logger.new(STDOUT)
   config.action_mailer.default_url_options = { :host => ENV['ADMIN_DOMAIN'] }
