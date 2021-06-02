@@ -21,7 +21,7 @@ Spree.config do |config|
 
 end
 
-Spree::Auth::Config[:confirmable] = ENV['ACCOUNT_CONFIRMABLE']
+Spree::Auth::Config[:confirmable] =  ENV['ACCOUNT_CONFIRMABLE'] || true
 
 # Configure Spree Dependencies
 #
