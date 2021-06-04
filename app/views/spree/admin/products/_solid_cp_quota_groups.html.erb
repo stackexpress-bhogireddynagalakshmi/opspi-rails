@@ -1,16 +1,13 @@
 <h6><strong>Quotas</strong></h6>
 <div id="accordion" class="mb-5">
+ <%@product.plan_quota_groups.each do |grp| %>
 
- <%=form.fields_for :plan_quota_groups do |qg_form|%>
-
-  <%=qg_form.hidden_field :product_id%>
-  <%=qg_form.hidden_field :group_name%>
-  <%=qg_form.hidden_field :solid_cp_quota_group_id%>
-
-   <%=qg_form.hidden_field :id%>
-
-
-   <div class="card">
+   <%=fields_for grp do |qg_form|%>
+    <%=qg_form.hidden_field :product_id%>
+    <%=qg_form.hidden_field :group_name%>
+    <%=qg_form.hidden_field :solid_cp_quota_group_id%>
+    <%=qg_form.hidden_field :id%>
+    <div class="card">
       <div class="card-header" id="headingOne">
         <h5 class="mb-0 d-inline">
           <%=qg_form.check_box :enabled %>  <button class="btn btn-link" data-toggle="collapse" data-target="#group_<%=qg_form.object.solid_cp_quota_group_id%>" aria-expanded="true" aria-controls="group_<%=qg_form.object.solid_cp_quota_group_id%>">
@@ -22,19 +19,16 @@
             <%=qg_form.check_box :calculate_bandwidth %> Count Bandwidth 
            </span>
       </div>
-
       <div id="group_<%=qg_form.object.solid_cp_quota_group_id%>" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
         <div class="card-body">         
           <table class="table">
             <%= qg_form.fields_for :plan_quotas,build_quota(@product,qg_form.object,quotas) do | plan_quota_form|%>
                 <%quota = plan_quota_form.object%>
                 <%=plan_quota_form.hidden_field :plan_quota_group_id %>
-               
                 <%=plan_quota_form.hidden_field :quota_name %>
                 <%=plan_quota_form.hidden_field :solid_cp_quota_group_id %>
                 <%=plan_quota_form.hidden_field :solid_cp_quota_id %>                
                 <%=plan_quota_form.hidden_field :id %>
-
                 <tr class="quota-row">
                   <td><%=plan_quota_form.object.formatted_quota_name%></td>
                   <td><%=plan_quota_form.text_field :quota_value,class: "quota-value #{quota.quota_value.present? && quota.quota_value < 0 ? 'd-none' : ''}"%>  <%=plan_quota_form.check_box :unlimited,:checked=>quota.quota_value < 0,class: 'quota-checkbox'%>  Unlimited</td>
@@ -43,26 +37,24 @@
           </table>
         </div>
       </div> 
-    </div>
- <%end%>
+      </div>
+   <%end%>
+  <%end%>
 </div>
 
 <script type="text/javascript">
-  
-
   $(document).ready(function(){
       $('.quota-checkbox').on('change',function(){
         var quotaValueInput = $(this).closest('.quota-row').find('.quota-value');
         debugger
 
         if (this.checked){
-            quotaValueInput.val("-1");
-            quotaValueInput.addClass('d-none');
+          quotaValueInput.val("-1");
+          quotaValueInput.addClass('d-none');
         }
         else{
           quotaValueInput.removeClass('d-none');
         }
-
       });
   });
 

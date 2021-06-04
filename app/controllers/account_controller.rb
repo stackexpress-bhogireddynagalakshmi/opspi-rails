@@ -27,12 +27,8 @@ class AccountController < Spree::StoreController
     end
 
     def get_hosting_plan_quotas
-      solid_cp_plan_id = current_store.solid_cp_master_plan_id || 10
-      response = SolidCp::Plan.get_hosting_plan_quotas(solid_cp_plan_id)
-      groups  = response.body[:get_hosting_plan_quotas_response][:get_hosting_plan_quotas_result][:diffgram][:new_data_set][:table]  
-      groups = groups.select{|x| x[:enabled]}
-      quotas  = response.body[:get_hosting_plan_quotas_response][:get_hosting_plan_quotas_result][:diffgram][:new_data_set][:table1]     
-      render :partial=> 'spree/admin/products/solid_cp_quota_groups',:locals=>{quota_groups: groups,quotas: quotas},:layout=>false
+      solid_cp_plan_id = params[:solid_cp_plan_id]
+      @product = Spree::Product.new
     end
     
 end
