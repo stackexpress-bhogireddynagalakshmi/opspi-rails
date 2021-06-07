@@ -12,6 +12,13 @@ class StoreAdminAbility
     	can :manage, ::Spree::Order
     	can :manage, ::Spree::Product
     	can :manage, ::Spree::User
+        can :manage, ::Spree::Image
+        can :manage, ::Spree::Variant
+        can :manage, ::Spree::ProductProperty
+        can :manage, ::Spree::StockItem
+        can :manage, ::Spree::StockLocation
+        can :manage, ::Spree::StockMovement
+        can :manage, ::Spree::Price
     	
     	#can :manage, ::Spree::ReturnAuthorization
     	#can :manage, ::Spree::CustomerReturn

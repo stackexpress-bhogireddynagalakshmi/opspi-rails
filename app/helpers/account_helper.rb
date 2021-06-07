@@ -2,7 +2,7 @@ module AccountHelper
 
 	def render_hosting_plan_quota_partial(product,user,solid_cp_plan_id)
 	  if user.store_admin?
-	 	 solid_cp_plan_id = current_store.solid_cp_master_plan_id || 10 	
+	 	 solid_cp_plan_id = current_store.solid_cp_master_plan_id
 	  end
 	 
       response = SolidCp::Plan.get_hosting_plan_quotas(solid_cp_plan_id)
