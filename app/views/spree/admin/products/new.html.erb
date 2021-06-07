@@ -55,19 +55,18 @@
     </div>
     
     <div id="solid_cp_quota_group_div">
-     <%if current_spree_user.superadmin?%>
-      <%= f.field_container :solid_cp_master_plan_id, class: ['form-group'] do %>
+      <%if current_spree_user.superadmin?%>
+        <%= f.field_container :solid_cp_master_plan_id, class: ['form-group'] do %>
           <%= f.label :solid_cp_master_plan_id, raw(Spree.t(:solid_cp_plan) + required_span_tag) %>
           <%= f.select :solid_cp_master_plan_id, options_for_select(SolidCp::Plan.master_plans_dropdown,f.object.solid_cp_master_plan_id),{},class: 'form-control title' %>
           <%= f.error_message_on :solid_cp_master_plan_id %>
-      <% end %>
+        <% end %>
       <%else%>
         <%=f.hidden_field :solid_cp_master_plan_id,value: current_store.solid_cp_master_plan_id %>
+      <%end%>
 
-     <%end%> 
-  
       <div id="product_quota_groups">
-        <%=render_hosting_plan_quota_partial(f,@product) if plan_type_values(current_spree_user).include?('windows')%>
+        <%=render :partial=>'solid_cp_quota_form',:locals=>{f: f,solid_cp_plan_id: 7}%>
       </div>
     </div>
 
@@ -138,7 +137,6 @@
     <div data-hook="product-from-prototype" id="product-from-prototype">
       <%= render template: 'spree/admin/prototypes/show' if @prototype %>
     </div>
-
     <%= render partial: 'spree/admin/shared/new_resource_links' %>
 
   </fieldset>
@@ -168,9 +166,8 @@
   $(document).ready(function (argument) {
     $('#product_solid_cp_master_plan_id').on('change',function(){
        var solidcpPlanId = $(this).val();
-
         $.get('/account/get_hosting_plan_quotas?solid_cp_plan_id='+solidcpPlanId,function(data){
-          $('#product_quota_groups').html(data);
+          // $('#product_quota_groups').html(data);
         });
     });
 

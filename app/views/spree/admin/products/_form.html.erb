@@ -34,6 +34,16 @@
 
     </div>
 
+   <%if current_spree_user.superadmin?%>
+    <div data-hook="admin_product_form_reseller_product">
+        <%= f.field_container :reseller_product, class: ['form-group'] do %>
+          <%= f.check_box :reseller_product,class: 'mr-2'%>
+          <%= f.label :reseller_product, raw(Spree.t(:reseller_product)) %>
+          <%= f.error_message_on :reseller_product %>
+        <% end %>
+     </div>
+   <%end%>
+
     <%= f.field_container :subscribable, class: ['form-group'] do %>
         <%= f.check_box :subscribable%>
         <%= f.label :subscribable, raw(Spree.t(:subscribable) + required_span_tag) %>
@@ -42,7 +52,7 @@
 
     <%if  @product.windows?%>
        <div id="product_quota_groups">
-         <%=render_hosting_plan_quota_partial(f,@product)%>
+         <%=render_hosting_plan_quota_partial(@product,spree_current_user,@product.solid_cp_master_plan_id)%>
        </div>
     <%end%>
      
@@ -286,6 +296,4 @@
 
     </div>
     
-
-
 </div>

@@ -22,20 +22,22 @@ module Spree
 
 	  	def ensure_plan_id_or_template_id
 
-	  		if self.solid_cp_master_plan_id.blank? && self.windows?
-
+	  		if self.windows?
+	  			self.update(isp_config_master_template_id: nil) 
+	  			return if self.solid_cp_master_plan_id.present? 
 	  			self.update(solid_cp_master_plan_id: account.spree_store.solid_cp_master_plan_id)
 	  			HostingPlanJob.perform_later(self.id)
 
-	  		elsif self.isp_config_master_template_id.blank? && self.linux?
+	  		elsif self.linux?
+	  			self.update(solid_cp_master_plan_id: nil)
+	  			return if self.isp_config_master_template_id.present?
 	  			self.update(isp_config_master_template_id: account.spree_store.isp_config_master_template_id) 
 	  		end
 	  	end
 
 	  	def add_to_tenant
-
 	  		if self.account_id.blank?
-	  			TenantManager::ProductTenantUpdater.new(self,1)
+	  			TenantManager::ProductTenantUpdater.new(self,1).call
 	  		end
 
 	  	end

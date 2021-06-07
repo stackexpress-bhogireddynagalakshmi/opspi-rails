@@ -109,6 +109,7 @@ module SolidCp
 
 	    #syncronous api call
 	    def self.master_plans_dropdown
+
 	    	begin
 	    		response = SolidCp::Plan.get_hosting_plans 
 				plans  = response.body[:get_hosting_plans_response][:get_hosting_plans_result][:diffgram][:new_data_set][:table]	
@@ -116,8 +117,9 @@ module SolidCp
 	    	rescue Exception => e
 	    		plans = [] 
 	    	end	
-	    	plans.collect{|x| [x[:plan_name],x[:plan_id]]}
-	     # static_plan_ids = [["Mishal_TEST", "7"], ["New Plan 01", "31"], ["New Reseller Test Plan", "33"], ["Red Hat Hosting", "10"], ["test", "3"], ["Test Window Hostig", "4"], ["Win-Basic", "2"], ["Windows Premium Hosting", "30"]]
+	    	plans = plans.collect{|x| [x[:plan_name],x[:plan_id]]}
+	    	@solid_cp_plan_id ||= plans[0][1]
+	    	plans
 	    end
 
 	end
