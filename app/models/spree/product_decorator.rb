@@ -24,12 +24,16 @@ module Spree
 
 	  		if self.windows?
 	  			self.update(isp_config_master_template_id: nil) 
-	  			return if self.solid_cp_master_plan_id.present? 
-	  			self.update(solid_cp_master_plan_id: account.spree_store.solid_cp_master_plan_id)
+	  		
+	  			return if self.solid_cp_master_plan_id.present?  && TenantManager::TenantHelper.current_admin_tenant?
+	  		
+	  			self.update(solid_cp_master_plan_id: account.spree_store.solid_cp_master_plan_id) 
+
 	  			HostingPlanJob.perform_later(self.id)
 
 	  		elsif self.linux?
 	  			self.update(solid_cp_master_plan_id: nil)
+
 	  			return if self.isp_config_master_template_id.present?
 	  			self.update(isp_config_master_template_id: account.spree_store.isp_config_master_template_id) 
 	  		end

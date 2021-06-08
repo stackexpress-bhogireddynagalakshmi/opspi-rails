@@ -59,9 +59,5 @@ class SolidCpProvisioningJob < ApplicationJob
          raise StandardError.new response[:message] 
      end
   end
-
-
-  # def solid_cp_response
-  #     yield if block_given?
-  # end
+  
 end
