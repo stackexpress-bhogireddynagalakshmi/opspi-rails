@@ -52,6 +52,7 @@
 
     <%if  @product.windows?%>
        <div id="product_quota_groups">
+        <%@form = f%>
          <%=render_hosting_plan_quota_partial(@product,spree_current_user,@product.solid_cp_master_plan_id)%>
        </div>
     <%end%>
