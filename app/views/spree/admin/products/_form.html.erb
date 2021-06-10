@@ -45,19 +45,18 @@
    <%end%>
 
     <%= f.field_container :subscribable, class: ['form-group'] do %>
-        <%= f.check_box :subscribable%>
+        <%= f.check_box :subscribable,class: 'mr-2'%>
         <%= f.label :subscribable, raw(Spree.t(:subscribable) + required_span_tag) %>
         <%= f.error_message_on :subscribable %>
     <% end %>
 
     <%if  @product.windows?%>
-       <div id="product_quota_groups">
+      <div id="product_quota_groups" class="<%= current_spree_user.superadmin? ? 'disable-quotas' : ''%>">
         <%@form = f%>
-         <%=render_hosting_plan_quota_partial(@product,spree_current_user,@product.solid_cp_master_plan_id)%>
-       </div>
+        <%=render_hosting_plan_quota_partial(@product,spree_current_user,@product.solid_cp_master_plan_id)%>
+      </div>
     <%end%>
      
-
     <div data-hook="admin_product_form_description">
       <%= f.field_container :description, class: ['form-group'] do %>
         <%= f.label :description, Spree.t(:description) %>
