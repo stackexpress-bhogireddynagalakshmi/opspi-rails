@@ -8,7 +8,7 @@ module Spree
 	    	base.has_many :plan_quota_groups,:class_name=>'PlanQuotaGroup',dependent: :destroy,:extend => FirstOrBuild
 	    	base.has_many :plan_quotas,:through=>:plan_quota_groups,dependent: :destroy
 	    	base.after_commit :ensure_plan_id_or_template_id, on: [:create]
-	    	base.after_commit :add_to_tenant, on: [:create]
+	    	base.after_commit :add_to_tenant, on: [:create,:update]
 
 	    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => lambda {|a|a[:enabled] == false},allow_destroy: true
 	    	base.scope :reseller_products, ->{where(reseller_product: true)}
@@ -25,7 +25,7 @@ module Spree
 	  		if self.windows?
 	  			self.update(isp_config_master_template_id: nil) 
 	  		
-	  			return if self.solid_cp_master_plan_id.present?  && TenantManager::TenantHelper.current_admin_tenant?
+	  			return if self.solid_cp_master_plan_id.present?  && TenantManager::TenantHelper.current_tenant.blank?
 	  		
 	  			self.update(solid_cp_master_plan_id: account.spree_store.solid_cp_master_plan_id) 
 

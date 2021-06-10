@@ -4,14 +4,12 @@ module AccountHelper
 	  if user.store_admin?
 	 	 solid_cp_plan_id = current_store.solid_cp_master_plan_id
 	  end
-	 
       response = SolidCp::Plan.get_hosting_plan_quotas(solid_cp_plan_id)
       groups  = response.body[:get_hosting_plan_quotas_response][:get_hosting_plan_quotas_result][:diffgram][:new_data_set][:table]  
       groups = groups.select{|x| x[:enabled]}
       quotas  = response.body[:get_hosting_plan_quotas_response][:get_hosting_plan_quotas_result][:diffgram][:new_data_set][:table1]     
       build_plan_quotas(product,groups,quotas)
       render :partial=> 'spree/admin/products/solid_cp_quota_groups',:locals=>{quota_groups: groups,quotas: quotas,:layout=>false}
-
 	end
 
 
@@ -19,6 +17,7 @@ module AccountHelper
 	    groups.each do |group|
 	     	group_obj = product.plan_quota_groups.first_or_build({:solid_cp_quota_group_id=>group[:group_id]})
 	     	group_obj.group_name = group[:group_name]
+	     	group_obj.enabled = group[:enabled]
 		end
     end
 
