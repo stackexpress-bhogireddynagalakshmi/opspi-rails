@@ -9,6 +9,7 @@ module Spree
 	    	base.has_many :plan_quotas,:through=>:plan_quota_groups,dependent: :destroy
 	    	base.after_commit :ensure_plan_id_or_template_id, on: [:create]
 	    	base.after_commit :add_to_tenant, on: [:create,:update]
+	    	base.after_commit :update_solid_cp_plan, on: [:update]
 
 	    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => lambda {|a|a[:enabled] == false},allow_destroy: true
 	    	base.scope :reseller_products, ->{where(reseller_product: true)}
@@ -18,7 +19,6 @@ module Spree
 				linux: 1
 			}
 	  	end
-
 
 	  	def ensure_plan_id_or_template_id
 
@@ -44,6 +44,12 @@ module Spree
 	  			TenantManager::ProductTenantUpdater.new(self,1).call
 	  		end
 
+	  	end
+
+	  	def update_solid_cp_plan
+	  		return if TenantManager::TenantHelper.current_tenant.blank?
+	  		return unless self.windows?
+	  		HostingPlanJob.perform_later(self.id,'update')
 	  	end
 
 	  	# def ensure_no_active_subscription
