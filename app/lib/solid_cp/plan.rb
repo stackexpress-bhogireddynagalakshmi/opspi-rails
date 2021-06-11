@@ -68,6 +68,32 @@ module SolidCp
 			end
 	    end
 
+	    def update_hosting_plan
+	    	if plan.solid_cp_plan_id.present?
+
+	    		response = super(message: { 
+			   		plan: {
+			   			"PlanId" => plan.solid_cp_plan_id,
+			   			"PackageId" => user.packages.first.try(:solid_cp_package_id),
+				   		"PlanName" => plan.name,
+				   		"PlanDescription"=>plan.description,
+				   		"Available"=> true,
+				   		"IsAddon"=> false,
+				   		"SetupPrice"=> 0.0,
+				   		"RecurringPrice" =>0.0000,
+				   		"RecurrenceUnit"=> 2,
+				   		"RecurrenceLength" =>1,
+				   		"Groups" => get_hosting_plan_groups_info,
+				   		"Quotas" => get_hosting_plan_quotas_info,
+				   		"UserId"=>user.solid_cp_id	   		
+			   		}
+			   	 })
+
+
+
+	    	end
+	    end
+
 
 	    def get_hosting_plan_groups_info
 	    	group_hash = {}
