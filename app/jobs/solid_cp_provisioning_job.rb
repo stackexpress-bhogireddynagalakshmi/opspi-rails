@@ -33,7 +33,7 @@ class SolidCpProvisioningJob < ApplicationJob
   def provision_store_admin_account(user,product_id)
     response = user.solid_cp.add_user('Reseller',RESELLER_ROLE_ID)
     
-    solid_cp_master_plan_id = user.spree_store.solid_cp_master_plan_id || RESELLER_ROLE_ID
+    solid_cp_master_plan_id = user.spree_store.solid_cp_master_plan_id 
     if response[:success] == true
      subscribe_to_solidcp_plan(user,solid_cp_master_plan_id) if user.packages.count <= 1
     else

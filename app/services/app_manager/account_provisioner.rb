@@ -29,7 +29,7 @@ module AppManager
         return if user.account.admin_tenant?
 
         if panels_access('isp_config') || user.store_admin?
-          IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id,product&.id)
+          IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id,order.subscribable_product&.id)
         end
       end
 
