@@ -7,17 +7,21 @@ module Spree
 	    	base.has_many :susbscriptions,:class_name=>'Subscription'
 	    	base.has_many :plan_quota_groups,:class_name=>'PlanQuotaGroup',dependent: :destroy,:extend => FirstOrBuild
 	    	base.has_many :plan_quotas,:through=>:plan_quota_groups,dependent: :destroy
+	    	base.has_one :isp_config_limit, inverse_of: :product, autosave: true, dependent: :destroy
 	    	base.after_commit :ensure_plan_id_or_template_id, on: [:create]
 	    	base.after_commit :add_to_tenant, on: [:create,:update]
 	    	base.after_commit :update_solid_cp_plan, on: [:update]
 
 	    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => lambda {|a|a[:enabled] == false},allow_destroy: true
+	    	base.accepts_nested_attributes_for :isp_config_limit
+
 	    	base.scope :reseller_products, ->{where(reseller_product: true)}
 
 	    	base.enum server_type: {
 				windows: 0,
 				linux: 1
 			}
+
 	  	end
 
 	  	def ensure_plan_id_or_template_id
@@ -65,6 +69,7 @@ end
 ::Spree::Product.prepend Spree::ProductDecorator if ::Spree::Product.included_modules.exclude?(Spree::ProductDecorator)
 
 [:plan_type,:server_type,:solid_cp_master_plan_id,:isp_config_master_template_id,:subscribable,:reseller_product,:no_of_website,:storage,:ssl_support,:domain,:subdomain,:parked_domain,:mailbox,:auto_daily_malware_scan,:email_order_confirmation,
+	:isp_config_limit_attributes=>IspConfigLimit.get_fields_name,
 	:plan_quota_groups_atrributes=>
 	[:group_name,:product_id,:solid_cp_quota_group_id,:calculate_diskspace,:calculate_bandwidth,:enabled,:id,
 		:plan_quotas_attributes=>

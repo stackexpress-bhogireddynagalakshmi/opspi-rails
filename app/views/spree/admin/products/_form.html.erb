@@ -55,6 +55,11 @@
         <%@form = f%>
         <%=render_hosting_plan_quota_partial(@product,spree_current_user,@product.solid_cp_master_plan_id)%>
       </div>
+    <%else%>
+    <div id="isp_config_limits">
+        <%=render :partial=>'isp_config_quota_form',:locals=>{f: f}%>
+    </div>
+    
     <%end%>
      
     <div data-hook="admin_product_form_description">

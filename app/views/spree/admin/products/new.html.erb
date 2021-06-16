@@ -40,16 +40,10 @@
       <% end %>
     </div>
 
-    <div id="isp_config_template_div" class="d-none">
-      <%if current_spree_user.superadmin?%>
-        <%= f.field_container :isp_config_master_template_id, class: ['form-group'] do %>
-          <%= f.label :isp_config_master_template_id, raw(Spree.t(:isp_config_template) + required_span_tag) %>
-          <%= f.select :isp_config_master_template_id, options_for_select(current_spree_user.isp_config.template.master_template_dropdown,f.object.isp_config_master_template_id),{},class: 'form-control title' %>
-          <%= f.error_message_on :isp_config_master_template_id %>
-        <% end %>
-      <%else%>
-           <%=f.hidden_field :isp_config_master_template_id,value: current_store.isp_config_master_template_id %>
-        <%end%>
+    <div id="isp_config_template_div" class="<%=plan_type_values(current_spree_user).include?('linux') ? '': 'd-none'  %>">
+      <div id="isp_config_limits">
+        <%=render :partial=>'isp_config_quota_form',:locals=>{f: f}%>
+      </div>
     </div>
     
     <div id="solid_cp_quota_group_div">
@@ -182,7 +176,7 @@
         {
           $('#solid_cp_quota_group_div').remove();
           $('#isp_config_template_div').removeClass('d-none');
-          $('#product_isp_config_master_template_id').attr('required','required');
+          //$('#product_isp_config_master_template_id').attr('required','required');
         }        
       
     });
