@@ -4,14 +4,13 @@ module IspConfig
 
 		def initialize user
 	       @user = user
-	    end
+	  end
 
-
-	    def  all
-	    	response = query({
-			    :endpoint => '/json.php?client_templates_get_all',
-			    :method => :GET,
-			    :body => {client_id: 1,params: {}}
+    def  all
+    	response = query({
+		    :endpoint => '/json.php?client_templates_get_all',
+		    :method => :GET,
+		    :body => {client_id: 1,params: {}}
 			})
 			if  response.code == "ok"
 				{:success=>true, :message=>'IspConfig user account updated successfully',response: response}
@@ -19,43 +18,39 @@ module IspConfig
 			 msg = "Something went wrong while creating user account. IspConfig Error: #{response.message}"
 			   		{:success=>false,:message=> msg,response: response}
 			end
-	    end
+    end
 
-	    def self.find(id)
+    def self.find(id)
 
-	    end
+    end
 
-	    def create
+    def create
+    end
 
-	    end
+    def update
+    end
 
-	    def update
+    def destroy
+    end
 
-	    end
+    def subscribe
+    end
 
-	    def destroy
+    def master_template_dropdown
+    	begin
+    		plans = all[:response].response
 
-	    end
-
-	    def subscribe
-
-	    end
-
-	    def master_template_dropdown
-	    	begin
-	    		plans = all[:response].response
-
-	    		if user.superadmin?
-	    			plans = plans.select{|x|x.sys_userid == "1"}
-	    		else
-	    			plans = plans.select{|x|x.sys_userid == user.isp_config_id}
-	    		end
-	    		plans = plans.pluck(:template_name,:template_id)
-
-    		rescue Exception => e
-    			plans = []
+    		if user.superadmin?
+    			plans = plans.select{|x|x.sys_userid == "1"}
+    		else
+    			plans = plans.select{|x|x.sys_userid == user.isp_config_id}
     		end
-	    end
+    		plans = plans.pluck(:template_name,:template_id)
+
+  		rescue Exception => e
+  			plans = []
+  		end
+	  end
 
 	end
 end
