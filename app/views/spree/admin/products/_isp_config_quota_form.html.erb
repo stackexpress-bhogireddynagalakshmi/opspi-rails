@@ -19,6 +19,7 @@
           <table class="table">
             <tbody>
             <%quota_group[1].each do |field_obj|%>
+               <%next if field_obj[:visible_to_only_admin].present? && !spree_current_user.superadmin?%>
               <tr>
                 <td><%=field_obj[:name]%></td>
                 <td><%=ff.send field_obj[:type], field_obj[:field]%></td>
