@@ -4,9 +4,9 @@ module IspConfig
 
 		include RedisConcern
 
-	    def initialize user
-	      @user = user
-	    end
+    def initialize user
+      @user = user
+    end
 
 		def create(product_id)
 			puts "Adding Client"
@@ -73,12 +73,10 @@ module IspConfig
 
 		end
 
-
-	   	#Package API interface for the  user/Reseller
-	   	def template
-	   		@template ||= IspConfig::Template.new(user)
-	   	end
-
+   	#Package API interface for the  user/Reseller
+   	def template
+   		@template ||= IspConfig::Template.new(user)
+   	end
 
 
 		private
@@ -140,7 +138,7 @@ module IspConfig
 			    limit_cron_type: template.limit_cron_type,
 			    limit_cron_frequency: template.limit_cron_frequency,
 			    limit_traffic_quota: template.limit_traffic_quota,
-			    limit_client: template.limit_client,
+			    limit_client: get_user_limits,
 			    parent_client_id: 0,
 			    username: get_username,
 			    password:  get_password('isp_config'),
@@ -155,14 +153,13 @@ module IspConfig
 		end
 
 		def get_user_limits
-			user.store_admin? ? 20 : 0
+			user.store_admin? ? template.limit_client : 0
 		end
 
 		def get_master_template_id
 			0
 		end
-
-
+		
 	end
 end
 

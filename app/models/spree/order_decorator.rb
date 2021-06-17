@@ -13,48 +13,48 @@ module Spree
 		end
 
 	  	def create_subscriptions(payment)
-      		line_items.each do |line_item|
-		        if line_item.product.subscribable?
-		          Subscription.subscribe!(
-		           user: self.user,
-		           product: line_item.product,
-		           order: self	            
-		          )
-		        end
-	      	end
+    		line_items.each do |line_item|
+	        if line_item.product.subscribable?
+	          Subscription.subscribe!(
+	           user: self.user,
+	           product: line_item.product,
+	           order: self	            
+	          )
+	        end
+      	end
 	  	end
 
-	  	def valid_plan_subscription?
+	  def valid_plan_subscription?
 	  		product = subscribable_product
 	 		if product && self.user.susbscriptions.joins(:plan).active.pluck(:server_type).include?(product.server_type) && (payments.blank? ||  !payments.last.completed?)
 	 		 	errors.add(:base, "Your are already subscribed to one #{product.server_type.titleize} Plan. Please check My Subscriptions page for more details")
 	 		 	return false
 	 		end
-	  	end
+	  end
 
-	  	def finalize!
-	  		super
-	  		update_tenant_if_needed
-	  		provision_accounts
-	  	end
+	  def finalize!
+  		super
+  		update_tenant_if_needed
+  		provision_accounts
+	  end
 
-	  	def update_tenant_if_needed
-	  		TenantManager::TenantServiceExecutor.new(TenantManager::TenantHelper.unscoped_query{self.user}).call
+	  def update_tenant_if_needed
+  		TenantManager::TenantServiceExecutor.new(TenantManager::TenantHelper.unscoped_query{self.user}).call
 
-	  		TenantManager::TenantUpdater.new(TenantManager::TenantHelper.unscoped_query{self.user.reload.account},order: self,product: subscribable_product).setup_panels_access
-	  	end
+  		TenantManager::TenantUpdater.new(TenantManager::TenantHelper.unscoped_query{self.user.reload.account},order: self,product: subscribable_product).setup_panels_access
+	  end
 
-	  	def provision_accounts
-	  		AppManager::AccountProvisioner.new(TenantManager::TenantHelper.unscoped_query{self.user},order: self).call
-	  	end
+  	def provision_accounts
+  		AppManager::AccountProvisioner.new(TenantManager::TenantHelper.unscoped_query{self.user},order: self).call
+  	end
 
-	  	def subscribable_products
-	  		self.products.where(subscribable: true)
-	  	end
-	  	
-	  	def subscribable_product
-	  		subscribable_products.first
-	  	end
+  	def subscribable_products
+  		self.products.where(subscribable: true)
+  	end
+  	
+  	def subscribable_product
+  		subscribable_products.first
+  	end
 
 	end
 end
