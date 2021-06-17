@@ -138,7 +138,7 @@ module IspConfig
 			    limit_cron_type: template.limit_cron_type,
 			    limit_cron_frequency: template.limit_cron_frequency,
 			    limit_traffic_quota: template.limit_traffic_quota,
-			    limit_client: get_user_limits,
+			    limit_client: get_user_limits(template),
 			    parent_client_id: 0,
 			    username: get_username,
 			    password:  get_password('isp_config'),
@@ -152,14 +152,14 @@ module IspConfig
         }
 		end
 
-		def get_user_limits
+		def get_user_limits(template)
 			user.store_admin? ? template.limit_client : 0
 		end
 
 		def get_master_template_id
 			0
 		end
-		
+
 	end
 end
 

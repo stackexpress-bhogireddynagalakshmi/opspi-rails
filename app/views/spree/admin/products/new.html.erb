@@ -40,7 +40,7 @@
       <% end %>
     </div>
 
-    <div id="isp_config_template_div" class="<%=plan_type_values(current_spree_user).include?('linux') ? '': 'd-none'  %>">
+    <div id="isp_config_template_div" class="<%=plan_type_values(current_spree_user).include?('linux') && !current_spree_user.superadmin? ? '': 'd-none'  %>">
       <div id="isp_config_limits">
         <%=render :partial=>'isp_config_quota_form',:locals=>{f: f}%>
       </div>
