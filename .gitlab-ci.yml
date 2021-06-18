@@ -87,3 +87,30 @@ deploy-staging:
     - dev
   when: manual
 
+deploy-production:
+  stage: deploy_production
+  variables:
+    APP_NAME: ops_pi
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+    - eval $(ssh-agent -s)
+
+    ##
+    ## We're using tr to fix line endings which makes ed25519 keys work
+    ## without extra base64 encoding.
+    ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
+    ##
+    - echo "$GITLAB_CI_OPSPI_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+    # - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    # - chmod 644 ~/.ssh/known_hosts
+  script:
+    - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT docker version
+    - scp -r -P $APP_SERVER_SSH_PORT docker-compose.yml $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST:/srv/docker-apps/opspi-stagging/
+    - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT "bash -c ' cd /srv/docker-apps/opspi-stagging && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
+  only:
+    - master
+  when: manual
