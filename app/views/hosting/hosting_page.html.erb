@@ -1,0 +1,11 @@
+<style type="text/css">
+	.bullets-point li {
+		margin-bottom: 10px;
+	}
+	.card {
+		margin: 15px;
+	}
+</style>
+
+
+<%=render :partial=>'plan_cards',:locals=>{:products=>@products,:title=>params[:slug].titleize}%>

@@ -1,0 +1,53 @@
+default:
+  navigation:
+    - title: Hosting
+      subtitle: Categories
+      url: /#
+      # items:
+      #   - :title: Shared Hosting
+      #     :url: /hosting/shared-hosting
+      #   - :title: VPS Hosting
+      #     :url: /hosting/vps-hosting
+      #   - :title: Dedicated Hosting
+      #     :url: /hosting/dedicated-hosting
+      promo_banners:
+        # - subtitle: New collection
+        #   title: Summer 2021
+        #   url: /t/new-collection/summer-2021
+        #   image: 'meganav/promo_banner_left-first-category.jpg'
+        # - subtitle: Special Offers
+        #   title: Get up to 30% off
+        #   url: /t/special-offers/30-percent-off
+        #   image: 'meganav/promo_banner_right-first-category.jpg'
+    - title: Servers
+      subtitle: Categories
+      url: /#
+      items:
+        - :title: Linux Dedicated Servers
+          :url: /servers/linux-servers
+        - :title: Windows Dedicated Servers
+          :url: /servers/windows-servers
+      promo_banners:
+        # - subtitle: New collection
+        #   title: Summer 2021
+        #   url: /t/new-collection/summer-2021
+        #   image: 'meganav/promo_banner_left-second-category.jpg'
+        # - subtitle: Special Offers
+        #   title: Get up to 30% off
+        #   url: /t/special-offers/30-percent-off
+        #   image: 'meganav/promo_banner_right-second-category.jpg'
+    - title: Cloud
+      subtitle: Categories
+      url: /#
+      items:
+        - :title: Cloud Hosting
+          :url: /servers/cloud-hosting
+      promo_banners:
+        - subtitle: Cloud Servers
+          title: Cloud
+          url: /servers/cloud-hosting
+          image: 'meganav/promo_banner_left-third-category.jpg'
+        # - subtitle: Special Offers
+        #   title: Get up to 30% off
+        #   url: /t/special-offers/30-percent-off
+        #   image: 'meganav/promo_banner_right-third-category.jpg'

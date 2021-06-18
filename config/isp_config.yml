@@ -1,0 +1,7 @@
+base_url: <%=ENV["ISP_CONFIG_REMOTE_URL"]%>
+user_url: <%=ENV["ISP_CONFIG_USER_URL"]%>
+username: <%= ENV["ISP_CONFIG_USERNAME"]%>
+password: <%= ENV["ISP_CONFIG_PASSWORD"]%>
+timeout: 30
+log: false
+register_users: true

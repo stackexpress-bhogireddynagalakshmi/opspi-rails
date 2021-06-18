@@ -1,0 +1,32 @@
+<h6><strong>Quotas</strong></h6>
+<div id="accordion" class="mb-5">
+
+ <%if spree_current_user.superadmin?%>
+  <span style="color:red">Below Master Plan Quotas are non editable and for view purpose only </span><br/>
+  <%@product.plan_quota_groups.each do |grp| %>
+     <%=fields_for grp do |qg_form|%>
+        <%=render :partial => 'spree/admin/products/fields_for',:locals=>{qg_form: qg_form,quotas: quotas}%>
+     <% end %>
+  <%end%>
+<%else%>
+   <%=@form.fields_for :plan_quota_groups, @product.plan_quota_groups do |qg_form|%>
+        <%=render :partial => 'spree/admin/products/fields_for',:locals=>{qg_form: qg_form,quotas: quotas}%>
+   <%end%>
+<%end%>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+      $('.quota-checkbox').on('change',function(){
+        var quotaValueInput = $(this).closest('.quota-row').find('.quota-value');
+        if (this.checked){
+          quotaValueInput.val("-1");
+          quotaValueInput.addClass('d-none');
+        }
+        else{
+          quotaValueInput.removeClass('d-none');
+        }
+      });
+  });
+
+</script>

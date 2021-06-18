@@ -1,0 +1,35 @@
+<h6><strong>Quotas</strong></h6>
+<div id="accordion" class="mb-5">
+   <%f.object.isp_config_limit || f.object.build_isp_config_limit%>
+   <%=f.fields_for :isp_config_limit do |ff|%>
+    <%=ff.hidden_field :product_id%>
+    <%=ff.hidden_field :id%>
+
+    <%IspConfigLimit::FIELDS.each do |quota_group|%>
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h5 class="mb-0 d-inline">
+            <button class="btn btn-link" data-toggle="collapse" data-target="#group_<%=quota_group[0].to_s%>" aria-expanded="true" aria-controls="group_<%=quota_group[0].to_s%>">
+              <%=quota_group[0].to_s.humanize%>
+            </button>
+          </h5>
+        </div>
+        <div id="group_<%=quota_group[0].to_s%>" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">         
+          <table class="table">
+            <tbody>
+            <%quota_group[1].each do |field_obj|%>
+               <%next if field_obj[:visible_to_only_admin].present? && !spree_current_user.superadmin?%>
+              <tr>
+                <td><%=field_obj[:name]%></td>
+                <td><%=ff.send field_obj[:type], field_obj[:field]%></td>
+              </tr>
+            <%end%>
+            </tbody>
+          </table>
+        </div>
+        </div> 
+      </div>
+    <%end%>
+   <%end%>
+</div>
