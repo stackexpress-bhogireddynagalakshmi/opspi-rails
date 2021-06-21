@@ -1,8 +1,7 @@
 module Spree
 	module Admin
 	    module StoresControllerDecorator
-	    
-	      
+	          
 	    end
 	 end
 end

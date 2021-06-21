@@ -10,7 +10,7 @@ class Subscription < ApplicationRecord
 	     	existing_subscription.update({status: true})
 	    else
 	    	self.create_fresh_subscription(opts)
-	    	AppManager::AccountProvisioner.new(opts[:user],opts[:product]).call
+	    	AppManager::AccountProvisioner.new(opts[:user],product: opts[:product],order: opts[:order]).call
 	    end
 	end
 
