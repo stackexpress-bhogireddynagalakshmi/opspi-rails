@@ -18,7 +18,7 @@ class IspConfigProvisioningJob < ApplicationJob
       isp_config_master_template_id = user.spree_store.isp_config_master_template_id || 1
         #attach_to_isp_config_tenplate(user,isp_config_master_template_id) #if user.packages.count <= 1
     else
-      raise StandardError.new response[:message]  
+      r#raise StandardError.new response[:message]  
     end
   end
 
@@ -27,10 +27,10 @@ class IspConfigProvisioningJob < ApplicationJob
     if response[:success] == true   
       if product_id.present?
         product = Spree::Product.find(product_id)
-        if product.isp_config_template_id.present?
-            #attach_to_isp_config_tenplate(user,product.isp_config_template_id)
+        if product.isp_config_master_template_id.present?
+            #attach_to_isp_config_tenplate(user,product.isp_config_master_template_id)
         else
-          raise StandardError.new "ISP  Config Template for this Product:##{product.id}-#{product.name} does not exist. HostingPlanJob started."
+          #raise StandardError.new "ISP  Config Template for this Product:##{product.id}-#{product.name} does not exist. HostingPlanJob started."
         end
       end
     else

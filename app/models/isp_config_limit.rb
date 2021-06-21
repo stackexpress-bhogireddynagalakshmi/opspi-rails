@@ -5,21 +5,21 @@ class IspConfigLimit < ApplicationRecord
 
   FIELDS = {
 		web_limits: [
-			# web_servers[]: 1,
+		# web_servers[]: 1,
 			{field: :limit_web_domain, type: :text_field,name: 'Max. number of web domains'},
 			{field: :limit_web_quota, type: :text_field,name: 'Web Quota (MB)'},
 			{field: :limit_traffic_quota,type: :text_field,name: 'Traffic Quota (MB)'},
-	  	{field: :limit_cgi, type: :check_box,name: 'CGI available'},
-	  	{field: :limit_ssi, type: :check_box,name: 'SSI available'},
-	  	{field: :limit_perl,type: :check_box,name: 'Perl available'},
-	  	{field: :limit_ruby,type: :check_box,name: 'Ruby available'},
-	  	{field: :limit_python,type: :check_box,name: 'Python available'},
-	  	{field: :force_suexec,type: :check_box,name: 'SuEXEC forced'},
+		  	{field: :limit_cgi, type: :check_box,name: 'CGI available'},
+		  	{field: :limit_ssi, type: :check_box,name: 'SSI available'},
+		  	{field: :limit_perl,type: :check_box,name: 'Perl available'},
+		  	{field: :limit_ruby,type: :check_box,name: 'Ruby available'},
+		  	{field: :limit_python,type: :check_box,name: 'Python available'},
+		  	{field: :force_suexec,type: :check_box,name: 'SuEXEC forced'},
 
-	  	{field: :limit_hterror,type: :check_box,name: 'Custom error docs available' },
-	  	{field: :limit_wildcard,type: :check_box,name: 'Wildcard subdomain available'},
-	  	{field: :limit_ssl,type: :check_box,name: 'SSL available'},
-	  	{field: :limit_ssl_letsencrypt,type: :check_box,name: "Let's Encrypt available"},
+		  	{field: :limit_hterror,type: :check_box,name: 'Custom error docs available' },
+		  	{field: :limit_wildcard,type: :check_box,name: 'Wildcard subdomain available'},
+		  	{field: :limit_ssl,type: :check_box,name: 'SSL available'},
+		  	{field: :limit_ssl_letsencrypt,type: :check_box,name: "Let's Encrypt available"},
 
 			{field: :limit_web_aliasdomain,type: :text_field,name: 'Max. number of web aliasdomains'},
 			{field: :limit_web_subdomain,type: :text_field,name: 'Max. number of web subdomains'},
@@ -30,7 +30,7 @@ class IspConfigLimit < ApplicationRecord
 		],
 
 		email_limits: [
-			# mail_servers[]: 1,
+		# mail_servers[]: 1,
 			{field: :limit_maildomain,type: :text_field,name: "Max. number of email domains"},
 			{field: :limit_mailbox,type: :text_field,name: "Max. number of mailboxes"},
 			{field: :limit_mailalias,type: :text_field,name: "Max. number of email aliases"},
