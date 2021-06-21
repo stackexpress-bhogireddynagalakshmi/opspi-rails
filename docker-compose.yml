@@ -16,7 +16,7 @@ services:
     image: "${APP_IMAGE}"
     env_file: .env
     ports:
-      - '4000:3000'
+      - '5000:3000'
     #volumes:
     #  - .:/myapp
     links:
