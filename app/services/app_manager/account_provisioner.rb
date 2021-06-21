@@ -14,7 +14,6 @@ module AppManager
         provision_isp_config_account
   		end
 
-
       def provison_solid_cp_account
         return unless TenantManager::TenantHelper.unscoped_query{user.account&.solid_cp_access?}
         return if user.account.admin_tenant?
@@ -29,7 +28,7 @@ module AppManager
         return if user.account.admin_tenant?
 
         if panels_access('isp_config') || user.store_admin?
-          IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id,order.subscribable_product&.id)
+          IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id,order&.subscribable_product&.id)
         end
       end
 

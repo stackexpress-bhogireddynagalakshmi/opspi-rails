@@ -3,7 +3,6 @@ class ApplicationController < ActionController::Base
 
 	helper_method [:get_tenant_host_for_resource_path]
 
-
 	before_action do
 	 	if DomainCheck.check_domain(request)
 	 		ActsAsTenant.current_tenant = Account.where('subdomain = ? or domain = ?',request.host,request.host).first 
@@ -13,12 +12,10 @@ class ApplicationController < ActionController::Base
 	 	end
 	end
 
-
 	def get_tenant_host_for_resource_path(resource)
 	  	[request.protocol,resource.account.domain,":#{request.port}"].join
 	end
 
-	
 	private
 
 	class DomainCheck
