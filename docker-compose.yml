@@ -2,7 +2,7 @@ version: "3"
 services:
 
   opspi:
-    container_name: opspi-stagging
+    container_name: opspi-stag
     image: "${APP_IMAGE}"
     #image: registry.gitlab.com/stackexpresso/opspi2020/opspi-rails:b8851674
     env_file: .env
