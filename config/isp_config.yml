@@ -5,3 +5,4 @@ password: <%= ENV["ISP_CONFIG_PASSWORD"]%>
 timeout: 30
 log: false
 register_users: true
+enabled: <%= ENV["ISP_CONFIG_ENABLED"]%>

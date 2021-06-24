@@ -2,18 +2,17 @@ version: "3"
 services:
 
   opspi:
-    container_name: opspi-stag
+    container_name: opspi
     image: "${APP_IMAGE}"
-    #image: registry.gitlab.com/stackexpresso/opspi2020/opspi-rails:b8851674
     env_file: .env
     ports:
       - '3000:3000'
     volumes:
-      - /var/log/opspi-stagging/:/project/log/
+      - /var/log/opspi/:/project/log/
     command: bash -c "rm -f /project/tmp/pids/server.pid && rake db:migrate && bin/rails server --port 3000 --binding 0.0.0.0"
     restart: unless-stopped
   sidekiq:
-    container_name: sidekiq-stag
+    container_name: sidekiq
     image: "${APP_IMAGE}"
     env_file: .env
     #volumes:
