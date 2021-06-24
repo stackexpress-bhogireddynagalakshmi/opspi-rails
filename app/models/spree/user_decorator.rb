@@ -5,7 +5,6 @@ module Spree
 		def self.prepended(base)
 	    	base.acts_as_tenant :account,:class_name=>'::Account'
 	    	base.before_create :ensure_unique_subdomain
-
 	    	base.has_many :susbscriptions,:class_name=>'Subscription'
 	    	base.has_many :plans,through: :susbscriptions,:class_name=>'Spree::Product' 
 	    	base.has_many :packages,:class_name=>'Package'
@@ -62,13 +61,16 @@ module Spree
 	  		self.store_admin? ? 0 : (account&.store_admin.try(:isp_config_id) || 0)
 	  	end
 
-
 	  	def ensure_unique_subdomain
 	  		if self.reseller_signup? && ::Account.where(subdomain: subdomain).size > 0
 	  			errors.add(:subdomain, 'is already taken')
 	  			throw :abort
 	  		end
 	  	end
+
+	  	def send_devise_notification(notification, *args)
+		  	UserMailer.send(notification, self, *args).deliver_later
+		end
 	end
 end
 
