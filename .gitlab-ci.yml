@@ -100,7 +100,7 @@ deploy-production:
     ## without extra base64 encoding.
     ## https://gitlab.com/gitlab-examples/ssh-private-key/issues/1#note_48526556
     ##
-    - echo "$GITLAB_CI_OPSPI_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$GITLAB_CI_OPSPI_PRIVATE_KEY_STAG" | tr -d '\r' | ssh-add -
 
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
@@ -108,9 +108,9 @@ deploy-production:
     # - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
     # - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT docker version
-    - scp -r -P $APP_SERVER_SSH_PORT docker-compose.yml $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST:/srv/docker-apps/opspi-stag/
-    - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT "bash -c ' cd /srv/docker-apps/opspi-stag && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
+    - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER_STAG@$APP_SERVER_SSH_HOST_STAG -p $APP_SERVER_SSH_PORT_STAG docker version
+    - scp -r -P $APP_SERVER_SSH_PORT_STAG docker-compose.yml $APP_SERVER_SSH_USER_STAG@$APP_SERVER_SSH_HOST_STAG:/srv/docker-apps/opspi-stag/
+    - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER_STAG@$APP_SERVER_SSH_HOST_STAG -p $APP_SERVER_SSH_PORT_STAG "bash -c ' cd /srv/docker-apps/opspi-stag && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
   only:
     - master
   when: manual
