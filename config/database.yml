@@ -52,7 +52,7 @@ test:
 production:
   database: ops_pi_stagging
   adapter: mysql2
-  encoding: utf8mb4
+  encoding: utf
   pool: 5
   host: 139.59.33.29
   username: ops_pi_stagging
