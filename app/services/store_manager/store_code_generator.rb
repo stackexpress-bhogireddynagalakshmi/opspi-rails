@@ -20,7 +20,7 @@ module StoreManager
       # store = Spree::Store.where(code: code).last
       # return code  if store.blank?  
     
-      "#{Spree::Store.last.id}"
+      "#{Spree::Store.last.id+1}"
 
     end
     
