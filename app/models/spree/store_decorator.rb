@@ -7,7 +7,7 @@ module Spree
 	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
 	    base.acts_as_tenant :account,class_name: '::Account'
 	    base.validates :url, uniqueness: true
-	    base.validates_format_of :admin_email, with: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+	    base.validates :admin_email, format: { with: URI::MailTo::EMAIL_REGEXP } 
 	    base.validates :isp_config_username,
 	    exclusion: { in: %w(www mail ftp smtp imap download upload image service offline online admin root username webmail blog help support),message: "%{value} is not a valid username." }
 	  end
