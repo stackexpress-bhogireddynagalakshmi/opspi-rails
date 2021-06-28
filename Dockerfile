@@ -19,7 +19,6 @@ WORKDIR /project
 RUN gem update --system
 RUN gem install bundler -v '2.2.3'
 RUN bundle --version
-#RUN gem install mysql
 RUN bundle install
 COPY . /project
 EXPOSE 3000
