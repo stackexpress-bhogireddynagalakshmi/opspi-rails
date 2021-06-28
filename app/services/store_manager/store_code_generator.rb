@@ -17,12 +17,13 @@ module StoreManager
     private
 
     def store_code
-      store = Spree::Store.where(code: code).last
-      return code  if store.blank?  
+      # store = Spree::Store.where(code: code).last
+      # return code  if store.blank?  
     
-      "#{code}_1"
+      "#{Spree::Store.last.id}"
 
     end
     
   end
 end
+
