@@ -4,6 +4,14 @@ services:
   opspi:
     container_name: opspi
     image: "${APP_IMAGE}"
+    args:
+      - RAILS_ENV
+      - DB_HOST
+      - DB_NAME
+      - DB_USERNAME
+      - DB_PASSWORD
+      - DB_PORT
+      - SECRET_KEY_BASE
     env_file: .env
     ports:
       - '3000:3000'
