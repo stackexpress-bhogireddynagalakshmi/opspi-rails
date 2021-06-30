@@ -54,7 +54,7 @@ production:
   adapter: mysql2
   encoding: utf8mb4
   pool: 5
-  host: <%= ENV['DEV_DATABASE_HOST'] %>
+  host: <%= ENV['PRO_DATABASE_HOST'] %>
   username: <%= ENV['PROD_DATABASE_USERNAME'] %> 
   password: <%= ENV['PROD_DATABASE_PASSWORD'] %>
   reconnect: true
