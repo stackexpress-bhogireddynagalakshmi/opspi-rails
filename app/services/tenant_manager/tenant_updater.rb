@@ -10,9 +10,8 @@ module TenantManager
   			@order = options[:order]
   		end
 
-
   		def call
-
+        
   		end
 
   		def setup_panels_access
@@ -40,7 +39,7 @@ module TenantManager
        		if order.present?   		 
        		  	order.line_items.each do |line_item|
 	       		  	panel_name = line_item.product.windows? ? 'solid_cp' : 'isp_config' 
-	       		  	 @panels << panel_name  if !@panels.include?(panel)
+	       		  	@panels << panel_name  if !@panels.include?(panel)
         		end
         	end
         	@panels.include?(panel)

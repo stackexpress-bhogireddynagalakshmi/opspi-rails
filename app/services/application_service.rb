@@ -11,6 +11,5 @@ class ApplicationService
    class NonCallablePassedToRun < StandardError; end
    class IncompatibleParamsPassed < StandardError; end
 
-   
 end
 

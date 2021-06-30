@@ -14,11 +14,10 @@ module TenantManager
 			Account.first
 		end
 
-
 		def self.unscoped_query(&block)
-	      	ActsAsTenant.without_tenant do 
-	      	  	yield 
-	      	end
+    	ActsAsTenant.without_tenant do 
+    	  yield 
+    	end
 		end
 
 	end
