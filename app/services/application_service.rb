@@ -10,6 +10,5 @@ class ApplicationService
    class WrongDataPassed < StandardError; end
    class NonCallablePassedToRun < StandardError; end
    class IncompatibleParamsPassed < StandardError; end
-
 end
 
