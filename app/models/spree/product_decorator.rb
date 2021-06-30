@@ -47,7 +47,6 @@ module Spree
 	  		if self.account_id.blank?
 	  			TenantManager::ProductTenantUpdater.new(self,1).call
 	  		end
-
 	  	end
 
 	  	def update_solid_cp_plan

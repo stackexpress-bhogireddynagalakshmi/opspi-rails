@@ -12,17 +12,17 @@ module Spree
 			end
 		end
 
-	  	def create_subscriptions(payment)
-    		line_items.each do |line_item|
-	        if line_item.product.subscribable?
-	          Subscription.subscribe!(
-	           user: self.user,
-	           product: line_item.product,
-	           order: self	            
-	          )
-	        end
-      	end
-	  	end
+	  def create_subscriptions(payment)
+  		line_items.each do |line_item|
+        if line_item.product.subscribable?
+          Subscription.subscribe!(
+           user: self.user,
+           product: line_item.product,
+           order: self	            
+          )
+        end
+    	end
+	  end
 
 	  def valid_plan_subscription?
 	  		product = subscribable_product

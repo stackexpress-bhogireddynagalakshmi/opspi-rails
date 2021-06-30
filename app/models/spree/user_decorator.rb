@@ -3,7 +3,7 @@ module Spree
 		attr_accessor :subdomain,:business_name
 
 		def self.prepended(base)
-			base.validate :ensure_valid_store_params
+			base.validate :ensure_valid_store_params,on: [:create]
 
 	    	base.acts_as_tenant :account,:class_name=>'::Account'
 	    	base.has_many :susbscriptions,:class_name=>'Subscription'
