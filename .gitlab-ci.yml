@@ -55,7 +55,7 @@ docker-build-staging:
     - echo "$DB_PASSWORD"
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
-    - docker build --build-arg "$DB_HOST:$DB_HOST" --build-arg "$DB_NAME:$DB_NAME" --build-arg "$DB_USERNAME:$DB_USERNAME" --build-arg "$DB_PASSWORD:$DB_PASSWORD" --build-arg $"DB_PORT:$DB_PORT" --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - docker build --build-arg DB_HOST=10.122.0.2 --build-arg DB_NAME=ops_pi --build-arg DB_USERNAME=ops_pi --build-arg DB_PASSWORD=rgbxyz@123 --build-arg DB_PORT=3306 --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
   only:
