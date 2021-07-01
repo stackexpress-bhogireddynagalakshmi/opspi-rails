@@ -50,12 +50,12 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  database: ops_pi
+  database: <%= ENV['DB_NAME'] %>
   adapter: mysql2
   encoding: utf8mb4
   pool: 5
-  host: 10.122.0.2
-  username: ops_pi
-  password: rgbxyz@123
+  host: <%= ENV['DB_HOST'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  port: <%= ENV['DB_PORT'] %>
   reconnect: true
-  port: 3306
