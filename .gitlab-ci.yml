@@ -9,11 +9,11 @@ variables:
   # App Specific Variables
   APP_NAME: "ops_pi"
   APP_URL_PATH: ""
-  DB_HOST: $DB_HOST
-  DB_NAME: $DB_NAME
-  DB_USERNAME: $DB_USERNAME
-  DB_PASSWORD: $DB_PASSWORD
-  DB_PORT: $DB_PORT
+  DB_HOST: ${DB_HOST}
+  DB_NAME: ${DB_NAME}
+  DB_USERNAME: ${DB_USERNAME}
+  DB_PASSWORD: ${DB_PASSWORD}
+  DB_PORT: ${DB_PORT}
 
 #Base CI/CD Run image
 image: ubuntu:latest
