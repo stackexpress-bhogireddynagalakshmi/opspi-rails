@@ -67,7 +67,6 @@ module Spree
 		end
 
 		def ensure_valid_store_params
-		    
 			return unless self.reseller_signup?
 			store = StoreManager::StoreCreator.new(self).store
 			return if store.valid?

@@ -13,17 +13,12 @@ module StoreManager
       store_code
     end
 
-
     private
-
+    
     def store_code
-      # store = Spree::Store.where(code: code).last
-      # return code  if store.blank?  
-    
-      "#{Spree::Store.last.id+1}"
-
+      TenantManager::TenantHelper.unscoped_query{Spree::Store.last.id+1}
     end
-    
+
   end
 end
 
