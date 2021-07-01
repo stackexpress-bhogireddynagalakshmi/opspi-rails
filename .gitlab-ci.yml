@@ -40,10 +40,6 @@ docker-build-production:
 docker-build-staging:
   # Official docker image.
   image: docker:stable
-<<<<<<< HEAD
-=======
-
->>>>>>> 1fdce616cb7d31a8fdfd7f16369b1609b06f4361
   stage: build
   services:
     - docker:dind
