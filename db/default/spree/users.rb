@@ -1,18 +1,20 @@
 require 'highline/import'
 
+
 # see last line where we create an admin if there is none, asking for email and password
 def prompt_for_admin_password
   if ENV['ADMIN_PASSWORD']
     password = ENV['ADMIN_PASSWORD'].dup
     say "Admin Password #{password}"
   else
-    password = ask('Password [spree123]: ') do |q|
+    randomPassword = Devise.friendly_token.first(8)
+    password = ask("Password [#{randomPassword}]: ") do |q|
       q.echo = false
       q.validate = /^(|.{6,40})$/
       q.responses[:not_valid] = 'Invalid password. Must be at least 6 characters long.'
       q.whitespace = :strip
     end
-    password = 'spree123' if password.blank?
+    password = randomPassword if password.blank?
   end
 
   password
@@ -23,11 +25,11 @@ def prompt_for_admin_email
     email = ENV['ADMIN_EMAIL'].dup
     say "Admin User #{email}"
   else
-    email = ask('Email [spree@example.com]: ') do |q|
+    email = ask('Email [opspi@example.com]: ') do |q|
       q.echo = true
       q.whitespace = :strip
     end
-    email = 'spree@example.com' if email.blank?
+    email = 'opspi@example.com' if email.blank?
   end
 
   email
@@ -35,8 +37,8 @@ end
 
 def create_admin_user
   if ENV['AUTO_ACCEPT']
-    password = 'spree123'
-    email = 'spree@example.com'
+    password = ENV['ADMIN_PASSWORD']
+    email = 'opspi@example.com'
   else
     puts 'Create the admin user (press enter for defaults).'
     # name = prompt_for_admin_name unless name
