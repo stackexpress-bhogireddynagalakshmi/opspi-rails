@@ -4,7 +4,7 @@ module TenantManager
 		
 		def initialize(user,tenant_id)
 			@user = user
-      @tenant_id = tenant_id
+     	@tenant_id = tenant_id
 		end
 
 		def call
@@ -14,5 +14,6 @@ module TenantManager
 			  end
 			end
 		end
+		
  	end
 end

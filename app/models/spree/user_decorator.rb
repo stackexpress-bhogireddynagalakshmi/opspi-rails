@@ -5,16 +5,19 @@ module Spree
 		def self.prepended(base)
 			base.validate :ensure_valid_store_params,on: [:create]
 
-	    	base.acts_as_tenant :account,:class_name=>'::Account'
-	    	base.has_many :susbscriptions,:class_name=>'Subscription'
-	    	base.has_many :plans,through: :susbscriptions,:class_name=>'Spree::Product' 
-	    	base.has_many :packages,:class_name=>'Package'
-	    	base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
-	    	base.has_one :tenant_service
+			base.belongs_to :account,:class_name=>'::Account'
+    	#base.acts_as_tenant :account,:class_name=>'::Account'
+    	base.has_many :susbscriptions,:class_name=>'Subscription'
+    	base.has_many :plans,through: :susbscriptions,:class_name=>'Spree::Product' 
+    	base.has_many :packages,:class_name=>'Package'
+    	base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
+    	base.has_one :tenant_service
 
-	    	base.after_commit :ensure_tanent_exists, on: [:create]
-	    	base.after_commit :provision_accounts, on: [:create]
-	  	end
+    	base.after_commit :update_user_tanent, on: [:create]
+    	base.after_commit :ensure_tanent_exists, on: [:create]
+    	base.after_commit :provision_accounts, on: [:create]
+
+	    end
 
 	  	def superadmin?
 	  		self.has_spree_role?('admin')
@@ -32,6 +35,16 @@ module Spree
 	  		@isp_config ||= IspConfig::User.new(self)
 	  	end
 
+	  	def update_user_tanent
+	  		tenant_id = 
+	  		if TenantManager::TenantHelper.current_admin_tenant?
+	  			TenantManager::TenantHelper.admin_tenant_id
+	  		else
+	  			TenantManager::TenantHelper.current_tenant_id
+	  		end
+	  		ActsAsTenant.without_tenant { update_column :account_id, tenant_id}
+	  	end
+
 	  	def ensure_tanent_exists
 	  		if  self.reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
 	  			StoreManager::StoreCreator.new(self).call
@@ -41,7 +54,6 @@ module Spree
 	  	def provision_accounts
 	  		AppManager::AccountProvisioner.new(self.reload).call
 	  	end
-
 
 	  	# Solid CP Concerns
 	  	def company_name
@@ -64,15 +76,33 @@ module Spree
 
 	  	def send_devise_notification(notification, *args)
 		  	UserMailer.send(notification, self, *args).deliver_later
-		end
+			end
 
-		def ensure_valid_store_params
-			return unless self.reseller_signup?
-			store = StoreManager::StoreCreator.new(self).store
-			return if store.valid?
-		
-			self.errors.merge!(store.errors)
-		end
+			def ensure_valid_store_params
+				return unless self.reseller_signup?
+				store = StoreManager::StoreCreator.new(self).store
+				return if store.valid?
+			
+				self.errors.merge!(store.errors)
+		  end
+
+			def active_for_authentication?
+				if self.superadmin?
+					super 
+				elsif self.store_admin?
+					if TenantManager::TenantHelper.current_admin_tenant? || TenantManager::TenantHelper.current_tenant.blank?
+						super
+					else
+						super && self.account_id == TenantManager::TenantHelper.current_tenant_id
+					end
+				else
+					super && self.account_id == TenantManager::TenantHelper.current_tenant_id
+				end
+			end
+
+			def inactive_message
+			  "Invalid Username or Password"
+			end
 	end
 end
 

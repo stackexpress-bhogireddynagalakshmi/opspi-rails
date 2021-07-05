@@ -25,7 +25,7 @@ class StoreAdminAbility
     	#can :manage, ::Spree::Admin::ReportsController
     	#can :manage, ::Spree::Promotion
 
-        can :manage, ::Spree::PaymentMethod
+        can :manage, ::Spree::PaymentMethod unless TenantManager::TenantHelper.current_admin_tenant?
         can :admin, ::Spree::Store
 
         can :manage, ::Spree::Payment
