@@ -4,7 +4,7 @@ module Spree
 	    	def collection
 		    	if TenantManager::TenantHelper.current_admin_tenant? && current_spree_user.store_admin?
 		    	 	super
-		    			@collection = @collection.where(account_id: current_spree_user.tenant_service.account_id) rescue []
+		    		@collection = @collection.where(account_id: current_spree_user.account_id) rescue []
 		    	 else
 		    		super
 		    	end

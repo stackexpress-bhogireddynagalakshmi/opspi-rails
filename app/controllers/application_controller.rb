@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
 
 	before_action do
 	 	if DomainCheck.check_domain(request)
-	 		ActsAsTenant.current_tenant = Account.where('subdomain = ? or domain = ?',request.host,request.host).first 
+	 		ActsAsTenant.current_tenant = Account.where('subdomain = ? or domain = ?',request.host,request.host).first
 	 		ActsAsTenant.current_tenant = nil if current_spree_user&.superadmin?
 	 	else
 	 	 	render :json=>'Sorry, this domain is currently unavailable.'
@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
 	end
 
 	def get_tenant_host_for_resource_path(resource)
-	  	[request.protocol,resource.account.domain,":#{request.port}"].join
+	  [request.protocol,resource.account.domain,":#{request.port}"].join
 	end
 
 	private
@@ -24,7 +24,6 @@ class ApplicationController < ActionController::Base
 		    whitelisted_domains.include? (request.host)
 		end
 	end
-
 
 end
 

@@ -11,7 +11,7 @@ module TenantManager
 			ActsAsTenant.without_tenant do
         product.update_column :account_id, tenant_id
 		  end
-    end
-    
+    end 
  	end
 end
+

@@ -26,6 +26,5 @@ module ApplicationHelper
 		elsif user.store_admin?
 			TenantManager::TenantHelper.unscoped_query{current_spree_user.orders.collect{|o|o.products.pluck(:server_type)}.flatten}.uniq
 		end
-			
 	end
 end

@@ -4,7 +4,7 @@ module Spree
 	    	def index
 	    		super
 	    	    if TenantManager::TenantHelper.current_admin_tenant? && current_spree_user.store_admin?
-	    	    	@orders = @orders.where(account_id: current_spree_user.tenant_service.account_id) rescue []
+	    	    	@orders = @orders.where(account_id: current_spree_user.account_id) #rescue []
 	    	    end
 	    	end	
 	    end

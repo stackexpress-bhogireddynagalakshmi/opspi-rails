@@ -7,7 +7,7 @@ module Spree
 	  end
 
 	  def add_to_tenant
-  		if self.account_id.blank?
+  		if ActiveRecord::Base.connection.column_exists?(:spree_payment_methods, :account_id) && self.account_id.blank?
   			TenantManager::PaymentMethodTenantUpdater.new(self,1).call
   		end
 	 	end
