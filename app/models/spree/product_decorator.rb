@@ -15,7 +15,7 @@ module Spree
     	base.after_commit :add_to_tenant, on: [:create,:update]
     	base.after_commit :update_solid_cp_plan, on: [:update]
 
-    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => :call_a_parent_instance_method,allow_destroy: true
+    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => :ensure_windows_server_type,allow_destroy: true
     	base.accepts_nested_attributes_for :isp_config_limit
 
     	base.scope :reseller_products, ->{where(reseller_product: true)}
@@ -52,7 +52,7 @@ module Spree
   		HostingPlanJob.perform_later(self.id,'update')
 	  end
 
-	  def call_a_parent_instance_method(attrs)
+	  def ensure_windows_server_type(attrs)
 	  	!self.windows?
 		end
 
