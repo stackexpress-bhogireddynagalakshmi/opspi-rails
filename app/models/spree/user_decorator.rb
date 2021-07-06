@@ -35,18 +35,9 @@ module Spree
 	  		@isp_config ||= IspConfig::User.new(self)
 	  	end
 
-	  	def update_user_tanent
-	  		tenant_id = 
-	  		if TenantManager::TenantHelper.current_admin_tenant?
-	  			TenantManager::TenantHelper.admin_tenant_id
-	  		else
-	  			TenantManager::TenantHelper.current_tenant_id
-	  		end
-	  		ActsAsTenant.without_tenant { update_column :account_id, tenant_id}
-	  	end
-
 	  	def ensure_tanent_exists
-	  		if  self.reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
+	  		update_user_tanent
+	  		if self.reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
 	  			StoreManager::StoreCreator.new(self).call
 	  		end
 	  	end
@@ -85,6 +76,17 @@ module Spree
 			
 				self.errors.merge!(store.errors)
 		  end
+
+		  def update_user_tanent
+	  		tenant_id = 
+	  		if TenantManager::TenantHelper.current_admin_tenant? || TenantManager::TenantHelper.current_tenant.blank?
+	  			TenantManager::TenantHelper.admin_tenant_id
+	  		else
+	  			TenantManager::TenantHelper.current_tenant_id
+	  		end
+	  		ActsAsTenant.without_tenant { self.update_column :account_id, tenant_id}
+	  	end
+
 
 			def active_for_authentication?
 				if self.superadmin?

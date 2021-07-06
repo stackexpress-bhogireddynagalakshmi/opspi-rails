@@ -3,6 +3,9 @@ module Spree
 	module ProductDecorator
 
 		def self.prepended(base)
+
+			base.validate :ensure_server_type_do_not_change,on: [:update]
+
     	base.acts_as_tenant :account,:class_name=>'::Account'
     	base.has_many :susbscriptions,:class_name=>'Subscription'
     	base.has_many :plan_quota_groups,:class_name=>'PlanQuotaGroup',dependent: :destroy,:extend => FirstOrBuild
@@ -12,7 +15,7 @@ module Spree
     	base.after_commit :add_to_tenant, on: [:create,:update]
     	base.after_commit :update_solid_cp_plan, on: [:update]
 
-    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => lambda {|a|a[:enabled] == false},allow_destroy: true
+    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => :ensure_windows_server_type,allow_destroy: true
     	base.accepts_nested_attributes_for :isp_config_limit
 
     	base.scope :reseller_products, ->{where(reseller_product: true)}
@@ -48,6 +51,16 @@ module Spree
   		return unless self.windows?
   		HostingPlanJob.perform_later(self.id,'update')
 	  end
+
+	  def ensure_windows_server_type(attrs)
+	  	!self.windows?
+		end
+
+		def ensure_server_type_do_not_change
+			return unless server_type_changed?
+
+			errors.add(:plan_type,'cannot be changed.')
+		end
 
 	  	# def ensure_no_active_subscription
 	    #    if susbscriptions.active.present?
