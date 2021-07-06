@@ -3,57 +3,64 @@ module Spree
 	module ProductDecorator
 
 		def self.prepended(base)
-	    	base.acts_as_tenant :account,:class_name=>'::Account'
-	    	base.has_many :susbscriptions,:class_name=>'Subscription'
-	    	base.has_many :plan_quota_groups,:class_name=>'PlanQuotaGroup',dependent: :destroy,:extend => FirstOrBuild
-	    	base.has_many :plan_quotas,:through=>:plan_quota_groups,dependent: :destroy
-	    	base.has_one :isp_config_limit, inverse_of: :product, autosave: true, dependent: :destroy
-	    	base.after_commit :ensure_plan_id_or_template_id, on: [:create]
-	    	base.after_commit :add_to_tenant, on: [:create,:update]
-	    	base.after_commit :update_solid_cp_plan, on: [:update]
 
-	    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => lambda {|a|a[:enabled] == false},allow_destroy: true
-	    	base.accepts_nested_attributes_for :isp_config_limit
+			base.validate :ensure_server_type_do_not_change,on: [:update]
 
-	    	base.scope :reseller_products, ->{where(reseller_product: true)}
+    	base.acts_as_tenant :account,:class_name=>'::Account'
+    	base.has_many :susbscriptions,:class_name=>'Subscription'
+    	base.has_many :plan_quota_groups,:class_name=>'PlanQuotaGroup',dependent: :destroy,:extend => FirstOrBuild
+    	base.has_many :plan_quotas,:through=>:plan_quota_groups,dependent: :destroy
+    	base.has_one :isp_config_limit, inverse_of: :product, autosave: true, dependent: :destroy
+    	base.after_commit :ensure_plan_id_or_template_id, on: [:create]
+    	base.after_commit :add_to_tenant, on: [:create,:update]
+    	base.after_commit :update_solid_cp_plan, on: [:update]
 
-	    	base.enum server_type: {
-				windows: 0,
-				linux: 1
-			}
+    	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => :ensure_windows_server_type,allow_destroy: true
+    	base.accepts_nested_attributes_for :isp_config_limit
 
-	  	end
+    	base.scope :reseller_products, ->{where(reseller_product: true)}
 
-	  	def ensure_plan_id_or_template_id
+    	base.enum server_type: {
+			windows: 0,
+			linux: 1
+		}
 
-	  		if self.windows?
-	  			self.update(isp_config_master_template_id: nil) 
-	  		
-	  			return if self.solid_cp_master_plan_id.present?  && TenantManager::TenantHelper.current_tenant.blank?
-	  		
-	  			self.update(solid_cp_master_plan_id: account.spree_store.solid_cp_master_plan_id) 
+	  end
 
-	  			HostingPlanJob.perform_later(self.id)
+	  def ensure_plan_id_or_template_id
+  		if self.windows?
+  			self.update(isp_config_master_template_id: nil) 
+  			return if self.solid_cp_master_plan_id.present?  && TenantManager::TenantHelper.current_tenant.blank?
+  			self.update(solid_cp_master_plan_id: account.spree_store.solid_cp_master_plan_id) 
+  			HostingPlanJob.perform_later(self.id)
+  		elsif self.linux?
+  			self.update(solid_cp_master_plan_id: nil)
+  			return if self.isp_config_master_template_id.present?
+  			self.update(isp_config_master_template_id: account.spree_store.isp_config_master_template_id) 
+  		end
+	  end
 
-	  		elsif self.linux?
-	  			self.update(solid_cp_master_plan_id: nil)
+	  def add_to_tenant
+  		if self.account_id.blank?
+  			TenantManager::ProductTenantUpdater.new(self,TenantManager::TenantHelper.admin_tenant_id).call
+  		end
+	  end
 
-	  			return if self.isp_config_master_template_id.present?
-	  			self.update(isp_config_master_template_id: account.spree_store.isp_config_master_template_id) 
-	  		end
-	  	end
+	  def update_solid_cp_plan
+  		return if TenantManager::TenantHelper.current_tenant.blank?
+  		return unless self.windows?
+  		HostingPlanJob.perform_later(self.id,'update')
+	  end
 
-	  	def add_to_tenant
-	  		if self.account_id.blank?
-	  			TenantManager::ProductTenantUpdater.new(self,1).call
-	  		end
-	  	end
+	  def ensure_windows_server_type(attrs)
+	  	!self.windows?
+		end
 
-	  	def update_solid_cp_plan
-	  		return if TenantManager::TenantHelper.current_tenant.blank?
-	  		return unless self.windows?
-	  		HostingPlanJob.perform_later(self.id,'update')
-	  	end
+		def ensure_server_type_do_not_change
+			return unless server_type_changed?
+
+			errors.add(:plan_type,'cannot be changed.')
+		end
 
 	  	# def ensure_no_active_subscription
 	    #    if susbscriptions.active.present?

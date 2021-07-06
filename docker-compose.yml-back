@@ -1,0 +1,22 @@
+version: "3"
+services:
+
+  opspi:
+    container_name: opspi
+    image: "${APP_IMAGE}"
+    env_file: .env
+    ports:
+      - '3000:3000'
+    volumes:
+      - /var/log/opspi/:/project/log/
+    command: bash -c "rm -f /project/tmp/pids/server.pid && rake db:migrate && bin/rails server --port 3000 --binding 0.0.0.0"
+    restart: unless-stopped
+  sidekiq:
+    container_name: sidekiq
+    image: "${APP_IMAGE}"
+    env_file: .env
+    #volumes:
+    #  - .:/myapp
+    links:
+      - opspi
+    command: bundle exec sidekiq
