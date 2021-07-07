@@ -92,7 +92,7 @@ module Spree
 				if self.superadmin?
 					super 
 				elsif self.store_admin?
-					if TenantManager::TenantHelper.current_admin_tenant? || TenantManager::TenantHelper.current_tenant.blank?
+					if TenantManager::TenantHelper.current_admin_tenant?
 						super
 					else
 						super && self.account_id == TenantManager::TenantHelper.current_tenant_id
