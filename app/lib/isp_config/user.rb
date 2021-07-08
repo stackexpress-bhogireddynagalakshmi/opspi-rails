@@ -54,12 +54,13 @@ module IspConfig
 
 
 		def attach_template(template_id)
-		    if user.isp_config_id.present?
+	    if user.isp_config_id.present?
 				response = query({
 					    :endpoint => '/json.php?client_update',
 					    :method => :GET,
 					    :body => {client_id: user.isp_config_id,params: {template_master: template_id}}
 				})
+				
 				if  response.code == "ok"
 					{:success=>true, :message=>'IspConfig user master template updated successfully',response: response}
 					
@@ -70,7 +71,6 @@ module IspConfig
 			else
 				{:success=>false,:message=>'IspConfig user account does not exists.'}
 			end
-
 		end
 
    	#Package API interface for the  user/Reseller

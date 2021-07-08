@@ -55,7 +55,6 @@ module Spree
   	def subscribable_product
   		subscribable_products.first
   	end
-
 	end
 end
 
