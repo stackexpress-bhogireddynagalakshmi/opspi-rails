@@ -15,7 +15,7 @@
 		   <%= f.text_field :subdomain, class: 'spree-flat-input form-control subdomain-field', placeholder: 'subdomain',required:true %>
 		  
 		  <div class="input-group-append">
-		    <span class="input-group-text" id="basic-addon2">.<%=ENV.fetch('BASE_DOMAIN','opspi.com')%></span>
+		    <span class="input-group-text" id="basic-addon2">.<%=ENV['BASE_DOMAIN']%></span>
 		  </div>
 
 		</div>
