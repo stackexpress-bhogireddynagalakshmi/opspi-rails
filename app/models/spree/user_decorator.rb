@@ -90,7 +90,7 @@ module Spree
 
 			def active_for_authentication?
 				if self.superadmin?
-					super 
+					super && true
 				elsif self.store_admin?
 					if TenantManager::TenantHelper.current_admin_tenant?
 						super
@@ -103,6 +103,8 @@ module Spree
 			end
 
 			def inactive_message
+				return super unless self.confirmed?
+
 			  "Invalid Username or Password"
 			end
 	end

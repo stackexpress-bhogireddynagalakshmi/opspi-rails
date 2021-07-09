@@ -6,6 +6,7 @@ module Spree
 	    		if  current_spree_user.store_admin?
 	    			@collection = @collection.where(account_id: current_spree_user.account_id)	
 	    		end
+	    		@users = @collection
 	    	end	
 	    end
 	 end
