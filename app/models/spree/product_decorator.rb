@@ -15,7 +15,7 @@ module Spree
     	base.after_commit :ensure_plan_id_or_template_id, on: [:create]
     	base.after_commit :add_to_tenant, on: [:create,:update]
     	base.after_commit :update_solid_cp_plan, on: [:update]
-    	base.after_commit :update_stock_availibility,on: [:create]
+    	# base.after_commit :update_stock_availibility,on: [:create]
 
     	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => :ensure_windows_server_type,allow_destroy: true
     	base.accepts_nested_attributes_for :isp_config_limit
