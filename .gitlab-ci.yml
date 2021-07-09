@@ -29,12 +29,18 @@ docker-build-production:
   # Official docker image.
   image: docker:stable
   stage: build
+  variables:
+    DB_HOST: ${DB_HOST_PROD}
+    DB_NAME: ${DB_NAME_PROD}
+    DB_USERNAME: ${DB_USERNAME_PROD}
+    DB_PASSWORD: ${DB_PASSWORD_PROD}
+    DB_PORT: ${DB_PORT_PROD}
   services:
     - docker:dind
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH" -t "$CI_REGISTRY_IMAGE:production" .
+    - docker build --build-arg DB_HOST=$DB_HOST --build-arg DB_NAME=$DB_NAME --build-arg DB_USERNAME=$DB_USERNAME --build-arg DB_PASSWORD=$DB_PASSWORD --build-arg DB_PORT=$DB_PORT --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -t "$CI_REGISTRY_IMAGE:production" .
     - docker push "$CI_REGISTRY_IMAGE"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_BRANCH"
@@ -94,12 +100,13 @@ deploy-staging:
     - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT "bash -c ' cd /srv/docker-apps/opspi && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
   only:
     - dev
-  when: manual
+  
 
 deploy-production:
   stage: deploy_production
   variables:
     APP_NAME: ops_pi
+    
   before_script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
     - eval $(ssh-agent -s)
