@@ -30,5 +30,26 @@ class AccountController < Spree::StoreController
       solid_cp_plan_id = params[:solid_cp_plan_id]
       @product = Spree::Product.new
     end
+
+    def reset_isp_config_password
+      @response = spree_current_user.isp_config.update_password
+      if @response[:success]
+        flash.now[:isp_config_info] = "ISP Config Password reset successfully"
+        @isp_new_password = @response[:new_password] 
+      else
+        flash.now[:isp_config_error] = "Something went wrong"
+      end
+     
+    end
+
+    def reset_solid_cp_password
+      @response = spree_current_user.solid_cp.change_user_password
+      if @response[:success]
+        flash.now[:solid_cp_info] = "SolidCP  Password reset successfully"
+        @solid_cp_new_password = @response[:new_password]
+      else
+         flash.now[:solid_cp_error] = "Something went wrong"
+      end
+    end
     
 end

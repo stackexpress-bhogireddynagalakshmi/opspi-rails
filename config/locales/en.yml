@@ -39,6 +39,7 @@ en:
     some_thing_went_wrong: 'Something went wrong. Please try again later.'
     subscription_canceled: 'Subscription canceled successfully.'
     sub_date: 'Sub Date'
+    
     list_of_solid_cp_users: 'List of SolidCP users'
     ist_of_solid_cp_plans: 'List of SolidCP plans'
     solid_cp_plan: 'SolidCP Hosting Plan'
@@ -53,4 +54,15 @@ en:
     isp_config_password: 'ISP Config Password'
 
     subdomain: 'Subdomain'
+
+  isp_config:
+    template_updated: 'IspConfig user master template updated successfully'
+    user_created: 'IspConfig user account created successfully'
+    user_updated: 'IspConfig user account updated successfully'
+    user_already_exists: 'IspConfig user account already exists for this user.'
+    something_went_wrong: "Something went wrong while creating user account. IspConfig Error: %{message}"
+    user_does_not_exists: 'IspConfig user account does not exists.'
+  
+
+
 

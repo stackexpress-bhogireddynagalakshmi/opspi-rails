@@ -40,9 +40,8 @@ Rails.application.routes.draw do
        get :subscription_cancel
        get :create_solidcp_account
        get :get_hosting_plan_quotas
+       get :reset_isp_config_password
+       get :reset_solid_cp_password
     end
-  end
-
-
-  
+  end  
 end

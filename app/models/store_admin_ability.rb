@@ -9,14 +9,14 @@ class StoreAdminAbility
 
     def apply_store_admin_permissions(user)
 
-    	can :manage, ::Spree::Order
-    	can :manage, ::Spree::Product
-    	can :manage, ::Spree::User
-        can :manage, ::Spree::Image
+    	can :manage, ::Spree::Order   unless TenantManager::TenantHelper.current_admin_tenant?
+    	can :manage, ::Spree::Product unless TenantManager::TenantHelper.current_admin_tenant?
+    	can :manage, ::Spree::User    unless TenantManager::TenantHelper.current_admin_tenant?
+        can :manage, ::Spree::Image 
         can :manage, ::Spree::Variant
         can :manage, ::Spree::ProductProperty
         can :manage, ::Spree::StockItem
-        can :manage, ::Spree::StockLocation
+        can :manage, ::Spree::StockLocation unless TenantManager::TenantHelper.current_admin_tenant?
         can :manage, ::Spree::StockMovement
         can :manage, ::Spree::Price
     	
@@ -28,7 +28,7 @@ class StoreAdminAbility
         can :manage, ::Spree::PaymentMethod unless TenantManager::TenantHelper.current_admin_tenant?
         can :admin, ::Spree::Store
 
-        can :manage, ::Spree::Payment
+        can :manage, ::Spree::Payment  
     	can :read, ::Spree::Country
 	    can :read, ::Spree::OptionType
 	    can :read, ::Spree::OptionValue
