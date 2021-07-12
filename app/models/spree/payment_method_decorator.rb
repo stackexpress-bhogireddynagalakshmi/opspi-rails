@@ -14,7 +14,11 @@ module Spree
 	 	end
 
     def update_store_payment_methods
-      current_store = TenantManager::TenantHelper.current_tenant.spree_store
+      if TenantManager::TenantHelper.current_tenant.blank?
+        current_store = TenantManager::TenantHelper.admin_tenant&.spree_store
+      else
+        current_store = TenantManager::TenantHelper.current_tenant&.spree_store
+      end
       self.stores << current_store  unless self.stores.include?(current_store)
     end
 	 	

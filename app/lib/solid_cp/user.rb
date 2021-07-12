@@ -6,14 +6,14 @@ module SolidCp
 		global :open_timeout, SolidCp::Config.timeout
   		global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
 
-  		include RedisConcern
+  	include RedisConcern
 
 		attr_reader :user,:package
 
 
-	    def initialize user
-	      @user = user
-	    end
+	  def initialize user
+	    @user = user
+	  end
 
 		operations :user_exists, :get_user_by_id,:get_user_by_username, :get_users, :add_user_v_lan, :delete_user_v_lan, :get_raw_users,
 		 		   :get_users_paged, :get_users_paged_recursive, :get_users_summary, :get_user_domains_paged, :get_raw_user_peers, :get_user_peers,
@@ -39,9 +39,14 @@ module SolidCp
 	    end
 
 	    def change_user_password
-	    	super(message: { user_id: user.user.solid_cp_id,password: user.password})
+	    	new_password = Devise.friendly_token.first(8)
+	    	response = super(message: { user_id: user.solid_cp_id,password: new_password})
+	    	if response.success?
+	    		{:success=>true, :message=>'SolidCP User created successfully',response: response,new_password: new_password}
+	    	else
+	    		{:success=>false,:message=> 'Something went wrong.',response: response}
+	    	end
 	    end
-
 
 	    # Creates User on SolidCP server
 	    # Role can  be Administrator or Reseller or User or ResellerCSR or PlatformCSR or ResellerHelpdesk or PlatformHelpdesk
@@ -78,11 +83,11 @@ module SolidCp
 			   	else
 			   		msg = "Something went wrong while creating user account. SolidCP ErrorCode: #{response.body[:add_user_response][:add_user_result]}"
 			   		{:success=>false,:message=> msg,response: response}
-			   		 
+
 			   	end
-			else
-				{:success=>true,:message=> "SolidCP account already exists for this user. #{user.email}"}
-			end
+				else
+					{:success=>true,:message=> "SolidCP account already exists for this user. #{user.email}"}
+				end
 	    end
 
 
