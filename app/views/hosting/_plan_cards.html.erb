@@ -17,11 +17,17 @@
             <div class="card-body">
               <h1 class="card-title pricing-card-title"><%=number_to_currency(product.price)%> <small class="text-muted">/ mo</small></h1>
               <ul class="list-unstyled mt-3 mb-4">
-             
-               
+                <li><b><%=product.windows? ? 'Windows Shared Hosting' : 'Linux Shared Hosting'%></b></li>
                 <li>SSL Support included</li>
-                 <%quota_list(product).each do |quota_text|%>
+                <%if product.windows?%>
+                  <%quota_list(product).each do |quota_text|%>
                     <li><%=quota_text%></li>
+                  <%end%>
+                <%else%>
+                  <%isp_config_limits(product).each do |limit|%>
+                    <%limit_value = product.isp_config_limit&.send(limit[:field])%>
+                    <li> <%=limit[:short_name]%> <%=limit_value == -1 ? 'Unlimited' : limit_value%></li>
+                  <%end if product.isp_config_limit.present?%>
                 <%end%>
                 <li>Email support</li>
                 <li>Help center access</li>

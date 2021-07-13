@@ -3,13 +3,17 @@ module Spree
     Spree::Address::ADDRESS_FIELDS = %w(firstname lastname company phone address1 address2 country state city zipcode).freeze
 
     def self.prepended(base)
-      base.after_commit :set_first_and_last_name, on: [:create]
+      base.after_commit :set_first_and_last_name, on: [:update]
     end
 
     def set_first_and_last_name
-      self.firstname = self.user&.first_name
-      self.lastname = self.user&.last_name
-      self.save
+      #return unless user_id_changed?
+      return unless self.user.present?
+      return if self.user.first_name.present? && self.user.last_name.present?
+
+       self.user.first_name =  self.firstname
+       self.user.last_name  =  self.lastname
+       self.user.save
     end
 
 	end
