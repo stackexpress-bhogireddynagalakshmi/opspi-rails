@@ -3,7 +3,7 @@ class HostingController < Spree::StoreController
 	include Spree::CacheHelper
 
 	def servers
-		@products = current_store.try(:account).try(:spree_products) 
+		@products = current_store.try(:account).try(:spree_products).where(subscribable: true)
 		if params[:slug] == 'vps'
 		elsif params[:slug] == 'linux-servers'
 			@products = @products.linux
