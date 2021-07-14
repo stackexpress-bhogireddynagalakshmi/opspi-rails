@@ -10,7 +10,7 @@ module TenantManager
       end
 
       def call
-        
+        setup_panels_access
       end
 
       def setup_panels_access
@@ -19,12 +19,12 @@ module TenantManager
         return unless TenantManager::TenantHelper.current_admin_tenant?
 
         #Solid CP Access to tenant  & Master Plan id set for a spree store
-
         account.update_column :solid_cp_access, true if panels_access('solid_cp')
         account.spree_store.update_column :solid_cp_access,true  if panels_access('solid_cp')
         account.spree_store.update(solid_cp_master_plan_id: order.subscribable_products.windows.first.solid_cp_master_plan_id) if  order.subscribable_products.windows.present?
 
-         #ISP config Access to tenant & Master Plan id set for a spree store
+
+        #ISP config Access to tenant & Master Plan id set for a spree store
         account.update_column :isp_config_access, true if panels_access('isp_config')
         account.spree_store.update_column :isp_config_access, true if panels_access('isp_config')
         account.spree_store.update(isp_config_master_template_id: order.subscribable_products.linux.first.isp_config_master_template_id) if  order.subscribable_products.linux.present?
@@ -32,7 +32,6 @@ module TenantManager
       end
 
       private
-
       def panels_access(panel)
         @panels = []
           if order.present?        

@@ -39,13 +39,20 @@ module Spree
 	  end
 
 	  def update_tenant_if_needed
-  		TenantManager::TenantServiceExecutor.new(TenantManager::TenantHelper.unscoped_query{self.user}).call
+  		TenantManager::TenantServiceExecutor.new(
+        TenantManager::TenantHelper.unscoped_query{self.user}
+      ).call
 
-  		TenantManager::TenantUpdater.new(TenantManager::TenantHelper.unscoped_query{self.user.reload.account},order: self,product: subscribable_product).setup_panels_access
+  		TenantManager::TenantUpdater.new(
+        TenantManager::TenantHelper.unscoped_query{self.user.reload.account},order: self,product: subscribable_product
+      ).call
+
 	  end
 
   	def provision_accounts
-  		AppManager::AccountProvisioner.new(TenantManager::TenantHelper.unscoped_query{self.user},order: self).call
+  		AppManager::AccountProvisioner.new(
+        TenantManager::TenantHelper.unscoped_query{self.user},order: self
+      ).call
   	end
 
   	def subscribable_products

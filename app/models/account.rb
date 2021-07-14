@@ -4,7 +4,6 @@ class Account < ApplicationRecord
 	has_many :spree_orders,:class_name=>'Spree::Order',dependent: :destroy
 	has_many :users,:class_name=>'Spree::User',dependent: :destroy
 
-
 	def store_admin
 		users.select{|user| user.store_admin?}.first
 	end
@@ -13,5 +12,4 @@ class Account < ApplicationRecord
 		TenantManager::TenantHelper.admin_tenant.id == self.id
 	end
 
-	
 end
