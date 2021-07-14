@@ -11,11 +11,13 @@
              height: 102) %>
     <h5 class="w-100 text-center"><%= Spree.t(:order_success) %></h5>
     <p class="order-show-explain w-100 text-center"><%= Spree.t(:order_success_explain) %></p>
-     <p class="order-show-explain w-100 text-center new-tenant">
-         <%=render_new_tenant_information(@order)&.html_safe%>
-     </p>
-
-     
+    
+    <%if TenantManager::TenantHelper.current_admin_tenant?%>
+       <p class="order-show-explain w-100 text-center new-tenant">
+          <%=render_new_tenant_information(@order)&.html_safe%>
+       </p>
+    <%end%>
+ 
   <% end %>
 
   <p class="order-show-number text-uppercase w-100 text-center">

@@ -9,7 +9,6 @@ module IspConfig
     end
 
 		def create(product_id)
-			puts "Adding Client"
 			@product = Spree::Product.find_by_id(product_id)
 			if user.isp_config_id.blank?
 				set_password('isp_config') if get_password('isp_config').blank? 
@@ -22,13 +21,12 @@ module IspConfig
 				if response.code == "ok"
 					user.isp_config_id = response.response
 					user.save
-					{:success=>true, :message=>'IspConfig user account created successfully',response: response}
+					{:success=>true, :message=>I18n.t('isp_config.user_created'),response: response}
 				else
-				 msg = "Something went wrong while creating user account. IspConfig Error: #{response.message}"
-				   {:success=>false,:message=> msg,response: response}
+				  {:success=>false,:message=> I18n.t('isp_config.something_went_wrong',message: response.message),response: response}
 				end
 			else
-				{:success=>true,:message=> "IspConfig user account already exists for this user." }
+				{:success=>true,:message=> I18n.t('isp_config.user_already_exists')}
 			end
 		end
 
@@ -36,19 +34,17 @@ module IspConfig
 		def update
 			if user.isp_config_id.present?
 				response = query({
-				    :endpoint => '/json.php?client_update',
-				    :method => :GET,
-				    :body => user_hash.merge({client_id: user.isp_config_id})
+			    :endpoint => '/json.php?client_update',
+			    :method => :GET,
+			    :body => user_hash.merge({client_id: user.isp_config_id})
 				})
 				if  response.code == "ok"
-					{:success=>true, :message=>'IspConfig user account updated successfully',response: response}
-					
+					{:success=>true, :message=>I18n.t('isp_config.user_updated'),response: response}
 				else
-				 msg = "Something went wrong while creating user account. IspConfig Error: #{respponse.message}"
-				   		{:success=>false,:message=> msg,response: response}
+				  {:success=>false,:message=> I18n.t('isp_config.something_went_wrong',message: response.message),response: response}
 				end
 			else
-				{:success=>false,:message=>'IspConfig user account does not exists.'}
+				{:success=>true,:message=> I18n.t('isp_config.user_does_not_exists')}
 			end
 		end
 
@@ -56,28 +52,44 @@ module IspConfig
 		def attach_template(template_id)
 	    if user.isp_config_id.present?
 				response = query({
-					    :endpoint => '/json.php?client_update',
-					    :method => :GET,
-					    :body => {client_id: user.isp_config_id,params: {template_master: template_id}}
+			    :endpoint => '/json.php?client_update',
+			    :method => :GET,
+			    :body => {client_id: user.isp_config_id,params: {template_master: template_id}}
 				})
 				
 				if  response.code == "ok"
-					{:success=>true, :message=>'IspConfig user master template updated successfully',response: response}
-					
+					{:success=>true, :message=>I18n.t('isp_config.template_updated'),response: response}		
 				else
 				 msg = "Something went wrong. IspConfig Error: #{respponse.message}"
-				   		{:success=>false,:message=> msg,response: response}
+				  {:success=>false,:message=> msg,response: response}
 				end
 			else
 				{:success=>false,:message=>'IspConfig user account does not exists.'}
 			end
 		end
 
+		def update_password
+			if user.isp_config_id.present?
+				new_password = Devise.friendly_token.first(8)
+				response = query({
+			    :endpoint => '/json.php?client_change_password',
+			    :method => :GET,
+			    :body => {client_id: user.isp_config_id,new_password: new_password}
+				})
+				if response.code == "ok"
+					{:success=>true, :message=>'IspConfig password updated successfully',response: response,new_password: new_password}
+				else
+					{:success=>false,:message=> I18n.t('isp_config.something_went_wrong',message: response.message),response: response}
+				end
+			else
+				{:success=>false,:message=>'IspConfig user account does not exists.'}
+			end
+		end 
+
    	#Package API interface for the  user/Reseller
    	def template
    		@template ||= IspConfig::Template.new(user)
    	end
-
 
 		private
 
