@@ -18,7 +18,7 @@ class IspConfigProvisioningJob < ApplicationJob
       isp_config_master_template_id = user.spree_store.isp_config_master_template_id || 1
         #attach_to_isp_config_tenplate(user,isp_config_master_template_id) #if user.packages.count <= 1
     else
-      #raise StandardError.new response[:message]  
+      raise StandardError.new response[:message]
     end
   end
 
