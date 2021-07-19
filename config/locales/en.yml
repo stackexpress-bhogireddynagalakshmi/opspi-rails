@@ -62,6 +62,13 @@ en:
     user_already_exists: 'IspConfig user account already exists for this user.'
     something_went_wrong: "Something went wrong while creating user account. IspConfig Error: %{message}"
     user_does_not_exists: 'IspConfig user account does not exists.'
+
+
+
+  devise:
+    user_passwords:
+      spree_user:
+        updated_not_active: ""
   
 
 
