@@ -10,14 +10,28 @@
 </p>
 
 <p>
+  Your username is <b><%=@email%></b>
+</p>
+
+<p>
   <%= Spree.t('user_mailer.confirmation_instructions.instructions_2') %>
 </p>
 <p class="body-action">
   <a href="<%= @confirmation_url %>" class="button button--green"><%= Spree.t('user_mailer.confirmation_instructions.button') %></a>
 </p>
+
+<p>
+  <%= Spree.t('user_mailer.button_does_not_work') %>
+</p>
+
+<p>
+   <a href="<%= @confirmation_url %>"><%= Spree.t('user_mailer.confirmation_instructions.button') %></a>
+</p>
+
 <p>
   <%= Spree.t('user_mailer.confirmation_instructions.instructions_3') %>
 </p>
+
 <p>
   <%= Spree.t('user_mailer.confirmation_instructions.thanks') %>
   <br />

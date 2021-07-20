@@ -5,10 +5,9 @@ class ApplicationController < ActionController::Base
 
 	include Tenantable
 
-	 before_action do
-      set_tenant
-    end
-
+	before_action do
+    set_tenant
+  end
 
 end
 
