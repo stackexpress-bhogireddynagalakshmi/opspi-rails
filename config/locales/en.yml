@@ -52,8 +52,13 @@ en:
     isp_config_panel: 'ISP Config Panel'
     isp_config_username: 'Isp Config Username'
     isp_config_password: 'ISP Config Password'
-
     subdomain: 'Subdomain'
+
+    user_mailer:
+      reset_button_does_not_work: "If the above button does not work then please click on the below link to reset your password"
+      confirm_button_does_not_work: "If the above button does not work then please click on the below link to confirm your account"
+
+      
 
   isp_config:
     template_updated: 'IspConfig user master template updated successfully'
@@ -64,12 +69,14 @@ en:
     user_does_not_exists: 'IspConfig user account does not exists.'
 
 
-
   devise:
     user_passwords:
       spree_user:
         updated_not_active: ""
+
+
   
+
 
 
 

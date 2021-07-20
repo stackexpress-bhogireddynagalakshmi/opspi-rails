@@ -4,6 +4,13 @@ module Spree
 			base.skip_before_action :load_object
 			base.before_action :load_object
 		end
+
+    def show
+      super
+      @orders = TenantManager::TenantHelper.unscoped_query{@user.orders.order('created_at desc')}
+      
+    end
+
 	end
 end
 
