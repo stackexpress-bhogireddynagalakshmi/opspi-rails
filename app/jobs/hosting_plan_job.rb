@@ -7,6 +7,7 @@ class HostingPlanJob < ApplicationJob
     product = Spree::Product.find(product_id)
     reseller = product.account&.store_admin
     return unless reseller.present?
+    return unless product.valid?
 
     if action == 'create'
     	reseller.solid_cp.plan(product).add_hosting_plan

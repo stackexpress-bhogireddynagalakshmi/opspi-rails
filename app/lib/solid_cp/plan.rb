@@ -88,9 +88,6 @@ module SolidCp
 				   		"UserId"=>user.solid_cp_id	   		
 			   		}
 			   	 })
-
-
-
 	    	end
 	    end
 

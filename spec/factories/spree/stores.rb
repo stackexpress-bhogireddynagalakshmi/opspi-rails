@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :spree_store, class: 'Spree::Store' do
     default_country_id {Spree::Config[:default_country_id]}
     name {'OpsPI'}
-    code {'opspi'}
+    code {SecureRandom.hex}
     url {ENV['ADMIN_DOMAIN']}
     mail_from_address {'no-reply@example.com'}
     customer_support_email {'support@example.com'}

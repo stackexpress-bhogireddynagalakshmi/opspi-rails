@@ -3,7 +3,6 @@ module Spree
 
 		def self.prepended(base)
 	    	base.acts_as_tenant :account
-	    	
 	    	base.checkout_flow do
 			    go_to_state :address
 			    go_to_state :payment, :if => lambda { |order| order.payment_required? }
@@ -46,7 +45,6 @@ module Spree
   		TenantManager::TenantUpdater.new(
         TenantManager::TenantHelper.unscoped_query{self.user.reload.account},order: self,product: subscribable_product
       ).call
-
 	  end
 
   	def provision_accounts
