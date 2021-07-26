@@ -7,12 +7,22 @@ module DnsManager
     def initialize(host)
       @host = host
       @res = Dnsruby::Resolver.new
-      @ret = @res.query(host, Types.CNAME)
+      
+    end
+
+    def call
+      begin
+        @ret = @res.query(host, Types.CNAME)
+      rescue Exception => e
+        puts e.message
+      end
+
+      return self
     end
 
 
     def cname
-      return if @ret.answer.blank?
+      return if @ret&.answer.blank?
 
       @ret.answer[0].domainname.to_s
     end
