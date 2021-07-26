@@ -41,9 +41,19 @@ Spree.user_class = "Spree::User"
 Spree::BackendConfiguration::ORDER_TABS << :my_custom_orders
 
 
-
 # Spree::BackendConfiguration.configure do |config|
 #   config.locale = 'en'
 #   config.menu_items << config.class::MenuItem.new([:accounts], 'file', url: :admin_accounts_path)
 # end
+
+
+# Spree::AppDependencies::INJECTION_POINTS << :current_store_finder 
+
+# Spree::Dependencies.current_store_finder = CustomStoreFinder
+
+
+Spree::BackendConfiguration.class_eval do
+  Spree::BackendConfiguration::CONFIGURATION_TABS << [:my_store]
+end
+
 

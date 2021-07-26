@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   
   Spree::Core::Engine.routes.draw do
     namespace :admin do
-
+      resources :my_store
       resources :panels do
         collection do 
           get :solidcp

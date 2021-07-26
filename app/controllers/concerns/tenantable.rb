@@ -8,6 +8,7 @@ module Tenantable
   
   def set_tenant
     if DomainCheck.check_domain(request)
+
       ActsAsTenant.current_tenant = Account.where('subdomain = ? or domain = ?',request.host,request.host).first
       ActsAsTenant.current_tenant = nil if current_spree_user&.superadmin?
     else
@@ -19,7 +20,7 @@ module Tenantable
 
   class DomainCheck
     def self.check_domain request
-      whitelisted_domains = Spree::Store.pluck(:url) + [OpspiHelper.admin_domain]
+      whitelisted_domains = Spree::Store.pluck(:url) + [OpspiHelper.admin_domain] + Account.pluck(:subdomain)
         whitelisted_domains.include? (request.host)
       end
   end 

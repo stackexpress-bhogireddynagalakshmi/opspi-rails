@@ -13,21 +13,22 @@ module Spree
 	  end
 
 	  protected
-	  	def create_account_and_admin_user
-	  		ActiveRecord::Base.transaction do
+  	def create_account_and_admin_user
+  		ActiveRecord::Base.transaction do
 
-			    account = TenantManager::TenantCreator.new(self).call
+		    account = TenantManager::TenantCreator.new(self).call
 
-		        ::TenantManager::StoreTenantUpdater.new(self,account.id).call
+	      ::TenantManager::StoreTenantUpdater.new(self,account.id).call
 
-		        store_admin = StoreManager::StoreAdminCreator.new(self,account: account).call
+	      store_admin = StoreManager::StoreAdminCreator.new(self,account: account).call
 
-		        if TenantManager::TenantHelper.current_tenant.blank?
-		        	store_admin.update_column :account_id, account.id
-		        end
+	      if TenantManager::TenantHelper.current_tenant.blank?
+	        store_admin.update_column :account_id, account.id
+	      end
+	      
+	    end
 
-		    end
-	  	end
+  	end
 
 	end
 end

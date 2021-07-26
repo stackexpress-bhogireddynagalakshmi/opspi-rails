@@ -83,6 +83,6 @@ gem 'sidekiq'
 gem 'httparty'
 gem 'hashie'
 gem 'dotenv-rails', groups: [:development, :test]
-
+gem 'dnsruby', '~> 1.59', '>= 1.59.3'
 
 
