@@ -61,7 +61,6 @@ en:
       confirm_button_does_not_work: "If the above button does not work then please click on the below link to confirm your account"
 
       
-
   isp_config:
     template_updated: 'IspConfig user master template updated successfully'
     user_created: 'IspConfig user account created successfully'
@@ -69,6 +68,9 @@ en:
     user_already_exists: 'IspConfig user account already exists for this user.'
     something_went_wrong: "Something went wrong while creating user account. IspConfig Error: %{message}"
     user_does_not_exists: 'IspConfig user account does not exists.'
+
+  my_store:
+    cname_not_added: "Please add %{cname} as CNAME in your DNS setting."
 
 
   devise:

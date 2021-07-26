@@ -7,20 +7,31 @@ class Spree::Admin::MyStoreController < Spree::Admin::BaseController
 
   def update
     @store = current_store
-    validation = StoreManager::StoreDomainValidator.new(params[:custom_domain],current_store: current_store).call
-
-    if validation[0] == true
-      dns_resolver = DnsManager::CnameResolver.new(params[:custom_domain])
-      if dns_resolver.cname_configured?
-        current_store.url = params[:custom_domain]
-        current_store.save
+    if params[:custom_domain].present?
+      validation = StoreManager::StoreDomainValidator.new(params[:custom_domain],current_store: current_store).call
+      if validation[0] == true
+        dns_resolver = DnsManager::CnameResolver.new(params[:custom_domain])
+        if dns_resolver.cname_configured?
+          current_store.url = params[:custom_domain]
+          if current_store.save
+            @store.update(store_params)
+          end
+        else
+          @store.errors.add(:url, I18n.t('my_store.cname_not_added',cname: ENV['CNAME_POINTER_DOMAIN']) )
+        end
       else
-        @store.errors.add(:url, "Please add #{ENV['ADMIN_DOMAIN'] } as CNAME in your DNS setting." )
+        @store.errors.add(:url, validation[1])
       end
     else
-      @store.errors.add(:url, validation[1])
+      @store.update(store_params)
     end
     render "index"
   end
-  
+
+  private
+
+  def store_params
+    params.require(:store).permit(:logo,:mailer_logo,:name)
+  end
+
 end

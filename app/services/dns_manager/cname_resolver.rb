@@ -20,7 +20,7 @@ module DnsManager
     def cname_configured?
       return false unless cname
 
-      cname == ENV['ADMIN_DOMAIN']     
+      cname == ENV['CNAME_POINTER_DOMAIN']     
     end
 
   end
