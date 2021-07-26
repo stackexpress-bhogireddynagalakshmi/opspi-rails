@@ -29,7 +29,6 @@ class Spree::Admin::MyStoreController < Spree::Admin::BaseController
   end
 
   private
-
   def store_params
     params.require(:store).permit(:logo,:mailer_logo,:name)
   end
