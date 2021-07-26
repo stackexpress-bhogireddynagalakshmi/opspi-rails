@@ -29,9 +29,6 @@ class StoreAdminAbility
 
         can :manage, ::Spree::PaymentMethod unless TenantManager::TenantHelper.current_admin_tenant?
 
-        can :manage, ::Spree::Store if TenantManager::TenantHelper.current_tenant.present? && TenantManager::TenantHelper.current_tenant.id == user.account_id
-
-
         can :manage, ::Spree::Payment  
     	can :read, ::Spree::Country
 	    can :read, ::Spree::OptionType
