@@ -25,13 +25,18 @@ class Spree::Admin::MyStoreController < Spree::Admin::BaseController
       end
     else
       @store.update(store_params)
+
     end
     render "index"
   end
 
+  def show
+  redirect_to action: :index
+  end
+
   private
   def store_params
-    params.require(:store).permit(:logo,:mailer_logo,:name)
+    params.require(:store).permit(:logo,:mailer_logo,:name,:seo_title,:meta_description,:meta_keywords,:seo_robots,:description,:address,:contact_phone)
   end
 
 end

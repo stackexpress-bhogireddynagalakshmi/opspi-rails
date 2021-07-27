@@ -1,7 +1,8 @@
 module TenantManager
 	class TenantHelper
+
 		def self.current_admin_tenant?
-			ActsAsTenant.current_tenant&.domain == ENV['ADMIN_DOMAIN']
+			[ActsAsTenant.current_tenant&.domain,ActsAsTenant.current_tenant&.subdomain].include?(ENV['ADMIN_DOMAIN'])
 		end
 
 		#current tenant based on URL of the store
@@ -14,11 +15,13 @@ module TenantManager
 		end
 
 		def self.admin_tenant
-			Account.where(domain: ENV['ADMIN_DOMAIN']).first
+			Account.where(domain: ENV['ADMIN_DOMAIN']).first ||
+			Account.where(subdomain: ENV['ADMIN_DOMAIN']).first 
 		end
 		
 		def self.admin_tenant_id
-			Account.where(domain: ENV['ADMIN_DOMAIN']).first&.id
+			Account.where(domain: ENV['ADMIN_DOMAIN']).first&.id ||
+			Account.where(subdomain: ENV['ADMIN_DOMAIN']).first&.id 
 		end
 
 		def self.unscoped_query(&block)

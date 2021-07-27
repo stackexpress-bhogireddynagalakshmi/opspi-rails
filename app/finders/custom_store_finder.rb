@@ -15,6 +15,7 @@ class CustomStoreFinder
 
   def by_url(scope)
     return if url.blank?
-    scope.by_url(url).first || ::Account.by_subdomain(url).first.spree_store
+ 
+    scope.where(url: url).first || ::Account.by_subdomain(url).first.spree_store
   end
 end
