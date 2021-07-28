@@ -8,35 +8,47 @@ class Spree::Admin::MyStoreController < Spree::Admin::BaseController
   def update
     @store = current_store
     if params[:custom_domain].present?
-      validation = StoreManager::StoreDomainValidator.new(params[:custom_domain],current_store: current_store).call
-      if validation[0] == true
-        dns_resolver = DnsManager::CnameResolver.new(params[:custom_domain]).call
-       
-        if dns_resolver.cname_configured?
-            current_store.url = params[:custom_domain]
-            if current_store.save
-              @store.update(store_params)
-            end
-          else
-            @store.errors.add(:url, I18n.t('my_store.cname_not_added',cname: ENV['CNAME_POINTER_DOMAIN']) )
-          end       
-      else
-        @store.errors.add(:url, validation[1])
-      end
+        response = validate_custom_domian(params[:custom_domain])
+        if response[:success]
+          @store.update(store_params)
+        else
+          @store.errors.add(:url,response[:msg])
+        end
     else
       @store.update(store_params)
-
+      flash[:success] = flash_message_for(@store, :successfully_updated)
     end
     render "index"
   end
 
   def show
-  redirect_to action: :index
+    redirect_to action: :index
+  end
+
+  def validate_domain
+    response = validate_custom_domian(params[:custom_domain])
+
+    render :json => response
   end
 
   private
+
   def store_params
     params.require(:store).permit(:logo,:mailer_logo,:name,:seo_title,:meta_description,:meta_keywords,:seo_robots,:description,:address,:contact_phone)
+  end
+
+
+  def validate_custom_domian(custom_domain)
+    return {success: false,msg: I18n.t('my_store.domain_cannot_be_blank')} if custom_domain.blank?
+
+    validation = StoreManager::StoreDomainValidator.new(custom_domain,current_store: current_store).call
+    return {success: false, msg: validation[1]} unless  validation[0]
+
+    dns_resolver = DnsManager::CnameResolver.new(custom_domain).call
+    return {success: false,msg:  I18n.t('my_store.cname_not_added',cname: ENV['CNAME_POINTER_DOMAIN'])} unless dns_resolver.cname_configured?
+
+    return {success: true, msg: I18n.t('my_store.domain_validated')}
+
   end
 
 end

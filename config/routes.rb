@@ -17,7 +17,11 @@ Rails.application.routes.draw do
   
   Spree::Core::Engine.routes.draw do
     namespace :admin do
-      resources :my_store
+      resources :my_store do
+        collection do 
+          post :validate_domain
+        end
+      end
       resources :panels do
         collection do 
           get :solidcp

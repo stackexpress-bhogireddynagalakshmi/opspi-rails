@@ -4,10 +4,10 @@ module DnsManager
     include Dnsruby
 
     attr_reader :host
+    
     def initialize(host)
       @host = host
       @res = Dnsruby::Resolver.new
-      
     end
 
     def call
