@@ -84,5 +84,6 @@ gem 'httparty'
 gem 'hashie'
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'dnsruby', '~> 1.59', '>= 1.59.3'
+gem "aws-sdk-s3", require: false
 
 

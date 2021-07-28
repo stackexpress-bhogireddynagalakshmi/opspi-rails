@@ -72,7 +72,7 @@ en:
   my_store:
     cname_not_added: "Please add %{cname} as CNAME in your DNS setting."
     domain_cannot_be_blank: "Custom domain can't be blank."
-    domain_validated: "Custom domain successfully validated."
+    domain_validated: "Custom domain successfully validated. Please check after few minutes."
 
 
   devise:
