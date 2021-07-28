@@ -38,5 +38,5 @@ digitalocean:
   endpoint: <%=ENV['DIGITALOCEAN_ENDPOINT']%>
   access_key_id: <%=ENV['DIGITALOCEAN_ACCESS_KEY_ID']%>
   secret_access_key: <%=ENV['DIGITALOCEAN_ACCESS_KEY']%>
-  bucket: <%=ENV['DIGITALOCEAN_BUKCET']%>
+  bucket: <%=ENV['DIGITALOCEAN_BUCKET']%>
   region: <%=ENV['DIGITALOCEAN_REGION']%>
