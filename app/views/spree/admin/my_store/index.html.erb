@@ -1,3 +1,8 @@
+<style type="text/css">
+  .formSuccess{
+    color: green;
+  }
+</style>
 <% content_for :page_title do %>
   <%= Spree.t(:"admin.user.my_store") %>
 <% end %>
@@ -60,11 +65,15 @@
         </div>
        <%domain = @store.account.domain == @store.account.subdomain ? '' : @store.account.domain%>
        <%= text_field_tag :custom_domain,domain, class: 'form-control' %>
+        <div class="input-group-prepend">
+          <%=f.button 'Validate',class: 'btn btn-primary',type: "button",id: 'validate-btn'%>
+        </div>
       </div>
+      <span id="domain-validation-msg"></span>
       <%= f.error_message_on :url %>
     <% end %>
 
-     <%= f.field_container :url, class: ['form-group'] do %>
+     <%= f.field_container :submit, class: ['form-group'] do %>
         <%=f.submit 'Submit',class: 'btn btn-primary'%>
      <%end%>
      
@@ -113,9 +122,7 @@
 
   </div>
 </div>
-
 <%end%>
-
 
 <%= form_for [:admin, @store], url: admin_my_store_path(@store.id) ,html: { multipart: true } do |f| %>
     <div class="card mb-4">
@@ -154,3 +161,30 @@
    </div> 
  </div>
 <%end%>
+
+
+<script type="text/javascript">
+  
+  $(document).ready(function (argument) {
+    $('#validate-btn').on('click',function (argument) {
+        var customDomain = $('#custom_domain').val();
+        $('#store_url_field').removeClass('withError');
+        $('#store_url_field').find(".formError").remove();
+
+        $.post("/admin/my_store/validate_domain?custom_domain="+customDomain,function(data){
+    
+          if(data["success"]){
+            $('#domain-validation-msg').html("<span class='formSuccess'>"+data["msg"]+"</span>")
+
+          }else{
+
+            $('#store_url_field').addClass('withError');              
+            $('#store_url_field').append("<span class='formError'>"+data["msg"]+"</span>");
+          }
+
+
+        })
+
+    });
+  });
+</script>
