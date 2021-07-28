@@ -171,7 +171,6 @@
         $('#store_url_field').removeClass('withError');
         $('#store_url_field').find(".formError").remove();
 
-
         $.post("/admin/my_store/validate_domain?custom_domain="+customDomain,function(data){
     
           if(data["success"]){
@@ -179,9 +178,7 @@
 
           }else{
 
-            $('#store_url_field').addClass('withError');
-            var errorMsg = "Please add lvh.me as CNAME in your DNS setting."
-              
+            $('#store_url_field').addClass('withError');              
             $('#store_url_field').append("<span class='formError'>"+data["msg"]+"</span>");
           }
 
