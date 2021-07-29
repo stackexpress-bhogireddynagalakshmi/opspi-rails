@@ -11,6 +11,9 @@ class Spree::Admin::MyStoreController < Spree::Admin::BaseController
         response = validate_custom_domian(params[:custom_domain])
         if response[:success]
           @store.update(store_params)
+          @store.url = params[:custom_domain]
+          @store.save
+          flash[:success] = flash_message_for(@store, :successfully_updated)
         else
           @store.errors.add(:url,response[:msg])
         end
@@ -45,7 +48,7 @@ class Spree::Admin::MyStoreController < Spree::Admin::BaseController
     return {success: false, msg: validation[1]} unless  validation[0]
 
     dns_resolver = DnsManager::CnameResolver.new(custom_domain).call
-    return {success: false,msg:  I18n.t('my_store.cname_not_added',cname: ENV['CNAME_POINTER_DOMAIN'])} unless dns_resolver.cname_configured?
+    return {success: false,msg:  I18n.t('my_store.cname_not_added',cname: ENV['CNAME_POINTER_DOMAIN']),current_cname: dns_resolver.cname} unless dns_resolver.cname_configured?
 
     return {success: true, msg: I18n.t('my_store.domain_validated')}
 

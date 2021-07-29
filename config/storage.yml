@@ -32,3 +32,11 @@ local:
 #   service: Mirror
 #   primary: local
 #   mirrors: [ amazon, google, microsoft ]
+
+digitalocean:
+  service: S3
+  endpoint: <%=ENV['DIGITALOCEAN_ENDPOINT']%>
+  access_key_id: <%=ENV['DIGITALOCEAN_ACCESS_KEY_ID']%>
+  secret_access_key: <%=ENV['DIGITALOCEAN_ACCESS_KEY']%>
+  bucket: <%=ENV['DIGITALOCEAN_BUCKET']%>
+  region: <%=ENV['DIGITALOCEAN_REGION']%>
