@@ -8,7 +8,7 @@ module TenantManager
       end
 
       def call
-         ActsAsTenant.without_tenant do
+        ActsAsTenant.without_tenant do
            store.update_column :account_id, tenant_id
          end
       end

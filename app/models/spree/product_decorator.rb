@@ -10,6 +10,7 @@ module Spree
     	base.acts_as_tenant :account,:class_name=>'::Account'
     	base.has_many :susbscriptions,:class_name=>'Subscription'
     	base.has_many :plan_quota_groups,:class_name=>'PlanQuotaGroup',dependent: :destroy,:extend => FirstOrBuild
+    
     	base.has_many :plan_quotas,:through=>:plan_quota_groups,dependent: :destroy
     	base.has_one :isp_config_limit, inverse_of: :product, autosave: true, dependent: :destroy
     	base.after_commit :ensure_plan_id_or_template_id, on: [:create]
