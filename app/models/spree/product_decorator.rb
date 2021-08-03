@@ -5,6 +5,7 @@ module Spree
 		def self.prepended(base)
 
 			base.validate :ensure_server_type_do_not_change,on: [:update]
+
 			base.after_initialize :set_available_date
 
     	base.acts_as_tenant :account,:class_name=>'::Account'
@@ -16,7 +17,7 @@ module Spree
     	base.after_commit :ensure_plan_id_or_template_id, on: [:create]
     	base.after_commit :add_to_tenant, on: [:create,:update]
     	base.after_commit :update_solid_cp_plan, on: [:update]
-    	# base.after_commit :update_stock_availibility,on: [:create]
+    	base.after_commit :update_stock_availibility,on: [:create]
 
     	base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => :ensure_windows_server_type,allow_destroy: true
     	base.accepts_nested_attributes_for :isp_config_limit
@@ -71,10 +72,10 @@ module Spree
 			self.available_on = Time.zone.now
 		end
 
-		# def update_stock_availibility
-		# 	self.stock_items.last.
-
-		# end
+		def update_stock_availibility
+			stock_item = self.stock_items.last
+      stock_item.stock_movements.create({quantity: 1000})
+		end
 
   	# def ensure_no_active_subscription
     #    if susbscriptions.active.present?
