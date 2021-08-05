@@ -1,0 +1,33 @@
+FROM ruby:3.0.0-alpine
+
+LABEL Author="Syed Shibli <mshibli786@gmail.com>"
+
+ENV BUNDLE_WITHOUT="development production" \
+    RAILS_ENV=test \
+    APP_DIR="/usr/src/app/" \
+    BUILD_PACKAGES="curl-dev ruby-dev build-base bash git" \
+    DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata mysql-dev nodejs"
+  
+
+WORKDIR $APP_DIR
+
+RUN apk update && \
+    apk upgrade && \
+    apk add --update\
+    $BUILD_PACKAGES \
+    $DEV_PACKAGES \
+    rm -rf /var/cache/apk/* && \
+    mkdir -p /usr/src/app
+
+
+COPY Gemfile* $APP_DIR
+
+RUN gem install bundler -v 2.2.8 && \
+    bundle config set without $BUNDLE_WITHOUT && \
+    bundle install --jobs 4 --retry 5 --binstubs
+
+COPY . $APP_DIR
+
+CMD ["bin/run-docker-test.sh"]
+
+CMD ["rspec"]

@@ -87,6 +87,9 @@ class IspConfigLimit < ApplicationRecord
 
 	def self.get_fields_name
 		column_names if ActiveRecord::Base.connection.table_exists? "isp_config_limits"
+
+		rescue ActiveRecord::NoDatabaseError
+		
 	end
 
 end
