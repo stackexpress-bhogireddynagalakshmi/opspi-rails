@@ -1,9 +1,29 @@
 version: "3"
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /etc/nginx/certs
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+
+  nginx-proxy-letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    environment:
+      - DEFAULT_EMAIL=naveen.tiwari@stackexpress.com
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/acme.sh
+        #volumes_from:
+        #- nginx-proxy
 
   opspi:
     container_name: opspi
-    image: "${APP_IMAGE}"
+    image: registry.gitlab.com/stackexpresso/opspi2020/billing-panel/opspi-rails:23d4b7cb
     env_file: .env
     ports:
       - '3000:3000'
@@ -13,7 +33,7 @@ services:
     restart: unless-stopped
   sidekiq:
     container_name: sidekiq
-    image: "${APP_IMAGE}"
+    image: registry.gitlab.com/stackexpresso/opspi2020/billing-panel/opspi-rails:23d4b7cb
     env_file: .env
     #volumes:
     #  - .:/myapp
