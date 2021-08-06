@@ -36,11 +36,13 @@ module Spree
 	  	end
 
 	  	def ensure_tanent_exists
-	  		update_user_tanent
-	  		if self.reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
-	  			StoreManager::StoreCreator.new(self).call
-	  		end
-	  	end
+        update_user_tanent
+        if self.reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
+          StoreManager::StoreCreator.new(self).call
+        else
+          StoreManager::StoreAdminRoleAssignor.new(self,{role: "user"}).call
+        end
+      end
 
 	  	def provision_accounts
 	  		AppManager::AccountProvisioner.new(self.reload).call
