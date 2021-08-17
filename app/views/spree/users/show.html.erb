@@ -85,7 +85,7 @@
               <%else%>
                 <div class="info-box-content">
                   <span class="info-box-text">Subscriptions</span>
-                  <span class="info-box-number"><%=spree_current_user.susbscriptions.active.count%></span>
+                  <span class="info-box-number"><%=spree_current_user.subscriptions.active.count%></span>
                 </div>
                 <%end%>
               <!-- /.info-box-content -->
@@ -179,7 +179,7 @@
     </div>
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
        <h3 class="text-uppercase spree-mb-medium spree-mt-medium spree-header"><%= Spree.t(:my_subscription) %></h3>
-       <%if spree_current_user.susbscriptions.present?%>
+       <%if spree_current_user.subscriptions.present?%>
         <table class="table">
           <thead class="active">
             <tr>
@@ -193,14 +193,14 @@
             </tr>
             </thead>
             <tbody>
-             <%spree_current_user.susbscriptions.order('created_at desc').each do |subscription|%>
+             <%spree_current_user.subscriptions.order('created_at desc').each do |subscription|%>
                 <tr>
                   <td class="account-page-order-number"><%= TenantManager::TenantHelper.unscoped_query{ subscription.plan.name} %> 
                     <br/>
                     <span class="font-12 grey"><%=subscription.plan.server_type.titleize%></span>
                   </td>
                   <td class="account-page-order-date"><%=subscription.status? ? 'Active': 'In-Active'%></td>
-                  <td class="account-page-order-status"><%=subscription.start_date%></td>
+                  <td class="account-page-order-status"><%=format_date(subscription.start_date)%></td>
                   <td class="account-page-order-payment-state"><%=subscription.billing_interval%></td>
                   <td class="account-page-order-payment-state"><%=number_to_currency(subscription.price)%></td>
                    <td class="account-page-order-payment-state"><%=subscription.canceled_at%></td>
@@ -257,6 +257,35 @@
 
     <div class="tab-pane fade" id="billing"  role="tabpanel" aria-labbelledby="billing-ab">
          <h3 class="text-uppercase spree-mb-medium spree-mt-medium spree-header"><%= Spree.t(:my_billing) %></h3>
+          
+          <table class="table">
+          <thead class="active">
+            <tr>
+              <th class="text-uppercase text-secondary"><%=Spree.t(:invoice)%></th>
+              <th class="text-uppercase text-secondary"><%= Spree.t(:status) %></th>
+              <th class="text-uppercase text-secondary"><%= Spree.t(:start_date) %></th>
+              <th class="text-uppercase text-secondary"><%= Spree.t(:end_date) %></th>
+              <th class="text-uppercase text-secondary"><%= Spree.t(:amount) %></th>
+              <th class="text-uppercase text-secondary">Action</th>
+
+            </tr>
+            </thead>
+            <tbody>
+              <%@user.invoices.each do |invoice|%>
+
+                <tr>
+                  <td><%=invoice.name%></td>
+                  <td><%=invoice.status.upcase%></td>
+                  <td><%=format_date(invoice.started_on)%></td>
+                  <td><%=format_date(invoice.finished_on)%></td>
+                  <td><%=number_to_currency(invoice.balance)%></td>
+                  <td><%=button_tag 'Pay',class: 'btn btn-primary',disabled: true%></td>
+                </tr>
+               
+              <%end%>
+            </tbody>
+          </table>
+
     </div>
     <div class="tab-pane fade" id="account_info" role="tabpanel" aria-labelledby="account-info">
       <h3 class="text-uppercase spree-mb-medium spree-mt-medium spree-header"><%= Spree.t(:account_info) %></h3>

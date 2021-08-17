@@ -7,9 +7,10 @@ module Spree
 
 			base.belongs_to :account,:class_name=>'::Account'
     	#base.acts_as_tenant :account,:class_name=>'::Account'
-    	base.has_many :susbscriptions,:class_name=>'Subscription'
-    	base.has_many :plans,through: :susbscriptions,:class_name=>'Spree::Product' 
+    	base.has_many :subscriptions,:class_name=>'Subscription'
+    	base.has_many :plans,through: :subscriptions,:class_name=>'Spree::Product' 
     	base.has_many :packages,:class_name=>'Package'
+    	base.has_many :invoices
     	base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
     	base.has_one :tenant_service
 

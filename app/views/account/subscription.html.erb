@@ -1,6 +1,6 @@
 <div class="container account-page">
   <h3 class="text-uppercase spree-mb-large spree-mt-large spree-header">Subscription</h3>
-   <%if spree_current_user.susbscriptions.present?%>
+   <%if spree_current_user.subscriptions.present?%>
   	<table class="table mb-5">
         <thead class="active">
           <tr>
@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-         <%spree_current_user.susbscriptions.order('created_at desc').each do |subscription|%>
+         <%spree_current_user.subscriptions.order('created_at desc').each do |subscription|%>
             <tr>
               <td class="account-page-order-number"><%=subscription.plan.name%> 
               	<br/>

@@ -25,7 +25,7 @@ module Spree
 
 	  def valid_plan_subscription?
 	  		product = subscribable_product
-	 		if product && self.user.susbscriptions.joins(:plan).active.pluck(:server_type).include?(product.server_type) && (payments.blank? ||  !payments.last.completed?)
+	 		if product && self.user.subscriptions.joins(:plan).active.pluck(:server_type).include?(product.server_type) && (payments.blank? ||  !payments.last.completed?)
 	 		 	errors.add(:base, "Your are already subscribed to one #{product.server_type.titleize} Plan. Please check My Subscriptions page for more details")
 	 		 	return false
 	 		end
