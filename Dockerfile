@@ -27,7 +27,11 @@ RUN npm install --global yarn
 # APT Cleanup
 RUN rm -rf /var/lib/apt/lists/* \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
-    && apt-get clean 
+    && apt-get clean
+# Copy hello-cron file to the cron.d directory
+COPY hello-cron /etc/cron.d/hello-cron
+# Give execution rights on the cron job
+RUN chmod 0644 /etc/cron.d/hello-cron 
 #RUN apt-get update && apt-get install -y mysql-client && rm -rf /var/lib/apt
 COPY Gemfile Gemfile.lock /project/
 WORKDIR /project
