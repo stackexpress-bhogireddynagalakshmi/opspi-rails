@@ -7,8 +7,8 @@ set -o pipefail
 bundle exec ./bin/rails db:migrate
 #bundle exec rails db:seed
 
-crontab /etc/cron.d/hello-cron
-/etc/cron.d/hello-cron start
+#crontab /etc/cron.d/hello-cron
+#/etc/cron.d/hello-cron start
 #/etc/init.d/cron start
 RAILS_ENV=production whenever --update-crontab
 
