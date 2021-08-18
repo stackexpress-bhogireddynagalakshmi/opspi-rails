@@ -23,7 +23,7 @@ RUN apt-get -y install
 RUN apt-get update && apt-get install -y mariadb-client
 RUN apt-get install mysql2 -v '0.5.3' -y
 RUN npm install --global yarn
-RUN apt-get update && apt-get -y install cron
+#RUN apt-get update && apt-get -y install cron
 # APT Cleanup
 RUN rm -rf /var/lib/apt/lists/* \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
