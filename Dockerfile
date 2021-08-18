@@ -22,7 +22,12 @@ RUN node -v
 RUN apt-get -y install
 RUN apt-get update && apt-get install -y mariadb-client
 RUN apt-get install mysql2 -v '0.5.3' -y
-RUN npm install --global yarn 
+RUN npm install --global yarn
+RUN apt-get update && apt-get -y install cron
+# APT Cleanup
+RUN rm -rf /var/lib/apt/lists/* \
+    && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
+    && apt-get clean 
 #RUN apt-get update && apt-get install -y mysql-client && rm -rf /var/lib/apt
 COPY Gemfile Gemfile.lock /project/
 WORKDIR /project
