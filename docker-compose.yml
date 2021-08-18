@@ -23,7 +23,7 @@ services:
 
   opspi:
     container_name: opspi
-    image: registry.gitlab.com/stackexpresso/opspi2020/billing-panel/opspi-rails:23d4b7cb
+    image: "${APP_IMAGE}"
     env_file: .env
     ports:
       - '3000:3000'
@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
   sidekiq:
     container_name: sidekiq
-    image: registry.gitlab.com/stackexpresso/opspi2020/billing-panel/opspi-rails:23d4b7cb
+    image: "${APP_IMAGE}"
     env_file: .env
     #volumes:
     #  - .:/myapp
