@@ -10,6 +10,8 @@ services:
       - /etc/nginx/certs
       - /etc/nginx/vhost.d
       - /usr/share/nginx/html
+    networks:
+      - adminer_default
 
   nginx-proxy-letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
@@ -17,8 +19,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/acme.sh
-        #volumes_from:
-        #- nginx-proxy
 
   opspi:
     container_name: opspi
@@ -44,3 +44,7 @@ services:
     links:
       - opspi
     command: bundle exec sidekiq
+networks:
+  # Check the existing jwilder network name with command 'docker network ls'
+  adminer_default:
+    external: true
