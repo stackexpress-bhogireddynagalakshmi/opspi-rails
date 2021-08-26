@@ -85,5 +85,6 @@ gem 'hashie'
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'dnsruby', '~> 1.59', '>= 1.59.3'
 gem "aws-sdk-s3", require: false
-
-
+gem 'aasm'
+gem 'after_commit_everywhere', '~> 1.0'
+gem 'whenever', require: false

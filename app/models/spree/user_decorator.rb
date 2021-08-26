@@ -7,9 +7,10 @@ module Spree
 
 			base.belongs_to :account,:class_name=>'::Account'
     	#base.acts_as_tenant :account,:class_name=>'::Account'
-    	base.has_many :susbscriptions,:class_name=>'Subscription'
-    	base.has_many :plans,through: :susbscriptions,:class_name=>'Spree::Product' 
+    	base.has_many :subscriptions,:class_name=>'Subscription'
+    	base.has_many :plans,through: :subscriptions,:class_name=>'Spree::Product' 
     	base.has_many :packages,:class_name=>'Package'
+    	base.has_many :invoices
     	base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
     	base.has_one :tenant_service
 
@@ -36,11 +37,13 @@ module Spree
 	  	end
 
 	  	def ensure_tanent_exists
-	  		update_user_tanent
-	  		if self.reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
-	  			StoreManager::StoreCreator.new(self).call
-	  		end
-	  	end
+        update_user_tanent
+        if self.reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
+          StoreManager::StoreCreator.new(self).call
+        else
+          StoreManager::StoreAdminRoleAssignor.new(self,{role: "user"}).call
+        end
+      end
 
 	  	def provision_accounts
 	  		AppManager::AccountProvisioner.new(self.reload).call

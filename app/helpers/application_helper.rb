@@ -27,4 +27,10 @@ module ApplicationHelper
 			TenantManager::TenantHelper.unscoped_query{current_spree_user.orders.collect{|o|o.products.pluck(:server_type)}.flatten}.uniq
 		end
 	end
+
+	def format_date(date)
+		return unless date
+
+		date.strftime("%m/%d/%y")
+	end
 end

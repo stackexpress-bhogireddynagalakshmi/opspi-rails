@@ -1,5 +1,24 @@
 version: "3"
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /etc/nginx/certs
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
+    networks:
+      - adminer_default
+
+  nginx-proxy-letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    env_file: .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/acme.sh
 
   opspi:
     container_name: opspi
@@ -9,8 +28,13 @@ services:
       - '3000:3000'
     volumes:
       - /var/log/opspi/:/project/log/
-    command: bash -c "rake db:migrate && bin/rails server --port 3000 --binding 0.0.0.0"
     restart: unless-stopped
+  cron:
+    container_name: opspi-cron
+    image: "${APP_IMAGE}"
+    env_file: .env
+    command: bash -c "bundle exec whenever --update-crontab && cron -f -L 15"
+
   sidekiq:
     container_name: sidekiq
     image: "${APP_IMAGE}"
@@ -20,3 +44,7 @@ services:
     links:
       - opspi
     command: bundle exec sidekiq
+networks:
+  # Check the existing jwilder network name with command 'docker network ls'
+  adminer_default:
+    external: true
