@@ -16,6 +16,6 @@ store_params = {
   }
 
 unless default_store.present?
-  sstore = Spree::Store.new(store_params)
+  store = Spree::Store.new(store_params)
   store.save!
 end
