@@ -13,6 +13,7 @@ module InvoiceManager
       ActiveRecord::Base.transaction do
         invoice = create_invoice
         add_fees_to_invoice(invoice)
+        # create_order_for_invoice(invoice)
         if payment_captured
           invoice.finalize! if invoice.may_finalize?
           invoice.close! if invoice.may_close?
@@ -30,6 +31,10 @@ module InvoiceManager
         #raise "Invoice already exists."
       end
       invoice
+    end
+
+    def create_order_for_invoice(invoice)
+      InvoiceManager::OrderCreator.new(invoice).call
     end
 
     private

@@ -4,7 +4,7 @@ module SolidCp
 
 		client wsdl: SOAP_USER_WSDL, endpoint: SOAP_USER_WSDL,log: SolidCp::Config.log
 		global :open_timeout, SolidCp::Config.timeout
-  		global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
+  	global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
 
   	include RedisConcern
 
@@ -132,7 +132,6 @@ module SolidCp
 	   		"#{user.first_name} #{user.last_name}"
 	   	end
 	   		   	
-
 	end
 end
 

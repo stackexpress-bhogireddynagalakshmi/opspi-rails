@@ -2,13 +2,20 @@ module Spree
 	module OrderDecorator
 
 		def self.prepended(base)
-	    	base.acts_as_tenant :account
+	    	#base.acts_as_tenant :account
+        base.belongs_to :account
 	    	base.checkout_flow do
 			    go_to_state :address
 			    go_to_state :payment, :if => lambda { |order| order.payment_required? }
 			    go_to_state :confirm, :if => lambda { |order| order.confirmation_required? }
 			    go_to_state :complete
 			end
+
+      base.enum order_type: {
+        manual: 0, # User is creating order by himself
+        auto: 1 # Order created against invoice by cron
+      }
+
 		end
 
 	  def create_subscriptions(payment)
@@ -24,7 +31,7 @@ module Spree
 	  end
 
 	  def valid_plan_subscription?
-	  		product = subscribable_product
+	  	product = subscribable_product
 	 		if product && self.user.subscriptions.joins(:plan).active.pluck(:server_type).include?(product.server_type) && (payments.blank? ||  !payments.last.completed?)
 	 		 	errors.add(:base, "Your are already subscribed to one #{product.server_type.titleize} Plan. Please check My Subscriptions page for more details")
 	 		 	return false

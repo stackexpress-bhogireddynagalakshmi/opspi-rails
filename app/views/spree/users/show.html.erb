@@ -263,6 +263,7 @@
             <tr>
               <th class="text-uppercase text-secondary"><%=Spree.t(:invoice_number)%></th>
               <th class="text-uppercase text-secondary"><%=Spree.t(:invoice)%></th>
+              <th class="text-uppercase text-secondary"><%=Spree.t(:order)%></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:status) %></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:start_date) %></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:end_date) %></th>
@@ -274,14 +275,28 @@
             <tbody>
               <%@user.invoices.each do |invoice|%>
 
+
                 <tr>
                   <td><%=invoice.invoice_number%></td>
                   <td><%=invoice.name%></td>
+                  <td><%=TenantManager::TenantHelper.unscoped_query{invoice.order.present? ? 'Yes' : 'No'}%></td>
                   <td><%=invoice.status.upcase%></td>
                   <td><%=format_date(invoice.started_on)%></td>
                   <td><%=format_date(invoice.finished_on)%></td>
                   <td><%=number_to_currency(invoice.balance)%></td>
-                  <td><%=button_tag 'Pay',class: 'btn btn-primary',disabled: true%></td>
+                  <td>
+
+                     <%=link_to 'Pay Now',spree.product_path(TenantManager::TenantHelper.unscoped_query{invoice.plan.slug},invoice_number: invoice.invoice_number),class: 'btn btn-lg btn-block btn-outline-primary'%>
+                  <%#= 
+
+
+
+
+                  render :partial=>'account/order_form',:locals=>{product: TenantManager::TenantHelper.unscoped_query{invoice.plan},variants: []}%>
+                  <%#=link_to 'Pay',spree.checkout_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary'%>
+
+                  <%#=link_to 'Pay',main_app.pay_invoice_account_index_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary'%>
+                   </td>
                 </tr>
                
               <%end%>

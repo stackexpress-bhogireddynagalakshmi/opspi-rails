@@ -4,12 +4,18 @@ class Invoice < ApplicationRecord
   acts_as_tenant :account,:class_name=>'::Account'
   belongs_to :user,foreign_key: :user_id,class_name: 'Spree::User'
   belongs_to :subscription
+  has_one :order,class_name: 'Spree::Order', primary_key: 'order_id', foreign_key: 'id',dependent: :destroy
+
+  delegate :plan,to: :subscription
 
   before_validation :ensure_name
   before_validation :set_invoice_number
 
   validates_presence_of :name, :account, :started_on, :finished_on, :invoice_number
   validates :finalized_at, presence: true, if: ->(i) { i.final? }
+
+
+
 
   aasm :status, column: 'status'  do
     state :active, initial: true

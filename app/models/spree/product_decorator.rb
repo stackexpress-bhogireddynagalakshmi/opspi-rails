@@ -6,7 +6,9 @@ module Spree
 			base.validate :ensure_server_type_do_not_change,on: [:update]
 			base.after_initialize :set_available_date
 
-    	base.acts_as_tenant :account,:class_name=>'::Account'
+    	#base.acts_as_tenant :account,:class_name=>'::Account'
+      base.belongs_to :account,:class_name=>'::Account'
+
     	base.has_many :plan_quota_groups,:class_name=>'PlanQuotaGroup',dependent: :destroy,:extend => FirstOrBuild
     
     	base.has_many :plan_quotas,:through=>:plan_quota_groups,dependent: :destroy
