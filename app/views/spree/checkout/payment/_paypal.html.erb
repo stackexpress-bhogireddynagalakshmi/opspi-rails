@@ -7,9 +7,9 @@ Pay with Paypal
 <script>
    
     setInterval(function(){ 
-    	// SpreePaypalExpress.paymentMethodID = "<%= payment_method.id %>"  
+      // SpreePaypalExpress.paymentMethodID = "<%= payment_method.id %>"  
 
-   		$('#paypal_button').attr('href',"<%=paypal_express_url(:payment_method_id => payment_method.id)%>")
-   	},1000);
+      $('#paypal_button').attr('href',"<%=paypal_express_url(:payment_method_id => payment_method.id)%>")
+    },1000);
 
  </script>

@@ -193,7 +193,7 @@
             </tr>
             </thead>
             <tbody>
-             <%spree_current_user.subscriptions.order('created_at desc').each do |subscription|%>
+              <%spree_current_user.subscriptions.order('created_at desc').each do |subscription|%>
                 <tr>
                   <td class="account-page-order-number"><%= TenantManager::TenantHelper.unscoped_query{ subscription.plan.name} %> 
                     <br/>
@@ -209,7 +209,7 @@
                      <%=link_to 'Cancel', "/account/subscription_cancel?subscription_id=#{subscription.id}",data: {confirm: 'Are you sure?'} %> </td>
                     <%end%>
                 </tr>
-            <%end%>
+              <%end%>
           
             </tbody>
           </table>
@@ -273,9 +273,7 @@
             </tr>
             </thead>
             <tbody>
-              <%@user.invoices.each do |invoice|%>
-
-
+              <%@user.invoices.order(created_at: :desc).each do |invoice|%>
                 <tr>
                   <td><%=invoice.invoice_number%></td>
                   <td><%=invoice.name%></td>
@@ -284,19 +282,9 @@
                   <td><%=format_date(invoice.started_on)%></td>
                   <td><%=format_date(invoice.finished_on)%></td>
                   <td><%=number_to_currency(invoice.balance)%></td>
-                  <td>
-
-                     <%=link_to 'Pay Now',spree.product_path(TenantManager::TenantHelper.unscoped_query{invoice.plan.slug},invoice_number: invoice.invoice_number),class: 'btn btn-lg btn-block btn-outline-primary'%>
-                  <%#= 
-
-
-
-
-                  render :partial=>'account/order_form',:locals=>{product: TenantManager::TenantHelper.unscoped_query{invoice.plan},variants: []}%>
-                  <%#=link_to 'Pay',spree.checkout_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary'%>
-
-                  <%#=link_to 'Pay',main_app.pay_invoice_account_index_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary'%>
-                   </td>
+                  <td> 
+                    <%=link_to 'Pay',spree.checkout_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary','data-turbolinks': false unless invoice.closed?%>
+                  </td>
                 </tr>
                
               <%end%>

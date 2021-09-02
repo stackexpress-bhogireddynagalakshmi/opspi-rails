@@ -27,13 +27,13 @@ class Invoice < ApplicationRecord
       transitions from: :active, to: :processing
     end
 
-    event :finalize, before: :ensure_finalizable_or_fail, after: :set_finalized_at do
-      transitions from: :active, to: :final 
-      transitions from: :processing, to: :final
-    end
+    # event :finalize, before: :ensure_finalizable_or_fail, after: :set_finalized_at do
+    #   transitions from: :active, to: :final 
+    #   transitions from: :processing, to: :final
+    # end
 
     event :close, after: :set_closed_at do
-      transitions from: :final, to: :closed
+      transitions from: [:active,:processing], to: :closed
     end
 
     event :reopen do
