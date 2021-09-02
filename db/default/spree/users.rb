@@ -76,11 +76,12 @@ end
 
 if Spree::User.admin.empty?
   create_admin_user
-else
-  puts 'Admin user has already been previously created.'
-  if agree('Would you like to create a new admin user? (yes/no)')
-    create_admin_user
-  else
-    puts 'No admin user created.'
-  end
+# else
+
+  # puts 'Admin user has already been previously created.'
+  # if agree('Would you like to create a new admin user? (yes/no)')
+  #   create_admin_user
+  # else
+  #   puts 'No admin user created.'
+  # end
 end
