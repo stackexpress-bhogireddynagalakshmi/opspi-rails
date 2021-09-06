@@ -47,17 +47,25 @@ module Spree
       invoice = CustomInvoiceFinder.new(order_id: self.id).unscoped_execute
 
       if invoice.present?
-        invoice.close!
-        invoice.save
-        # InvoiceMailer.send_notification(invoice)
+        if not_a_check_payment?
+          invoice.close!
+          invoice.save
+          
+        else
+          invoice.process!
+          invoice.save
+        end
+
       else
         update_tenant_if_needed
         provision_accounts
       end
 
+      #InvoiceMailer.send_notification(invoice)
 	  end
 
 	  def update_tenant_if_needed
+
   		TenantManager::TenantServiceExecutor.new(
         TenantManager::TenantHelper.unscoped_query{self.user}
       ).call
@@ -82,6 +90,8 @@ module Spree
   	end
 
     def update_tenant_id
+      return unless self.user
+
       tenant_id =
       if self.user.store_admin?
         TenantManager::TenantHelper.admin_tenant.id
@@ -91,6 +101,11 @@ module Spree
       
 
       TenantManager::OrderTenantUpdater.new(self,tenant_id).update_tenant_id_to_order
+    end
+
+
+    def not_a_check_payment?
+      self.payments.last.check_number.blank?
     end
 	end
 end

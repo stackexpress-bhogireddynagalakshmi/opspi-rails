@@ -2,12 +2,12 @@ module Spree
   
   module CheckoutControllerDecorator
 
-
      # Updates the order and advances to the next state (when possible.)
     def update
       if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
         @order.temporary_address = !params[:save_user_address]
-        unless @order.next
+        
+        unless @order.next 
           flash[:error] = @order.errors.full_messages.join("\n")
           redirect_to(spree.checkout_state_path(@order.state)) && return
         end
@@ -22,28 +22,33 @@ module Spree
       else
         render :edit
       end
-    end
 
+    rescue Exception => e
+      puts e.backtrace
+      raise 
+    end
 
     def load_order_with_lock
      
-      if params[:invoice_number].present?
-        
+      if params[:invoice_number].present?   
         invoice = CustomInvoiceFinder.new(invoice_number: params[:invoice_number]).unscoped_execute
-
         super unless invoice
         super if invoice.closed?
         
-        TenantManager::TenantHelper.unscoped_query  do
+        TenantManager::TenantHelper.unscoped_query do
           @order = InvoiceManager::OrderCreator.new(invoice).call
           cookies.signed[:token] = @order.token
         end
 
       else
-       
         super   
       end
     end
+
+     def ensure_sufficient_stock_lines
+      TenantManager::TenantHelper.unscoped_query { super }
+    end
+
 
     def ensure_valid_state
       if @order.state != correct_state && !skip_state_validation?

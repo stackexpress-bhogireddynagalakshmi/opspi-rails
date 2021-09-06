@@ -274,8 +274,15 @@
             </thead>
             <tbody>
               <%@user.invoices.order(created_at: :desc).each do |invoice|%>
+                <%order = TenantManager::TenantHelper.unscoped_query{invoice.order}%>
                 <tr>
-                  <td><%=invoice.invoice_number%></td>
+                  <td>
+                    <%if order%>
+                      <%= link_to invoice.invoice_number, spree.order_path(order) %>
+                    <%else%>
+                       <%=invoice.invoice_number%>
+                    <%end%>                    
+                  </td>
                   <td><%=invoice.name%></td>
                   <td><%=TenantManager::TenantHelper.unscoped_query{invoice.order.present? ? 'Yes' : 'No'}%></td>
                   <td><%=invoice.status.upcase%></td>
@@ -283,7 +290,11 @@
                   <td><%=format_date(invoice.finished_on)%></td>
                   <td><%=number_to_currency(invoice.balance)%></td>
                   <td> 
-                    <%=link_to 'Pay',spree.checkout_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary','data-turbolinks': false unless invoice.closed?%>
+                    <%if invoice.closed?  || invoice.processing?%>
+                  
+                    <%else%>
+                     <%=link_to 'Pay',spree.checkout_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary','data-turbolinks': false%>
+                    <%end%>
                   </td>
                 </tr>
                

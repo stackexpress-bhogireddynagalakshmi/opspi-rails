@@ -8,6 +8,7 @@ module InvoiceManager
     end
     
     def call
+   
       begin
         if invoice.order.blank?    
           order = Spree::Order.create!(order_params)
@@ -25,6 +26,7 @@ module InvoiceManager
       rescue Exception => e
         puts e.message    
       end
+
     end
 
     private
