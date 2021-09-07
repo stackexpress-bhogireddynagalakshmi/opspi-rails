@@ -193,7 +193,7 @@
             </tr>
             </thead>
             <tbody>
-             <%spree_current_user.subscriptions.order('created_at desc').each do |subscription|%>
+              <%spree_current_user.subscriptions.order('created_at desc').each do |subscription|%>
                 <tr>
                   <td class="account-page-order-number"><%= TenantManager::TenantHelper.unscoped_query{ subscription.plan.name} %> 
                     <br/>
@@ -209,7 +209,7 @@
                      <%=link_to 'Cancel', "/account/subscription_cancel?subscription_id=#{subscription.id}",data: {confirm: 'Are you sure?'} %> </td>
                     <%end%>
                 </tr>
-            <%end%>
+              <%end%>
           
             </tbody>
           </table>
@@ -263,6 +263,7 @@
             <tr>
               <th class="text-uppercase text-secondary"><%=Spree.t(:invoice_number)%></th>
               <th class="text-uppercase text-secondary"><%=Spree.t(:invoice)%></th>
+              <th class="text-uppercase text-secondary"><%=Spree.t(:order)%></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:status) %></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:start_date) %></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:end_date) %></th>
@@ -272,16 +273,29 @@
             </tr>
             </thead>
             <tbody>
-              <%@user.invoices.each do |invoice|%>
-
+              <%@user.invoices.order(created_at: :desc).each do |invoice|%>
+                <%order = TenantManager::TenantHelper.unscoped_query{invoice.order}%>
                 <tr>
-                  <td><%=invoice.invoice_number%></td>
+                  <td>
+                    <%if order%>
+                      <%= link_to invoice.invoice_number, spree.order_path(order) %>
+                    <%else%>
+                       <%=invoice.invoice_number%>
+                    <%end%>                    
+                  </td>
                   <td><%=invoice.name%></td>
+                  <td><%=TenantManager::TenantHelper.unscoped_query{invoice.order.present? ? 'Yes' : 'No'}%></td>
                   <td><%=invoice.status.upcase%></td>
                   <td><%=format_date(invoice.started_on)%></td>
                   <td><%=format_date(invoice.finished_on)%></td>
                   <td><%=number_to_currency(invoice.balance)%></td>
-                  <td><%=button_tag 'Pay',class: 'btn btn-primary',disabled: true%></td>
+                  <td> 
+                    <%if invoice.closed?  || invoice.processing?%>
+                  
+                    <%else%>
+                     <%=link_to 'Pay',spree.checkout_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary','data-turbolinks': false%>
+                    <%end%>
+                  </td>
                 </tr>
                
               <%end%>
