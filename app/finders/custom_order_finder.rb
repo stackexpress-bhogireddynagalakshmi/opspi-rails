@@ -1,5 +1,6 @@
 class CustomOrderFinder
-
+  attr_reader :scope, :url
+  
   def initialize(scope: nil, invoice_number: nil,order_id: nil)
     @scope = scope || Order
     @invoice_number = invoice_number
@@ -22,7 +23,7 @@ class CustomOrderFinder
 
   protected
 
-  attr_reader :scope, :url
+ 
 
   def by_invoice_number
     @scope.find_by_invoice_number(@invoice_number)
@@ -30,7 +31,7 @@ class CustomOrderFinder
 
   def by_order_id
     TenantManager::TenantHelper.unscoped_query do
-      @scope.
+    
     end
   end
 
