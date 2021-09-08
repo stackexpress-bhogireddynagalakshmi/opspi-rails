@@ -63,10 +63,9 @@ module ControllerHelpers
             if current_store.present? 
               return current_store.id
             elsif TenantManager::TenantHelper.current_tenant.present?
-                    TenantManager::TenantHelper.current_tenant.spree_store.id
+                TenantManager::TenantHelper.current_tenant.spree_store.id
             else
-                 Rails.logger.info { "Store Not found setting Store ID: as 1"  }
-                1
+                raise StandardError.new "Store Not Found"
             end
         end
 
