@@ -85,14 +85,3 @@
   </div>
 <% end %>
 
-
-<script type="text/javascript">
-  $(document).ready(function(){
-    
-    Spree.addToCartFormSubmissionOptions = function() {
-      return {"invoice_number": "<%=params[:invoice_number]%>"};
-    }
-
-  });
-  
-</script>
