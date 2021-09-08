@@ -53,8 +53,22 @@ module ControllerHelpers
         end
 
         def current_order_params
-          { currency: current_currency, token: cookies.signed[:token], user_id: try_spree_current_user.try(:id) }
+            order_data = { currency: current_currency, token: cookies.signed[:token], user_id: try_spree_current_user.try(:id),store_id:  get_current_store_id}
+            Rails.logger.info { "Order Params: #{order_data}"  }
+
+          order_data
         end
+
+        def get_current_store_id
+            if current_store.present? 
+              return current_store.id
+            elsif TenantManager::TenantHelper.current_tenant.present?
+                TenantManager::TenantHelper.current_tenant.spree_store.id
+            else
+                raise StandardError.new "Store Not Found"
+            end
+        end
+
 
     end
  end
