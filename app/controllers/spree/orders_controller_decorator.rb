@@ -14,7 +14,7 @@ module Spree
 
 
       else
-        if current_spree_user.store_admin?
+        if current_spree_user.present? && current_spree_user.store_admin?
          @order =  current_spree_user.orders.incomplete.
           includes(line_items: [variant: [:images, :product, option_values: :option_type]]).find_or_initialize_by(token: cookies.signed[:token])
         else
