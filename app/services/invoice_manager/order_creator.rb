@@ -24,7 +24,7 @@ module InvoiceManager
 
         invoice.reload.order
       rescue Exception => e
-        puts e.message    
+        Rails.logger.error {e.message}
       end
 
     end
@@ -52,6 +52,7 @@ module InvoiceManager
         currency:   current_currency,
         user_id:    user.id,
         store_id:   store_id,
+        account_id: account_id,
         state:      'address', 
         email:      user.email,
         order_type: 'auto',
@@ -65,11 +66,19 @@ module InvoiceManager
     end
 
     def bill_address_id
-      user.orders.complete.last.bill_address_id
+      user.bill_address_id
     end
 
     def ship_address_id
-      user.orders.complete.last.bill_address_id
+      user.ship_address_id
+    end
+
+    def account_id
+      if user.store_admin?
+        TenantManager::TenantHelper.admin_tenant_id
+      else
+        user.account_id
+      end
     end
 
   end

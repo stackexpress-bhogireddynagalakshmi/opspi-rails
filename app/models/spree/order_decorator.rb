@@ -92,17 +92,19 @@ module Spree
     def update_tenant_id
       return unless self.user
 
+
+
       tenant_id =
       if self.user.store_admin?
         TenantManager::TenantHelper.admin_tenant.id
       else
         self.user.account_id
       end
-      
+      Rails.logger.info {"update_tenant_id: #{tenant_id}"}
+
 
       TenantManager::OrderTenantUpdater.new(self,tenant_id).update_tenant_id_to_order
     end
-
 
     def not_a_check_payment?
       self.payments.last.check_number.blank?
