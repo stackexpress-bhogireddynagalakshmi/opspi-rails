@@ -9,7 +9,7 @@ class StoreAdminAbility
 
     def apply_store_admin_permissions(user)
 
-    	can :manage, ::Spree::Order   unless TenantManager::TenantHelper.current_admin_tenant?
+    	can :manage, ::Spree::Order   #unless TenantManager::TenantHelper.current_admin_tenant?
     	can :manage, ::Spree::Product unless TenantManager::TenantHelper.current_admin_tenant?
     	can :manage, ::Spree::User    unless TenantManager::TenantHelper.current_admin_tenant?
         can :manage, ::Spree::Image 

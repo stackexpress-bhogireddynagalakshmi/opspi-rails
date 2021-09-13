@@ -3,19 +3,22 @@ module InvoiceManager
     attr_reader :user,:subscription, :billing_period,:payment_captured
 
     def initialize(subscription, opts={})
-      @subscription = subscription
-      @user = @subscription.user
-      @billing_period ||= BillingPeriod.new(subscription)
-      @payment_captured = opts[:payment_captured] || false
+      @subscription       = subscription
+      @user               = @subscription.user
+      @billing_period     ||= BillingPeriod.new(subscription)
+      @payment_captured   = opts[:payment_captured] || false
+      @order              = opts[:order]
     end
 
     def call
       ActiveRecord::Base.transaction do
         invoice = create_invoice
         add_fees_to_invoice(invoice)
+        # create_order_for_invoice(invoice)
         if payment_captured
-          invoice.finalize! if invoice.may_finalize?
+          # invoice.finalize! if invoice.may_finalize?
           invoice.close! if invoice.may_close?
+          invoice.update_column :order_id, @order.id if @order.present?
         end
       end
     end
@@ -30,6 +33,10 @@ module InvoiceManager
         #raise "Invoice already exists."
       end
       invoice
+    end
+
+    def create_order_for_invoice(invoice)
+      InvoiceManager::OrderCreator.new(invoice).call
     end
 
     private

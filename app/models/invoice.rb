@@ -4,12 +4,18 @@ class Invoice < ApplicationRecord
   acts_as_tenant :account,:class_name=>'::Account'
   belongs_to :user,foreign_key: :user_id,class_name: 'Spree::User'
   belongs_to :subscription
+  has_one :order,class_name: 'Spree::Order', primary_key: 'order_id', foreign_key: 'id',dependent: :destroy
+
+  delegate :plan,to: :subscription
 
   before_validation :ensure_name
   before_validation :set_invoice_number
 
   validates_presence_of :name, :account, :started_on, :finished_on, :invoice_number
   validates :finalized_at, presence: true, if: ->(i) { i.final? }
+
+
+
 
   aasm :status, column: 'status'  do
     state :active, initial: true
@@ -21,13 +27,13 @@ class Invoice < ApplicationRecord
       transitions from: :active, to: :processing
     end
 
-    event :finalize, before: :ensure_finalizable_or_fail, after: :set_finalized_at do
-      transitions from: :active, to: :final 
-      transitions from: :processing, to: :final
-    end
+    # event :finalize, before: :ensure_finalizable_or_fail, after: :set_finalized_at do
+    #   transitions from: :active, to: :final 
+    #   transitions from: :processing, to: :final
+    # end
 
     event :close, after: :set_closed_at do
-      transitions from: :final, to: :closed
+      transitions from: [:active,:processing,:closed], to: :closed
     end
 
     event :reopen do
@@ -48,23 +54,27 @@ class Invoice < ApplicationRecord
   
 
   def ensure_processable_or_fail
-    if can_process? && can_run_invoice_finalizer?
-      self.processing_started_on = Time.current
-      true
-    else
-      Rails.logger.error("Someone tried to process an #{Invoice.model_name.human} before it was ready! Not cool: #{Invoice.model_name.human} #{id}")
-      raise InvoiceError, 'Invoice not ready for process!'
-    end
+    # if can_process? && can_run_invoice_finalizer?
+    #   self.processing_started_on = Time.current
+    #   true
+    # else
+    #   Rails.logger.error("Someone tried to process an #{Invoice.model_name.human} before it was ready! Not cool: #{Invoice.model_name.human} #{id}")
+    #   raise InvoiceError, 'Invoice not ready for process!'
+    # end
+
+    return true
   end
 
 
   def ensure_finalizable_or_fail
-    if can_finalize?
-      true
-    else
-      Rails.logger.error("Someone tried to finalize an #{Invoice.model_name.human} before it was ready! Not cool: #{Invoice.model_name.human} #{id}")
-      raise InvoiceError, 'Invoice not ready for finalization!'
-    end
+    # if can_finalize?
+    #   true
+    # else
+    #   Rails.logger.error("Someone tried to finalize an #{Invoice.model_name.human} before it was ready! Not cool: #{Invoice.model_name.human} #{id}")
+    #   raise InvoiceError, 'Invoice not ready for finalization!'
+    # end
+
+    return true
   end
 
   def billing_period_started?
@@ -121,7 +131,8 @@ class Invoice < ApplicationRecord
 
   def ensure_name
     if account && posting_date
-      self.name  = "#{billing_month} Invoice for  #{subscription.plan.name}"
+      plan = TenantManager::TenantHelper.unscoped_query { subscription.plan }
+      self.name  = "#{billing_month} Invoice for  #{plan.name}"
     end
   end
 
@@ -135,4 +146,5 @@ class Invoice < ApplicationRecord
     result
   end
 
+  class InvoiceError <  StandardError; end
 end

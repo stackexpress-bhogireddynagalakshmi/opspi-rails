@@ -38,7 +38,7 @@ class Subscription < ApplicationRecord
 	    validity: validity
     })
 
-    InvoiceManager::InvoiceCreator.new(subscription,{payment_captured: true}).call
+    InvoiceManager::InvoiceCreator.new(subscription,{payment_captured: true,order: opts[:order]}).call
 
 	end
 

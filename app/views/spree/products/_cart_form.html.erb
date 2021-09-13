@@ -24,6 +24,9 @@
     'data-variants': product_variants_matrix(is_product_available_in_currency),
     'data-variant-change-trigger-identifier': variant_change_identifier
   } do |f| %>
+
+  <%=f.hidden_field :invoice_number,value: params[:invoice_number]%>
+
   <div id="inside-product-cart-form" data-hook="inside_product_cart_form">
     <% if is_product_available_in_currency %>
       <div id="product-price" class="mb-2 text-center text-md-left add-to-cart-form-price" data-hook="product_price">
@@ -81,3 +84,4 @@
     <% end %>
   </div>
 <% end %>
+
