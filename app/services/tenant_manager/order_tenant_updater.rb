@@ -2,9 +2,9 @@ module TenantManager
   class OrderTenantUpdater < ApplicationService
   		attr_reader :order,:tenant_id
   		
-  		def initialize(order,tanent_id=nil)
+  		def initialize(order,tenant_id=nil)
   			@order = order
-        @tanent_id = tanent_id
+        @tenant_id = tenant_id
   		end
 
   		def call
@@ -26,7 +26,7 @@ module TenantManager
 
       def update_tenant_id_to_order
         ActsAsTenant.without_tenant do  
-           order.update_column :account_id, tenant_id
+          order.update_column :account_id, tenant_id
         end
       end
  	end
