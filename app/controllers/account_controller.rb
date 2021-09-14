@@ -5,9 +5,7 @@ class AccountController < Spree::StoreController
 	include Spree::CacheHelper
     respond_to :html
 
-    def subscription
-
-   	end
+    def subscription; end
 
    	def subscription_cancel
    		@subscription = Subscription.find(params[:subscription_id])
@@ -20,7 +18,6 @@ class AccountController < Spree::StoreController
    		end
    		render "subscription"
    	end
-
 
     def create_solidcp_account
       ProvisioningJob.perform_later(spree_current_user.id)
@@ -38,8 +35,7 @@ class AccountController < Spree::StoreController
         @isp_new_password = @response[:new_password] 
       else
         flash.now[:isp_config_error] = "Something went wrong"
-      end
-     
+      end 
     end
 
     def reset_solid_cp_password
@@ -51,5 +47,11 @@ class AccountController < Spree::StoreController
          flash.now[:solid_cp_error] = "Something went wrong"
       end
     end
-    
+
+
+    def pay_invoice
+      @invoice = Invoice.find_by_invoice_number(params[:invoice_number])
+    end
+
+
 end

@@ -46,6 +46,7 @@ Rails.application.routes.draw do
        get :get_hosting_plan_quotas
        get :reset_isp_config_password
        get :reset_solid_cp_password
+       get :pay_invoice
     end
   end  
 end

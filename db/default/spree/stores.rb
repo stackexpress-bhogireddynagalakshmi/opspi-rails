@@ -1,4 +1,10 @@
-default_store = Spree::Store.default
+#admin_tenant  = Account.find_or_create_by({domain: ENV['ADMIN_DOMAIN'],subdomain: ENV['ADMIN_DOMAIN']}) 
+
+
+#dfault_store = TenantManager::TenantHelper.admin_tenant&.spree_store
+
+default_store = Spree::Store.first
+
 
 store_params = {
     default_country_id: Spree::Config[:default_country_id],
@@ -15,9 +21,7 @@ store_params = {
     admin_password: ENV['ADMIN_PASSWORD']
   }
 
-if default_store.persisted?
-  default_store.update!(store_params)
-else
-   store = Spree::Store.new(store_params)
-   store.save!
+unless default_store.present?
+  store = Spree::Store.new(store_params)
+  store.save!
 end

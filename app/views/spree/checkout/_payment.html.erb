@@ -2,45 +2,58 @@
   <p class="payment-type checkout-content-header">
     <%= Spree.t(:payment_type).upcase %>
   </p>
+     <%TenantManager::TenantHelper.unscoped_query do%>
+      <div data-hook="checkout_payment_step">
+        <%= render partial: 'spree/checkout/payment/storecredit' %>
 
-  <div data-hook="checkout_payment_step">
-    <%= render partial: 'spree/checkout/payment/storecredit' %>
+        <ul id="payment-method-fields" class="list-unstyled position-relative" data-hook>
 
-    <ul id="payment-method-fields" class="list-unstyled position-relative" data-hook>
-      <%available_methods = @order.send('collect_payment_methods',current_store)%>
-      <!-- checkout_available_payment_methods -->
-      <% available_methods.each do |method| %>
-        <li class="radio">
-          <%= label_tag '', class: "form-check-label spree-radio-label payment-option", data: { type: method.id == @payment_sources&.first&.payment_method_id ? 'card' : nil } do %>
-            <%= radio_button_tag "order[payments_attributes][][payment_method_id]",
-                                 method.id,
-                                 method.id == @order.payments.checkout.last&.payment_method_id || method == checkout_available_payment_methods.first, method_type: method.method_type %>
-            <span class="spree-radio-label-custom-input"></span>
-            <%= Spree.t(method.name, scope: :payment_methods, default: method.name) %>
-          <% end %>
-          <%if method.method_type == 'check'%>
-           
-          <%end%>
-        </li>
-      <% end %>
-    </ul>
+            <%if spree_current_user.store_admin?%>
+              <%store_context = TenantManager::TenantHelper.admin_tenant.spree_store%>
+            <%else%>
+              <%store_context = current_store%>
+            <%end%>
 
-    <div class="payment-sources">
-      <%= render partial: 'payment_sources' if @payment_sources.present? %>
-
-      <ul id="payment-methods" class="list-unstyled position-relative mb-0 payment-sources-add-form" data-hook>
-
-        <% checkout_available_payment_methods.each do |method| %>
+            <%available_methods = @order.send('collect_payment_methods',store_context)%>
         
-          <li id="payment_method_<%= method.id %>" class="<%= 'last' if method == checkout_available_payment_methods.last %>" data-hook>
-            <fieldset>
-              <%= render partial: "spree/checkout/payment/#{method.method_type}", locals: { payment_method: method } %>
-            </fieldset>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  </div>
+
+          <!-- checkout_available_payment_methods -->
+          <% available_methods.each do |method| %>
+            <li class="radio">
+              <%= label_tag '', class: "form-check-label spree-radio-label payment-option", data: { type: method.id == @payment_sources&.first&.payment_method_id ? 'card' : nil } do %>
+                <%= radio_button_tag "order[payments_attributes][][payment_method_id]",
+                                     method.id,
+                                     method.id == @order.payments.checkout.last&.payment_method_id || method == available_methods.first, method_type: method.method_type %>
+                <span class="spree-radio-label-custom-input"></span>
+                <%= Spree.t(method.name, scope: :payment_methods, default: method.name) %>
+              <% end %>
+              <%if method.method_type == 'check'%>
+               
+              <%end%>
+            </li>
+          <% end %>
+
+        
+        </ul>
+
+        <div class="payment-sources">
+          <%= render partial: 'payment_sources' if @payment_sources.present? %>
+
+          <ul id="payment-methods" class="list-unstyled position-relative mb-0 payment-sources-add-form" data-hook>
+
+            <% available_methods.each do |method| %>
+            
+              <li id="payment_method_<%= method.id %>" class="<%= 'last' if method == checkout_available_payment_methods.last %>" data-hook>
+                <fieldset>
+                  <%= render partial: "spree/checkout/payment/#{method.method_type}", locals: { payment_method: method } %>
+                </fieldset>
+              </li>
+
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <%end%>
 </div>
 
 
@@ -55,7 +68,7 @@
       {
         $('#check_number_input_id').attr('required','required');
       }
-     
+    
       else{
           $('#check_number_input_id').removeAttr('required');
 
@@ -75,8 +88,8 @@
             $('#default-payment-btn').removeClass('d-none');
              $('#check_number_input_id').attr('required','required');
           }
-
         });
+
      });
 
   }, 1000);

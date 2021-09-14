@@ -3,6 +3,7 @@ class Account < ApplicationRecord
 	has_many :spree_products,:class_name=>'Spree::Product',dependent: :destroy
 	has_many :spree_orders,:class_name=>'Spree::Order',dependent: :destroy
 	has_many :users,:class_name=>'Spree::User',dependent: :destroy
+  has_many :payment_methods, :class_name=>'Spree::PaymentMethod'
 
   scope :by_subdomain,-> (url){
   	where(subdomain: url)

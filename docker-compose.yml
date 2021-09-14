@@ -1,6 +1,5 @@
 version: "3"
 services:
-
   opspi:
     container_name: opspi
     image: "${APP_IMAGE}"
@@ -9,8 +8,13 @@ services:
       - '3000:3000'
     volumes:
       - /var/log/opspi/:/project/log/
-    command: bash -c "rake db:migrate && bin/rails server --port 3000 --binding 0.0.0.0"
     restart: unless-stopped
+  cron:
+    container_name: opspi-cron
+    image: "${APP_IMAGE}"
+    env_file: .env
+    command: bash -c "bundle exec whenever --update-crontab && cron -f -L 15"
+
   sidekiq:
     container_name: sidekiq
     image: "${APP_IMAGE}"

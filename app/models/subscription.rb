@@ -1,8 +1,16 @@
 class Subscription < ApplicationRecord
 	belongs_to :user,:class_name=>'Spree::User'
 	belongs_to :plan,:class_name=>'Spree::Product',:foreign_key=>'product_id'
-	scope :active, -> {where(status: true) }
+	has_many :invoices
 
+	scope :active, -> {where(status: true) }
+	
+	# enum frequency: {
+	# 	monthly: 0,
+	# 	quaterly: 1,
+	# 	half_yearly: 2,
+	# 	yearly: 3
+	# } 
 
 	def self.subscribe!(opts)
 		existing_subscription = self.where(status: true,user_id: opts[:user].try(:id),product_id: opts[:product].try(:id)).first
@@ -14,18 +22,25 @@ class Subscription < ApplicationRecord
 	    end
 	end
 
-	def self.create_fresh_subscription(opts)
-		self.create({
-    		product_id: opts[:product].try(:id),
-    		user_id: opts[:user].try(:id),
-    		start_date: Date.today,
-		    end_date: Date.today + 1.year,
-		    price:  opts[:product].price,
-		    status:  true,
-		    frequency:  'ANNUAL'
-    	})
-	end
+	DEFAULT_VALIDITY_DAYS = 30
 
+	def self.create_fresh_subscription(opts)
+		validity = opts[:product].try(:validity) || DEFAULT_VALIDITY_DAYS
+
+		subscription =  self.create({
+  		product_id: opts[:product].try(:id),
+  		user_id: opts[:user].try(:id),
+  		start_date: Date.today,
+	    end_date: Date.today + validity.days,
+	    price:  opts[:product].price,
+	    status:  true,
+	    frequency:  'monthly',
+	    validity: validity
+    })
+
+    InvoiceManager::InvoiceCreator.new(subscription,{payment_captured: true,order: opts[:order]}).call
+
+	end
 
 	def active?
 		status
@@ -34,4 +49,14 @@ class Subscription < ApplicationRecord
 	def billing_interval
 		frequency
 	end
+
+	def current_started_on_day
+		day = start_date.day
+		day =-1 
+		day-=1 if day == 30
+		day-=1 if Date.today.year % 4 == 0 && date == 27
+
+		day
+	end
+
 end
