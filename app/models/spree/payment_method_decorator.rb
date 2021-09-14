@@ -18,6 +18,9 @@ module Spree
       Rails.logger.info {"update_tenant_id: #{tenant_id}"}
 
       TenantManager::PaymentMethodTenantUpdater.new(self,tenant_id).call
+
+      rescue StandardError  => e
+        Rails.logger.error {e.message}
 	 	end
 
     def update_store_payment_methods
@@ -27,6 +30,9 @@ module Spree
         current_store = TenantManager::TenantHelper.current_tenant&.spree_store
       end
       self.stores << current_store  unless self.stores.include?(current_store)
+      
+      rescue StandardError  => e
+        Rails.logger.error {e.message}
     end
 	 	
 	end
