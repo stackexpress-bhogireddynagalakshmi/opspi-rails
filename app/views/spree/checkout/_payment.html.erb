@@ -64,29 +64,36 @@
   setInterval(function(){ 
 
      $(document).ready(function (argument) {
-      if ($('input[type="radio"][name="order[payments_attributes][][payment_method_id]"]:checked').attr('method_type') == 'check')
-      {
-        $('#check_number_input_id').attr('required','required');
+       var checkRadio = $('input[type="radio"][name="order[payments_attributes][][payment_method_id]"]:checked')
+      if (checkRadio.attr('method_type') == 'check')  { 
+        var paymentMethodId = $(checkRadio).val()
+        console.log("paymentMethodId: "+ paymentMethodId);
+        $('#check_number_input_id_'+paymentMethodId).attr('required','required');
       }
-    
-      else{
-          $('#check_number_input_id').removeAttr('required');
-
+     
+      else{  
+        $('.check-payment-input').removeAttr('required');
       }
 
 
-       $('input[type="radio"][name="order[payments_attributes][][payment_method_id]"]').click(function () {
-      
+      $('input[type="radio"][name="order[payments_attributes][][payment_method_id]"]').click(function () {
+
+         if ($(this).attr('method_type') == 'check'){
+          var paymentMethodId = $(this).val();
+          console.log("paymentMethodId: "+ paymentMethodId);
+          $('.check-payment-input').removeAttr('required');
+          $('#check_number_input_id_'+paymentMethodId).attr('required','required');
+         }
+        
+
           if ($(this).attr('method_type') == 'paypal'){
             $('#paypal-express-payment-btn').removeClass('d-none');
             $('#default-payment-btn').addClass('d-none');
-             $('#check_number_input_id').removeAttr('required');
           }
 
           else{
             $('#paypal-express-payment-btn').addClass('d-none');
             $('#default-payment-btn').removeClass('d-none');
-             $('#check_number_input_id').attr('required','required');
           }
         });
 
