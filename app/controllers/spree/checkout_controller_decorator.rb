@@ -4,6 +4,9 @@ module Spree
 
      # Updates the order and advances to the next state (when possible.)
     def update
+  
+      update_payments_methods_attributes_params 
+
       if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
         @order.temporary_address = !params[:save_user_address]
         
@@ -82,6 +85,23 @@ module Spree
 
     def check_authorization
       #authorize!(:edit, current_order, cookies.signed[:token])
+    end
+
+
+    def update_payments_methods_attributes_params
+
+      return unless params[:order].present?
+      return unless params[:order][:payments_attributes].present?
+
+      params[:order][:payments_attributes].each(&:permit!)
+
+       params[:order][:payments_attributes].each_with_index do |pa,idx|
+        next if idx == 0
+
+        params[:order][:payments_attributes][0].merge!(pa)
+         #TODO: If Store has two check payment methods and if user fills check number in first check payment and then selects different check payment method and enter another check no so here merge might not be able to decide which check no is correct. Need to either restrict one check payment per store or some thing to prevent this issue
+      end
+      params[:order][:payments_attributes] = [params[:order][:payments_attributes][0]] 
     end
 
   end
