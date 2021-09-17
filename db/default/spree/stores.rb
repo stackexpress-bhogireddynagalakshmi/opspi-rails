@@ -1,4 +1,10 @@
-default_store = TenantManager::TenantHelper.admin_tenant&.spree_store
+#admin_tenant  = Account.find_or_create_by({domain: ENV['ADMIN_DOMAIN'],subdomain: ENV['ADMIN_DOMAIN']}) 
+
+
+#dfault_store = TenantManager::TenantHelper.admin_tenant&.spree_store
+
+default_store = Spree::Store.first
+
 
 store_params = {
     default_country_id: Spree::Config[:default_country_id],

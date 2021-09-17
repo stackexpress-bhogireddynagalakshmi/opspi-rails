@@ -15,6 +15,7 @@ module Spree
 	  protected
   	def create_account_and_admin_user
   		ActiveRecord::Base.transaction do
+  		
 
 		    account = TenantManager::TenantCreator.new(self).call
 

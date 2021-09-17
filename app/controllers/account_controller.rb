@@ -8,14 +8,18 @@ class AccountController < Spree::StoreController
     def subscription; end
 
    	def subscription_cancel
-   		@subscription = Subscription.find(params[:subscription_id])
-   		@subscription.status = false
-   		@subscription.canceled_at = Time.zone.now
-   		if @subscription.save
-   			flash[:success] = Spree.t('subscription_canceled')
-   		else
-   			flash[:error] = Spree.t('some_thing_went_wrong')
-   		end
+      TenantManager::TenantHelper.unscoped_query do 
+     		@subscription = spree_current_user.subscriptions.find(params[:subscription_id])
+     		@subscription.status = false
+     		@subscription.canceled_at = Time.zone.now
+
+     		if @subscription.save
+     			flash[:success] = Spree.t('subscription_canceled')
+     		else
+     			flash[:error] = Spree.t('some_thing_went_wrong')
+     		end
+      end
+
    		render "subscription"
    	end
 
