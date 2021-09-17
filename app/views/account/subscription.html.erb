@@ -17,11 +17,10 @@
         <tbody>
          <%spree_current_user.subscriptions.order('created_at desc').each do |subscription|%>
             <tr>
-              <td class="account-page-order-number"><%=subscription.plan.name%> 
+              <td class="account-page-order-number"><%=TenantManager::TenantHelper.unscoped_query{subscription.plan.name}%> 
               	<br/>
-              	<span class="font-12 grey"><%=subscription.plan.plan_type.titleize%></span>
+              	<span class="font-12 grey"><%=TenantManager::TenantHelper.unscoped_query{subscription.plan.server_type.titleize}%></span>
               </td>
-              <!-- <td class="account-page-order-number"><%=subscription.plan.plan_type.titleize%></td> -->
               <td class="account-page-order-date"><%=subscription.status? ? 'Active': 'In-Active'%></td>
               <td class="account-page-order-status"><%=subscription.start_date%></td>
               <td class="account-page-order-payment-state"><%=subscription.billing_interval%></td>
