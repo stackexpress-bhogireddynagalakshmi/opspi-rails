@@ -14,20 +14,22 @@
 <div class="row">
   <% [ 'shipping','billing'].each do |address_type|
     address_name = "#{address_type[0...4]}_address" %>
-    <div class="col-12 mb-4" data-hook="<%= address_type %>_fieldset_wrapper">
+    <div class="col-12 <%= address_type == 'shipping' ? 'd-none' : '' %>" data-hook="<%= address_type %>_fieldset_wrapper">
       <div id="<%= address_type %>" data-hook>
-        <h5 class="text-uppercase checkout-content-header">
-          <%= Spree.t(address_type + '_address') %>
+        <h5 class="text-uppercase checkout-content-header <%= address_type == 'shipping' ? 'd-none' : '' %>">
+          <%= Spree.t(address_type + '_address') if address_type != 'shipping'%>
         </h5>
         <% if address_type == 'shipping' %>
           <div class="spree-checkbox-container checkout-content-billing-checkbox" data-hook="use_billing">
             <div class="spree-checkbox">
-              <%= check_box_tag 'order[use_billing]', '1', @order.shipping_eq_billing_address?, { class: 'form-check-input'} %>
-              <%= label_tag :order_use_billing, nil, id: 'use_billing' %>
+               <%=hidden_field_tag 'order[use_billing]','1'%>
+              <%#= check_box_tag 'order[use_billing]', '1', @order.shipping_eq_billing_address?, { class: 'form-check-input'} %>
+              <%#= label_tag :order_use_billing, nil, id: 'use_billing' %>
             </div>
-            <%= label_tag :order_use_billing, Spree.t(:use_billing_address), class: 'spree-checkbox-label' %>
+            <%#= label_tag :order_use_billing, Spree.t(:use_billing_address), class: 'spree-checkbox-label' %>
           </div>
         <% end %>
+
         <% if @addresses.present? %>
           <div class="select_address mb-5">
             <div class="form-group col">
@@ -50,7 +52,7 @@
             </div>
           </div>
         <% end %>
-
+       
         <%= form.fields_for address_name do |address_form| %>
           <div class="inner checkout-content-inner" data-hook='<%= "#{address_type}_inner" %>'>
             <%= render partial: 'spree/addresses/form', locals: {
