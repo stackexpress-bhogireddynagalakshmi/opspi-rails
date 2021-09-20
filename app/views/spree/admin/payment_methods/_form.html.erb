@@ -33,6 +33,13 @@
             <%= label_tag :payment_method_display_on, Spree.t(:display) %>
             <%= select(:payment_method, :display_on, Spree::PaymentMethod::DISPLAY.collect { |display| [Spree.t(display), display.to_s] }, {}, {class: 'select2'}) %>
           </div>
+
+          <div data-hook="display" class="form-group">
+            <%= label_tag :position, Spree.t(:position) %>
+            <%= f.number_field :position, class: 'form-control' %>
+          </div>
+
+
           <div data-hook="auto_capture" class="form-group">
             <%= label_tag :payment_method_auto_capture, Spree.t(:auto_capture) %>
             <%= select(:payment_method, :auto_capture, [["#{Spree.t(:use_app_default)} (#{Spree::Config[:auto_capture]})", ''], [Spree.t(:say_yes), true], [Spree.t(:say_no), false]], {}, {class: 'select2'}) %>
