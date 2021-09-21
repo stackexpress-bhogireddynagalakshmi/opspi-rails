@@ -3,7 +3,7 @@ FactoryBot.define do
     default_country_id {Spree::Config[:default_country_id]}
     name {'OpsPI'}
     code {SecureRandom.hex}
-    url {"#{Random.new(42)}.lvh.me"}
+    url {"#{Random.new(42)}.example.com"}
     mail_from_address {'no-reply@example.com'}
     customer_support_email {'support@example.com'}
     default_currency {'USD'}
