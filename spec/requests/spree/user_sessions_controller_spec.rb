@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Spree::UserSessionsController, type: :controller do
   let(:admin_user) { create(:spree_user,:with_super_admin_role,password: 'opspi@123') }
-  let(:admin_store) {create(:spree_store,url: 'exapmple.com')}
+  let(:admin_store) {create(:spree_store,url: 'example.com')}
   
   let(:store_admin) { create(:spree_user,:with_store_admin_role,password: 'opspi@123') }
   let(:store_admin2) { create(:spree_user,:with_store_admin_role,password: 'opspi@123') }
@@ -61,5 +61,5 @@ RSpec.describe Spree::UserSessionsController, type: :controller do
       end
     end
   end
-  
+
 end
