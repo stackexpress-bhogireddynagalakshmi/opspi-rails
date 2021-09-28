@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_30_040333) do
+ActiveRecord::Schema.define(version: 2021_09_16_120646) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -83,6 +83,28 @@ ActiveRecord::Schema.define(version: 2021_06_30_040333) do
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", length: 20
     t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id"
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
+  end
+
+  create_table "invoices", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.integer "account_id"
+    t.integer "order_id"
+    t.integer "user_id"
+    t.date "started_on"
+    t.date "finished_on"
+    t.string "status"
+    t.string "invoice_number"
+    t.datetime "finalized_at"
+    t.boolean "tweak"
+    t.boolean "pdf_url_generated"
+    t.datetime "processing_started_on"
+    t.datetime "due_date"
+    t.datetime "closed_at"
+    t.decimal "balance", precision: 14, scale: 4
+    t.integer "net_term_days"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "subscription_id"
   end
 
   create_table "isp_config_limits", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -494,7 +516,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_040333) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "currency"
-    t.string "last_ip_address"
+    t.text "last_ip_address"
     t.integer "created_by_id"
     t.decimal "shipment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "additional_tax_total", precision: 10, scale: 2, default: "0.0"
@@ -515,6 +537,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_040333) do
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.boolean "store_owner_notification_delivered"
     t.integer "account_id"
+    t.integer "order_type", default: 0
     t.index ["approver_id"], name: "index_spree_orders_on_approver_id"
     t.index ["bill_address_id"], name: "index_spree_orders_on_bill_address_id"
     t.index ["canceler_id"], name: "index_spree_orders_on_canceler_id"
@@ -680,6 +703,8 @@ ActiveRecord::Schema.define(version: 2021_06_30_040333) do
     t.boolean "reseller_product", default: false, null: false
     t.integer "server_type"
     t.integer "isp_config_master_template_id"
+    t.integer "validity"
+    t.integer "frequency"
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_products_on_discontinue_on"
@@ -1345,6 +1370,7 @@ ActiveRecord::Schema.define(version: 2021_06_30_040333) do
     t.string "frequency"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "validity"
   end
 
   create_table "tenant_services", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
