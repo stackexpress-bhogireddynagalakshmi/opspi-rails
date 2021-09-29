@@ -6,10 +6,11 @@ module StoreManager
 
     def initialize(store_admin, options = {})
       @store_admin = store_admin
+      @role = options[:role].present? ? options[:role] : 'store_admin'
     end
 
     def call
-      role = Spree::Role.find_or_create_by({:name=>'store_admin'})
+      role = Spree::Role.find_or_create_by({:name=>@role})
       store_admin.spree_roles << role if !store_admin.spree_roles.include?(role)
       store_admin.save
     end

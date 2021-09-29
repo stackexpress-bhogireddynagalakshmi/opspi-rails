@@ -86,6 +86,7 @@ class IspConfigLimit < ApplicationRecord
 	}
 
 	def self.get_fields_name
+
 		column_names   # This might raise error during the migration or seed
 
 	rescue StandardError  => e
