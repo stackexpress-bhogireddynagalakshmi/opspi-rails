@@ -1,6 +1,6 @@
 FROM ruby:3.0.0-alpine
 
-LABEL Author="Syed Shibli <mshibli786@gmail.com>"
+LABEL Author="Syed Shibli <syed.m.shibli@et.apyl.com>"
 
 ENV BUNDLE_WITHOUT="development production" \
     RAILS_ENV=test \
