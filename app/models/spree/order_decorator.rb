@@ -50,13 +50,15 @@ module Spree
         if not_a_check_payment?
           invoice.close!
           invoice.save
-          
         else
           invoice.process!
           invoice.save
         end
+      end
+    
+      tenant_service = TenantService.find_by({user_id: TenantManager::TenantHelper.unscoped_query{self.user.id}})
 
-      else
+      if invoice.blank? || (tenant_service.present? && !tenant_service.service_executed?)
         update_tenant_if_needed
         provision_accounts
       end
