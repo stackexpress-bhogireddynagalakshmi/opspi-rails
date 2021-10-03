@@ -1,4 +1,6 @@
 class InvoiceFinder
+   #find invoice by billing period
+   #scope is subscription object
 
   def initialize(scope: nil,billing_period:)
     @scope = scope
@@ -16,7 +18,7 @@ class InvoiceFinder
 
   def by_billing_period(scope)
     return if @billing_period.blank?
-  
+    # byebug
     invoice = @invoices.
               where(started_on: @billing_period.begin,
                     finished_on: @billing_period.end).

@@ -52,11 +52,20 @@ class Subscription < ApplicationRecord
 
 	def current_started_on_day
 		day = start_date.day
-		day =-1 
-		day-=1 if day == 30
-		day-=1 if Date.today.year % 4 == 0 && date == 27
+		day -=1 
+		day -=1 if day == 30
+		day -=1 if Date.today.year % 4 == 0 && day == 27
 
 		day
+	end
+
+	def current_unpaid_invoice
+	 	invoice = InvoiceFinder.new(scope: self,billing_period: BillingPeriod.new(self)).execute
+
+	 	return unless invoice.present?
+	 	return unless invoice.active?
+
+	 	return invoice
 	end
 
 end

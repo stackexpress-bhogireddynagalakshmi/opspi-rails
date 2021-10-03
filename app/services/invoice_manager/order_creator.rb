@@ -19,7 +19,7 @@ module InvoiceManager
               quantity: 1,
               options: {}
             )
-          InvoiceManager::InvoiceUpdater.new(invoice,{params: {order_id: order.id}}).call
+          InvoiceManager::InvoiceUpdater.new(invoice, { params: { order_id: order.id }}).call
         end
 
         invoice.reload.order
