@@ -1,5 +1,6 @@
 class CustomInvoiceFinder
 
+  #find invoice by invoice numbr or order id
   def initialize(scope: nil, invoice_number: nil,order_id: nil)
     @scope = scope || Invoice
     @invoice_number = invoice_number
@@ -13,12 +14,6 @@ class CustomInvoiceFinder
   def present?
     execute
   end
-
-  # def unscoped
-  #   TenantManager::TenantHelper.unscoped_query do
-  #    execute
-  #   end
-  # end
 
   def unscoped_execute
     TenantManager::TenantHelper.unscoped_query do
