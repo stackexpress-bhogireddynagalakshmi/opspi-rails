@@ -1,3 +1,6 @@
+<%
+user = Spree::User.find_by_email(@email)%>
+
 <h1>
   <%= Spree.t('user_mailer.confirmation_instructions.welcome', email: @email) %>
 </h1>
@@ -5,8 +8,9 @@
   <%= Spree.t('user_mailer.confirmation_instructions.instructions_1', { store_name: @current_store.name }) %>
 </p>
 
+
 <p>
-  Your marketplace url is <%=@current_store.url%>
+  Your marketplace url is <a href="http://<%=user.marketplace_url%>"><%=user.marketplace_url%></a>
 </p>
 
 <p>
