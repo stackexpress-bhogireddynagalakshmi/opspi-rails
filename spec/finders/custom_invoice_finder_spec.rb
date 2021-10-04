@@ -31,7 +31,4 @@ describe CustomInvoiceFinder do
     it { expect(subject).to eq(invoice.invoice_number) }
   end
 
-
-
-
 end

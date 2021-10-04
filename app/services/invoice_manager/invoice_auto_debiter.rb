@@ -1,5 +1,5 @@
 module InvoiceManager
-  class InvoiceAutoDebiter
+  class InvoiceAutoDebiter < ApplicationService
     attr_reader :invoice,:payment_source
 
     def initialize(invoice,options={})
