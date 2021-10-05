@@ -33,4 +33,10 @@
       <%= link_to Spree.t(:forgot_password), spree.recover_password_path %>
     </div>
   <% end %>
+
+  <% if spree.respond_to?(:new_spree_user_confirmation_path) %>
+    <div class="text-center forgot-password mb-4">
+      <%= link_to 'Resend Confirmation email', '/confirmations/new' %>
+    </div>
+  <% end %>
 </div>
