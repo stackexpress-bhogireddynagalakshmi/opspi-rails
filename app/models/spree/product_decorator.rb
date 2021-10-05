@@ -73,7 +73,8 @@ module Spree
 
 		def update_stock_availibility
 			stock_item = self.stock_items.last
-      stock_item.stock_movements.create({quantity: 1000})
+
+      stock_item.stock_movements.create({quantity: 1000}) if stock_item.present?
 		end
     
 	end

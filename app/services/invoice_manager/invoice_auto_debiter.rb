@@ -6,7 +6,7 @@ module InvoiceManager
       @invoice = invoice
       Rails.logger.info { "Finding default payment source"}
 
-      @payment_source = invoice.user.payment_sources.detect{|x|x.default?}
+      @payment_source = invoice.user.payment_sources.detect{|x|x.default?} if invoice.present?
       Rails.logger.info { "Payment Source Found: #{@payment_source.present?}"}
     end
 
