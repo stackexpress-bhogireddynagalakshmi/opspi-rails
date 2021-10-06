@@ -1,5 +1,9 @@
 
 module Spree
+	Product.class_eval do
+		self.whitelisted_ransackable_attributes |= %w[store_id_in]
+	end
+
 	module ProductDecorator
 
 		def self.prepended(base)
