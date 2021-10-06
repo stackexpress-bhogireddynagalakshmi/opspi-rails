@@ -14,6 +14,10 @@ Rails.application.routes.draw do
   authenticate :spree_user, lambda { |u| u.superadmin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
+
+  devise_scope :spree_user do
+    get '/confirmations/new' => 'spree/user_confirmations#new', :as => :new_confirmation
+  end
   
   Spree::Core::Engine.routes.draw do
     namespace :admin do
