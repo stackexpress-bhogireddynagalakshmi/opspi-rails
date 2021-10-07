@@ -11,7 +11,7 @@ class Invoice < ApplicationRecord
   before_validation :ensure_name
   before_validation :set_invoice_number
 
-  validates_presence_of :name, :account, :started_on, :finished_on, :invoice_number
+  validates_presence_of :name, :started_on, :finished_on, :invoice_number
   validates :finalized_at, presence: true, if: ->(i) { i.final? }
 
 

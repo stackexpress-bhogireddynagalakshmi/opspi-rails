@@ -16,7 +16,8 @@ FactoryBot.define do
     validity { 30 }
     price { 100 }
     shipping_category_id { Spree::ShippingCategory.find_or_create_by({:name=>'Default'}).id }
-    account { create(:account) }
+    account {::Account.last}  
+
 
   
   end

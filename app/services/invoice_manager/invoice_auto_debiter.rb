@@ -11,6 +11,7 @@ module InvoiceManager
     end
 
     def call
+  
       return unless invoice.present?
       return unless invoice.active?
       return unless payment_source.present?
@@ -25,9 +26,7 @@ module InvoiceManager
 
       Rails.logger.info { "Attempting to authorize a payment"}
 
- 
-      if payment.authorize!
-        
+      if payment.authorize!     
         Rails.logger.info { "Attempting to auto capture the payment" }
 
         if payment.capture!
@@ -40,7 +39,6 @@ module InvoiceManager
             count += 1
           end
         end
-
       else
          Rails.logger.info { "Payment not authorized or failed for Invoice #{invoice.invoice_number}"}
       end
