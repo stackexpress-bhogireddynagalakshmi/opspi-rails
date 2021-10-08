@@ -67,6 +67,7 @@ module Spree
 	  end
 
 	  def update_tenant_if_needed
+      Rails.logger.info { "Updated Tenant if needed called " }
 
   		TenantManager::TenantServiceExecutor.new(
         TenantManager::TenantHelper.unscoped_query{self.user}
