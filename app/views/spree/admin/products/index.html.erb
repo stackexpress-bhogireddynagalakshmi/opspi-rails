@@ -25,10 +25,12 @@
           </div>
         </div>
         <div class="col-12 col-lg-6">
-          <div class="form-group">
-            <%= f.label :q_store_id_in, Spree.t(:store) %>
-            <%= f.select :store_id_in, Spree::Store.order(:name).pluck(:name, :id), { include_blank: true }, class: 'form-control select2-clear js-filterable' %>
-          </div>
+          <%if current_spree_user.superadmin?%>
+            <div class="form-group">
+              <%= f.label :account_id, Spree.t(:store) %>
+              <%= f.select :account_id, Spree::Store.order(:name).collect{|x| ["#{x.name} #{x.url}",x.account_id]}, { include_blank: true,selected: params[:q][:account_id] }, class: 'form-control select2-clear js-filterable' %>
+            </div>
+          <%end%>
         </div>
         <div class="col-12">
           <div class="field checkbox mb-2">

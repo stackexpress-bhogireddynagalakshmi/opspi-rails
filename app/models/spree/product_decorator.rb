@@ -1,8 +1,5 @@
 
 module Spree
-	Product.class_eval do
-		self.whitelisted_ransackable_attributes |= %w[store_id_in]
-	end
 
 	module ProductDecorator
 
@@ -31,6 +28,8 @@ module Spree
 			windows: 0,
 			linux: 1
 		}
+
+    base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on account_id]
 
 	  end
 

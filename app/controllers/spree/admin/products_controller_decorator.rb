@@ -6,7 +6,8 @@ module Spree
 		    	 	super
 		    		@collection = @collection.where(account_id: current_spree_user.account_id) rescue []
 		    	 else
-		    		super
+            super
+            @collection = @collection.where(account_id: params[:q][:account_id]) if params[:q][:account_id].present?		    		
 		    	end
 	    	end	
 	    end
@@ -14,3 +15,5 @@ module Spree
 end
 
 ::Spree::Admin::ProductsController.prepend Spree::Admin::ProductsControllerDecorator if ::Spree::Admin::ProductsController.included_modules.exclude?(Spree::Admin::ProductsControllerDecorator)
+
+
