@@ -13,9 +13,9 @@ module Spree
 	  end
 
      def self.current(domain = nil)
-      current_store = domain ? Store.by_url(domain).first : nil
+      current_store = domain ? Store.by_url(domain).first : nil 
      
-      return current_store if current_store.present?
+      return current_store if domain.present && current_store.present?
 
        if TenantManager::TenantHelper.current_admin_tenant? || TenantManager::TenantHelper.current_tenant.blank?
          TenantManager::TenantHelper.admin_tenant.spree_store
@@ -25,7 +25,7 @@ module Spree
     end
 
 	  protected
-    
+
   	def create_account_and_admin_user
   		ActiveRecord::Base.transaction do
   		
