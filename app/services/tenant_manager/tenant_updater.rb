@@ -10,7 +10,10 @@ module TenantManager
       end
 
       def call
+        Rails.logger.info { "TenantUpdater is called. " }
+        
         setup_panels_access
+
       end
 
       def setup_panels_access
@@ -18,11 +21,15 @@ module TenantManager
         return if product.blank?
         return unless TenantManager::TenantHelper.current_admin_tenant?
 
+         Rails.logger.info { "setup_panels_access method is called. SolidCP Access: #{panels_access('solid_cp')} " }
+
         #Solid CP Access to tenant  & Master Plan id set for a spree store
         account.update_column :solid_cp_access, true if panels_access('solid_cp')
         account.spree_store.update_column :solid_cp_access,true  if panels_access('solid_cp')
         account.spree_store.update(solid_cp_master_plan_id: order.subscribable_products.windows.first.solid_cp_master_plan_id) if  order.subscribable_products.windows.present?
 
+
+        Rails.logger.info { "setup_panels_access method is called. ISPConfig Access: #{panels_access('isp_config')} " }
 
         #ISP config Access to tenant & Master Plan id set for a spree store
         account.update_column :isp_config_access, true if panels_access('isp_config')

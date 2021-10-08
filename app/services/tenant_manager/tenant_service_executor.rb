@@ -8,8 +8,11 @@ module TenantManager
     end
 
     def call
+
+      Rails.logger.info { "TenantServiceExecutor is called. " }
+  
       return if resource.blank?
-      return unless TenantManager::TenantHelper.current_admin_tenant?
+      #return unless TenantManager::TenantHelper.current_admin_tenant?
 
       tenant_service = TenantService.find_by({user_id: resource.id})
       return if tenant_service.blank? || tenant_service.service_executed?
@@ -20,6 +23,8 @@ module TenantManager
 
       tenant_service.update(service_executed: true)
       @service_executed = tenant_service.service_executed
+
+      Rails.logger.info { "TenantServiceExecutor executed successfully. " }
 
       tenant_service
     end 
