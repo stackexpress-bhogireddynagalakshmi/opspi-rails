@@ -2,6 +2,7 @@
   <%= plural_resource_name(Spree::Product) %>
 <% end %>
 
+<%@collection = @collection.where(account_id: params[:q][:account_id]) if params[:q][:account_id].present?%>
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:new_product), new_object_url, { class: "btn-success", icon: 'add.svg', id: 'admin_new_product' } %>
 <% end if can?(:create, Spree::Product) %>
