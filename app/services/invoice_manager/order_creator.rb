@@ -1,5 +1,5 @@
 module InvoiceManager
-  class OrderCreator
+  class OrderCreator < ApplicationService
     attr_reader :invoice,:user
 
     def initialize(invoice)
@@ -8,29 +8,27 @@ module InvoiceManager
     end
     
     def call
-   
       begin
         if invoice.order.blank?    
           order = Spree::Order.create!(order_params)
-          
+
           add_item_service.call(
               order: order,
               variant: invoice.plan.master,
               quantity: 1,
               options: {}
             )
-          InvoiceManager::InvoiceUpdater.new(invoice,{params: {order_id: order.id}}).call
+
+          InvoiceManager::InvoiceUpdater.new(invoice, { params: { order_id: order.id }}).call
         end
 
         invoice.reload.order
       rescue Exception => e
         Rails.logger.error {e.message}
       end
-
     end
 
     private
-
     def current_currency
       if invoice.account.spree_store.present?
          invoice.account.spree_store.default_currency

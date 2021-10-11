@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :spree_store, class: 'Spree::Store' do
+  factory :product, class: 'Spree::Product' do
     default_country_id {Spree::Config[:default_country_id]}
     name {'OpsPI'}
     code {SecureRandom.hex}

@@ -1,0 +1,26 @@
+version: '3.2'
+
+services:
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+      args:
+        - BUNDLE_WITHOUT=production
+    links:
+      - db
+    depends_on:
+      - db
+    environment:
+      RAILS_ENV: "test"
+    env_file:
+      - .env.test
+

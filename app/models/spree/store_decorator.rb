@@ -12,7 +12,20 @@ module Spree
 	    exclusion: { in: %w(www mail ftp smtp imap download upload image service offline online admin root username webmail blog help support),message: "%{value} is not a valid username." }
 	  end
 
+     def self.current(domain = nil)
+      current_store = domain ? Store.by_url(domain).first : nil 
+     
+      return current_store if domain.present && current_store.present?
+
+       if TenantManager::TenantHelper.current_admin_tenant? || TenantManager::TenantHelper.current_tenant.blank?
+         TenantManager::TenantHelper.admin_tenant.spree_store
+       else
+        TenantManager::TenantHelper.current_tenant.spree_store
+       end
+    end
+
 	  protected
+
   	def create_account_and_admin_user
   		ActiveRecord::Base.transaction do
   		

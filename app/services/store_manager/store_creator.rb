@@ -33,8 +33,14 @@ module StoreManager
       subdomain = store_admin.subdomain.split(".")[0]
       url = "#{subdomain}.#{ENV['BASE_DOMAIN']}"
       
-      store_params = {name: store_admin.business_name,admin_email: store_admin.email,url: url,
-            mail_from_address: ENV['MAIL_FROM'],default_currency: 'USD'}
+      store_params = {
+        name: store_admin.business_name,
+        admin_email: store_admin.email,
+        url: url,
+        mail_from_address: ENV['MAIL_FROM'],
+        default_currency: 'USD',
+        default: false
+      }
     end
 
     def ensure_store_admin_role
