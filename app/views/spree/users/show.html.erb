@@ -309,8 +309,13 @@
         <div class="col-xs-12 col-lg-4">
 
           <span><%=@user.full_name%></span>
-          
+
           <dd class="account-page-user-info-item-definition"><%= @user.email%></dd>
+          <%if current_spree_user.superadmin? || current_spree_user.store_admin?%>
+              <a href="http://<%=Account.find_by!(:id => @user.account_id).try(:subdomain)%>:3000" target="_blank"><%=Account.find_by!(:id => @user.account_id).try(:subdomain)%></a>
+          <%else%>
+              <a href="http://<%=Account.find_by!(:id => @user.account_id).try(:subdomain)%>:3000" style="pointer-events: none;"><%=Account.find_by!(:id => @user.account_id).try(:subdomain)%></a>
+          <% end %>
           <dt class="text-uppercase account-page-user-info-item-title">
               <%= link_to spree.edit_user_path(@user), class: "account-page-user-info-item-title-edit" do %>
               <%= inline_svg_tag('edit.svg', width: 27.6, height: 24) %>
