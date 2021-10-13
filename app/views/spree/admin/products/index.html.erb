@@ -64,6 +64,7 @@
       <tr data-hook="admin_products_index_headers">
         <th scope="col" colspan="2"><%= sort_link @search,:name, Spree.t(:name), { default_order: "desc" }, {title: 'admin_products_listing_name_title'} %></th>
         <th scope="col"><%= Spree.t(:sku) %></th>
+        <th scope="col"><%= Spree.t(:plan_type) %></th>
         <th scope="col"><%= Spree.t(:store) %></th>
         <th scope="col"><%= Spree.t(:status) %></th>
         <th scope="col" class="text-center">
@@ -83,6 +84,7 @@
           </td>
           <td><%= link_to product.try(:name), edit_admin_product_path(product) %></td>
           <td class="sku"><%= product.sku rescue '' %></td>
+          <td class="plan_type"><%= product.server_type rescue '' %></td>
 <!--            <td><%# Spree::Store.find_by(account_id: product.account_id).try(:store_id) %></td>-->
           <td class="store">
             <span data-ransack-field="q_store_id_in" data-ransack-value="<%= Spree::Store.find_by(account_id: product.account_id).try(:store_id) %>">
