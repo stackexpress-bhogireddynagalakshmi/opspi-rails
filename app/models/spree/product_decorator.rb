@@ -1,5 +1,6 @@
 
 module Spree
+
 	module ProductDecorator
 
 		def self.prepended(base)
@@ -27,6 +28,8 @@ module Spree
 			windows: 0,
 			linux: 1
 		}
+
+    base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on account_id]
 
 	  end
 
