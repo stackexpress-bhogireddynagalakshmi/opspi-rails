@@ -185,7 +185,8 @@
             <tr>
               <th class="text-uppercase text-secondary"><%=Spree.t(:subscription)%></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:status) %></th>
-              <th class="text-uppercase text-secondary" title="Subscription Date"><%= Spree.t(:sub_date) %></th>
+              <th class="text-uppercase text-secondary" title="Subscription Date"><%= Spree.t(:start_date) %></th>
+              <th class="text-uppercase text-secondary" title="Subscription Date"><%= Spree.t(:end_date) %></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:Interval) %></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:amount) %></th>
               <th class="text-uppercase text-secondary"><%= Spree.t(:canceled_at) %></th>
@@ -200,7 +201,8 @@
                     <span class="font-12 grey"><%=subscription.plan.server_type.titleize%></span>
                   </td>
                   <td class="account-page-order-date"><%=subscription.status? ? 'Active': 'In-Active'%></td>
-                  <td class="account-page-order-status"><%=format_date(subscription.start_date)%></td>
+                  <td class="account-page-order-status"><%=subscription.start_date%></td>
+                   <td class="account-page-order-status"><%=subscription.end_date%></td>
                   <td class="account-page-order-payment-state"><%=subscription.billing_interval%></td>
                   <td class="account-page-order-payment-state"><%=number_to_currency(subscription.price)%></td>
                    <td class="account-page-order-payment-state"><%=subscription.canceled_at%></td>
@@ -286,8 +288,8 @@
                   <td><%=invoice.name%></td>
                   <td><%=TenantManager::TenantHelper.unscoped_query{invoice.order.present? ? 'Yes' : 'No'}%></td>
                   <td><%=invoice.status.upcase%></td>
-                  <td><%=format_date(invoice.started_on)%></td>
-                  <td><%=format_date(invoice.finished_on)%></td>
+                  <td><%=invoice.started_on%></td>
+                  <td><%=invoice.finished_on%></td>
                   <td><%=number_to_currency(invoice.balance)%></td>
                   <td> 
                     <%if invoice.closed?  || invoice.processing?%>

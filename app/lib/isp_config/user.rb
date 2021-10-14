@@ -86,6 +86,40 @@ module IspConfig
 			end
 		end 
 
+    def disable_client_login
+        if user.isp_config_id.present?
+          response = query({
+          :endpoint => '/json.php?client_update',
+          :method => :POST,
+          :body => { client_id: user.isp_config_id,params: { canceled: 'y' }} })
+
+          if response.code == "ok"
+              {:success=>true, :message=>'IspConfig account canceled successfully',response: response}
+          else
+            {:success=>false,:message=> I18n.t('isp_config.something_went_wrong',message: response.message),response: response}
+          end
+        else
+          {:success=>false,:message=>'IspConfig user account does not exists.'}
+        end
+    end
+
+     def enable_client_login
+        if user.isp_config_id.present?
+          response = query({
+          :endpoint => '/json.php?client_update',
+          :method => :POST,
+          :body => { client_id: user.isp_config_id,params: { canceled: 'n' }} })
+
+          if response.code == "ok"
+              {:success=>true, :message=>'IspConfig account enabled successfully',response: response}
+          else
+            {:success=>false,:message=> I18n.t('isp_config.something_went_wrong',message: response.message),response: response}
+          end
+        else
+          {:success=>false,:message=>'IspConfig user account does not exists.'}
+        end
+    end
+
    	#Package API interface for the  user/Reseller
    	def template
    		@template ||= IspConfig::Template.new(user)

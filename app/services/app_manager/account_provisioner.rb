@@ -1,19 +1,19 @@
 module AppManager
-	class AccountProvisioner
+  class AccountProvisioner
     
-		attr_reader :user,:product,:order
+    attr_reader :user,:product,:order
 
-		  def initialize(user,options = {})
-  			@user = user
-  			@product = options[:product]
+      def initialize(user,options = {})
+        @user = user
+        @product = options[:product]
         @order = options[:order]
-  		end
+      end
 
-  		def call
+      def call
         Rails.logger.info { "AccountProvisioner is called " }
         provison_solid_cp_account
         provision_isp_config_account
-  		end
+      end
 
       def provison_solid_cp_account
          Rails.logger.info { "provison_solid_cp_account is called " }
@@ -50,5 +50,5 @@ module AppManager
           @panels.include?(panel)
       end
 
-	end
+  end
 end

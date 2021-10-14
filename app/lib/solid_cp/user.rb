@@ -30,8 +30,16 @@ module SolidCp
 	   		super(message: { username: user.login })
 	    end
 
-	    def change_user_status
-	      super(message: { user_id: user.solid_cp_id,status: 'Active'})
+      #http://solidcpent.myhsphere.biz:9002/esUsers.asmx?op=ChangeUserStatus
+      #Active or Suspended or Cancelled or Pending
+
+	    def change_user_status(status)
+	      response = super(message: { user_id: user.solid_cp_id,status: status})
+        if response.success?
+          {:success=>true, :message=>'SolidCP User status changed successfully',response: response}
+        else
+          {:success=>false,:message=> 'Something went wrong.',response: response}
+        end
 	    end
 
 	    def delete_user
