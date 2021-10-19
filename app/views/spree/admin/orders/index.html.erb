@@ -170,6 +170,7 @@
             <th><%= sort_link @search, :created_at,     I18n.t(:created_at, scope: 'activerecord.attributes.spree/order') %></th>
           <% end %>
           <th>Store</th>
+          <th>Role</th>
           <th><%= sort_link @search, :considered_risky, I18n.t(:considered_risky, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= sort_link @search, :state,            I18n.t(:state, scope: 'activerecord.attributes.spree/order') %></th>
           <th><%= sort_link @search, :payment_state,    I18n.t(:payment_state, scope: 'activerecord.attributes.spree/order') %></th>
@@ -190,6 +191,9 @@
           </td>  
           <td>
             <%=Spree::Store.find_by_id(order.store_id).try(:name)%>
+          </td>
+          <td>
+            <%=order.user.user_role%>
           </td>
           <td>
             <span class="badge badge-<%= order.considered_risky ? 'considered_risky' : 'considered_safe' %> text-uppercase">
