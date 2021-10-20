@@ -16,19 +16,25 @@ describe CustomInvoiceFinder do
 
 
   context 'no arguments' do
-
-    it {
-      expect(subject).to eq(nil) 
-    }
+    it {  expect(subject).to eq(nil)   }
   end
 
-
   context 'by invoice number' do
-    let(:subscription) {create(:subscription,user: store_admin)}
-
-    let(:invoice) {  create(:invoice,account_id: reseller_store.account.id,user: store_admin,subscription: subscription)}
+    before do 
+      reseller_store
+    end
     
-    it { expect(subject).to eq(invoice.invoice_number) }
+   let(:product1) { create(:product,account: admin_store.account)}
+   let(:subscription) { create(:subscription,user: store_admin,plan: product1)}
+  
+    let(:invoice) {  create(:invoice,account: reseller_store.account,user: store_admin,subscription: subscription)}
+    let(:invoice_number) { invoice.invoice_number }
+
+    # it do
+    #   byebug
+    #  expect(subject.invoice_number).to eq(invoice.invoice_number)
+    # end
+
   end
 
 end

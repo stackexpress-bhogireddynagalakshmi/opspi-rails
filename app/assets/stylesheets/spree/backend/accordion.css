@@ -1,0 +1,8 @@
+[data-toggle="collapse"] .fa:before {  
+  font-family: FontAwesome;
+  content: "\f056";
+}
+
+[data-toggle="collapse"].collapsed .fa:before {
+  content: "\f055";
+} 

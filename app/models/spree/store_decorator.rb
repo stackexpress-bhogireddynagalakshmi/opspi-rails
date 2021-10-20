@@ -27,6 +27,7 @@ module Spree
 	  protected
 
   	def create_account_and_admin_user
+
   		ActiveRecord::Base.transaction do
   		
 
@@ -39,7 +40,7 @@ module Spree
 	      if TenantManager::TenantHelper.current_tenant.blank?
 	        store_admin.update_column :account_id, account.id
 	      end
-	      
+	     
 	    end
 
   	end
