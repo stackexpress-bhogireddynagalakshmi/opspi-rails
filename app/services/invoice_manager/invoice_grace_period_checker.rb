@@ -1,5 +1,5 @@
 module InvoiceManager
-  class AccountGracePeriodChecker < ApplicationService
+  class InvoiceGracePeriodChecker < ApplicationService
     attr_reader :invoice
 
     def initialize(invoice,options={})
@@ -23,7 +23,8 @@ module InvoiceManager
     private
 
     def send_invoice_reminder_notification
-      if invoice.last_reminder_sent_at.blank? || invoice.last_reminder_sent_at >= 3.days.ago
+
+      if invoice.last_reminder_sent_at.blank? || invoice.last_reminder_sent_at.to_date + 3.day <= Date.today
         args = {
             invoice: invoice,
             notification: 'unpaid_invoice_reminder',

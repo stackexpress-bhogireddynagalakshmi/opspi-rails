@@ -1,5 +1,5 @@
 module AppManager
-  class PanelAccessDisabler  < ApplicationService
+  class PanelAccessEnabler  < ApplicationService
     attr_reader :invoice, :user
 
     def initialize(invoice,options = {})
@@ -8,28 +8,28 @@ module AppManager
     end
 
     def call
-      Rails.logger.info { "PanelAccessDisabler is called " }
+      Rails.logger.info { "PanelAccessEnabler is called " }
 
       return unless invoice.present?
       return unless invoice.subscription.present?
 
 
       if invoice.subscription.plan.windows?
-        response  = user.solidcp.change_user_status('Suspended')
+        response  = user.solidcp.change_user_status('Active')
         if response && response[:success] == true
-          Rails.logger.info { "SolidCP account suspended for #{invoice.user.email}" }
+          Rails.logger.info { "SolidCP account activated for #{invoice.user.email}" }
           send_panel_access_disabled_notification('SolidCP')
         else
-          Rails.logger.info { "Unable to suspend SolidCP account" }
+          Rails.logger.info { "Unable to activated SolidCP account" }
         end
 
       elsif invoice.subscription.plan.linux?
-        response = user.isp_config.disable_client_login
+        response = user.isp_config.enable_client_login
         if response && response[:success] == true
           Rails.logger.info { "ISPConfig account suspended for #{invoice.user.email}" }
           send_panel_access_disabled_notification('ISPConfig')
         else
-          Rails.logger.info { "Unable to suspend ISPConfig account for #{invoice.user.email}" }
+          Rails.logger.info { "Unable to activated ISPConfig account for #{invoice.user.email}" }
         end
 
       else
@@ -42,7 +42,7 @@ module AppManager
      def send_panel_access_disabled_notification(panel)
       args = {
           invoice: invoice,
-          notification: 'pannel_access_disabled',
+          notification: 'pannel_access_enabled',
           user: invoice.user,
           panel: panel
         }

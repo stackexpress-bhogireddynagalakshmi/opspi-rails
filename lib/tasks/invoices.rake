@@ -36,7 +36,7 @@ namespace :invoices do
         next unless user.subscriptions.any?
         user.subscriptions.each do |subscription|
           invoice = subscription.current_unpaid_invoice
-          InvoiceManager::AccountGracePeriodChecker.new(invoice) if invoice.present?
+          InvoiceManager::InvoiceGracePeriodChecker.new(invoice).call if invoice.present?
         end
       end
     end

@@ -20,7 +20,7 @@ module AppManager
         user:    invoice.user
         )
       .unpaid_invoice_reminder
-      .perform_later
+      .deliver
 
       invoice.update(last_reminder_sent_at: Time.zone.now)
       
@@ -28,13 +28,28 @@ module AppManager
 
     def user_pannel_access_disabled
       invoice = @args.fetch(:invoice)
+      panel   = @args.fetch(:panel)
 
       NotificationMailer.with(
         invoice: invoice,
-        user:    invoice.user
+        user:    invoice.user,
+        panel:   panel
         )
       .pannel_access_disabled
-      .perform_later
+      .deliver
+    end
+
+     def user_pannel_access_enabled
+      invoice = @args.fetch(:invoice)
+      panel   = @args.fetch(:panel)
+
+      NotificationMailer.with(
+        invoice: invoice,
+        user:    invoice.user,
+        panel:   panel
+        )
+      .pannel_access_enabled
+      .deliver
 
     end
 
