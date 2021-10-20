@@ -26,6 +26,18 @@ module Spree
       self.has_spree_role?('store_admin')
     end
     
+    def end_user?
+      self.has_spree_role?('user')
+    end
+
+    def user_role
+      if store_admin?
+        'Reseller'
+      elsif end_user?
+        'User'
+      end
+    end
+
     def solid_cp
       @solid_cp ||= SolidCp::User.new(self)
     end

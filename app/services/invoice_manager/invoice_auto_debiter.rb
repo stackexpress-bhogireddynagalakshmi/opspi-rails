@@ -6,11 +6,12 @@ module InvoiceManager
       @invoice = invoice
       Rails.logger.info { "Finding default payment source"}
 
-      @payment_source = invoice.user.payment_sources.detect{|x|x.default?}
+      @payment_source = invoice.user.payment_sources.detect{|x|x.default?} if invoice.present?
       Rails.logger.info { "Payment Source Found: #{@payment_source.present?}"}
     end
 
     def call
+  
       return unless invoice.present?
       return unless invoice.active?
       return unless payment_source.present?
@@ -25,9 +26,7 @@ module InvoiceManager
 
       Rails.logger.info { "Attempting to authorize a payment"}
 
- 
-      if payment.authorize!
-        
+      if payment.authorize!     
         Rails.logger.info { "Attempting to auto capture the payment" }
 
         if payment.capture!
@@ -40,7 +39,6 @@ module InvoiceManager
             count += 1
           end
         end
-        
       else
         Rails.logger.info { "Payment not authorized or failed for Invoice #{invoice.invoice_number}"}
       end

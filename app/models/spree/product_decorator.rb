@@ -1,5 +1,6 @@
 
 module Spree
+
 	module ProductDecorator
 
 		def self.prepended(base)
@@ -27,6 +28,8 @@ module Spree
 			windows: 0,
 			linux: 1
 		}
+
+    base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on account_id]
 
 	  end
 
@@ -73,7 +76,8 @@ module Spree
 
 		def update_stock_availibility
 			stock_item = self.stock_items.last
-      stock_item.stock_movements.create({quantity: 1000})
+
+      stock_item.stock_movements.create({quantity: 1000}) if stock_item.present?
 		end
     
 	end
