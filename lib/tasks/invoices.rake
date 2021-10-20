@@ -7,7 +7,6 @@ namespace :invoices do
         next unless user.subscriptions.any?
         user.subscriptions.each do |subscription|
           InvoiceManager::InvoiceCreator.new(subscription).call
-          print "."
         end
       end
     end
@@ -23,6 +22,21 @@ namespace :invoices do
         user.subscriptions.each do |subscription|
           invoice = subscription.current_unpaid_invoice
             InvoiceManager::InvoiceAutoDebiter.new(invoice).call  if invoice.present?
+        end
+      end
+    end
+  end
+
+
+  desc "Disbale Pannel access on non payement of invoice after grace Period"
+  task  disbale_account: :environment do
+    Account.all.each do |account|
+      next if account.admin_tenant?
+      account.users.each do |user|
+        next unless user.subscriptions.any?
+        user.subscriptions.each do |subscription|
+          invoice = subscription.current_unpaid_invoice
+          InvoiceManager::InvoiceGracePeriodChecker.new(invoice).call if invoice.present?
         end
       end
     end

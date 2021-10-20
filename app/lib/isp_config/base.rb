@@ -60,12 +60,12 @@ module IspConfig
     end
 
     def fresh_token?
-       current_session_token && current_session_started && current_session_started >= 90.minutes.ago
+      current_session_token && current_session_started && current_session_started >= 10.minutes.ago
     end
-
 
     def login_app
       puts "Login to ISP Config"
+      puts "Current Session Token: #{current_session_token}"
       login_hash = {
         :endpoint => '/json.php?login',
         :method => :POST,
@@ -79,9 +79,7 @@ module IspConfig
       self.current_session_started = Time.zone.now       
       self.current_session_token = response.parsed_response["response"]
     end
-    
 
   end
 
 end
-

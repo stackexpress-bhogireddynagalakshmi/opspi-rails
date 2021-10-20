@@ -1,0 +1,22 @@
+Hello <%=@user.full_name%>  <br/><br/>
+
+There is a billing problem with your account that requires your attention. We have still not received the following payment. <br/><br/>
+
+
+Account ending in ****<%=@payment_source.try(:last_digits)%> <br/>
+Statement Period: <%=@invoice.name%><br/>
+Invoice Number: <%=@invoice.invoice_number%><br/>
+Amount: <%=number_to_currency(@invoice.balance)%><br/>
+<br/>
+We hate to do this but if we do not hear from you this account may be suspended. This means you will no longer be able to access to your Hosting Panel, manage existing resources or buy any new resources. You will still be able to log-in to the Billing and Cost Management page to pay your bill.
+<br/><br/>
+
+
+We appreciate your help resolving this issue. <br/><br/>
+
+<a href="<%= @current_store.url%>"><%= @current_store.url%></a> <br/>
+
+Sincerely, <%=@user.account.orgainization_name%><br/>
+<br/>
+
+
