@@ -21,8 +21,8 @@ image: ubuntu:latest
 stages:
   - build
   - test
+  - deploy_dev
   - deploy_staging
-  - deploy_production
 
 
 sonarqube-check:
@@ -45,7 +45,7 @@ sonarqube-check:
     - dev
 
 
-docker-build-production:
+docker-build-staging:
   # Official docker image.
   image: docker:stable
   stage: build
@@ -68,7 +68,7 @@ docker-build-production:
   only:
     - master
 
-docker-build-staging:
+docker-build-dev:
   # Official docker image.
   image: docker:stable
   stage: build
@@ -94,8 +94,8 @@ docker-build-staging:
   except:
     - master
 
-deploy-staging:
-  stage: deploy_staging
+deploy-dev:
+  stage: deploy_dev
   variables:
     APP_NAME: ops_pi
   before_script:
@@ -122,8 +122,8 @@ deploy-staging:
     - dev
 
 
-deploy-production:
-  stage: deploy_production
+deploy-staging:
+  stage: deploy_staging
   variables:
     APP_NAME: ops_pi
 
@@ -150,3 +150,4 @@ deploy-production:
   only:
     - master
   when: manual
+
