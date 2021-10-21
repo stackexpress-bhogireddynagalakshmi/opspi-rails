@@ -51,7 +51,7 @@ namespace :invoices do
         next unless user.subscriptions.any?
         user.subscriptions.each do |subscription|
          
-          if subscription.control_panel_disabled? #&& subscription.invoices.active.count == 0
+          if subscription.control_panel_disabled? && subscription.invoices.active.count == 0
             AppManager::PanelAccessEnabler.new(subscription.invoices.last).call
           end
 
