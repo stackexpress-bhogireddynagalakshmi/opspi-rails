@@ -18,6 +18,8 @@ module AppManager
         response  = user.solidcp.change_user_status('Suspended')
         if response && response[:success] == true
           Rails.logger.info { "SolidCP account suspended for #{invoice.user.email}" }
+
+          invoice.subscription.update_column(:panel_disabled_at,Time.zone.now)
           send_panel_access_disabled_notification('SolidCP')
         else
           Rails.logger.info { "Unable to suspend SolidCP account" }
@@ -27,6 +29,8 @@ module AppManager
         response = user.isp_config.disable_client_login
         if response && response[:success] == true
           Rails.logger.info { "ISPConfig account suspended for #{invoice.user.email}" }
+
+          invoice.subscription.update_column(:panel_disabled_at,Time.zone.now)
           send_panel_access_disabled_notification('ISPConfig')
         else
           Rails.logger.info { "Unable to suspend ISPConfig account for #{invoice.user.email}" }

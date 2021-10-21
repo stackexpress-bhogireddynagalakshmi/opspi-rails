@@ -59,6 +59,11 @@ class Subscription < ApplicationRecord
     day
   end
 
+
+  def control_panel_disabled?
+    panel_disabled_at.present?
+  end
+
   def current_unpaid_invoice
     invoice = InvoiceFinder.new(scope: self,billing_period: BillingPeriod.new(self)).execute
 
