@@ -15,22 +15,16 @@ class Invoice < ApplicationRecord
   validates :finalized_at, presence: true, if: ->(i) { i.final? }
 
 
-
-
   aasm :status, column: 'status'  do
     state :active, initial: true
     state :processing
     state :final
     state :closed
+    state :archived
 
     event :process, before: :ensure_processable_or_fail do
       transitions from: :active, to: :processing
     end
-
-    # event :finalize, before: :ensure_finalizable_or_fail, after: :set_finalized_at do
-    #   transitions from: :active, to: :final 
-    #   transitions from: :processing, to: :final
-    # end
 
     event :close, after: :set_closed_at do
       transitions from: [:active,:processing,:closed], to: :closed
@@ -38,6 +32,10 @@ class Invoice < ApplicationRecord
 
     event :reopen do
       transitions from: :closed, to: :final
+    end
+
+    event :archive do
+      transitions from: [:active,:processing,:closed], to: :archived
     end
     
   end
@@ -52,7 +50,6 @@ class Invoice < ApplicationRecord
   end
 
   
-
   def ensure_processable_or_fail
     # if can_process? && can_run_invoice_finalizer?
     #   self.processing_started_on = Time.current

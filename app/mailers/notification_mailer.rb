@@ -15,7 +15,7 @@ class NotificationMailer < Spree::BaseMailer
     @current_store  = @user.account.spree_store
     @panel          = params[:panel] 
 
-    mail to: @user.email, from: @current_store.mail_from_address, subject: "#{panel} Account Disabled", store_url: @current_store.url
+    mail to: @user.email, from: @current_store.mail_from_address, subject: "#{@panel} Account Disabled", store_url: @current_store.url
   end
 
 
@@ -25,7 +25,7 @@ class NotificationMailer < Spree::BaseMailer
     @current_store  = @user.account.spree_store
     @panel          = params[:panel] 
 
-    mail to: @user.email, from: @current_store.mail_from_address, subject: "#{panel} Account Enabled", store_url: @current_store.url
+    mail to: @user.email, from: @current_store.mail_from_address, subject: "#{@panel} Account Enabled", store_url: @current_store.url
   end
 
 end

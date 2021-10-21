@@ -13,21 +13,25 @@ module AppManager
       return unless invoice.present?
       return unless invoice.subscription.present?
 
-
       if invoice.subscription.plan.windows?
         response  = user.solidcp.change_user_status('Active')
         if response && response[:success] == true
           Rails.logger.info { "SolidCP account activated for #{invoice.user.email}" }
-          send_panel_access_disabled_notification('SolidCP')
+
+          invoice.subscription.update_column(:panel_disabled_at,nil)
+          send_panel_access_enabled_notification('SolidCP')
         else
           Rails.logger.info { "Unable to activated SolidCP account" }
         end
 
       elsif invoice.subscription.plan.linux?
         response = user.isp_config.enable_client_login
+
         if response && response[:success] == true
           Rails.logger.info { "ISPConfig account suspended for #{invoice.user.email}" }
-          send_panel_access_disabled_notification('ISPConfig')
+
+          invoice.subscription.update_column(:panel_disabled_at,nil)
+          send_panel_access_enabled_notification('ISPConfig')
         else
           Rails.logger.info { "Unable to activated ISPConfig account for #{invoice.user.email}" }
         end
@@ -39,7 +43,7 @@ module AppManager
 
     private
 
-     def send_panel_access_disabled_notification(panel)
+     def send_panel_access_enabled_notification(panel)
       args = {
           invoice: invoice,
           notification: 'pannel_access_enabled',
