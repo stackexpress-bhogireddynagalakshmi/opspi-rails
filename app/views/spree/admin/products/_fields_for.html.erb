@@ -14,7 +14,7 @@
 	    <%=qg_form.check_box :calculate_bandwidth %> Count Bandwidth 
 	   </span>
 	</div>
-	<div id="group_<%=qg_form.object.solid_cp_quota_group_id%>" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+	<div id="group_<%=qg_form.object.solid_cp_quota_group_id%>" class="collapse" aria-labelledby="headingOne">
 	<div class="card-body">         
 	  <table class="table">
 	    <%= qg_form.fields_for :plan_quotas,build_quota(@product,qg_form.object,quotas) do | plan_quota_form|%>
@@ -25,8 +25,8 @@
 	        <%=plan_quota_form.hidden_field :solid_cp_quota_id %>                
 	        <%=plan_quota_form.hidden_field :id %>
 	        <tr class="quota-row">
-	          <td><%=plan_quota_form.object.formatted_quota_name%></td>
-	          <td><%=plan_quota_form.text_field :quota_value,class: "quota-value #{quota.quota_value.present? && quota.quota_value < 0 ? 'd-none' : ''}"%>  <%=plan_quota_form.check_box :unlimited,:checked=>quota.quota_value < 0,class: 'quota-checkbox'%>  Unlimited</td>
+	          <td class="disable-quotas"><%=plan_quota_form.object.formatted_quota_name%></td>
+	          <td class="disable-quotas"><%=plan_quota_form.text_field :quota_value,class: "quota-value #{quota.quota_value.present? && quota.quota_value < 0 ? 'd-none' : ''}"%>  <%=plan_quota_form.check_box :unlimited,:checked=>quota.quota_value < 0,class: 'quota-checkbox'%>  Unlimited</td>
 	        </tr>     
 	    <%end%>
 	  </table>

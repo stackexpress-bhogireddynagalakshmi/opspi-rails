@@ -57,7 +57,7 @@
         <%=f.hidden_field :solid_cp_master_plan_id,value: current_store.solid_cp_master_plan_id %>
       <%end%>
 
-      <div id="product_quota_groups" class="<%= current_spree_user.superadmin? ? 'disable-quotas' : ''%>">
+      <div id="product_quota_groups">
         <%@form = f%>
         <%=render :partial=>'solid_cp_quota_form',:locals=>{f: f,solid_cp_plan_id: ""} if current_spree_user.store_admin?%>
       </div>
