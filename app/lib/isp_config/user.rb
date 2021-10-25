@@ -140,7 +140,7 @@ module IspConfig
           "params": {
           company_name: user.company_name,
           contact_name: user.full_name.present? ? user.full_name : 'Empty' ,
-          customer_no:  user.id,
+          customer_no:  Random.new.rand(1_000_000..10_000_000-1),
           "vat_id": "",
           street: address&.address1,
           zip: address&.zipcode,

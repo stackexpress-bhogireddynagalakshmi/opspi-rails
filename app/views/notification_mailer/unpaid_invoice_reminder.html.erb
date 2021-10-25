@@ -1,6 +1,10 @@
 Hello <%=@user.full_name%>  <br/><br/>
 
-There is a billing problem with your account that requires your attention. We have still not received the following payment. <br/><br/>
+<%if @invoice.last_reminder_sent_at.to_date == @invoice.due_date.to_date%>
+  This is the final notice regarding the overdue payment of the following invoice- <br/><br/>
+<%else%>
+  There is a billing problem with your account that requires your attention. The invoice is overdue against-<br/><br/>
+<%end%>
 
 
 Account ending in ****<%=@payment_source.try(:last_digits)%> <br/>
@@ -12,11 +16,13 @@ We hate to do this but if we do not hear from you this account may be suspended.
 <br/><br/>
 
 
-We appreciate your help resolving this issue. <br/><br/>
+We appreciate your help resolving this issue. <br/>
+If you have any queries, please feel free to contact-<br/><br/>
 
 <a href="<%= @current_store.url%>"><%= @current_store.url%></a> <br/>
 
-Sincerely, <%=@user.account.orgainization_name%><br/>
+thanks,<br/>
+<%=@user.account.orgainization_name%><br/>
 <br/>
 
 
