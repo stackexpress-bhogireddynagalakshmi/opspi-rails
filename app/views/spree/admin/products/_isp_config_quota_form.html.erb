@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> 
 <h6><strong>Quotas</strong></h6>
 <div id="accordion" class="mb-5">
    <%f.object.isp_config_limit || f.object.build_isp_config_limit%>
@@ -10,12 +9,12 @@
       <div class="card">
         <div class="card-header" id="headingOne">
           <h5 class="mb-0 d-inline">
-            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#group_<%=quota_group[0].to_s%>" aria-expanded="true" aria-controls="group_<%=quota_group[0].to_s%>">
+            <a class="btn btn-link collapsed" data-toggle="collapse" data-target="#group_<%=quota_group[0].to_s%>" aria-expanded="true" aria-controls="group_<%=quota_group[0].to_s%>">
               <i class="fa" aria-hidden="true">&nbsp;</i><%=quota_group[0].to_s.humanize%>
-            </button>
+            </a>
           </h5>
         </div>
-        <div id="group_<%=quota_group[0].to_s%>" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+        <div id="group_<%=quota_group[0].to_s%>" class="collapse" aria-labelledby="headingOne">
         <div class="card-body">         
           <table class="table">
             <tbody>
