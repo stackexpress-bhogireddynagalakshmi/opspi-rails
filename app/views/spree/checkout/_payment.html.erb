@@ -7,14 +7,9 @@
         <%= render partial: 'spree/checkout/payment/storecredit' %>
 
         <ul id="payment-method-fields" class="list-unstyled position-relative" data-hook>
+          
 
-            <%if spree_current_user.store_admin?%>
-              <%store_context = TenantManager::TenantHelper.admin_tenant.spree_store%>
-            <%else%>
-              <%store_context = current_store%>
-            <%end%>
-
-            <%available_methods = @order.send('collect_payment_methods',store_context)%>
+          <%available_methods = current_available_payment_methods(spree_current_user)%>
         
 
           <!-- checkout_available_payment_methods -->
