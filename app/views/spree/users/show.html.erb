@@ -274,7 +274,7 @@
             </tr>
             </thead>
             <tbody>
-              <%@user.invoices.order(created_at: :desc).each do |invoice|%>
+              <%@invoices.order(created_at: :desc).each do |invoice|%>
                 <%order = TenantManager::TenantHelper.unscoped_query{invoice.order}%>
                 <tr>
                   <td>

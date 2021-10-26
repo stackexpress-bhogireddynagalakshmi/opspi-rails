@@ -5,6 +5,13 @@ module Spree
 	    	base.acts_as_tenant :account
         #base.belongs_to :account
 
+        # base.belongs_to :bill_address, foreign_key: :bill_address_id, class_name: 'Spree::Address',
+        #                       optional: true,dependent: :delete
+
+        # base.belongs_to :ship_address, foreign_key: :ship_address_id, class_name: 'Spree::Address',
+        #                       optional: true, dependent: :delete
+
+
         base.after_create_commit :update_tenant_id
 	    	base.checkout_flow do
 			    go_to_state :address

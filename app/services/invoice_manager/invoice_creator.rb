@@ -28,8 +28,9 @@ module InvoiceManager
 
       if invoice.blank?
         invoice = Invoice.create!(invoice_params)
+        Rails.logger.info {"New Invoice created: #{invoice.name} for #{user.email}"}
       else
-        puts "Invoice already exists. #{invoice.name} for #{user.email}"
+        puts "Invoice Exists: #{invoice.name} for #{user.email}"
         #raise "Invoice already exists."
       end
       invoice
