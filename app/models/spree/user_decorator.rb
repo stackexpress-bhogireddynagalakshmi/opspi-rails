@@ -78,7 +78,7 @@ module Spree
     end
 
     def send_devise_notification(notification, *args)
-        UserMailer.send(notification, self, *args).deliver_now
+      UserMailer.send(notification, self, *args).deliver_later
     end
 
     def ensure_valid_store_params

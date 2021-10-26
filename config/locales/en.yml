@@ -58,7 +58,10 @@ en:
 
     user_mailer:
       reset_button_does_not_work: "If the above button does not work then please click on the below link to reset your password"
-      confirm_button_does_not_work: "If the above button does not work then please click on the below link to confirm your account"
+      confirm_button_does_not_work: "In case of any issues with the confirmation link above, please click on the link below:"
+      confirmation_instructions: 
+        instructions_1: "Thanks for signing up!"
+        instructions_3: "If you have any queries, feel free to reply to this email."
 
       
   isp_config:
