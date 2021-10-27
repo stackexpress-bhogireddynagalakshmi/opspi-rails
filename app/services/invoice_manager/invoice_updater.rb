@@ -8,7 +8,7 @@ module InvoiceManager
     end
 
     def call
-      puts "Updating Invoice"
+      Rails.logger.info { "Updating Invoice" }
       @invoice.update!(@params)
     end
     

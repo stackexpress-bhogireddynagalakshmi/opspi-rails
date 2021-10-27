@@ -8,9 +8,7 @@
 
         <ul id="payment-method-fields" class="list-unstyled position-relative" data-hook>
           
-
           <%available_methods = current_available_payment_methods(spree_current_user)%>
-        
 
           <!-- checkout_available_payment_methods -->
           <% available_methods.each do |method| %>
@@ -27,7 +25,6 @@
               <%end%>
             </li>
           <% end %>
-
         
         </ul>
 
@@ -55,7 +52,6 @@
 <%#=content_for :javascript do%>
 
 <script type="text/javascript">
-
   setInterval(function(){ 
 
      $(document).ready(function (argument) {
