@@ -312,7 +312,7 @@
           <span><%=@user.full_name%></span>
 
           <dd class="account-page-user-info-item-definition"><%= @user.email%></dd>
-          <a href=<%current_spree_user.account.spree_store.url%> target: :blank><%=current_spree_user.account.spree_store.url%></a>
+          <a href=<%= "//"+current_spree_user.account.spree_store.url%> target="_blank"><%=current_spree_user.account.spree_store.url%></a>
           <dt class="text-uppercase account-page-user-info-item-title">
               <%= link_to spree.edit_user_path(@user), class: "account-page-user-info-item-title-edit" do %>
               <%= inline_svg_tag('edit.svg', width: 27.6, height: 24) %>
