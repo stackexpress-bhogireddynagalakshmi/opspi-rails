@@ -8,7 +8,7 @@ module Spree
     def show
       super
       @orders = TenantManager::TenantHelper.unscoped_query{@user.orders.order('created_at desc')}
-      
+      @invoices = TenantManager::TenantHelper.unscoped_query{@user.invoices.order(created_at: :desc)}
     end
 
 	end
