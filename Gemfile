@@ -88,3 +88,4 @@ gem "aws-sdk-s3", require: false
 gem 'aasm'
 gem 'after_commit_everywhere', '~> 1.0'
 gem 'whenever', require: false
+gem 'exception_notification'

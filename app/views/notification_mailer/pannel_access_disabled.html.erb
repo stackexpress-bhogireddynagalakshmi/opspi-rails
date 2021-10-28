@@ -1,0 +1,25 @@
+Hello <%=@user.full_name%> 
+
+<br/>
+<br/>
+
+<b>Your account has been temporarily suspended!</b> <br/>
+
+This could be due to non-payment of invoices. You will no longer be able to access to your Hosting Panel, manage existing resources or buy any new resources. However, you can still access our Billing and Cost Management page to pay your bills to reactivate the account. <br/><br/>
+
+Please login to pay the pending invoices to continue enjoying the services.
+
+<br/>
+<br/>
+
+
+We appreciate your help resolving this issue. <br/><br/>
+
+<a href="<%= @current_store.url%>"><%= @current_store.url%></a> <br/>
+
+Thanks,<br/>
+<%=@user.account.orgainization_name%><br/>
+
+<br/>
+
+

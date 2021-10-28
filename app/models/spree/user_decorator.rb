@@ -78,7 +78,7 @@ module Spree
     end
 
     def send_devise_notification(notification, *args)
-        UserMailer.send(notification, self, *args).deliver_later
+      UserMailer.send(notification, self, *args).deliver_later
     end
 
     def ensure_valid_store_params
@@ -132,7 +132,7 @@ module Spree
     def get_subdomain_from_redis
       return unless self.reseller_signup?
 
-      AppManager::RedisWrapper.get(reseller_subdomain_redis_key) || user.account.spree_store.url
+      AppManager::RedisWrapper.get(reseller_subdomain_redis_key) || self.account.spree_store.url
     end
 
     def reseller_subdomain_redis_key

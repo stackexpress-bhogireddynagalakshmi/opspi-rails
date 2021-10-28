@@ -40,7 +40,7 @@ module InvoiceManager
           end
         end
       else
-         Rails.logger.info { "Payment not authorized or failed for Invoice #{invoice.invoice_number}"}
+        Rails.logger.info { "Payment not authorized or failed for Invoice #{invoice.invoice_number}"}
       end
 
     end

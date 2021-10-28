@@ -14,7 +14,7 @@ module DnsManager
       begin
         @ret = @res.query(host, Types.CNAME)
       rescue Exception => e
-        puts e.message
+        Rails.logger.info { e.message }
       end
 
       return self
