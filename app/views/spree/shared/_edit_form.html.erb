@@ -1,13 +1,12 @@
-<%if current_admin_tenant?%>
-	<%=f.hidden_field :reseller_signup,:value=>true%>
-		<div class="form-group mb-4">
-		  <%= f.text_field :business_name, class: 'spree-flat-input',required:true,placeholder: "business Name" %>
-		</div>
-
-<%end%>
+<div class="form-group mb-4">
+  <%= f.text_field :first_name, class: 'spree-flat-input', placeholder: Spree.t(:first_name) %>
+</div>
+<div class="form-group mb-4">
+  <%= f.text_field :last_name, class: 'spree-flat-input', placeholder: Spree.t(:last_name) %>
+</div>
 
 <div class="form-group mb-4">
-  <%= f.email_field :email, class: 'spree-flat-input', placeholder: Spree.t(:email) %>
+  <%= f.email_field :email, class: 'spree-flat-input', placeholder: Spree.t(:email), disabled: true %>
 </div>
 
 <div class="form-group mb-4">
