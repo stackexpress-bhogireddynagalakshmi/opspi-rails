@@ -10,6 +10,7 @@ module AccountHelper
     groups = groups.select{|x| x[:enabled]}
     quotas  = response.body[:get_hosting_plan_quotas_response][:get_hosting_plan_quotas_result][:diffgram][:new_data_set][:table1]     
     build_plan_quotas(product,groups,quotas)
+
     render :partial=> 'spree/admin/products/solid_cp_quota_groups',:locals=>{quota_groups: groups,quotas: quotas,:layout=>false}
 	end
 

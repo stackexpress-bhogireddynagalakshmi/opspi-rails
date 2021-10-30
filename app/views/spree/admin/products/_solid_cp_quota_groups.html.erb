@@ -2,15 +2,15 @@
 <div id="accordion" class="mb-5">
 
  <%if spree_current_user.superadmin?%>
-  <span style="color:red">Below Master Plan Quotas are non editable and for view purpose only </span><br/>
-  <%@product.plan_quota_groups.each do |grp| %>
-     <%=fields_for grp do |qg_form|%>
-        <%=render :partial => 'spree/admin/products/fields_for',:locals=>{qg_form: qg_form,quotas: quotas}%>
-     <% end %>
-  <%end%>
+    <span style="color:red">Below Master Plan Quotas are non editable and for view purpose only </span><br/>
+    <%@product.plan_quota_groups.each do |grp| %>
+       <%=fields_for grp do |qg_form|%>
+          <%=render :partial => 'spree/admin/products/fields_for',:locals=>{qg_form: qg_form,quotas: quotas,disable_class: 'disable-quotas'}%>
+       <% end %>
+    <%end%>
 <%else%>
    <%=@form.fields_for :plan_quota_groups, @product.plan_quota_groups do |qg_form|%>
-        <%=render :partial => 'spree/admin/products/fields_for',:locals=>{qg_form: qg_form,quotas: quotas}%>
+      <%=render :partial => 'spree/admin/products/fields_for',:locals=>{qg_form: qg_form,quotas: quotas,disable_class: ''}%>
    <%end%>
 <%end%>
 </div>

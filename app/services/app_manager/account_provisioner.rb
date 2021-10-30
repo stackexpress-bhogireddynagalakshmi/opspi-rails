@@ -16,14 +16,15 @@ module AppManager
       end
 
       def provison_solid_cp_account
-         Rails.logger.info { "provison_solid_cp_account is called " }
+        Rails.logger.info { "provison_solid_cp_account is called " }
         return unless TenantManager::TenantHelper.unscoped_query{user.account&.solid_cp_access?}
         return if user.account.admin_tenant?
 
-        if panels_access('solid_cp') || user.store_admin?
+        if panels_access('solid_cp') 
           SolidCpProvisioningJob.set(wait: 3.second).perform_later(user.id,product&.id) 
           Rails.logger.info { "SolidCpProvisioningJob is scheduled to create user account on solid CP " }
-        end 
+        end
+
       end
 
       def provision_isp_config_account
@@ -31,9 +32,9 @@ module AppManager
         return unless TenantManager::TenantHelper.unscoped_query{user.account&.isp_config_access?}
         return if user.account.admin_tenant?
 
-        if panels_access('isp_config') || user.store_admin?
+        if panels_access('isp_config')
           IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id,order&.subscribable_product&.id)
-          Rails.logger.info { "IspConfigProvisioningJob is scheduled to create user account on solid CP " }
+          Rails.logger.info { "IspConfigProvisioningJob is scheduled to create user account on ISPConfig Account " }
         end
       end
 

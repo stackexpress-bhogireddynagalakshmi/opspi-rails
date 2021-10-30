@@ -10,9 +10,7 @@ module RedisConcern
     Sidekiq.redis{|conn|conn.set("spree_user_id_#{user.id}_#{panel}", password)}
   end
 
-  def get_username
-    return user.isp_config_username if user.isp_config_username.present?
-    
+  def get_username    
     "u_#{SecureRandom.hex(6)}"
   end
 

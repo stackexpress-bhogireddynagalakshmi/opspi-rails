@@ -24,7 +24,7 @@ class AccountController < Spree::StoreController
    	end
 
     def create_solidcp_account
-      ProvisioningJob.perform_later(spree_current_user.id)
+      #ProvisioningJob.perform_later(spree_current_user.id)
     end
 
     def get_hosting_plan_quotas
