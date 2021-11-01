@@ -44,15 +44,15 @@ en:
       processing: processing
       void: void
     order_state:
-      address: order not completed
+      address: address
       awaiting_return: awaiting return
       canceled: canceled
-      cart: order not completed
+      cart: cart
       considered_risky: considered risky
       complete: complete
       confirm: confirm
       delivery: delivery
-      payment: order not completed
+      payment: payment
       resumed: resumed
       returned: returned
     plan_type: 'Plan Type'
