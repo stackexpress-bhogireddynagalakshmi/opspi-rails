@@ -44,6 +44,7 @@ module AppManager
         @panels = []
           if order.present?        
               order.line_items.each do |line_item|
+                next if line_item.product.blank?
                 panel_name = line_item.product.windows? ? 'solid_cp' : 'isp_config' 
                  @panels << panel_name  if !@panels.include?(panel)
             end
