@@ -24,7 +24,7 @@ module InvoiceManager
     end
 
     def create_invoice
-      invoice ||= current_invoice_finder.new(scope: subscription,billing_period: billing_period).execute
+      invoice ||= find_current_invoice
 
       if invoice.blank?
         invoice = Invoice.create!(invoice_params)
@@ -64,5 +64,11 @@ module InvoiceManager
       InvoiceFinder
     end
 
+    def find_current_invoice
+      last_invoice = subscription.invoices.active.last
+
+      return last_invoice if last_invoice &&  last_invoice.finished_on > Date.today 
+
+    end
   end
 end
