@@ -1,6 +1,6 @@
 Hello <%=@user.full_name%>  <br/><br/>
 
-<%if @invoice.last_reminder_sent_at.to_date == @invoice.due_date.to_date%>
+<%if @invoice.last_reminder_sent_at.present? && @invoice.last_reminder_sent_at.to_date == @invoice.due_date.to_date%>
   This is the final notice regarding the overdue payment of the following invoice- <br/><br/>
 <%else%>
   There is a billing problem with your account that requires your attention. The invoice is overdue against-<br/><br/>

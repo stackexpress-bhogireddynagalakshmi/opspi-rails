@@ -6,7 +6,7 @@ namespace :invoices do
       account.users.each do |user|
         next unless user.subscriptions.any?
         user.subscriptions.each do |subscription|
-          InvoiceManager::InvoiceCreator.new(subscription).call
+          InvoiceManager::InvoiceCreator.new(subscription).call if subscription.canceled_at.blank?
         end
       end
     end
@@ -20,8 +20,9 @@ namespace :invoices do
       account.users.each do |user|
         next unless user.subscriptions.any?
         user.subscriptions.each do |subscription|
-          invoice = subscription.current_unpaid_invoice
-            InvoiceManager::InvoiceAutoDebiter.new(invoice).call  if invoice.present?
+          subscription.invoices.active.each do |invoice|
+            InvoiceManager::InvoiceAutoDebiter.new(invoice).call 
+          end
         end
       end
     end
@@ -35,7 +36,7 @@ namespace :invoices do
       account.users.each do |user|
         next unless user.subscriptions.any?
         user.subscriptions.each do |subscription|
-          invoice = subscription.current_unpaid_invoice
+          invoice = subscription.invoices.active.last
           InvoiceManager::InvoiceGracePeriodChecker.new(invoice).call if invoice.present?
         end
       end
@@ -50,7 +51,7 @@ namespace :invoices do
       account.users.each do |user|
         next unless user.subscriptions.any?
         user.subscriptions.each do |subscription|
-         
+
           if subscription.control_panel_disabled? && subscription.invoices.active.count == 0
             AppManager::PanelAccessEnabler.new(subscription.invoices.last).call
           end

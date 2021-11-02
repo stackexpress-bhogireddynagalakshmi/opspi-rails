@@ -1,0 +1,21 @@
+Hello <%=@user.full_name%>  <br/><br/>
+
+Your account has been successfully charged for below invoice.
+
+<br/><br/>
+
+Invoice Number: <%=@invoice.invoice_number%><br/>
+Statement Period: <%=@invoice.name%><br/>
+Account ending in ****<%=@payment_source.try(:last_digits)%> <br/>
+Amount: <%=number_to_currency(@invoice.balance)%><br/>
+
+<br/><br/>
+
+<a href="<%= @current_store.url%>"><%= @current_store.url%></a> <br/>
+
+thanks,<br/>
+<%=@user.account.orgainization_name%><br/>
+<br/>
+
+
+
