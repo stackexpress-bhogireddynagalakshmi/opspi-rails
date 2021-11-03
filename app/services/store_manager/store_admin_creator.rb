@@ -19,9 +19,8 @@ module StoreManager
 
       admin.update(
         :login => store.admin_email,
-        :email=> store.admin_email,
-        :isp_config_username=>store.isp_config_username
-        )
+        :email=> store.admin_email
+      )
 
       StoreManager::StoreAdminRoleAssignor.new(admin).call
 
