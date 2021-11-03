@@ -47,4 +47,10 @@ module ApplicationHelper
     end
   end
 
+  def link_to_with_protocol(text,url,opts={})
+    protocol = request.ssl? ? 'https://' : 'http://'
+    
+    link_to text,"#{protocol}#{url}",opts
+  end
+
 end

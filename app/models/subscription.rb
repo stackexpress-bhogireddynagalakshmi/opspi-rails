@@ -38,7 +38,7 @@ class Subscription < ApplicationRecord
       validity:     validity
     })
 
-    InvoiceManager::InvoiceCreator.new(subscription,{payment_captured: true,order: opts[:order]}).call
+    InvoiceManager::InvoiceCreator.new(subscription,{ payment_captured: true,order: opts[:order] }).call
 
   end
 
@@ -51,7 +51,7 @@ class Subscription < ApplicationRecord
   end
 
   def current_started_on_day
-    day = start_date.day
+    day  = start_date.day
     day -=1 
     day -=1 if day == 30
     day -=1 if Date.today.year % 4 == 0 && day == 27

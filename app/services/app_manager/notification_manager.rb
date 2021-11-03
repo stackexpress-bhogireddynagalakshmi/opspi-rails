@@ -39,7 +39,7 @@ module AppManager
       .deliver
     end
 
-     def user_pannel_access_enabled
+    def user_pannel_access_enabled
       invoice = @args.fetch(:invoice)
       panel   = @args.fetch(:panel)
 
@@ -51,6 +51,17 @@ module AppManager
       .pannel_access_enabled
       .deliver
 
+    end
+
+    def user_invoice_payment_captured
+      invoice = @args.fetch(:invoice)
+     
+      NotificationMailer.with(
+        invoice: invoice,
+        user:    invoice.user
+        )
+      .invoice_payment_captured
+      .deliver
     end
 
   end

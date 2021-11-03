@@ -33,6 +33,28 @@ en:
   hello: "Hello world"
 
   spree:
+    payment_states:
+      balance_due: Approval Awaited
+      checkout: checkout
+      completed: completed
+      credit_owed: credit owed
+      failed: failed
+      paid: paid
+      pending: pending
+      processing: processing
+      void: void
+    order_state:
+      address: address
+      awaiting_return: awaiting return
+      canceled: canceled
+      cart: cart
+      considered_risky: considered risky
+      complete: complete
+      confirm: confirm
+      delivery: delivery
+      payment: payment
+      resumed: resumed
+      returned: returned
     plan_type: 'Plan Type'
     ssl_support: 'SSL Support'
     auto_daily_malware_scan: 'Automatic Daily Malware Scan'

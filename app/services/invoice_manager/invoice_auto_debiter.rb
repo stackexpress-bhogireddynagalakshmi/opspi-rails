@@ -38,6 +38,7 @@ module InvoiceManager
             @order.next  
             count += 1
           end
+          payment_received_notification(invoice)
         end
       else
         Rails.logger.info { "Payment not authorized or failed for Invoice #{invoice.invoice_number}"}
@@ -55,6 +56,17 @@ module InvoiceManager
         payment_method_id: payment_source.payment_method_id
       }
     end
-    
+
+    def payment_received_notification(invoice)
+
+      args = {
+            invoice: invoice,
+            notification: 'invoice_payment_captured',
+            user: invoice.user
+          }
+        
+      AppManager::NotificationManager.new(args).call
+    end
+
   end
 end
