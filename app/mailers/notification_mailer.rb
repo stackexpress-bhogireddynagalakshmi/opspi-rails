@@ -28,4 +28,15 @@ class NotificationMailer < Spree::BaseMailer
     mail to: @user.email, from: @current_store.mail_from_address, subject: "#{@panel} Account Enabled", store_url: @current_store.url
   end
 
+
+  def invoice_payment_captured
+    @invoice        = params[:invoice]
+    @user           = params[:user]
+    @current_store  = @user.account.spree_store
+    @panel          = params[:panel] 
+
+    mail to: @user.email, from: @current_store.mail_from_address, subject: "Invoice Payment Received ##{@invoice.invoice_number}", store_url: @current_store.url
+
+  end
+
 end

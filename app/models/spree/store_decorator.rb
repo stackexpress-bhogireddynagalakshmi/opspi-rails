@@ -2,7 +2,6 @@ module Spree
 	module StoreDecorator
 	  attr_accessor :admin_password,:solid_cp_password,:isp_config_username,:isp_config_password
 
-	 
 	  def self.prepended(base)  
 	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
 	    base.acts_as_tenant :account,class_name: '::Account'

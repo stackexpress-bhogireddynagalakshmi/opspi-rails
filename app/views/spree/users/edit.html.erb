@@ -3,7 +3,7 @@
   <%= render partial: 'spree/shared/error_messages', locals: { target: @user } %>
 
   <%= form_for Spree.user_class.new, as: @user, url: spree.user_path(@user), method: :put do |f| %>
-    <%= render partial: 'spree/shared/user_form', locals: { f: f, remember_me_field: false } %>
+    <%= render partial: 'spree/shared/edit_form', locals: { f: f, remember_me_field: false } %>
     <div>
       <%= f.submit Spree.t(:update), class: 'btn btn-lg btn-block btn-primary text-uppercase font-weight-bold' %>
     </div>

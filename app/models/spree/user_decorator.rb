@@ -14,7 +14,7 @@ module Spree
 
       base.after_commit :update_user_tanent, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]
-      base.after_commit :provision_accounts, on: [:create]
+     
       base.after_commit :save_subdomain_to_redis, on: [:create]
     end
 
@@ -53,10 +53,6 @@ module Spree
       else
         StoreManager::StoreAdminRoleAssignor.new(self,{role: "user"}).call
       end
-    end
-
-    def provision_accounts
-      AppManager::AccountProvisioner.new(self.reload).call
     end
 
     def company_name
