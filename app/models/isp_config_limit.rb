@@ -12,6 +12,16 @@ class IspConfigLimit < ApplicationRecord
 		  {field: :limit_cgi, type: :check_box,name: 'CGI available'},
 		  {field: :limit_ssi, type: :check_box,name: 'SSI available'},
 		  {field: :limit_perl,type: :check_box,name: 'Perl available'},
+      {field: :web_php_options, type: :array,name: 'Php available',
+        options:
+        [
+          {label: 'Disabled',type: :check_box, value: 'no',field: :disabled},
+          {label: 'Fast-CGI',type: :check_box, value: 'fast-cgi',field: :fast_cgi},
+          {label: 'Mod-PHP',type: :check_box, value: 'mod',field: :mod},
+          {label: 'PHP-FPM',type: :check_box, value: 'php-fpm',field: :php_fpm}
+        ]
+     },
+      
 		  {field: :limit_ruby,type: :check_box,name: 'Ruby available'},
 		  {field: :limit_python,type: :check_box,name: 'Python available'},
 		  {field: :force_suexec,type: :check_box,name: 'SuEXEC forced'},
@@ -89,8 +99,8 @@ class IspConfigLimit < ApplicationRecord
 
 		column_names   # This might raise error during the migration or seed
 
-	rescue StandardError  => e
-		Rails.logger.error {e.message}
+	# rescue StandardError  => e
+	# 	Rails.logger.error {e.message}
 	end
 
 end
