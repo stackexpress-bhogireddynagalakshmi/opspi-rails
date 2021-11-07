@@ -99,8 +99,8 @@ class IspConfigLimit < ApplicationRecord
 
 		column_names   # This might raise error during the migration or seed
 
-	# rescue StandardError  => e
-	# 	Rails.logger.error {e.message}
+	rescue StandardError  => e
+		Rails.logger.error {e.message}
 	end
 
 end
