@@ -165,10 +165,17 @@
 
 
   $(document).ready(function (argument) {
+
+    $('.array-field-single').on('change',function (argument) {
+      var val = "";
+      $('.array-field-single:checked').each(function(id,el){val+=$(el).val()+","});
+      $('#product_isp_config_limit_attributes_web_php_options').val(val)
+    });
+
     $('#product_solid_cp_master_plan_id').on('change',function(){
        var solidcpPlanId = $(this).val();
         $.get('/account/get_hosting_plan_quotas?solid_cp_plan_id='+solidcpPlanId,function(data){
-          // $('#product_quota_groups').html(data);
+        
         });
     });
 
