@@ -19,11 +19,23 @@
           <table class="table">
             <tbody>
             <%quota_group[1].each do |field_obj|%>
-               <%next if field_obj[:visible_to_only_admin].present? && !spree_current_user.superadmin?%>
-              <tr>
-                <td><%=field_obj[:name]%></td>
-                <td><%=ff.send field_obj[:type], field_obj[:field]%></td>
-              </tr>
+              <%next if field_obj[:visible_to_only_admin].present? && !spree_current_user.superadmin?%>
+              <%if field_obj[:type] == :array%>
+                <tr>
+                  <td><%=field_obj[:name]%></td>
+                  <td>
+                    <%field_obj[:options].each do |opt|%>
+                      <span class="mr-2">  <%=check_box_tag opt[:field],opt[:value],ff.object.send(field_obj[:field]).include?(opt[:value]),class: 'array-field-single'%> <%=opt[:label]%></span>
+                    <%end%>
+                    <%=ff.hidden_field field_obj[:field]%>
+                  </td>
+                </tr>
+              <%else%>
+                <tr>
+                  <td><%=field_obj[:name]%></td>
+                  <td><%=ff.send field_obj[:type], field_obj[:field] %></td>
+                </tr>
+              <%end%>
             <%end%>
             </tbody>
           </table>

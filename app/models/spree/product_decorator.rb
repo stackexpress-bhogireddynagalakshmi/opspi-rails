@@ -60,7 +60,6 @@ module Spree
     end
 
     def ensure_windows_server_type(attrs)
-      byebug
       !self.windows?
     end
 
