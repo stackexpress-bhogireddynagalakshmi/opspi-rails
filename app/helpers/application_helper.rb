@@ -53,4 +53,11 @@ module ApplicationHelper
     link_to text,"#{protocol}#{url}",opts
   end
 
+  def render_domain_status(value)
+    status = value["status"] == 'available' ?  "<span class='available'>Available</span>" : "<span class='not-available'>Not Available</span>"
+
+    status.html_safe
+
+  end
+
 end

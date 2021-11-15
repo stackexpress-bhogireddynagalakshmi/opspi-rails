@@ -1,0 +1,67 @@
+<!-- 
+<div class="container mt-4" id="pricing_container">
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h4 class="display-5"> Domain Name Registration</h4>
+    <p class="lead">Book your domian here</p>
+  </div>
+</div>
+ -->
+
+ <style type="text/css">
+   .available {
+    color: green;
+   }
+
+   .not-available {
+    color: red;
+   }
+
+ </style>
+<div class="container mb-5">
+  <%form_for "search_domian", url: "/search_domain" do |f|%> 
+  <div class="row mb-3">
+   
+      <div class="col-md-12 form-group">
+        <label>Check upto 15 domian names</label>
+        <%=text_area_tag :domian_names,'',class: 'form-control',required: true,placeholder: 'test,test2,abc'%>
+      </div>
+        
+      <div class="col-md-12 form-group">
+        <label >Most Popular Domain Extensions:</label>
+        <table class="table">
+         <%['com', 'net', 'org', 'online', 'live', 'me', 'news', 'co', 'biz', 'xyz'].in_groups_of(5) do |group|%>
+         <tr>
+            <%group.each do |tld|%>
+
+            <td><%=check_box_tag 'tlds[]',tld,false,class: 'mr-2'%> <%=tld%></td>
+
+            <%end%>
+          </tr>
+         <%end%>
+        </table>
+      </div>
+      <%=submit_tag 'Search for Domain Name(s)',class: 'btn btn-primary'%>
+  
+  </div>
+  <%end%>
+
+<h5>Your Domain</h5>
+ <table class="table">
+  <%@response.each do |key, value|%>
+    <tr>
+      <td><b><%=key%></b> is   <%=render_domain_status(value)%></td>
+    </tr>
+  <%end%>
+ </table>
+
+
+<h5>Other matching domains that are available</h5>
+<table class="table">
+  <%@suggestions.each do |key, value|%>
+    <tr>
+      <td><b><%=key%></b> is   <%=render_domain_status(value)%></td>
+    </tr>
+  <%end%>
+ </table>
+
+</div>
