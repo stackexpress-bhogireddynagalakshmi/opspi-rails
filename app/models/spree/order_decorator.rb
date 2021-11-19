@@ -60,6 +60,8 @@ module Spree
       
       provision_accounts 
 
+      domain_registration
+
     end
 
     def update_tenant_if_needed
@@ -81,6 +83,15 @@ module Spree
       AppManager::AccountProvisioner.new(
           TenantManager::TenantHelper.unscoped_query{self.user},order: self
       ).call
+    end
+
+    def domain_registration
+
+      self.line_items.each do |line_item|
+        next unless line_item.product.domain? 
+        
+        DnsManager::DomainRegisterar.new(line_item).call
+      end
     end
 
     def subscribable_products

@@ -17,15 +17,13 @@
    }
 
  </style>
-<div class="container mb-5">
+<div class="container mb-5" id="product-details">
   <%form_for "search_domian", url: "/search_domain" do |f|%> 
-  <div class="row mb-3">
-   
+    <div class="row mb-3">
       <div class="col-md-12 form-group">
         <label>Check upto 15 domian names</label>
         <%=text_area_tag :domian_names,'',class: 'form-control',required: true,placeholder: 'test,test2,abc'%>
-      </div>
-        
+      </div>      
       <div class="col-md-12 form-group">
         <label >Most Popular Domain Extensions:</label>
         <table class="table">
@@ -41,27 +39,86 @@
         </table>
       </div>
       <%=submit_tag 'Search for Domain Name(s)',class: 'btn btn-primary'%>
-  
-  </div>
+    </div>
   <%end%>
 
-<h5>Your Domain</h5>
- <table class="table">
-  <%@response.each do |key, value|%>
-    <tr>
-      <td><b><%=key%></b> is   <%=render_domain_status(value)%></td>
-    </tr>
-  <%end%>
- </table>
-
+<h5 class="mt-4">Your Domain</h5>
+<%= render partial: 'domain_list',locals: {domains: @response}%>
 
 <h5>Other matching domains that are available</h5>
-<table class="table">
-  <%@suggestions.each do |key, value|%>
-    <tr>
-      <td><b><%=key%></b> is   <%=render_domain_status(value)%></td>
-    </tr>
-  <%end%>
- </table>
 
-</div>
+<% is_product_available_in_currency = true %>
+<% @variants = @product.variants%>
+
+    
+    <% if is_product_available_in_currency && @product.can_supply? %>
+      <div id="inside-product-cart-form" data-hook="inside_product_cart_form"> <hr>
+        <%= render partial: 'domain_list',locals: {domains: @suggestions}%>
+      </div>
+    <% end %>
+  </div>
+
+
+<script type="text/javascript">
+
+  setTimeout(function(){
+    $('#product-details').on('submit', ADD_TO_CART_FORM_SELECTOR, function(event) {
+    event.stopImmediatePropagation();
+    var $cartForm = $(event.currentTarget);
+    var $addToCart = $cartForm.find(ADD_TO_CART_SELECTOR);
+    var variantId = $cartForm.find(VARIANT_ID_SELECTOR).val();
+    var quantity = parseInt($cartForm.find('[name="quantity"]').val());
+    var years   = $cartForm.closest('tr').find('#years').val();
+    var domain  = $cartForm.find('#domain').val();
+    var protectPrivacy =  $cartForm.find('#protect_rivacy').val() || false;
+    var options = {}
+
+    options['validity'] = years;
+    options['domain'] = domain;
+    options['protect_privacy'] = protectPrivacy;
+
+    event.preventDefault()
+    $addToCart.prop('disabled', true);
+    Spree.ensureCart(function() {
+      SpreeAPI.Storefront.addToCart(
+        variantId,
+        quantity,
+        options, // options hash - you can pass additional parameters here, your backend
+        // needs to be aware of those, see API docs:
+        // https://github.com/spree/spree/blob/master/api/docs/v2/storefront/index.yaml#L42
+        function(response) {
+          $addToCart.prop('disabled', false)
+          Spree.fetchCart()
+          Spree.showProductAddedModal(JSON.parse(
+            $cartForm.attr('data-product-summary')
+          ), Spree.variantById($cartForm, variantId))
+          $cartForm.trigger({
+            type: 'product_add_to_cart',
+            variant: Spree.variantById($cartForm, variantId),
+            quantity_increment: quantity,
+            cart: response.attributes
+          })
+        },
+        function(error) {
+          if (typeof error === 'string' && error !== '') {
+            document.querySelector('#no-product-available .no-product-available-text').innerText = error
+          }
+          document.getElementById('overlay').classList.add('shown')
+          document.getElementById('no-product-available').classList.add('shown')
+          window.scrollTo(0, 0)
+          $addToCart.prop('disabled', false)
+        } // failure callback for 422 and 50x errors
+      )
+    })
+  })
+
+
+
+
+  }, 2000);
+
+
+
+  
+
+</script>

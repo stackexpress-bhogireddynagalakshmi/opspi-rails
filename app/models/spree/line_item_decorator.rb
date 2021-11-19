@@ -38,3 +38,8 @@ end
 
 
 ::Spree::LineItem.prepend Spree::LineItemDecorator if ::Spree::LineItem.included_modules.exclude?(Spree::LineItemDecorator)
+
+
+Spree::PermittedAttributes.line_item_attributes.push << :domain
+Spree::PermittedAttributes.line_item_attributes.push << :validity
+Spree::PermittedAttributes.line_item_attributes.push << :protect_privacy

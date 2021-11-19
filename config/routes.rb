@@ -35,6 +35,8 @@ Rails.application.routes.draw do
   end
 
 
+  get 'register-domain', :controller=> 'hosting',:action=> "register_domain"
+  post 'search_domain', :controller=> 'hosting',:action=> "search_domain"
   get 'hosting/:slug', :controller=> 'hosting',:action=> "hosting_page"
   get 'servers/:slug', :controller=> 'hosting',:action=> "servers"
 

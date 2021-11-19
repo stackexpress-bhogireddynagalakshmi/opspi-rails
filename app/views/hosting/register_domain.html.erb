@@ -49,16 +49,13 @@ ul li {
          <%['com', 'net', 'org', 'online', 'live', 'me', 'news', 'co', 'biz', 'xyz'].in_groups_of(5) do |group|%>
          <tr>
             <%group.each do |tld|%>
-
             <td><%=check_box_tag 'tlds[]',tld,false,class: 'mr-2'%> <%=tld%></td>
-
             <%end%>
           </tr>
          <%end%>
         </table>
       </div>
       <%=submit_tag 'Search for Domain Name(s)',class: 'btn btn-primary'%>
-   
   </div>
   <%end%>
 

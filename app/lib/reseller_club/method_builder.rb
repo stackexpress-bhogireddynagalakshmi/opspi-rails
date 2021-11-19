@@ -49,8 +49,8 @@ module ResellerClub
           data["values"].merge!(params)
         end
 
-        data["values"]['auth-userid']   = "18749"
-        data["values"]["api-key"] =  'CGWfMhdcGziR5XGa37aE2YDbTwTiNMG1'
+        data["values"]['auth-userid']   = ENV['RESELLER_CLUB_ACCOUNT_ID']
+        data["values"]["api-key"]       =  ENV['RESELLER_CLUB_API_KEY']
     
 
         if data["validate"].call(data["values"])
