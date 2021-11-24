@@ -1,5 +1,5 @@
 module Spree
-    class OrderMailer 
+    module OrderMailerDecorator 
       def confirm_email(order, resend = false)
         @order = order.respond_to?(:id) ? order : Spree::Order.find(order)
         current_store = @order.store
@@ -24,4 +24,8 @@ module Spree
       end
     end
   end
+
+
+
+  ::Spree::OrderMailer.prepend Spree::OrderMailerDecorator if ::Spree::OrderMailer.included_modules.exclude?(Spree::OrderMailerDecorator)
   
