@@ -37,9 +37,7 @@ class Subscription < ApplicationRecord
       frequency:    'monthly',
       validity:     validity
     })
-
     InvoiceManager::InvoiceCreator.new(subscription,{ payment_captured: true,order: opts[:order] }).call
-
   end
 
   def active?

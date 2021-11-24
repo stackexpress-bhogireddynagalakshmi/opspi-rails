@@ -54,6 +54,8 @@ Spree::BackendConfiguration::ORDER_TABS << :my_custom_orders
 
 Spree::BackendConfiguration.class_eval do
   Spree::BackendConfiguration::CONFIGURATION_TABS << [:my_store]
+  # Spree::BackendConfiguration::DOMAIN_TABS = []
+  # Spree::BackendConfiguration::DOMAIN_TABS << [:domain_registrations]
 end
 
 

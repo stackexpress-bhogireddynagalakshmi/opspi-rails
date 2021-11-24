@@ -33,6 +33,11 @@ module Spree
 
     end
 
+
+    def product
+      TenantManager::TenantHelper.unscoped_query  { super }
+    end
+
 	end
 end
 

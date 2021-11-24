@@ -68,4 +68,11 @@ module ApplicationHelper
     line_item.domain + ": #{line_item.validity} Years"
   end
 
+
+  def generate_id_from_key(key)
+    return nil  if key.blank?
+
+    key.gsub('.','_')
+  end
+
 end

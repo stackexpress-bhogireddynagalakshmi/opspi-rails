@@ -4,11 +4,9 @@ module ResellerClub
 
     def initialize(data,opts={})
       @data = data
-      set_auth_keys
     end
 
     def call
-      byebug
       # construct_url_bind = method(:construct_url)
 
       # construct_url_bind.call(data["values"], data["url"])
@@ -30,10 +28,6 @@ module ResellerClub
       url
     end
 
-     def set_auth_keys
-      @data["values"]['auth-userid']   = "18749"
-      @data["values"]["api-key"] =  'CGWfMhdcGziR5XGa37aE2YDbTwTiNMG1'
-    end
 
 
   end
