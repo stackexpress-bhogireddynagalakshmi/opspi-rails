@@ -26,8 +26,12 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
       if params[:domian_names].present?
         domains = params[:domian_names].split(",")
         tlds    = params[:tlds]
-        @response = ResellerClub::Domain.available("domain-name" => domains,"tlds" => tlds)
-        @suggestions =  ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds, "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10")
+        @response = ResellerClub::Domain.available("domain-name" => domains,"tlds" => tlds)[:response]
+
+        @suggestions =  ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds, "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10")[:response]
+
+        
+
       end
     end
 
@@ -85,12 +89,12 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
 
     def current_domain_order
       TenantManager::TenantHelper.unscoped_query do
-        current_spree_user
-                 .orders.incomplete
-                 .joins(:products,:payments)
-                 .where(spree_products: {server_type: 'domain'})
-                 .where("spree_payments.state != ?",'invalid')
-                 .last
+        Spree::Order.all
+                    .incomplete
+                    .joins(:products)
+                    .where(spree_products: {server_type: 'domain'})
+                    .where(spree_orders: {user_id: current_spree_user.id})
+                     .last
       end
     end
 

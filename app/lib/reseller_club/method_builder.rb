@@ -16,7 +16,12 @@ module ResellerClub
         end
       end
       url = url[0..-2] if url[-1] == "&"
+
+
+
+      # url = url.split("?")[0]+ "?" +CGI.escape(url.split("?")[1])
        
+  
       url
     end
 

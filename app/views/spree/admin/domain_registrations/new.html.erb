@@ -42,11 +42,11 @@
 <div>
   <h5 class="mt-4">Domain Availibility</h5>
 
-  <%= render partial: 'hosting/domain_list',locals: {domains: @response} if @response.present?%>
+  <%= render partial: 'hosting/domain_list',locals: {domains: @response,order: @order} if @response.present?%>
 
 </div>
 
 <div>
   <h5>Other matching domains that are available</h5>
-  <%= render partial: 'hosting/domain_list',locals: {domains: @suggestions} if @suggestions.present?%>
+  <%= render partial: 'hosting/domain_list',locals: {domains: @suggestions,order: @order} if @suggestions.present?%>
 </div>

@@ -140,6 +140,11 @@ module Spree
 
       "Invalid Username or Password"
     end
+
+
+    def reseller_club_password_key
+      "reseller_club_user_id_#{self.id}"
+    end
   
   end
 end

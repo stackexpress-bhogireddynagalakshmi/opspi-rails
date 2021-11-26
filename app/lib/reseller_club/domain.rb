@@ -3,7 +3,7 @@ module ResellerClub
    class << self
     extend MethodBuilder
 
-     BASE_URL = "https://test.httpapi.com/api/domains/"
+     BASE_URL = "#{ResellerClub::Config.base_url}/domains/"
 
       [{"values" => {}, "http_method" => "get", "validate" => lambda {|v| true}, "url" => "available.json"},
        {"values" => {}, "http_method" => "get", "validate" => lambda {|v| true}, "url" => "idn-available.json"},

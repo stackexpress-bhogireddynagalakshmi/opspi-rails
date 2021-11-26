@@ -20,7 +20,7 @@ module Spree
 
     def create_subscriptions(payment)
       line_items.each do |line_item|
-        
+
         if line_item.product.subscribable?
           Subscription.subscribe!(
            user: self.user,
@@ -90,8 +90,9 @@ module Spree
 
       self.line_items.each do |line_item|
         next unless line_item.product.domain? 
-        
-        DnsManager::DomainRegisterar.new(line_item).call
+
+        DomainRegistrationJob.perform_later(line_item)
+      
       end
     end
 

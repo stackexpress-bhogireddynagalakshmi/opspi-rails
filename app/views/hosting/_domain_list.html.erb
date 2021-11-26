@@ -1,6 +1,6 @@
 <table class="table">
   <%domains.each do |key, value|%>
-    <%disabled = current_order.line_items.pluck(:domain).include?(key) rescue false%>
+    <%disabled = order.line_items.pluck(:domain).include?(key) rescue false%>
     <tr id="<%=generate_id_from_key(key)%>">
       <td><b><%=key%></b> is   <%=render_domain_status(value)%> <br/> </td>
         <%if value["status"] == 'available'%>
