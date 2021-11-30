@@ -8,17 +8,16 @@ class DomainRegistrationJob < ApplicationJob
 
 
     if @user.reseller_club_customer_id.blank?
-      success  = DnsManager::ResellerClub::CustomerCreator.new(@user).call
-    
-      raise "Unable to create ResllerClub Customer: #{response.error}" unless success
+      @result  = DnsManager::ResellerClub::CustomerCreator.new(@user).call
+      
+      raise "Unable to create ResllerClub Customer: #{@result.inspect}"  unless  success?
     end
 
 
     if @user.reseller_club_contact_id.blank?
-      success  = DnsManager::ResellerClub::ContactCreator.new(@user).call
+       @result   = DnsManager::ResellerClub::ContactCreator.new(@user).call
       
-
-      raise "Unable to create ResllerClub Contact:  #{response.error}" unless response.success
+      raise "Unable to create ResllerClub Contact:  #{@result.inspect}" unless  success?
     end
 
     domain = line_item.domain
@@ -26,14 +25,18 @@ class DomainRegistrationJob < ApplicationJob
     protect_privacy = line_item.protect_privacy.to_s
 
 
-    success = DnsManager::ResellerClub::DomainRegistrar.new(
-                @user, {domain: domain,validity: validity,protect_privacy: protect_privacy}
+     @result  = DnsManager::ResellerClub::DomainRegistrar.new(
+                @user, {domain: domain,validity: validity,protect_privacy: protect_privacy,line_item: line_item}
               ).call
 
-    
+  
+    raise "Unable to RegisterDomain:  #{@result.inspect}"   unless  success?
+  end
 
-    raise "Unable to RegisterDomain:  #{response.error}"  unless response.success
 
+  def success?()
+    return
+    @result[:success] == true
   end
 
 

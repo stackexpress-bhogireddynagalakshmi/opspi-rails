@@ -2,6 +2,8 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
    helper Spree::Admin::NavigationHelper
 
    def index
+    ActsAsTenant.current_tenant = nil
+
     if current_spree_user.superadmin?
       @orders = Spree::Order
     else
@@ -29,9 +31,7 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
         @response = ResellerClub::Domain.available("domain-name" => domains,"tlds" => tlds)[:response]
 
         @suggestions =  ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds, "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10")[:response]
-
         
-
       end
     end
 

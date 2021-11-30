@@ -8,20 +8,7 @@ module ResellerClub
     def construct_url(params, method)
       params.delete_if {|k,v| v == ""}
       url = self::BASE_URL + method + "?"
-      params.each do |k,v|
-        if v.kind_of?(Array)
-          v.each { |elem| url = url + k.gsub("_","-") + "=" + elem + "&"}
-        else
-          url = url + k.gsub("_","-") + "=" + v + "&"
-        end
-      end
-      url = url[0..-2] if url[-1] == "&"
-
-
-
-      # url = url.split("?")[0]+ "?" +CGI.escape(url.split("?")[1])
-       
-  
+      url += URI.encode_www_form(params)
       url
     end
 

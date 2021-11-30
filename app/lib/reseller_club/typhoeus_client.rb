@@ -23,26 +23,10 @@ module ResellerClub
 
         Rails.logger.info { parsed_response }
 
-        success = true if response.code == 200
+        success = true if response.code == 200 && parsed_response["error"].blank?
 
         return { success: success, response: parsed_response }
 
-
-        # byebug
-        # case response.code
-        # when 200
-        #   success = true
-        #   return JSON.parse(true_false_or_text_bind.call(response.body))
-        # when 500
-        #   error = JSON.parse(true_false_or_text_bind.call(response.body))
-        #   raise  Exception.new  error["response"]
-        # when 404
-        #   raise  Exception.new  "Action not Found #{error["response"]}"
-        # else
-        #   error = JSON.parse(true_false_or_text_bind.call(response.body))
-          
-        #   return JSON.parse(true_false_or_text_bind.call(response.body))
-        # end
       end
     end
 

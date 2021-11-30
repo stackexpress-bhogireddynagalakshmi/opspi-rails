@@ -19,7 +19,7 @@ module DnsManager
           user.update_column(:reseller_club_customer_id,response[:response]["code"])
         end
 
-        response[:success]
+        response
 
       end
 
@@ -34,6 +34,7 @@ module DnsManager
 
         {
           "username"        =>  user.email,
+          "email"          =>  user.email,
           "passwd"          =>  get_password,
           "name"            =>  user.first_name || "",
           "company"         =>  user.company_name || "" ,
