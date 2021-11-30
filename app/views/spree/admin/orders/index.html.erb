@@ -193,7 +193,7 @@
             <%=Spree::Store.find_by_id(order.store_id).try(:name)%>
           </td>
           <td>
-            <%=order.user.user_role%>
+            <%=order.user.user_role rescue ''%>
           </td>
           <td>
             <span class="badge badge-<%= order.considered_risky ? 'considered_risky' : 'considered_safe' %> text-uppercase">
