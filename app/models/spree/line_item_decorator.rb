@@ -33,8 +33,24 @@ module Spree
 
     end
 
+    def insufficient_stock?
+      self.reload
+      super
+    end
+
+
+
+    def product
+      TenantManager::TenantHelper.unscoped_query  { super }
+    end
+
 	end
 end
 
 
 ::Spree::LineItem.prepend Spree::LineItemDecorator if ::Spree::LineItem.included_modules.exclude?(Spree::LineItemDecorator)
+
+
+Spree::PermittedAttributes.line_item_attributes.push << :domain
+Spree::PermittedAttributes.line_item_attributes.push << :validity
+Spree::PermittedAttributes.line_item_attributes.push << :protect_privacy

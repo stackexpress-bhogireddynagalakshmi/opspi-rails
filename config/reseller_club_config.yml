@@ -1,0 +1,8 @@
+user_url: <%=ENV["RESELLER_CLUB_URL"]%>
+base_url: <%=ENV["RESELLER_CLUB_API_URL"]%>
+reseller_account_id: <%= ENV["RESELLER_CLUB_ACCOUNT_ID"]%>
+api_key: <%= ENV["RESELLER_CLUB_API_KEY"]%>
+timeout: 30
+log: false
+register_users: true
+enabled: <%= ENV["RESELLER_CLUB_ENABLED"]%>

@@ -1,4 +1,6 @@
-<% variant = line_item.variant %>
+
+<%TenantManager::TenantHelper.unscoped_query do %>
+<% variant = line_item.reload.variant %>
 
 <%= order_form.fields_for :line_items, line_item do |item_form| %>
   <div class="d-table-row shopping-cart-item">
@@ -8,6 +10,7 @@
     
     <div class="d-table-cell shopping-cart-item-description" data-hook="cart_item_description">
       <h2 class="item-title"><%= link_to line_item.name, spree.product_path(variant.product) %></h2>
+      <%=render_domain_name(variant.product,line_item)%>
       <% if line_item.insufficient_stock? %>
         <span class="out-of-stock">
           <%= Spree.t(:out_of_stock) %>&nbsp;&nbsp;<br>
@@ -26,3 +29,5 @@
     <%= render 'line_item_data', view: 'desktop', line_item: line_item, item_form: item_form %>
   </div>
 <% end %>
+
+<%end%>

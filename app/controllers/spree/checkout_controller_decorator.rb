@@ -31,8 +31,7 @@ module Spree
       raise 
     end
 
-    def load_order_with_lock
-     
+    def load_order_with_lock   
       if params[:invoice_number].present?   
         invoice = CustomInvoiceFinder.new(invoice_number: params[:invoice_number]).unscoped_execute
         super unless invoice
@@ -52,7 +51,6 @@ module Spree
       TenantManager::TenantHelper.unscoped_query { super }
     end
 
-
     def ensure_valid_state
       if @order.state != correct_state && !skip_state_validation?
         flash.keep
@@ -60,7 +58,6 @@ module Spree
         redirect_to spree.checkout_state_path(@order.state,invoice_number: params[:invoice_number])
       end
     end
-
 
     def ensure_valid_state_lock_version
       if params[:order] && params[:order][:state_lock_version]
@@ -86,7 +83,6 @@ module Spree
     def check_authorization
       #authorize!(:edit, current_order, cookies.signed[:token])
     end
-
 
     def update_payments_methods_attributes_params
 
