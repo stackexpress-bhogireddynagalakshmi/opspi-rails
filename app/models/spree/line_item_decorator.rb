@@ -33,6 +33,12 @@ module Spree
 
     end
 
+    def insufficient_stock?
+      self.reload
+      super
+    end
+
+
 
     def product
       TenantManager::TenantHelper.unscoped_query  { super }

@@ -36,13 +36,13 @@ default:
         #   title: Get up to 30% off
         #   url: /t/special-offers/30-percent-off
         #   image: 'meganav/promo_banner_right-second-category.jpg'
-    - title: Domain
-      subtitle: Categories
-      url: /#
-      items:
-        - :title: Register a Domain
-          :url: /register-domain
-      promo_banners:
+    # - title: Domain
+    #   subtitle: Categories
+    #   url: /#
+    #   items:
+    #     - :title: Register a Domain
+    #       :url: /register-domain
+    #   promo_banners:
         # - subtitle: Cloud Servers
         #   title: Cloud
         #   url: /servers/cloud-hosting

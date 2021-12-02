@@ -1,6 +1,6 @@
 
 <%TenantManager::TenantHelper.unscoped_query do %>
-<% variant = line_item.variant %>
+<% variant = line_item.reload.variant %>
 
 <%= order_form.fields_for :line_items, line_item do |item_form| %>
   <div class="d-table-row shopping-cart-item">

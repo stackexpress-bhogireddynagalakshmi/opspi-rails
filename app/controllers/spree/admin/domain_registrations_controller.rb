@@ -27,7 +27,8 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
  
       if params[:domian_names].present?
         domains = params[:domian_names].split(",")
-        tlds    = params[:tlds]
+        tlds    = params[:tlds] || ["com"]
+        
         @response = ResellerClub::Domain.available("domain-name" => domains,"tlds" => tlds)[:response]
 
         @suggestions =  ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds, "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10")[:response]
@@ -37,7 +38,9 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
 
     def create
       TenantManager::TenantHelper.unscoped_query do
-      @product = Spree::Product.domain.first
+
+      @product = Spree::Product.domain.first 
+
       @order   = Spree::Order.find_by_id(params[:order_id]) || current_domain_order
       @variant = Spree::Variant.find(params[:variant_id])
 

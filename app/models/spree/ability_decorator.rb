@@ -2,7 +2,7 @@
 	module Spree
 		module AbilityDecorator
 		  def abilities_to_register
-		    [StoreAdminAbility]
+		    [StoreAdminAbility,UserAbility]
 		  end
 		end
 	end

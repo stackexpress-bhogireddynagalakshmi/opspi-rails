@@ -3,6 +3,8 @@
 
   <%if (current_spree_user.store_admin? && !TenantManager::TenantHelper.current_admin_tenant?) || current_spree_user.admin? %>
     <%= link_to Spree.t('nav_bar.admin_panel'), spree.admin_orders_path, class: 'dropdown-item text-uppercase'%>
+  <%elsif current_spree_user.end_user?%>
+   <%= link_to Spree.t('nav_bar.admin_panel'), spree.admin_domain_registrations_path, class: 'dropdown-item text-uppercase'%>
   <%end%>
 
   <%= link_to Spree.t('nav_bar.log_out'), spree_logout_path, class: 'dropdown-item', method: :get if defined?(spree_logout_path) %>
