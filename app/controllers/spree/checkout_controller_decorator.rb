@@ -17,7 +17,7 @@ module Spree
 
         if @order.completed?
           @current_order = nil
-           flash[:notice] = "Order Placed Successfully"
+            flash['order_completed'] = true
           redirect_to completion_route
         else
           redirect_to spree.checkout_state_path(@order.state,invoice_number: params[:invoice_number])

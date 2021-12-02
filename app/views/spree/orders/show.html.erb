@@ -1,6 +1,6 @@
 <div class='order-show container d-flex flex-column align-items-center flex-lg-wrap flex-lg-row justify-content-center' id="order_summary" data-hook>
 
-  <% if(@order).completed? %>
+    <% if order_just_completed?(@order) %>
     <%= icon(name: 'check-mark-circle',
              classes: 'd-block d-lg-none mx-auto order-show-check-mark',
              width: 56,
