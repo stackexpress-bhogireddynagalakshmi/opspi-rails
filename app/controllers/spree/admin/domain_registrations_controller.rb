@@ -11,7 +11,7 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
     end    
     @orders   = @orders.joins(line_items: [:product])
                           .where(spree_products: {server_type: 'domain'})
-                          .select("spree_orders.*,spree_line_items.domain,spree_line_items.validity")
+                          .select("spree_orders.*,spree_line_items.domain,spree_line_items.validity,spree_line_items.domain_successfully_registered,spree_line_items.domain_registered_at,spree_line_items.api_response")
                           .order('spree_orders.created_at desc')
     
     @domains  =  @orders
