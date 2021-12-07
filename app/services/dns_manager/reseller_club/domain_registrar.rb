@@ -36,7 +36,8 @@ module DnsManager
           "invoice-option"    => "NoInvoice",
           "protect-privacy"   => protect_privacy,
           "attr-name1"        => "idnLanguageCode",
-          "attr-value1"       => "aze"
+          "attr-value1"       => "aze",
+          "email"             => @user.email
         }
       end
 

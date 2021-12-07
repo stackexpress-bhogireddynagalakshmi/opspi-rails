@@ -29,9 +29,9 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
         domains = params[:domian_names].split(",")
         tlds    = params[:tlds] || ["com"]
         
-        @response = ResellerClub::Domain.available("domain-name" => domains,"tlds" => tlds)[:response]
+        @response = ResellerClub::Domain.available("domain-name" => domains,"tlds" => tlds, 'email'=> current_spree_user.email)[:response]
 
-        @suggestions =  ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds, "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10")[:response]
+        @suggestions =  ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds, "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10",  'email'=> current_spree_user.email)[:response]
         
       end
     end
@@ -58,6 +58,15 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
 
       end
       #redirect_to  new_admin_domain_registration_path(order_id: @order.id,domian_names: params[:options][:domain],tlds: tlds)
+    end
+
+    def setup_reseller_club
+
+      if request.post?
+        byebug
+        spree_current_user.update(user_params)
+      end
+
     end
 
 
@@ -99,6 +108,10 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
                     .where(spree_orders: {user_id: current_spree_user.id})
                      .last
       end
+    end
+
+    def user_params
+      params.require(:user).permit(:user_key_attributes=>[:id,:_destroy,:reseller_club_account_id,:reseller_club_account_key_enc])
     end
 
 end

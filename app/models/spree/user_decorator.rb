@@ -11,11 +11,13 @@ module Spree
       base.has_many :invoices
       base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
       base.has_one :tenant_service
+      base.has_one :user_key
 
       base.after_commit :update_user_tanent, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]
      
       base.after_commit :save_subdomain_to_redis, on: [:create]
+      base.accepts_nested_attributes_for :user_key,:reject_if => :reject_if_key_blank
     end
 
     def superadmin?
@@ -141,9 +143,13 @@ module Spree
       "Invalid Username or Password"
     end
 
-
     def reseller_club_password_key
       "reseller_club_user_id_#{self.id}"
+    end
+
+    def reject_if_key_blank(attrs)
+      attrs['reseller_club_account_key_enc'].blank?
+
     end
   
   end

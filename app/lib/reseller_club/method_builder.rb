@@ -40,9 +40,16 @@ module ResellerClub
         else
           data["values"].merge!(params)
         end
+        
 
-        data["values"]['auth-userid']   = ENV['RESELLER_CLUB_ACCOUNT_ID']
-        data["values"]["api-key"]       =  ENV['RESELLER_CLUB_API_KEY']
+        current_user = Spree::User.find_by_email(data['values']['email'])
+
+        reseller = current_user.account.store_admin
+
+        
+
+        data["values"]['auth-userid']   =  reseller.user_key.try(:reseller_club_account_id)
+        data["values"]["api-key"]       =  reseller.user_key.try(:reseller_club_account_key)
     
 
         if data["validate"].call(data["values"])
