@@ -39,7 +39,7 @@ module InvoiceManager
 
     def store_id
       if user.store_admin?
-        TenantManager::TenantHelper.admin_tenant_id
+        TenantManager::TenantHelper.admin_tenant.spree_store.id
       else
         user.account.spree_store.id
       end

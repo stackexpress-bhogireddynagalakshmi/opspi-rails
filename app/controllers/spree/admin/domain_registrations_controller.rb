@@ -92,7 +92,7 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
 
     def store_id
       if spree_current_user.store_admin?
-        TenantManager::TenantHelper.admin_tenant_id
+        TenantManager::TenantHelper.admin_tenant.spree_store.id
       else
         spree_current_user.account.spree_store.id
       end

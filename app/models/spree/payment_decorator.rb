@@ -34,7 +34,7 @@ module Spree
 
     end
 
-     def provision_accounts
+    def provision_accounts
       AppManager::AccountProvisioner.new(
           TenantManager::TenantHelper.unscoped_query{self.order.user},order: self.order
       ).call

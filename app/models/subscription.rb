@@ -25,6 +25,8 @@ class Subscription < ApplicationRecord
   DEFAULT_VALIDITY_DAYS = 30
 
   def self.create_fresh_subscription(opts)
+    TenantManager::TenantHelper.unscoped_query do
+
     validity = opts[:product].try(:validity) || DEFAULT_VALIDITY_DAYS
 
     subscription =  self.create({
@@ -37,7 +39,10 @@ class Subscription < ApplicationRecord
       frequency:    'monthly',
       validity:     validity
     })
+
     InvoiceManager::InvoiceCreator.new(subscription,{ payment_captured: true,order: opts[:order] }).call
+
+   end
   end
 
   def active?

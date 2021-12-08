@@ -6,7 +6,6 @@ module SecurityManager
     
     def initialize(text,options={})
       @public_key_file = File.join(Rails.root, 'config', 'public.pem')
-      byebug
       @text       = text
     end
 

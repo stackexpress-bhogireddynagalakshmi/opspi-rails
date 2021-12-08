@@ -58,8 +58,6 @@ module Spree
       end
     
       update_tenant_if_needed 
-      
-      provision_accounts 
 
       domain_registration
 
@@ -80,11 +78,6 @@ module Spree
       ).call
     end
 
-    def provision_accounts
-      AppManager::AccountProvisioner.new(
-          TenantManager::TenantHelper.unscoped_query{self.user},order: self
-      ).call
-    end
 
     def domain_registration
 

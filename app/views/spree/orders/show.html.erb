@@ -1,6 +1,6 @@
 <div class='order-show container d-flex flex-column align-items-center flex-lg-wrap flex-lg-row justify-content-center' id="order_summary" data-hook>
 
-  <% if true || order_just_completed?(@order) %>
+    <% if order_just_completed?(@order) %>
     <%= icon(name: 'check-mark-circle',
              classes: 'd-block d-lg-none mx-auto order-show-check-mark',
              width: 56,
@@ -11,13 +11,11 @@
              height: 102) %>
     <h5 class="w-100 text-center"><%= Spree.t(:order_success) %></h5>
     <p class="order-show-explain w-100 text-center"><%= Spree.t(:order_success_explain) %></p>
-    
     <%if TenantManager::TenantHelper.current_admin_tenant?%>
-       <p class="order-show-explain w-100 text-center new-tenant">
-          <%=render_new_tenant_information(@order)&.html_safe%>
-       </p>
+      <p class="order-show-explain w-100 text-center new-tenant">
+        <%=render_new_tenant_information(@order)&.html_safe%>
+      </p>
     <%end%>
- 
   <% end %>
 
   <p class="order-show-number text-uppercase w-100 text-center">
