@@ -8,7 +8,11 @@ module Spree
             elsif current_spree_user.end_user?
               @orders = @orders.where(user_id: current_spree_user.id)              
             end
-        end  
+        end
+
+        def edit
+          TenantManager::TenantHelper.unscoped_query{super}
+        end
       end
    end
 end

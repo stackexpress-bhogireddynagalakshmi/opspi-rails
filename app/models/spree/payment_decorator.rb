@@ -18,7 +18,7 @@ module Spree
       return if invoice # if Invoice Payment then no need to create subscription again
 
     	self.order.create_subscriptions(self)
-        provision_accounts 
+      provision_accounts 
   	end
 
 
@@ -36,7 +36,7 @@ module Spree
 
      def provision_accounts
       AppManager::AccountProvisioner.new(
-          TenantManager::TenantHelper.unscoped_query{self.user},order: self
+          TenantManager::TenantHelper.unscoped_query{self.order.user},order: self.order
       ).call
     end
 

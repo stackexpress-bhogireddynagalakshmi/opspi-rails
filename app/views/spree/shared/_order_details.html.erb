@@ -125,6 +125,7 @@
 
   <div class="mt-5" id="checkout-summary" data-hook="checkout_summary_box">
     <%= render partial: 'spree/checkout/summary', locals: { order: @order } %>
+    
       <%= form_for @order, url: spree.update_checkout_path(@order.state), html: { id: "checkout_form_#{@order.state}", class: "w-100 d-lg-flex align-items-lg-baseline  flex-wrap position-relative" } do |form| %>
        <%=hidden_field_tag :invoice_number,params[:invoice_number]%>
 
@@ -137,7 +138,7 @@
             </div>
             
             <div class="d-flex flex-column text-center shopping-cart-buttons" data-hook="cart_buttons">
-              <%= link_to Spree.t(submit_label_key), spree.checkout_path, class: 'btn btn-primary text-uppercase font-weight-bold w-100 cart-checkout-btn shopping-cart-buttons-checkout', id: 'checkout-link', method: :get%>
+              <%= submit_tag Spree.t(submit_label_key), class: 'btn btn-primary text-uppercase font-weight-bold w-100 cart-checkout-btn shopping-cart-buttons-checkout', id: 'checkout-link'%>
             </div>  
 
           </div>

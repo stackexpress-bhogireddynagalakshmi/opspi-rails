@@ -19,6 +19,7 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
 
 
     def new
+
       @order = current_domain_order
 
       cookies.signed[:token] = @order.token if @order.present?
@@ -46,6 +47,7 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
 
       if @order.blank?
         @order = Spree::Order.create!(order_params)
+        cookies.signed[:token] = @order.token
       end
 
      
@@ -61,12 +63,9 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
     end
 
     def setup_reseller_club
-
       if request.post?
-        byebug
         spree_current_user.update(user_params)
       end
-
     end
 
 
@@ -106,7 +105,9 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
                     .joins(:products)
                     .where(spree_products: {server_type: 'domain'})
                     .where(spree_orders: {user_id: current_spree_user.id})
-                     .last
+                    .where("Date(spree_orders.created_at) > ?", Date.today - 1.day )
+                    .last
+
       end
     end
 

@@ -128,8 +128,9 @@ class Invoice < ApplicationRecord
 
   def ensure_name
     if account && posting_date
-      plan = TenantManager::TenantHelper.unscoped_query { subscription.plan }
-      self.name  = "#{billing_month} Invoice for  #{plan.name}"
+      plan = TenantManager::TenantHelper.unscoped_query { Spree::Product.find_by_id(subscription.product_id) }
+      byebug
+      self.name  = "#{billing_month} Invoice for  #{plan.try(:name)}"
     end
   end
 
