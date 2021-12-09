@@ -125,6 +125,7 @@
 
   <div class="mt-5" id="checkout-summary" data-hook="checkout_summary_box">
     <%= render partial: 'spree/checkout/summary', locals: { order: @order } %>
+    
       <%= form_for @order, url: spree.update_checkout_path(@order.state), html: { id: "checkout_form_#{@order.state}", class: "w-100 d-lg-flex align-items-lg-baseline  flex-wrap position-relative" } do |form| %>
        <%=hidden_field_tag :invoice_number,params[:invoice_number]%>
 
@@ -136,6 +137,7 @@
                <%= link_to(Spree.t(submit_label_key), paypal_express_url(:payment_method_id => checkout_available_payment_methods.select{|x|x.method_type == 'check'}.first&.id), :method => :post, class: 'btn btn-primary text-uppercase font-weight-bold w-100 paypal-btn-custom',:id => "paypal_button") %>     
             </div>
             
+
             <%if submit_label_key.eql?(:place_order)%>
               <div id="default-payment-btn">
                 <%= submit_tag Spree.t(submit_label_key), class: 'btn btn-primary text-uppercase font-weight-bold w-100 checkout-content-save-continue-button' %>

@@ -32,7 +32,12 @@ Rails.application.routes.draw do
         end
       end
       
-      resources :domain_registrations
+      resources :domain_registrations do 
+        collection do
+          get :setup_reseller_club
+          post :setup_reseller_club
+        end
+      end
     end
   end
 
