@@ -1,6 +1,7 @@
 module Spree
 	module Admin
 	    module StoresControllerDecorator
+      ## Todo: Need to customize in callback way(here we dont have any callback)
 			def update
 				@store.assign_attributes(permitted_store_params)
 		

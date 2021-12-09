@@ -9,7 +9,7 @@ module Spree
 	    		@users = @collection
 	    	end	
 
-			## Todo: Need to customize in callback way(here we dont have any callback)
+			## Todo: Need to customize in callback way(here we dont have any callback) 
 			def update
 				if params[:user][:password].blank? && params[:user][:password_confirmation].blank?
 				  params[:user].delete(:password)
