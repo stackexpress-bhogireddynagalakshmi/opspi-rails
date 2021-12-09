@@ -5,7 +5,7 @@ module SecurityManager
   class Encrypter
     
     def initialize(text,options={})
-      @public_key_file = File.join(Rails.root, 'config', 'public.pem')
+      @public_key_file = File.join(Rails.root, 'config', 'reseller_api_enc_public.pem')
       @text       = text
     end
 

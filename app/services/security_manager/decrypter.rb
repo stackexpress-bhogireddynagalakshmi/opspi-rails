@@ -5,8 +5,8 @@ module SecurityManager
   class Decrypter
     
     def initialize(encypted_text, options={})
-      @private_key_file = File.join(Rails.root, 'config', 'private.pem')
-      @password      = ENV['PRIVATE_KEY_PASS']
+      @private_key_file = File.join(Rails.root, 'config', 'reseller_api_enc_private.pem')
+      @password      = ENV['RESELLER_API_ENC_PASSPHRASE']
       @encypted_text = encypted_text
     end
 
@@ -16,3 +16,4 @@ module SecurityManager
     end
   end
 end
+
