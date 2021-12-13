@@ -8,6 +8,8 @@ services:
       - '3000:3000'
     volumes:
       - /var/log/opspi/:/project/log/
+      - "${DATA_DIR}/config:/project/config/reseller_api_enc_private.pem"
+      - "${DATA_DIR}/config:/project/config/reseller_api_enc_public.pem"
     restart: unless-stopped
   cron:
     container_name: opspi-cron
