@@ -37,7 +37,7 @@ class Spree::Admin::MyStoreController < Spree::Admin::BaseController
   private
 
   def store_params
-    params.require(:store).permit(:logo,:mailer_logo,:name,:seo_title,:meta_description,:meta_keywords,:seo_robots,:description,:address,:contact_phone)
+    params.require(:store).permit(:logo,:mailer_logo,:name,:seo_title,:meta_description,:meta_keywords,:seo_robots,:description,:address,:contact_phone,:mail_from_address,:customer_support_email,:new_order_notifications_email)
   end
 
 
