@@ -1,19 +1,25 @@
+job_type :opspi_cron, "cd :path && :environment_variable=:environment :bundle_command rake :task"
+
 #every 1 am 
 every '0 1 * * *' do
-  rake 'invoices:generate_invoices'
+  opspi_cron "invoices:generate_invoices"
 end
 
+#every 2 am 
 every '0 2 * * *' do
-  rake 'invoices:auto_payment'
+  opspi_cron 'invoices:auto_payment'
 end
 
+#every 3 am 
 every '0 3 * * *' do
-  rake 'invoices:disable_control_panel'
+  opspi_cron 'invoices:disable_control_panel'
 end
 
+#every 4 am 
 every '0 4 * * *' do
-  rake 'invoices:enable_control_panel'
+  opspi_cron 'invoices:enable_control_panel'
 end
+
 
 
 
