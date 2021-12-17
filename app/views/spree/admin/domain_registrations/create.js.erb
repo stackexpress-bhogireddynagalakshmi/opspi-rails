@@ -1,0 +1,11 @@
+<%if @result.success?%>
+
+$('#<%=generate_id_from_key(@result.value.domain)%>').find('.add-to-cart-button').attr('disabled','disabled');
+<%count = @order.try(:line_items).try(:count)%>
+$('#proceed_to_checkout').html('<%="Checkout #{count}"%>')
+
+$('#order_id').val("<%=@order.id%>")
+
+<%else%>
+
+<%end%>

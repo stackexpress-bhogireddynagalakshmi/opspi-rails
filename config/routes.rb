@@ -31,10 +31,19 @@ Rails.application.routes.draw do
           get :solidcp
         end
       end
+      
+      resources :domain_registrations do 
+        collection do
+          get :setup_reseller_club
+          post :setup_reseller_club
+        end
+      end
     end
   end
 
 
+  get 'register-domain', :controller=> 'hosting',:action=> "register_domain"
+  post 'search_domain', :controller=> 'hosting',:action=> "search_domain"
   get 'hosting/:slug', :controller=> 'hosting',:action=> "hosting_page"
   get 'servers/:slug', :controller=> 'hosting',:action=> "servers"
 

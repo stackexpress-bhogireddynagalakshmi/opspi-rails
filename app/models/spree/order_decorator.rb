@@ -20,6 +20,7 @@ module Spree
 
     def create_subscriptions(payment)
       line_items.each do |line_item|
+
         if line_item.product.subscribable?
           Subscription.subscribe!(
            user: self.user,
@@ -35,7 +36,7 @@ module Spree
       return if invoice
 
       product = subscribable_product
-      if product && self.user.subscriptions.joins(:plan).active.pluck(:server_type).include?(product.server_type) && (payments.blank? ||  !payments.last.completed?)
+      if product && self.user.present?  && self.user.subscriptions.joins(:plan).active.pluck(:server_type).include?(product.server_type) && (payments.blank? ||  !payments.last.completed?)
           errors.add(:base, "Your are already subscribed to one #{product.server_type.titleize} Plan. Please check My Subscriptions page for more details")
 
         return false
@@ -57,8 +58,8 @@ module Spree
       end
     
       update_tenant_if_needed 
-      
-      provision_accounts 
+
+      domain_registration
 
     end
 
@@ -77,10 +78,15 @@ module Spree
       ).call
     end
 
-    def provision_accounts
-      AppManager::AccountProvisioner.new(
-          TenantManager::TenantHelper.unscoped_query{self.user},order: self
-      ).call
+
+    def domain_registration
+
+      self.line_items.each do |line_item|
+        next unless line_item.product.domain? 
+
+        DomainRegistrationJob.perform_later(line_item)
+      
+      end
     end
 
     def subscribable_products

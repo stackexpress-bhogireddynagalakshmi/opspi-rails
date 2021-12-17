@@ -1,0 +1,62 @@
+<style type="text/css">
+  .price-list-bar {
+    overflow: hidden;
+}
+ul li {
+    list-style-type: none;
+}
+.price-list-bar ul li {
+    float: left;
+    font: bold 16px Arial, Helvetica, sans-serif;
+    color: #555f4b;
+    width: 124px;
+    background: url(//cdnassets.com/ui/resellerdata/0_29999/18749/supersite2/supersite/themes/MinimalGreen-MyTheme/images/pr-list-sep.gif) no-repeat right -2px #e1f3cf;
+    padding: 8px 0 6px 15px;
+    border-top: solid 1px #d6e3c8;
+    height: 71px;
+    overflow: hidden;
+}
+
+.price-list-bar ul .first {
+    color: #fff;
+    font: normal 15px Arial, Helvetica, sans-serif;
+    padding: 10px 30px 16px 20px;
+    width: 135px;
+    background: url(//cdnassets.com/ui/resellerdata/0_29999/18749/supersite2/supersite/themes/MinimalGreen-MyTheme/images/pr-list-first.gif) no-repeat right top #3f4d31;
+    height: 71px;
+    text-align: center;
+}
+</style>
+<div class="container mt-4" id="pricing_container">
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h4 class="display-5"> Domain Name Registration</h4>
+    <p class="lead">Book your domian here</p>
+  </div>
+</div>
+
+<div class="container mb-5">
+  <%=form_for "search_domian", url: "/search_domain" do |f|%> 
+  <div class="row mb-3">
+   
+      <div class="col-md-12 form-group">
+        <label>Check upto 15 domian names</label>
+        <%=text_area_tag :domian_names,'',class: 'form-control',required: true,placeholder: 'test,test2,abc'%>
+      </div>
+        
+      <div class="col-md-12 form-group">
+        <label >Most Popular Domain Extensions:</label>
+        <table class="table">
+         <%['com', 'net', 'org', 'online', 'live', 'me', 'news', 'co', 'biz', 'xyz'].in_groups_of(5) do |group|%>
+         <tr>
+            <%group.each do |tld|%>
+            <td><%=check_box_tag 'tlds[]',tld,false,class: 'mr-2'%> <%=tld%></td>
+            <%end%>
+          </tr>
+         <%end%>
+        </table>
+      </div>
+      <%=submit_tag 'Search for Domain Name(s)',class: 'btn btn-primary'%>
+  </div>
+  <%end%>
+
+</div>

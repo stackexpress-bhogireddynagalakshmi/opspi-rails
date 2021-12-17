@@ -17,8 +17,6 @@ module AppManager
 
       def provison_solid_cp_account
         Rails.logger.info { "provison_solid_cp_account is called " }
-        return unless TenantManager::TenantHelper.unscoped_query{user.account&.solid_cp_access?}
-        return if user.account.admin_tenant?
 
         if panels_access('solid_cp') 
           SolidCpProvisioningJob.set(wait: 3.second).perform_later(user.id,product&.id) 
@@ -29,8 +27,6 @@ module AppManager
 
       def provision_isp_config_account
         Rails.logger.info { "provision_isp_config_account is called " }
-        return unless TenantManager::TenantHelper.unscoped_query{user.account&.isp_config_access?}
-        return if user.account.admin_tenant?
 
         if panels_access('isp_config')
           IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id,order&.subscribable_product&.id)

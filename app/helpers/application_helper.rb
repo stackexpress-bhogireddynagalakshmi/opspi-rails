@@ -40,7 +40,7 @@ module ApplicationHelper
 
 
   def current_available_payment_methods(user)
-    if user.store_admin?
+    if user.present? && user.store_admin?
       TenantManager::TenantHelper.unscoped_query{TenantManager::TenantHelper.admin_tenant.payment_methods.available_on_front_end.select { |pm| pm.available_for_order?(self) }}
     else  
       current_tenant.payment_methods.available_on_front_end.select { |pm| pm.available_for_order?(self) }
@@ -51,6 +51,28 @@ module ApplicationHelper
     protocol = request.ssl? ? 'https://' : 'http://'
     
     link_to text,"#{protocol}#{url}",opts
+  end
+
+  def render_domain_status(value)
+    status = value["status"] == 'available' ?  "<span class='available'>Available</span>" : "<span class='not-available'>Not Available</span>"
+
+    status.html_safe
+
+  end
+
+  def render_domain_name(product,line_item)
+    return nil unless product.domain? 
+    return nil unless line_item.domain.present?
+    
+
+    line_item.domain + ": #{line_item.validity} Years"
+  end
+
+
+  def generate_id_from_key(key)
+    return nil  if key.blank?
+
+    key.gsub('.','_')
   end
 
 end

@@ -17,14 +17,15 @@ module Spree
       base.after_commit :update_solid_cp_plan, on: [:update]
       base.after_commit :update_stock_availibility,on: [:create]
 
-      base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => :ensure_windows_server_type,allow_destroy: true
-      base.accepts_nested_attributes_for :isp_config_limit
+      base.accepts_nested_attributes_for :plan_quota_groups,:reject_if => :reject_if_not_windows,allow_destroy: true
+      base.accepts_nested_attributes_for :isp_config_limit,:reject_if => :reject_if_not_linux
 
       base.scope :reseller_products, ->{where(reseller_product: true)}
 
       base.enum server_type: {
       windows: 0,
-      linux: 1
+      linux: 1,
+      domain:2
     }
 
     base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on account_id]
@@ -59,8 +60,12 @@ module Spree
       HostingPlanJob.perform_later(self.id,'update')
     end
 
-    def ensure_windows_server_type(attrs)
+    def reject_if_not_windows(attrs)
       !self.windows?
+    end
+
+    def reject_if_not_linux(attrs)
+      !self.linux?
     end
 
     def ensure_server_type_do_not_change

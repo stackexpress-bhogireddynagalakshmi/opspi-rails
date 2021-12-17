@@ -2,6 +2,7 @@ module Spree
   module VariantDecorator
 
     def tax_category
+      self.reload
       TenantManager::TenantHelper.unscoped_query { super }
     end
   

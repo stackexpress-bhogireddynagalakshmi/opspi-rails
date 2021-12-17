@@ -187,10 +187,14 @@
           $('#solid_cp_quota_group_div').removeClass('d-none');
           $('#isp_config_template_div').addClass('d-none');
         } 
-        else
-        {
+        else if(type == 'linux'){
           $('#solid_cp_quota_group_div').addClass('d-none');
           $('#isp_config_template_div').removeClass('d-none');
+        }
+        else
+        {
+          $('#isp_config_template_div').addClass('d-none');
+          $('#solid_cp_quota_group_div').addClass('d-none');
         }        
     });
 
