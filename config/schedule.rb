@@ -1,3 +1,6 @@
+# Ensure required enviroment variables are provided
+ENV.each { |k, v| env(k, v) }
+
 job_type :opspi_cron, "cd :path && :environment_variable=:environment :bundle_command rake :task"
 
 #every 1 am 
