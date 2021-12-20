@@ -12,21 +12,24 @@ module ResellerClub
 
     def call
       true_false_or_text_bind = method(:true_false_or_text)
+      opts = {
+        method: data["http_method"].to_sym
+      }
+
+      if ENV['RESELLER_CLUB_PROXY_SERVER'].present?
+        opts[:proxy] = ENV['RESELLER_CLUB_PROXY_SERVER']
+      end
 
       if data["silent"]
-        Typhoeus::Request.send data["http_method"], url
+        Typhoeus::Request.new(url,opts).run
       else
-
-        response = Typhoeus::Request.send data["http_method"], url
-
+        puts "URL:  #{url}"
+        response =  Typhoeus::Request.new(url,opts).run
         parsed_response = JSON.parse(true_false_or_text_bind.call(response.body))
-
         Rails.logger.info { parsed_response }
-
         success = true if response.code == 200 && parsed_response["error"].blank?
 
         return { success: success, response: parsed_response }
-
       end
     end
 

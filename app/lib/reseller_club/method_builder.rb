@@ -41,13 +41,14 @@ module ResellerClub
           data["values"].merge!(params)
         end
         
-
-        current_user = Spree::User.find_by_email(data['values']['email'])
-
+        if data['values']['customer-id'].present?
+          current_user = Spree::User.find_by_reseller_club_customer_id(data['values']['customer-id'])
+        else
+          current_user = Spree::User.find_by_email(data['values']['email'])
+        end
         reseller = current_user.account.store_admin
 
-        
-
+      
         data["values"]['auth-userid']   =  reseller.user_key.try(:reseller_club_account_id)
         data["values"]["api-key"]       =  reseller.user_key.try(:reseller_club_account_key)
     
