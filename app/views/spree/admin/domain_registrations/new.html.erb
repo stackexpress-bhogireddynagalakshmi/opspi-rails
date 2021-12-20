@@ -50,3 +50,16 @@
   <h5>Other matching domains that are available</h5>
   <%= render partial: 'hosting/domain_list',locals: {domains: @suggestions,order: @order} if @suggestions.present?%>
 </div>
+
+
+<script type="text/javascript">
+  
+  $(document).ready(function (argument) {
+    $('.domain-validity-dropdown').on('change',function (argument) {
+      var validity = $(this).val() || 1;
+      var priceInput    = $(this).closest('td').find('.domain-price');
+      var amount  = parseInt(validity) * parseFloat($(priceInput).val());
+      $(priceInput).val(amount);
+    });
+  });
+</script>

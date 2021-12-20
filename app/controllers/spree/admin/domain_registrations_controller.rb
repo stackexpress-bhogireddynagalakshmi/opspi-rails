@@ -1,6 +1,8 @@
 class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
    helper Spree::Admin::NavigationHelper
 
+   before_action :set_tld_pricing, only: [:new]
+
    def index
     ActsAsTenant.current_tenant = nil
 
@@ -50,7 +52,6 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
         cookies.signed[:token] = @order.token
       end
 
-     
       @result = add_item_service.call(
             order: @order,
             variant: @variant,
@@ -59,7 +60,6 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
           )
 
       end
-      #redirect_to  new_admin_domain_registration_path(order_id: @order.id,domian_names: params[:options][:domain],tlds: tlds)
     end
 
     def setup_reseller_club
@@ -68,9 +68,17 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
       end
     end
 
-
-
     private
+    
+    def set_tld_pricing
+      response = ResellerClub::Product.customer_price('customer-id'=>customer_id)
+
+      if response[:success]
+        @tld_pricing = response[:response]
+      else
+        @tld_pricing = []
+      end
+    end
 
     def order_params
       { 
@@ -115,4 +123,7 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
       params.require(:user).permit(:user_key_attributes=>[:id,:_destroy,:reseller_club_account_id,:reseller_club_account_key_enc])
     end
 
+    def customer_id
+      current_spree_user.account.store_admin.reseller_club_customer_id rescue nil
+    end
 end

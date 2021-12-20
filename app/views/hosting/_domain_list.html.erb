@@ -8,17 +8,18 @@
           <%= form_for :order,url: '/admin/domain_registrations', html: {
                 id: 'add-to-cart-form',class: 'add-to-cart-form' }, remote: true do |f| %>
               <span class="mr-4">
-                  <%=select_tag 'options[validity]',options_for_select([['1 Year',1],['2 Year',2],['3 Year',3]])%>
+                  <%=select_tag 'options[validity]',options_for_select([['1 Year',1],['2 Year',2],['3 Year',3]]),class: 'domain-validity-dropdown' %>
                 </span>
-              <span class="mr-4"><%=number_to_currency(10)%></span>
+              <span class="mr-4"><%=number_to_currency(get_tld_pricing(key,@tld_pricing))%>/Yr</span>
               <%= hidden_field_tag "order_id", @order.try(:id),class: 'order_id' %>
               <%= hidden_field_tag "variant_id", @product.try(:id) %>
-              <%= hidden_field_tag :tlds,params[:tlds]%>
+              <%= hidden_field_tag :tlds, params[:tlds]%>
               <%=hidden_field_tag 'options[domain]',key%>
+              
+              <%=hidden_field_tag 'options[price]',get_tld_pricing(key,@tld_pricing),class: 'domain-price'%>
               <%= button_tag class: 'btn btn-primary text-uppercase font-weight-bold add-to-cart-button', id: 'add-to-cart-button', type: :submit,disabled: disabled do %>
                   <%= Spree.t(:add_to_cart) %>
               <% end %>
-
             <% end %>
           <%else%>
             <td colspan="3"></td>
