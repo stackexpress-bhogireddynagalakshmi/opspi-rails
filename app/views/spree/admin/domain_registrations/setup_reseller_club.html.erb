@@ -12,16 +12,34 @@
   <%=f.fields_for :user_key do |ff|%>
   <fieldset>
     <div class="form-group field">
-      <label>Reseller Club Account Id</label>
+      <label>Account Id</label>
       <%=ff.text_field :reseller_club_account_id, class: 'form-control',required: true%>
     </div>
-          
+
     <div class="form-group field">
-      <label >Reseller Club API Key</label>
+      <label >API Key</label>
       <%=ff.text_field :reseller_club_account_key_enc,value: '', class: 'form-control',required: true%>
     </div>
     <%end%>
+    
+     <div class="form-group field">
+      <label>Reseller Club Customer Id <span style="color: grey;margin-left: 10px;">(If you don't already have, We will create one)</span></label>
+      <%=f.text_field :reseller_club_customer_id, class: 'form-control'%>
+    </div>
+
+    <div class="form-group field">
+      <label>Reseller Club  Contact Id,<span  style="color: grey;margin-left: 10px;">(If you don't already have, We will create one)</span></label>
+      <%=f.text_field :reseller_club_contact_id, class: 'form-control'%>
+    </div>
+          
     <%=submit_tag 'Save',class: 'btn btn-primary'%>
 
   </fieldset>
 <%end%>
+
+
+<script type="text/javascript">
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+</script>

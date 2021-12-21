@@ -35,7 +35,7 @@ class DomainRegistrationJob < ApplicationJob
 
 
   def success?()
-    @result[:success] == true
+    @result[:success] == true 
   end
 
 

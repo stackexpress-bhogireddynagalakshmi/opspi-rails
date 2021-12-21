@@ -41,6 +41,16 @@ module Spree
       TenantManager::TenantHelper.unscoped_query  { super }
     end
 
+    def update_price
+      TenantManager::TenantHelper.unscoped_query  do
+        if self.reload.product.domain?
+          return nil
+        else
+          super
+        end
+      end
+    end
+    
   end
 end
 
