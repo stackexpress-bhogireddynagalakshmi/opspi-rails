@@ -26,10 +26,11 @@ module ResellerClub
         puts "URL:  #{url}"
         response =  Typhoeus::Request.new(url,opts).run
         parsed_response = JSON.parse(true_false_or_text_bind.call(response.body))
-        Rails.logger.info { parsed_response }
-        success = true if response.code == 200 && parsed_response["error"].blank?
+        Rails.logger.info { "ResellerClub Response: #{parsed_response }"}
+        
+        @success = true if response.code == 200
 
-        return { success: success, response: parsed_response }
+        return { success: @success, response: parsed_response }
       end
     end
 

@@ -1,5 +1,6 @@
 class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
    helper Spree::Admin::NavigationHelper
+   include Spree::Admin::DomainRegistrationsHelper
 
    before_action :set_tld_pricing, only: [:new]
 
@@ -21,11 +22,8 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
 
 
     def new
-
       @order = current_domain_order
-
       cookies.signed[:token] = @order.token if @order.present?
-  
       @product = TenantManager::TenantHelper.unscoped_query { Spree::Product.domain.first }
  
       if params[:domian_names].present?
@@ -34,8 +32,8 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
         
         @response = ResellerClub::Domain.available("domain-name" => domains,"tlds" => tlds, 'email'=> current_spree_user.email)[:response]
 
+
         @suggestions =  ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds, "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10",  'email'=> current_spree_user.email)[:response]
-        
       end
     end
 
@@ -52,11 +50,13 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
         cookies.signed[:token] = @order.token
       end
 
+      options = validate_pricing_for_domain(params[:options])
+
       @result = add_item_service.call(
             order: @order,
             variant: @variant,
             quantity: 1,
-            options: params[:options]
+            options: options
           )
 
       end
@@ -65,13 +65,14 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
     def setup_reseller_club
       if request.post?
         spree_current_user.update(user_params)
+        flash.now[:success] = "ResellerClub credentials saved successfully"
       end
     end
 
     private
     
     def set_tld_pricing
-      response = ResellerClub::Product.customer_price('customer-id'=>customer_id)
+      response = ResellerClub::Product.customer_price('customer-id'=>customer_id,'email'=>current_spree_user.email)
 
       if response[:success]
         @tld_pricing = response[:response]
@@ -120,10 +121,14 @@ class Spree::Admin::DomainRegistrationsController < Spree::Admin::BaseController
     end
 
     def user_params
-      params.require(:user).permit(:user_key_attributes=>[:id,:_destroy,:reseller_club_account_id,:reseller_club_account_key_enc])
+      params.require(:user).permit(:reseller_club_customer_id,:reseller_club_contact_id, :user_key_attributes=>[:id,:_destroy,:reseller_club_account_id,:reseller_club_account_key_enc])
     end
 
     def customer_id
       current_spree_user.account.store_admin.reseller_club_customer_id rescue nil
+    end
+
+    def validate_pricing_for_domain(options)
+      return options  #TODO: calculate the pricing again and update the hash before saving into database
     end
 end
