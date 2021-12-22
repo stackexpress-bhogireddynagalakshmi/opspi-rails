@@ -1,6 +1,6 @@
 module Spree
 	module AddressDecorator
-    Spree::Address::ADDRESS_FIELDS = %w(firstname lastname company phone address1 address2 country state city zipcode).freeze
+    Spree::Address::ADDRESS_FIELDS = %w(firstname lastname company country_code phone address1 address2 country state city zipcode).freeze
 
     def self.prepended(base)
       base.after_commit :set_first_and_last_name, on: [:update]
@@ -20,5 +20,5 @@ module Spree
 end
 
 ::Spree::Address.prepend Spree::AddressDecorator if ::Spree::Address.included_modules.exclude?(Spree::AddressDecorator)
-
+Spree::PermittedAttributes.address_attributes << :country_code
 
