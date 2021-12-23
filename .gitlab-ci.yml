@@ -92,6 +92,7 @@ docker-build-dev:
   only:
     - merge_requests
     - dev
+    - test/*
   except:
     - master
 

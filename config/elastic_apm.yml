@@ -1,0 +1,15 @@
+## config/elastic_apm.yml:
+
+# Set the service name - allowed characters: a-z, A-Z, 0-9, -, _ and space
+# Defaults to the name of your Rails app
+service_name: 'opspi-web'
+
+# Use if APM Server requires a secret token
+secret_token: ''
+
+# Set the custom APM Server URL (default: http://localhost:8200)
+server_url: 'http://apm.opspi.com:8200'
+
+# Set the service environment
+environment: 'development'
+
