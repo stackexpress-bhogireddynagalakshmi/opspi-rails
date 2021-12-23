@@ -6,7 +6,6 @@ module Spree
     def update
   
       update_payments_methods_attributes_params 
-        
       if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
         update_order_store_id
 
