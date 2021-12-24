@@ -35,7 +35,7 @@ module Spree
 
 	      store_admin = StoreManager::StoreAdminCreator.new(self,account: account).call
 
-	      if TenantManager::TenantHelper.current_tenant.blank?
+	      if TenantManager::TenantHelper.current_tenant.blank? || store_admin.account_id.blank?
 	        store_admin.update_column :account_id, account.id
 	      end
         
