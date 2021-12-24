@@ -91,3 +91,8 @@ gem 'after_commit_everywhere', '~> 1.0'
 gem 'whenever', require: false
 gem 'exception_notification'
 gem 'typhoeus', '~> 1.4'
+
+
+## DevOps Tools Start ##
+gem 'elastic-apm'
+## DevOps Tools End ##
