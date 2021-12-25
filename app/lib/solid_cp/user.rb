@@ -3,6 +3,7 @@ module SolidCp
   class User < Base
 
     client wsdl: SOAP_USER_WSDL, endpoint: SOAP_USER_WSDL,log: SolidCp::Config.log
+    global :read_timeout, SolidCp::Config.timeout
     global :open_timeout, SolidCp::Config.timeout
     global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
 
