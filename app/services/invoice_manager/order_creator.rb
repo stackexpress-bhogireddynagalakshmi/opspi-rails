@@ -37,14 +37,6 @@ module InvoiceManager
       end&.upcase
     end
 
-    def store_id
-      if user.store_admin?
-        TenantManager::TenantHelper.admin_tenant.spree_store.id
-      else
-        user.account.spree_store.id
-      end
-    end
-
     def order_params
       { 
         currency:   current_currency,
@@ -79,5 +71,13 @@ module InvoiceManager
       end
     end
 
+    def store_id
+      if user.store_admin?
+        TenantManager::TenantHelper.admin_tenant.spree_store.id
+      else
+        user.account.spree_store.id
+      end
+    end
+    
   end
 end

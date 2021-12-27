@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_16_120646) do
+ActiveRecord::Schema.define(version: 2021_12_20_072953) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -85,6 +85,28 @@ ActiveRecord::Schema.define(version: 2021_09_16_120646) do
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type"
   end
 
+  create_table "hosted_zone_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "hosted_zone_id"
+    t.string "record_name"
+    t.string "record_type"
+    t.string "value"
+    t.string "routing_policy"
+    t.boolean "alias_name"
+    t.string "ttl"
+    t.integer "isp_config_host_zone_record_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "hosted_zones", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "name"
+    t.integer "isp_config_host_zone_id"
+    t.string "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "invoices", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
     t.integer "account_id"
@@ -105,6 +127,7 @@ ActiveRecord::Schema.define(version: 2021_09_16_120646) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "subscription_id"
+    t.datetime "last_reminder_sent_at"
   end
 
   create_table "isp_config_limits", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -221,6 +244,7 @@ ActiveRecord::Schema.define(version: 2021_09_16_120646) do
     t.integer "user_id"
     t.datetime "deleted_at"
     t.string "label"
+    t.string "country_code"
     t.index ["country_id"], name: "index_spree_addresses_on_country_id"
     t.index ["deleted_at"], name: "index_spree_addresses_on_deleted_at"
     t.index ["firstname"], name: "index_addresses_on_firstname"
@@ -395,6 +419,12 @@ ActiveRecord::Schema.define(version: 2021_09_16_120646) do
     t.decimal "pre_tax_amount", precision: 12, scale: 4, default: "0.0", null: false
     t.decimal "taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "non_taxable_adjustment_total", precision: 10, scale: 2, default: "0.0", null: false
+    t.string "domain"
+    t.integer "validity"
+    t.boolean "protect_privacy"
+    t.boolean "domain_successfully_registered", default: false, null: false
+    t.datetime "domain_registered_at"
+    t.text "api_response"
     t.index ["order_id"], name: "index_spree_line_items_on_order_id"
     t.index ["tax_category_id"], name: "index_spree_line_items_on_tax_category_id"
     t.index ["variant_id"], name: "index_spree_line_items_on_variant_id"
@@ -1301,8 +1331,10 @@ ActiveRecord::Schema.define(version: 2021_09_16_120646) do
     t.integer "solid_cp_id"
     t.string "solid_cp_password"
     t.integer "isp_config_id"
-    t.string "isp_config_username", default: "null"
+    t.string "isp_config_username"
     t.boolean "reseller_signup", default: false, null: false
+    t.integer "reseller_club_customer_id"
+    t.integer "reseller_club_contact_id"
     t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
     t.index ["email"], name: "email_idx_unique", unique: true
@@ -1371,6 +1403,7 @@ ActiveRecord::Schema.define(version: 2021_09_16_120646) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "validity"
+    t.datetime "panel_disabled_at"
   end
 
   create_table "tenant_services", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -1378,6 +1411,14 @@ ActiveRecord::Schema.define(version: 2021_09_16_120646) do
     t.integer "account_id"
     t.integer "store_id"
     t.boolean "service_executed", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_keys", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "reseller_club_account_id"
+    t.text "reseller_club_account_key_enc"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

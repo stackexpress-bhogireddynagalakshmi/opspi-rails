@@ -30,8 +30,6 @@ module DnsManager
       def customer_params
         address = user.addresses.first
         set_password
-
-
         {
           "username"        =>  user.email,
           "email"          =>  user.email,
@@ -43,8 +41,8 @@ module DnsManager
           "state"           =>  state(address&.state&.name )|| "",
           "country"         =>  address&.country&.iso || "",
           "zipcode"         =>  address&.zipcode || "",
-          "phone-cc"        =>  "1",
-          "phone"           =>  address&.phone || "",
+          "phone-cc"        =>  sanitize_country_code(address.country_code),
+          "phone"           =>  sanitize_phone(address&.phone),
           "lang-pref"       => "en"
           
         }
@@ -68,6 +66,18 @@ module DnsManager
         name.gsub(" ","-")
       end
 
+      def sanitize_phone(phone)
+        return "" if phone.blank?
+
+        phone.delete('^0-9')
+      end
+
+      def sanitize_country_code(code)
+        return "1"
+        
+        code.delete('^0-9')
+      end
+
       def generate_password
        
         lower_chars   = 'abcdefghijklmnopqrstuvwxyz'
@@ -88,6 +98,8 @@ module DnsManager
         end while password.length < 15
         password
       end
+
+
 
     end
   end

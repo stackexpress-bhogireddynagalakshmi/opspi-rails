@@ -6,8 +6,9 @@ module Spree
     def update
   
       update_payments_methods_attributes_params 
-
       if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+        update_order_store_id
+
         @order.temporary_address = !params[:save_user_address]
         
         unless @order.next 
@@ -100,8 +101,18 @@ module Spree
       params[:order][:payments_attributes] = [params[:order][:payments_attributes][0]] 
     end
 
-  end
+    def update_order_store_id
+      if current_spree_user.present?
+        if current_spree_user.store_admin?
+          store_id = TenantManager::TenantHelper.admin_tenant.spree_store.id
+        else
+          store_id = current_store.id
+        end
+        @order.update_column(:store_id,store_id)
+      end
+    end
 
+  end
 end
 
 ::Spree::CheckoutController.prepend Spree::CheckoutControllerDecorator if ::Spree::OrdersController.included_modules.exclude?(Spree::CheckoutControllerDecorator)

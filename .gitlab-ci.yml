@@ -41,8 +41,9 @@ sonarqube-check:
     - sonar-scanner
   allow_failure: true
   only:
-    - master
-    - dev
+    - test
+    #- master
+    #- dev
 
 
 docker-build-staging:
@@ -91,6 +92,7 @@ docker-build-dev:
   only:
     - merge_requests
     - dev
+    - test/apm
   except:
     - master
 

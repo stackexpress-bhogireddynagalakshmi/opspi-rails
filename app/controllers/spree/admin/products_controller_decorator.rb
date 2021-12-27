@@ -9,6 +9,13 @@ module Spree
           super            
         end
       end  
+      
+      protected
+
+      def location_after_save
+        params.key?(:done) ? admin_products_path : edit_admin_product_url(@product)
+      end
+
     end
   end
 end

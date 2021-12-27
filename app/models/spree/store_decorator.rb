@@ -4,7 +4,7 @@ module Spree
 
 	  def self.prepended(base)  
 	    base.after_commit :create_account_and_admin_user, on: [:create,:update]
-	    base.acts_as_tenant :account,class_name: '::Account'
+	    base.belongs_to :account,class_name: '::Account'
 	    base.validates :url, uniqueness: true
 	    base.validates :admin_email, format: { with: URI::MailTo::EMAIL_REGEXP } 
 	    base.validates :isp_config_username,
@@ -28,7 +28,6 @@ module Spree
   	def create_account_and_admin_user
 
   		ActiveRecord::Base.transaction do
-  		
 
 		    account = TenantManager::TenantCreator.new(self).call
 
@@ -36,14 +35,12 @@ module Spree
 
 	      store_admin = StoreManager::StoreAdminCreator.new(self,account: account).call
 
-	      if TenantManager::TenantHelper.current_tenant.blank?
+	      if TenantManager::TenantHelper.current_tenant.blank? || store_admin.account_id.blank?
 	        store_admin.update_column :account_id, account.id
 	      end
-	     
+        
 	    end
-
   	end
-
 	end
 end
 

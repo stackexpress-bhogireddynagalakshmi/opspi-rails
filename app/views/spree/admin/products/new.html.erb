@@ -13,14 +13,12 @@
       <%= f.error_message_on :name %>
     <% end %>
 
-
     <div data-hook="admin_product_form_server_type">
       <%= f.field_container :server_type, class: ['form-group'] do %>
       <%= f.label :plan_type, raw(Spree.t(:plan_type) + required_span_tag) %>
       <%= f.select :server_type, options_for_select(plan_type_values(current_spree_user),f.object.server_type),{include_blank: true},class: 'form-control title' %>
       <%= f.error_message_on :server_type %>
     <% end %>
-
 
    <%if current_spree_user.superadmin?%>
     <div data-hook="admin_product_form_reseller_product">
@@ -56,7 +54,7 @@
       <%else%>
         <%=f.hidden_field :solid_cp_master_plan_id,value: current_store.solid_cp_master_plan_id %>
       <%end%>
-
+      
       <div id="product_quota_groups">
         <%@form = f%>
         <%=render :partial=>'solid_cp_quota_form',:locals=>{f: f,solid_cp_plan_id: ""} if current_spree_user.store_admin?%>

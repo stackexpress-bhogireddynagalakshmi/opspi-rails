@@ -40,13 +40,32 @@
 <%end%>
 
 <div>
-  <h5 class="mt-4">Domain Availibility</h5>
-
+ 
+  <%if @response && @response["status"]=='ERROR'%>
+    <div style="color: red;" class="mt-3"><%=@response["message"]%></</div> 
+  <%else%>
+   <h5 class="mt-4">Domain Availibility</h5>
   <%= render partial: 'hosting/domain_list',locals: {domains: @response,order: @order} if @response.present?%>
-
+  <%end%>
 </div>
 
+
+<%if  @response && @response["status"]!='ERROR'%>
 <div>
   <h5>Other matching domains that are available</h5>
   <%= render partial: 'hosting/domain_list',locals: {domains: @suggestions,order: @order} if @suggestions.present?%>
 </div>
+<%end%>
+
+
+<script type="text/javascript">
+  
+  $(document).ready(function (argument) {
+    $('.domain-validity-dropdown').on('change',function (argument) {
+      var validity = $(this).val() || 1;
+      var priceInput    = $(this).closest('td').find('.domain-price');
+      var amount  = parseInt(validity) * parseFloat($(priceInput).val());
+      $(priceInput).val(amount);
+    });
+  });
+</script>
