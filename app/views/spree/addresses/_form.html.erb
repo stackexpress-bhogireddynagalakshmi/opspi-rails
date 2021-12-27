@@ -6,7 +6,7 @@
   <% if field == "country" %>
     <div class="form-group checkout-content-inner-field" id="<%= "#{address_id}country" %>">
       <div id="<%= "#{address_id}country-selection" %>" class="d-block position-relative has-float-label">
-        <%= address_form.collection_select :country_id, available_countries, :id, :name,
+        <%= address_form.collection_select :country_id, available_countries, :id, :country_name_dialing_code,
                                            { prompt: Spree.t(:country).upcase },
                                            { class: 'form-control spree-flat-select',
                                              aria: { label: Spree.t(:country) } } %>
