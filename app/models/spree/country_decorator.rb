@@ -8,5 +8,5 @@ module Spree
 	end
 end
 
-::Spree::Country.prepend Spree::CounrtyDecorator if ::Spree::Country.included_modules.exclude?(Spree::CounrtyDecorator)
+::Spree::Country.prepend Spree::CountryDecorator if ::Spree::Country.included_modules.exclude?(Spree::CountryDecorator)
 
