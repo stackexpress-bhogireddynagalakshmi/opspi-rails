@@ -91,6 +91,7 @@ gem 'after_commit_everywhere', '~> 1.0'
 gem 'whenever', require: false
 gem 'exception_notification'
 gem 'typhoeus', '~> 1.4'
+gem 'iso_country_codes'
 
 
 ## DevOps Tools Start ##

@@ -1,12 +1,11 @@
 <% s_or_b = type.chars.first %>
-<%= f %>
 <div id="<%= type %>" data-hook="address_fields">
   <% Spree::Address::ADDRESS_FIELDS.each do |field| %>
     <% if field == "country" %>
       <%= field_container (s_or_b + '_' + field), nil, class: ["form-group", "#{type}-row"] do %>
         <%= f.label :country_id, Spree.t(:country) %>
         <div id="<%= s_or_b %>country">
-          <%= f.collection_select :country_id, available_countries, :id, :name, {}, { class: 'select2 w-100' } %>
+          <%= f.collection_select :country_id, available_countries, :id, :country_name_dialing_code, {}, { class: 'select2 w-100' } %>
         </div>
       <% end %>
     <% elsif field == "state" %>
@@ -26,15 +25,6 @@
         </div>
         <%= error_message_on f.object, :state_id %>
       <% end %>
-    <% elsif field == "country_code" %>
-      <%= field_container (s_or_b + '_' + field), nil, class: ["form-group", "#{type}-row"] do %>
-        <%= f.label :country_code, Spree.t(:country_code) %>
-        <div id="<%= s_or_b %>country_code" class="d-block position-relative has-float-label">
-            <%= f.select :country_code, options_for_select(country_codes,f.object.country_code),
-                         :onchange => "document.getElementById('country_code').value = this.options[selectedIndex].value;"%>
-            <%= image_tag 'arrow.svg', class: 'position-absolute flat-select-arrow' %>
-        </div>
-      <% end %>
     <% else %>
         <%= field_container (s_or_b + '_' + field), nil, class: ["form-group", "#{type}-row"] do %>
           <%= f.label field, Spree.t(field) %>
@@ -45,10 +35,3 @@
   <% end %>
 </div>
 
-<% content_for :head do %>
-  <script>
-    $(document).ready(function(){
-      $('#<%= s_or_b %>country select').on('change', function() { update_state('<%= s_or_b %>'); });
-    });
-  </script>
-<% end %>
