@@ -1,5 +1,5 @@
 module Spree
-	module CounrtyDecorator
+	module CountryDecorator
     
         def country_name_dialing_code
             code = IsoCountryCodes.find(iso)
