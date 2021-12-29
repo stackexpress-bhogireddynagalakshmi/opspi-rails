@@ -1,4 +1,6 @@
 require "typhoeus"
+require 'addressable/uri'
+
 module ResellerClub
   class TyphoeusClient
     attr_reader :url,:data,:success
@@ -23,7 +25,7 @@ module ResellerClub
       if data["silent"]
         Typhoeus::Request.new(url,opts).run
       else
-        puts "URL:  #{url}"
+        Rails.logger.info { "URL:  #{fiter_sensitive_info(url)}" }
         response =  Typhoeus::Request.new(url,opts).run
         parsed_response = JSON.parse(true_false_or_text_bind.call(response.body))
         Rails.logger.info { "ResellerClub Response: #{parsed_response }"}
@@ -42,9 +44,7 @@ module ResellerClub
       !success
     end
 
-
     private
-
     def true_false_or_text(str)
       if str == "true"
         return {"response" => true}.to_json
@@ -60,6 +60,15 @@ module ResellerClub
         end
         return str
       end
+    end
+
+    def fiter_sensitive_info(url)
+      uri = Addressable::URI.parse(url)
+      params = uri.query_values 
+      params = params.reject { |k,v| Rails.application.config.filter_parameters.include?(k) }
+      uri.query_values = params 
+
+      uri.to_s
     end
   end
 end
