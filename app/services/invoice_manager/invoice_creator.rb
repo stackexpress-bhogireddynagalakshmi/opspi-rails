@@ -65,10 +65,12 @@ module InvoiceManager
     end
 
     def find_current_invoice
-      last_invoice = subscription.invoices.active.last
+      last_invoice = subscription.invoices.last
+      return nil if last_invoice.blank?
+      return nil if last_invoice.archived?
+      return nil if Date.today > last_invoice.finished_on 
 
-      return last_invoice if last_invoice &&  last_invoice.finished_on > Date.today 
-
+      return last_invoice
     end
   end
 end

@@ -16,7 +16,7 @@ module InvoiceManager
       if Date.today > invoice.due_date.to_date
         AppManager::PanelAccessDisabler.new(invoice).call        
       else
-        send_invoice_reminder_notification
+        send_invoice_reminder_notification if invoice_is_in_grace_period
       end
     end
 
@@ -33,6 +33,12 @@ module InvoiceManager
         
         AppManager::NotificationManager.new(args).call
       end
+    end
+
+    def invoice_is_in_grace_period
+      return true if Date.today > invoice.finished_on
+
+      return false
     end
 
   end
