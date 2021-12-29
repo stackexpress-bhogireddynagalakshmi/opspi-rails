@@ -26,6 +26,8 @@ module OpsPi
     config.hosts = nil
     config.active_job.queue_adapter = :sidekiq
     config.active_storage.service = :digitalocean
+    config.filter_parameters += ['api-key','auth-userid',:passwd]
+
     
   
     # config.assets.precompile += %w( store/all.js store/all.css admin/all.js admin/all.css)
