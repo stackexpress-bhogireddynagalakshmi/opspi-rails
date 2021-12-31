@@ -53,10 +53,8 @@
         </div>
         <%= text_field_tag :url,@store.account.subdomain, class: 'form-control',readonly: true %>
       </div>
-     
     <% end %>
-
-
+    
     <%= f.field_container :url, class: ['form-group'] do %>
       <%= f.label :url, raw(Spree.t(:custom_marketplace_url) + required_span_tag) %>
       <div class="input-group mb-3">
@@ -64,9 +62,9 @@
           <span class="input-group-text" id="basic-addon3">https://</span>
         </div>
        <%domain = @store.account.domain == @store.account.subdomain ? '' : @store.account.domain%>
-       <%= text_field_tag :custom_domain,domain, class: 'form-control' %>
-        
+       <%= text_field_tag :custom_domain,domain, class: 'form-control' %> 
       </div>
+
       <span id="domain-validation-msg"></span>
       <%= f.error_message_on :url %>
     <% end %>
