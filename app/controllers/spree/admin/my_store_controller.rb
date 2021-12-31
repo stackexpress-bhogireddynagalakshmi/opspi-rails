@@ -48,7 +48,7 @@ class Spree::Admin::MyStoreController < Spree::Admin::BaseController
     return {success: false, msg: validation[1]} unless  validation[0]
 
     dns_resolver = DnsManager::CnameResolver.new(custom_domain).call
-    return {success: false,msg:  I18n.t('my_store.cname_not_added',cname: ENV['CNAME_POINTER_DOMAIN']),current_cname: dns_resolver.cname} unless dns_resolver.cname_configured?
+    return {success: false,msg:  I18n.t('my_store.cname_not_added',cname: ENV['CNAME_POINTER_DOMAIN'],custom_domain: custom_domain),current_cname: dns_resolver.cname} unless dns_resolver.cname_configured?
 
     return {success: true, msg: I18n.t('my_store.domain_validated')}
 

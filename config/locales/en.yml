@@ -95,7 +95,7 @@ en:
     user_does_not_exists: 'IspConfig user account does not exists.'
 
   my_store:
-    cname_not_added: "Please add %{cname} as CNAME in your DNS setting."
+    cname_not_added: "Please add %{cname} as CNAME record in your DNS setting of %{custom_domain}."
     domain_cannot_be_blank: "Custom domain can't be blank."
     domain_validated: "Custom domain successfully validated. Please check after few minutes."
 
