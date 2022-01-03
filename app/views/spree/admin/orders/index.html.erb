@@ -7,7 +7,8 @@
     class: "btn-success",
       icon: 'add.svg',
       id: 'admin_new_order' %>
-<% end if can? :create, Spree::Order %>
+<% end if can? :create, Spree::Order  && false%>
+
 <% content_for :table_filter do %>
   <div data-hook="admin_orders_index_search">
 
