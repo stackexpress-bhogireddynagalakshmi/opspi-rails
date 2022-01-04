@@ -39,5 +39,28 @@ module OpsPi
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+
+
+
+    # Override Spree Core routes in order to translate products routes
+    initializer "delete_spree_core_routes", after: "add_routing_paths" do |app|
+      new_spree_auth_route_path = File.expand_path('../../config/spree_auth_routes_override.rb', __FILE__)
+      routes_paths = app.routes_reloader.paths
+
+      spree_devise_auth_route_path = routes_paths.select{ |path| path.include?("spree_auth_devise") }.first
+
+      if spree_devise_auth_route_path.present?
+        spree_core_route_path_index = routes_paths.index(spree_devise_auth_route_path)
+
+        routes_paths.delete_at(spree_core_route_path_index)
+      
+        routes_paths.insert(spree_core_route_path_index, new_spree_auth_route_path)
+       
+      end
+    end
+
   end
 end
+
+
