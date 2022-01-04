@@ -14,6 +14,7 @@ module StoreManager
         store.reload
         ensure_store_admin_role
         ensure_tenant_service_created(store)
+        update_tenant_id(store)
       end
     end
 
@@ -48,7 +49,11 @@ module StoreManager
     end
 
     def ensure_tenant_service_created(store)
-       TenantService.find_or_create_by({user_id: store_admin.id,account_id: store.account_id})
+      TenantService.find_or_create_by({ user_id: store_admin.id, account_id: store.account_id })
+    end
+
+    def update_tenant_id(store)
+     # store_admin.update_column(:account_id, store.account_id)
     end
 
   end

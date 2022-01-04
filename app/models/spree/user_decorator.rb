@@ -100,7 +100,7 @@ module Spree
 
     def active_for_authentication?
       if self.superadmin?
-        super && true
+        super && TenantManager::TenantHelper.current_admin_tenant?
       elsif self.store_admin?
         if TenantManager::TenantHelper.current_admin_tenant?
           super
