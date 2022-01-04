@@ -65,8 +65,8 @@ module Spree
       "#{first_name} #{last_name}"
     end
 
-      #for store admin or reseller owner_id will be always 1
-      #For normal user ower_id will be the is of Store Admin/Reseller
+    #for store admin or reseller owner_id will be always 1
+    #For normal user ower_id will be the is of Store Admin/Reseller
     def owner_id
       self.store_admin? ? 1  : (account.store_admin.try(:solid_cp_id) || 1)
     end
@@ -100,7 +100,7 @@ module Spree
 
     def active_for_authentication?
       if self.superadmin?
-        super && true
+        super && TenantManager::TenantHelper.current_admin_tenant?
       elsif self.store_admin?
         if TenantManager::TenantHelper.current_admin_tenant?
           super

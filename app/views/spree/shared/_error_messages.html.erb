@@ -2,7 +2,9 @@
   <div id="errorExplanation" class="alert alert-danger d-flex justify-content-center mb-0" data-hook>
      <ul class="mb-0 pl-0" style="list-style-type: none;">
        <% target.errors.full_messages.each do |msg| %>
+        <% unless (msg.include?("Ship")) %>
          <li><%= msg %></li>
+        <%end%>
        <% end %>
      </ul>
      <br>
