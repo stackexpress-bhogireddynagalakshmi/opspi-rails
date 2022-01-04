@@ -34,6 +34,8 @@ user = Spree::User.find_by_email(@email)%>
 
 <p>
   <%= Spree.t('user_mailer.confirmation_instructions.instructions_3') %>
+  <br />
+  <%= @current_store.customer_support_email %>
 </p>
 
 <p>
