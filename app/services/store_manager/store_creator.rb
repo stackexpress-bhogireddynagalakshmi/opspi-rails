@@ -32,7 +32,7 @@ module StoreManager
 
     def store_params
       subdomain = store_admin.subdomain.split(".")[0]
-      url = "#{subdomain}.#{ENV['BASE_DOMAIN']}"
+      url = "#{subdomain}.#{ENV['BASE_DOMAIN']}".downcase
       
       store_params = {
         name: store_admin.business_name,
