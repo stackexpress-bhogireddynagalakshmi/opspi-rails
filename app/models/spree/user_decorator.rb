@@ -86,7 +86,7 @@ module Spree
       return unless self.reseller_signup?
       
 
-      unless subdomain.match? /^[a-z0-9-]*?$/ # alphanumeric
+      unless subdomain.match? /^[a-z0-9]*?$/ # alphanumeric
         self.errors.add(:base,'Subdomain is invalid. Please enter valid subdomain containing lowercase characters and numbers only.')
       end
 
