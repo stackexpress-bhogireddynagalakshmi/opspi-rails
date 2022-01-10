@@ -11,7 +11,7 @@ module Spree
         end
 
         def edit
-          TenantManager::TenantHelper.unscoped_query{super}
+          ActsAsTenant.current_tenant = nil     
         end
       end
    end
