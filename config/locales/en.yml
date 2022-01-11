@@ -31,8 +31,10 @@
 
 en:
   hello: "Hello world"
+ 
 
   spree:
+    products: 'Services'
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout
