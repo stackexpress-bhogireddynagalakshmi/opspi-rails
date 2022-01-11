@@ -4,6 +4,7 @@ module Spree
 
     def self.prepended(base)
       base.validate :ensure_valid_store_params,on: [:create]
+
       base.belongs_to :account,:class_name=>'::Account'
       base.has_many :subscriptions,:class_name=>'Subscription'
       base.has_many :plans,through: :subscriptions,:class_name=>'Spree::Product' 
@@ -53,7 +54,9 @@ module Spree
       if self.reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
         StoreManager::StoreCreator.new(self).call
       else
-        StoreManager::StoreAdminRoleAssignor.new(self,{role: "user"}).call
+        if spree_roles.blank?
+          StoreManager::StoreAdminRoleAssignor.new(self,{role: "user"}).call
+        end
       end
     end
 
@@ -81,8 +84,15 @@ module Spree
 
     def ensure_valid_store_params
       return unless self.reseller_signup?
+      
+
+      unless subdomain.match? /^[a-z0-9]*?$/ # alphanumeric
+        self.errors.add(:base,'Subdomain is invalid. Please enter valid subdomain containing lowercase characters and numbers only.')
+      end
+
+
       store = StoreManager::StoreCreator.new(self).store
-      return if store.valid?
+      return nil if store.valid?
     
       self.errors.merge!(store.errors)
     end
