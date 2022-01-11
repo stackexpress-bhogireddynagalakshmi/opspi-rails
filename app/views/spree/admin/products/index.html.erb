@@ -1,5 +1,6 @@
 <% content_for :page_title do %>
-  <%= plural_resource_name(Spree::Product) %>
+  <%#= plural_resource_name(Spree::Product) %>
+  <%=Spree.t(:products)%>
 <% end %>
 
 <%@collection = @collection.where(account_id: params[:q][:account_id]) if params[:q][:account_id].present?%>
