@@ -164,7 +164,7 @@ module Spree
 
     def ensure_terms_and_condition_accepted
       unless terms_and_conditions
-        errors.add(:_, "Tick I agree button before continuing ")
+        errors.add(:_, "Please accept the terms and conditions")
       end
     end
   
