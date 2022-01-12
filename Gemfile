@@ -72,11 +72,11 @@ gem 'sassc', github: 'sass/sassc-ruby', branch: 'master'
 gem 'acts_as_tenant'
 gem 'spree_i18n', github: 'spree-contrib/spree_i18n', branch: 'master'
 # gem 'spree_mail_settings', github: 'spree-contrib/spree_mail_settings'
+gem 'spree_print_invoice', github: 'spree-contrib/spree_print_invoice', branch: 'master'
 
 #gem 'spree_braintree_vzero', '~> 3.5'
 
 gem 'spree_paypal_express', git: 'git://github.com/spree-contrib/better_spree_paypal_express'
-gem 'spree_print_invoice', github: 'spree-contrib/spree_print_invoice', branch: 'master'
 
 # gem 'httparty'
 # gem 'hashie'
