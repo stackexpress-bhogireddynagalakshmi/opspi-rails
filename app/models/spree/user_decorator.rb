@@ -3,7 +3,8 @@ module Spree
     attr_accessor :subdomain,:business_name
 
     def self.prepended(base)
-      base.validate :ensure_valid_store_params,on: [:create]
+      base.validate :ensure_valid_store_params, on: [:create]
+      base.validate :ensure_terms_and_condition_accepted, on: [:create]
 
       base.belongs_to :account,:class_name=>'::Account'
       base.has_many :subscriptions,:class_name=>'Subscription'
@@ -159,7 +160,12 @@ module Spree
 
     def reject_if_key_blank(attrs)
       attrs['reseller_club_account_key_enc'].blank?
+    end
 
+    def ensure_terms_and_condition_accepted
+      unless terms_and_conditions
+        errors.add(:_, "Please accept the terms and conditions")
+      end
     end
   
   end
@@ -171,7 +177,7 @@ Spree::PermittedAttributes.user_attributes.push << :last_name
 Spree::PermittedAttributes.user_attributes.push << :subdomain
 Spree::PermittedAttributes.user_attributes.push << :reseller_signup
 Spree::PermittedAttributes.user_attributes.push << :business_name
-
+Spree::PermittedAttributes.user_attributes.push << :terms_and_conditions
 
 
 
