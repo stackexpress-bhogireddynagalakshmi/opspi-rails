@@ -72,12 +72,10 @@ gem 'sassc', github: 'sass/sassc-ruby', branch: 'master'
 gem 'acts_as_tenant'
 gem 'spree_i18n', github: 'spree-contrib/spree_i18n', branch: 'master'
 # gem 'spree_mail_settings', github: 'spree-contrib/spree_mail_settings'
-gem 'spree_print_invoice', github: 'spree-contrib/spree_print_invoice', branch: 'master'
 
 #gem 'spree_braintree_vzero', '~> 3.5'
-
+# gem 'spree_print_invoice', github: 'spree-contrib/spree_print_invoice', branch: 'master'
 gem 'spree_paypal_express', git: 'git://github.com/spree-contrib/better_spree_paypal_express'
-
 # gem 'httparty'
 # gem 'hashie'
 
@@ -85,7 +83,7 @@ gem 'savon', '~> 2.12.0'
 gem 'sidekiq'
 gem 'httparty'
 gem 'hashie'
-gem 'dotenv-rails', groups: [:development, :test]
+gem 'dotenv-rails', groups: [:development, :test,:staging]
 gem 'dnsruby', '~> 1.59', '>= 1.59.3'
 gem "aws-sdk-s3", require: false
 gem 'aasm'
@@ -99,3 +97,4 @@ gem 'iso_country_codes'
 ## DevOps Tools Start ##
 gem 'elastic-apm'
 ## DevOps Tools End ##
+#gem 'deface', '~> 1.0', '>= 1.0.2'
