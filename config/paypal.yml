@@ -5,3 +5,12 @@ development:
 production:
   ssl_options:
     ca_file: null
+
+qa:
+  ssl_options:
+    ca_file: null
+
+
+staging:
+  ssl_options:
+    ca_file: null
