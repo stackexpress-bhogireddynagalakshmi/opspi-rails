@@ -1,0 +1,50 @@
+<% content_for :page_title do %>
+ Domains
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_domian),
+    domain_admin_isp_config_index_path,
+    class: "btn-success",
+      icon: 'add.svg',
+      id: 'admin_new_domain' %>
+<% end %>
+
+<% if @domains.any? %>
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+    <table class="table" id="listing_orders" data-hook data-nav-x-content>
+      <thead>
+        <tr data-hook="admin_orders_index_headers">
+          <th>Domain Name</th>
+          <th>Active</th>
+          <th>Actions</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+      <%@domains.each do |domain| %>
+        <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
+          <td><%=domain.domain%></td>
+          <td><%=domain.active%></td>
+          <td><%=link_to 'Edit',domain_admin_isp_config_index_path(domain_id: domain.domain_id)%> |
+            <%=link_to 'Delete',domain_admin_isp_config_index_path(domain_id: domain.domain_id), method: :delete%>
+          </td>  
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+  
+  </div>
+<% end %>
+
+
+<script type="text/javascript">
+  
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+</script>

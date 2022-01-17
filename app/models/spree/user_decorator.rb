@@ -14,6 +14,7 @@ module Spree
       base.has_one :spree_store,:through=>:account,:class_name=>'Spree::Store' 
       base.has_one :tenant_service
       base.has_one :user_key
+      base.has_many :mail_domains
 
       base.after_commit :update_user_tanent, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]

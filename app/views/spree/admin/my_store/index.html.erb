@@ -206,24 +206,20 @@
   
   $(document).ready(function (argument) {
     $('#validate-btn').on('click',function (argument) {
-        var customDomain = $('#custom_domain').val();
-        $('#store_url_field').removeClass('withError');
-        $('#store_url_field').find(".formError").remove();
+      var customDomain = $('#custom_domain').val();
+      $('#store_url_field').removeClass('withError');
+      $('#store_url_field').find(".formError").remove();
 
-        $.post("/admin/my_store/validate_domain?custom_domain="+customDomain,function(data){
-    
-          if(data["success"]){
-            $('#domain-validation-msg').html("<span class='formSuccess'>"+data["msg"]+"</span>")
+      $.post("/admin/my_store/validate_domain?custom_domain="+customDomain,function(data){
+  
+        if(data["success"]){
+          $('#domain-validation-msg').html("<span class='formSuccess'>"+data["msg"]+"</span>")
 
-          }else{
-
-            $('#store_url_field').addClass('withError');              
-            $('#store_url_field').append("<span class='formError'>"+data["msg"]+"</span>");
-          }
-
-
-        })
-
+        }else{
+          $('#store_url_field').addClass('withError');              
+          $('#store_url_field').append("<span class='formError'>"+data["msg"]+"</span>");
+        }
+      })
     });
   });
 </script>
