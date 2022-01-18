@@ -12,6 +12,8 @@
 <% end %>
 
  <%=form_for "domain", url: domain_admin_isp_config_index_path, html: {method: @mail_domain.present? ? :put : :post} do |f|%> 
+
+  <%=hidden_field_tag :domain_id,@mail_domain.try("domain_id")%>
   <fieldset>
     <div class="form-group field">
       <label>Mail Domain</label>

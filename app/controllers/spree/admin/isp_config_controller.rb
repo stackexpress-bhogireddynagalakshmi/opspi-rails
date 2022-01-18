@@ -13,7 +13,7 @@ class Spree::Admin::IspConfigController < Spree::Admin::BaseController
   def domain
     domain = current_mail_domain
 
-    if domain.present?  #edit,delete.update
+    if domain.present? #edit,delete.update
       if request.put?
         @response  = mail_domain.update(domain.isp_config_mail_domain_id, mail_domain_params)
         set_flash
@@ -24,7 +24,6 @@ class Spree::Admin::IspConfigController < Spree::Admin::BaseController
         redirect_to domains_admin_isp_config_index_path
       elsif request.get?
         @response = mail_domain.find(domain.isp_config_mail_domain_id)
-        byebug
         @mail_domain = @response[:response].response  if @response[:success].present?
       end
 
@@ -41,7 +40,7 @@ class Spree::Admin::IspConfigController < Spree::Admin::BaseController
   private
 
   def set_flash
-    if @response[:success]
+    if @response[:success] 
       flash[:success] = @response[:message]
     else
       flash[:error] = @response[:message] 

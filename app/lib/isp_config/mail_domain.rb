@@ -55,6 +55,7 @@ module IspConfig
           primary_id: primary_id
         }}
       )
+      user.mail_domains.find_by_isp_config_mail_domain_id(primary_id).destroy if response.code == "ok"
       formatted_response(response,'delete')
     end
 
