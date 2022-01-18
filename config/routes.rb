@@ -38,6 +38,22 @@ Rails.application.routes.draw do
           post :setup_reseller_club
         end
       end
+
+      resources :isp_config,only: [] do
+        collection do
+          get :domains
+          get :domain
+          post :domain
+          put :domain
+          delete :domain
+          get :mailboxes
+          get :mailbox
+          post :mailbox
+          delete :domain
+          put :domain
+        end
+      end
+
     end
   end
 
