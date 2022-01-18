@@ -125,10 +125,14 @@ module IspConfig
         end
     end
 
-     #Package API interface for the  user/Reseller
-     def template
-       @template ||= IspConfig::Template.new(user)
-     end
+    #Package API interface for the  user/Reseller
+    def template
+      @template ||= IspConfig::Template.new(user)
+    end
+
+    def mail_domain
+      @mail_domain ||= IspConfig::MailDomain.new(user)
+    end
 
     private
 

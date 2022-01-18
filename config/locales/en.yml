@@ -95,6 +95,10 @@ en:
     user_already_exists: 'IspConfig user account already exists for this user.'
     something_went_wrong: "Something went wrong while creating user account. IspConfig Error: %{message}"
     user_does_not_exists: 'IspConfig user account does not exists.'
+    mail_domain:
+      create: Mail Domain created successfully.
+      update: Mail Domain updated successfully.
+      delete: Mail Domain deleted successfully.
 
   my_store:
     cname_not_added: "Please add %{cname} as CNAME record in your DNS setting of %{custom_domain}."
