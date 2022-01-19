@@ -26,11 +26,11 @@ class Spree::Admin::IspConfigController < Spree::Admin::BaseController
         @mail_domain = @response[:response].response  if @response[:success].present?
       end
     else #create , #new
-       if request.post?
-         @response  = mail_domain.create(mail_domain_params)
-         set_flash
-         redirect_to domains_admin_isp_config_index_path
-       end
+      if request.post?
+        @response  = mail_domain.create(mail_domain_params)
+        set_flash
+        redirect_to domains_admin_isp_config_index_path
+      end
     end
   end
 
@@ -77,7 +77,6 @@ class Spree::Admin::IspConfigController < Spree::Admin::BaseController
     end
   end
 
-  #mail domains
   def mail_domain_params
     params.require("domain").permit(:domain,:active)
   end
