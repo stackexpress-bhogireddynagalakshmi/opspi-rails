@@ -99,6 +99,11 @@ en:
       create: Mail Domain created successfully.
       update: Mail Domain updated successfully.
       delete: Mail Domain deleted successfully.
+    mail_user:
+      create: Mail Box created successfully.
+      update: Mail Box updated successfully.
+      delete: Mail Box deleted successfully.
+
 
   my_store:
     cname_not_added: "Please add %{cname} as CNAME record in your DNS setting of %{custom_domain}."
