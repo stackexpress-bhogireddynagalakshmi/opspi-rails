@@ -39,18 +39,17 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :mail do
+        resources :domains        
+      end
+
       resources :isp_config,only: [] do
         collection do
-          get :domains
-          get :domain
-          post :domain
-          put :domain
-          delete :domain
           get :mailboxes
           get :mailbox
           post :mailbox
-          delete :domain
-          put :domain
+          delete :mailbox
+          put :mailbox
         end
       end
 

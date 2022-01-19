@@ -134,6 +134,10 @@ module IspConfig
       @mail_domain ||= IspConfig::MailDomain.new(user)
     end
 
+    def mail_user
+      @mail_user ||= IspConfig::MailUser.new(user)
+    end
+
     private
 
     def user_hash
