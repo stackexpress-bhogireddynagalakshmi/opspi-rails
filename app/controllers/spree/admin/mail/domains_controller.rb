@@ -58,6 +58,8 @@ module Spree
 
         def set_mail_domain
           @domain = current_spree_user.mail_domains.find_by_isp_config_mail_domain_id(params[:id])
+
+          redirect_to admin_mail_domains_path, notice: 'Not Authorized' if @domain.blank?
         end
 
       end
