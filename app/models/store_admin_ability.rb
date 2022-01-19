@@ -26,8 +26,8 @@ class StoreAdminAbility
       #can :manage, ::Spree::Promotion
       
       can :manage, :domain_registrations
-      can :manage, :isp_config
       can :manage, :domains
+      can :manage, :mail_boxes
       can :manage, :my_store
       can :manage, ::Spree::PaymentMethod unless TenantManager::TenantHelper.current_admin_tenant?
       can :admin, ::Spree::Store if TenantManager::TenantHelper.current_tenant.present? && TenantManager::TenantHelper.current_tenant.id == user.account_id

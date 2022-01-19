@@ -1,0 +1,103 @@
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
+<style type="text/css">
+  .formSuccess{
+    color: green;
+  }
+</style>
+
+<% content_for :page_title do %>
+ <div class="mt-2"></div>
+  <%= link_to Spree.t(:mailbox), admin_mail_mail_boxes_path %> /
+  <%= Spree.t(:new_mailbox) %>
+<% end %>
+
+<% url =  @mail_user.present? ?   admin_mail_mail_box_path(@mail_user.mailuser_id) : admin_mail_mail_boxes_path%>
+
+ <%=form_for "mailuser", url: url, html: {method: @mail_user.present? ? :put : :post} do |f|%> 
+
+  <%=hidden_field_tag :domain_id, @mail_domain.try("domain_id")%>
+  <fieldset>
+    <div class="form-group field">
+      <label>Name</label>
+      <%=f.text_field 'name', value: @mail_user.try(:name), class: 'form-control'%>
+    </div>
+
+    <div class="form-group field">
+      <label>Email</label>
+      <%=f.email_field 'email', value: @mail_user.try(:email), class: 'form-control'%>
+    </div>
+
+    <div class="form-group field">
+      <label>Password</label>
+      <%=f.password_field 'password', class: 'form-control'%>
+    </div>
+
+    <div class="form-group field">
+      <label>Quota (0 for unlimited)</label>
+      <%=f.text_field 'quota', value: @mail_user.try(:quota) || 0, class: 'form-control'%>
+    </div>
+
+     <div class="form-group field">
+      <label>Send copy to (Separate multiple email addresses with commas)</label>
+      <%=f.text_field 'cc', value: @mail_user.try(:cc), class: 'form-control'%>
+    </div>
+ 
+
+    <div class="form-group field">
+      <label>Copy during delivery</label>
+      <%=f.check_box 'forward_in_lda', value: @mail_user.try(:forward_in_lda)%>
+    </div>
+    
+    <div class="form-group field">
+      <label>Spamfilter</label>
+      <%=f.select 'policy', options_for_select([['- Inherit domain setting -',0],['Non-paying',1],['Normal',5],['Permissive',7],['Trigger happy',6],['Uncensored',2],['Wants all spam',3],['Wants viruses',4]], @mail_user.try(:policy)), {}, class: 'form-control'%>
+    </div>
+
+    <div class="form-group field">
+      <label>Enable receiving</label>
+      <%=f.check_box 'postfix',{ value: 'y', checked: @mail_user&.postfix == 'y' || true}, 'y', 'n'%>
+    </div>
+    
+
+    <div class="form-group field">
+      <label>Disable sending</label>
+      <%=f.check_box 'disablesmtp', { value: 'y', checked: @mail_user&.disablesmtp == 'y'} , 'y', 'n'%>
+    </div>
+
+    <div class="form-group field">
+      <label>Disable (local) delivering</label>
+      <%=f.check_box 'disabledeliver', { value: 'y', checked: @mail_user&.disabledeliver == 'y'} , 'y', 'n'%>
+    </div>
+
+     <div class="form-group field">
+      <label>Enable greylisting</label>
+      <%=f.check_box 'greylisting', { value: 'y', checked: @mail_user&.greylisting == 'y' } , 'y', 'n'%>
+    </div>
+
+     <div class="form-group field">
+      <label>Disable IMAP</label>
+      <%=f.check_box 'disableimap', { value: 'y', checked: @mail_user&.disableimap == 'y' } , 'y', 'n'%>
+    </div>
+    <div class="form-group field">
+      <label>Disable POP3</label>
+      <%=f.check_box 'disablepop3', { value: 'y', checked: @mail_user&.disablepop3 == 'y' } , 'y', 'n'%>
+    </div>
+
+    <%=submit_tag "#{@mail_domain.present? ? 'Update' : 'Add'} Mailbox",class: 'btn btn-primary'%>
+
+  </fieldset>
+<%end%>
+
+<div>
+ 
+  <%if @response && @response["status"]=='ERROR'%>
+    <div style="color: red;" class="mt-3"><%=@response["message"]%></</div> 
+  <%end%>
+</div>
+
+
+<script type="text/javascript">
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+</script>
