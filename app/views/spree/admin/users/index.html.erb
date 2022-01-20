@@ -62,8 +62,7 @@
           <tr id="<%= spree_dom_id user %>" data-hook="admin_users_index_rows">
            <!--  <td class='user_name'><%#= user.full_name %></td> -->
             <td class='user_email'><%= link_to user.email, edit_admin_user_url(user) %></td>
-            <td class='user_role'><span class="" style="text-transform: none;"><%=user.spree_roles.pluck(:name).uniq.join(",")%></span></td>
-
+            <td class='user_role'><span class="" style="text-transform: none;"><%=user.spree_roles.pluck(:name).uniq.join(",").eql?("store_admin") ? "Reseller Admin" : user.spree_roles.pluck(:name).uniq.join(",")%></span></td>
             <td class='user_role'><%=Account.find_by_id(user.account_id).try(:orgainization_name)%></td>
 
             <td data-hook="admin_users_index_row_actions" class="actions actions-2 text-right">
