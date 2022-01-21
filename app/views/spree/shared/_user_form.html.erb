@@ -47,8 +47,6 @@
 <div data-hook="signup_below_password_fields"></div>
 
 <div class="form-group mb-4">
-  <%= f.check_box :terms_and_conditions,class: 'mr-2' %> I agree to the <%= link_to 'Terms&C.', '/', :onclick => "popUp(/spree/shared/popup/_terms_conditions.html); return false;" %>
+  <%= f.check_box :terms_and_conditions,class: 'mr-2' %> I agree to the <%= link_to 'Terms&Conditions.', terms_condition_path, :onclick => "Spree.showTermsModal();" %>
   <!--a href="#">Terms & Conditions</a-->
 </div>
-
-

@@ -197,7 +197,7 @@
                 <tr>
                   <td class="account-page-order-number"><%= TenantManager::TenantHelper.unscoped_query{ subscription.plan.name} %> 
                     <br/>
-                    <span class="font-12 grey"><%=subscription.plan.server_type.titleize%></span>
+                    <span class="font-12 grey"><%=subscription.plan.name.titleize%></span>
                   </td>
                   <td class="account-page-order-date"><%=subscription.status? ? 'Active': 'In-Active'%></td>
                   <td class="account-page-order-status"><%=subscription.start_date%></td>
