@@ -14,14 +14,6 @@ module Spree
 
     end
 
-  def terms_condition
-    render :terms
-    # respond_to do |format|
-    #   format.html
-    #   format.js
-    # end
-    end
-
   end
 end
 

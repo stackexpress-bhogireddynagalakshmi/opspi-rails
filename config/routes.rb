@@ -46,9 +46,6 @@ Rails.application.routes.draw do
       
     end
   end
-
-  get 'terms-condition', :controller=> 'spree/user_registrations', :action=> "terms_condition"
-  
   get 'register-domain', :controller=> 'hosting',:action=> "register_domain"
   post 'search_domain', :controller=> 'hosting',:action=> "search_domain"
   get 'hosting/:slug', :controller=> 'hosting',:action=> "hosting_page"
