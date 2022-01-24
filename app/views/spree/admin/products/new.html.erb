@@ -20,6 +20,14 @@
       <%= f.error_message_on :server_type %>
     <% end %>
 
+    <div data-hook="admin_product_form_main_panel_access_only">
+        <%= f.field_container :main_panel_access_only, class: ['form-group'] do %>
+        <%= f.check_box :main_panel_access_only,class: 'mr-2'%>
+        <%= f.label :main_panel_access_only, raw(Spree.t(:main_panel_access_only)) %>
+        <%= f.error_message_on :main_panel_access_only %>
+      <% end %>
+    </div>
+
    <%if current_spree_user.superadmin?%>
     <div data-hook="admin_product_form_reseller_product">
         <%= f.field_container :reseller_product, class: ['form-group'] do %>
@@ -35,14 +43,6 @@
         <%= f.check_box :subscribable,class: 'mr-2',checked: true%>
         <%= f.label :subscribable, raw(Spree.t(:subscribable)) %>
         <%= f.error_message_on :subscribable %>
-      <% end %>
-    </div>
-
-    <div data-hook="admin_product_form_main_panel_access_only">
-        <%= f.field_container :main_panel_access_only, class: ['form-group'] do %>
-        <%= f.check_box :main_panel_access_only,class: 'mr-2'%>
-        <%= f.label :main_panel_access_only, raw(Spree.t(:main_panel_access_only)) %>
-        <%= f.error_message_on :main_panel_access_only %>
       <% end %>
     </div>
 
