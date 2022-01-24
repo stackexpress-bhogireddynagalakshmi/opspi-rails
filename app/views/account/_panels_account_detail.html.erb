@@ -32,7 +32,8 @@
 <div class="row mt-5">
    <div class="col-xs-12">
     <hr>
-      <%if spree_current_user.isp_config_id.present?%>
+    <%spree_current_user.subscriptions.order('created_at desc').each do |subscription|%>
+      <%if spree_current_user.isp_config_id.present? && !subscription.plan.main_panel_access_only?%>
         <%if flash[:isp_config_info]%>
           <div class="alert alert-info">
             <%=flash[:isp_config_info]%>
@@ -63,6 +64,7 @@
         </div>
 
       <%end%>
+      <% end %>
 
    </div>
 </div>

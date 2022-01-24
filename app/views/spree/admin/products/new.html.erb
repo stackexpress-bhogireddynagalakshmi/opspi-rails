@@ -38,6 +38,14 @@
       <% end %>
     </div>
 
+    <div data-hook="admin_product_form_main_panel_access_only">
+        <%= f.field_container :main_panel_access_only, class: ['form-group'] do %>
+        <%= f.check_box :main_panel_access_only,class: 'mr-2'%>
+        <%= f.label :main_panel_access_only, raw(Spree.t(:main_panel_access_only)) %>
+        <%= f.error_message_on :main_panel_access_only %>
+      <% end %>
+    </div>
+
     <div id="isp_config_template_div" class="d-none">
       <div id="isp_config_limits">
         <%=render :partial=>'isp_config_quota_form',:locals=>{f: f}%>
