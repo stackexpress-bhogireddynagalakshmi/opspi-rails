@@ -93,7 +93,7 @@ en:
     user_created: 'IspConfig user account created successfully'
     user_updated: 'IspConfig user account updated successfully'
     user_already_exists: 'IspConfig user account already exists for this user.'
-    something_went_wrong: "Something went wrong while creating user account. IspConfig Error: %{message}"
+    something_went_wrong: "Something went wrong. Error: %{message}"
     user_does_not_exists: 'IspConfig user account does not exists.'
     mail_domain:
       create: Mail Domain created successfully.
@@ -103,6 +103,11 @@ en:
       create: Mailbox created successfully.
       update: Mailbox updated successfully.
       delete: Mailbox deleted successfully.
+    mailing_lists:
+      create: Mailing List created successfully.
+      update: Mailing List updated successfully.
+      delete: Mailing List deleted successfully.
+
 
   my_store:
     cname_not_added: "Please add %{cname} as CNAME record in your DNS setting of %{custom_domain}."

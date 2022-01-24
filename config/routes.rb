@@ -41,7 +41,8 @@ Rails.application.routes.draw do
 
       namespace :mail do
         resources :domains    
-        resources :mail_boxes    
+        resources :mail_boxes  
+        resources :mailing_lists  
       end
       
     end

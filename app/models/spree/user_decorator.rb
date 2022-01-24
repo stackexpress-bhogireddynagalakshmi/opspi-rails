@@ -16,6 +16,7 @@ module Spree
       base.has_one :user_key
       base.has_many :mail_domains
       base.has_many :mail_users
+      base.has_many :mailing_lists
 
       base.after_commit :update_user_tanent, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]
