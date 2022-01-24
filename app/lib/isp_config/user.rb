@@ -138,8 +138,11 @@ module IspConfig
       @mail_user ||= IspConfig::MailUser.new(user)
     end
 
-    private
+    def mailing_list
+      @mailing_list ||= IspConfig::MailingList.new(user)
+    end
 
+    private
     def user_hash
       template = @product.isp_config_limit || @product.build_isp_config_limit
       address = user.addresses.first

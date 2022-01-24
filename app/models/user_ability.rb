@@ -12,5 +12,6 @@ class UserAbility
       can :manage, :domain_registrations
       can :manage, :domains
       can :manage, :mail_boxes
+      can :manage, :mailing_lists
     end
 end

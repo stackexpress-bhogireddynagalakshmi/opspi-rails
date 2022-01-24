@@ -1,0 +1,57 @@
+<% content_for :page_title do %>
+ Mailing List
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_mailing_list),
+    new_admin_mail_mailing_list_path,
+    class: "btn-success",
+      icon: 'add.svg' %>
+<% end %>
+
+<% if @mailing_lists.any? %>
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+    <table class="table" id="listing_orders" data-hook data-nav-x-content>
+      <thead>
+        <tr data-hook="admin_orders_index_headers">
+          <th>Listname</th>
+          <th>domain</th>
+          
+          
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <%@mailing_lists.each do |mailing_list| %>
+        <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
+          <td><%= mailing_list.listname%></td>
+          <td><%= mailing_list.domain%></td>
+             <td><%=link_to 'Edit',edit_admin_mail_mailing_list_path(id: mailing_list.mailinglist_id)%> |
+            <%=link_to 'Delete',admin_mail_mailing_list_path(id: mailing_list.mailinglist_id), method: :delete%>
+          </td>  
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+  
+  </div>
+<% end %>
+
+
+<script type="text/javascript">
+  
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+</script>
