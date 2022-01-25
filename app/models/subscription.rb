@@ -12,17 +12,19 @@ class Subscription < ApplicationRecord
   #   yearly: 3
   # } 
 
+
+  DEFAULT_VALIDITY_DAYS = 30
+
   def self.subscribe!(opts)
     existing_subscription = self.where(status: true,user_id: opts[:user].try(:id),product_id: opts[:product].try(:id)).first
       if existing_subscription.present?
-         existing_subscription.update({status: true})
+        validity = opts[:product].try(:validity) || DEFAULT_VALIDITY_DAYS
+        existing_subscription.update({status: true, start_date: Date.today, end_date: Date.today + validity.days})
       else
         self.create_fresh_subscription(opts)
         AppManager::AccountProvisioner.new(opts[:user],product: opts[:product],order: opts[:order]).call
       end
   end
-
-  DEFAULT_VALIDITY_DAYS = 30
 
   def self.create_fresh_subscription(opts)
     TenantManager::TenantHelper.unscoped_query do
