@@ -95,6 +95,6 @@ gem 'iso_country_codes'
 
 
 ## DevOps Tools Start ##
-gem 'elastic-apm'
+gem 'elastic-apm', groups: [:qa, :staging, :production]
 ## DevOps Tools End ##
 #gem 'deface', '~> 1.0', '>= 1.0.2'
