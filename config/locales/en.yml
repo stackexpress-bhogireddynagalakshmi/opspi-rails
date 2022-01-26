@@ -35,6 +35,11 @@ en:
 
   spree:
     products: 'Services'
+    hosting_controls: Hosting Control
+    opsbot: OpsBot
+    mail: Mail
+    ci_cd: CI/CD
+    dns: 'dns'
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout

@@ -61,8 +61,18 @@
      <ul class="nav nav-sidebar border-bottom" id="sidebarDomain">
       <%= tab 'Reseller Club', url: spree.setup_reseller_club_admin_domain_registrations_path,  icon: 'report.svg'%>
     </ul>
+    <%end%>
 
-    <ul class="nav nav-sidebar border-bottom" id="sidebarDomain">
+
+    <ul class="nav nav-sidebar border-bottom" id="sidebarHostingControl">
+      <%= main_menu_tree Spree.t(:hosting_controls), icon: "report.svg", sub_menu: "hosting_control", url: "#sidebar-hosting_controls" %>
+    </ul>
+
+    <ul class="nav nav-sidebar border-bottom" id="sidebarOpsBot">
+      <%= main_menu_tree Spree.t(:opsbot), icon: "report.svg", sub_menu: "opsbot", url: "#sidebar-opsbot" %>
+    </ul>
+
+ <!--ul class="nav nav-sidebar border-bottom" id="sidebarDomain">
       <%= tab 'Mail Domain', url: spree.admin_mail_domains_path,  icon: 'report.svg'%>
     </ul>
 
@@ -72,7 +82,8 @@
 
     <ul class="nav nav-sidebar border-bottom" id="sidebarDomain">
       <%= tab 'Mailing List', url: spree.admin_mail_mailing_lists_path,  icon: 'report.svg'%>
-    </ul>
+    </ul--> 
+
 
     <ul class="nav nav-sidebar border-bottom" id="sidebarDomain">
       <%= tab 'Spam Blacklist', url: spree.admin_mail_spam_filter_blacklists_path,  icon: 'report.svg'%>
@@ -84,5 +95,4 @@
     </ul>
 
 
-    <%end%>
 </nav>
