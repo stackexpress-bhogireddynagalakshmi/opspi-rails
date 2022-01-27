@@ -39,7 +39,8 @@ en:
     opsbot: OpsBot
     mail: Mail
     ci_cd: CI/CD
-    dns: 'dns'
+    dns: DNS
+    ftp: FTP
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout
