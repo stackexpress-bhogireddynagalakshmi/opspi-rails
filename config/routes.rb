@@ -43,6 +43,8 @@ Rails.application.routes.draw do
         resources :domains    
         resources :mail_boxes  
         resources :mailing_lists  
+        resources :spam_filter_blacklists
+        resources :spam_filter_whitelists
       end
       
     end

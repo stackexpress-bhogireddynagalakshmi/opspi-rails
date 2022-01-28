@@ -107,6 +107,11 @@ en:
       create: Mailing List created successfully.
       update: Mailing List updated successfully.
       delete: Mailing List deleted successfully.
+    spamfilter:
+      whitelist: Spamfilter Whitelist
+      add_whitelist: New Whitelist Record
+      blacklist: Spamfilter Blacklist
+      add_blacklist: New Blacklist Record
 
 
   my_store:
