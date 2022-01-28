@@ -18,6 +18,7 @@ module Spree
       base.has_many :mail_users
       base.has_many :mailing_lists
       base.has_many :spam_filters
+      base.has_many :hosted_zones
 
       base.after_commit :update_user_tanent, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]

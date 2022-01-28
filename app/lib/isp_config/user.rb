@@ -150,6 +150,10 @@ module IspConfig
       @spam_filter ||= IspConfig::SpamFilterBlacklist.new(user)
     end
 
+    def hosted_zone
+      @hosted_zone ||= IspConfig::HostedZone.new(self)
+    end
+
     private
 
     def user_hash

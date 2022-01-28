@@ -101,6 +101,17 @@ en:
     user_already_exists: 'IspConfig user account already exists for this user.'
     something_went_wrong: "Something went wrong. Error: %{message}"
     user_does_not_exists: 'IspConfig user account does not exists.'
+    host_zone_record_created: 'DNS Record Created Successfully'
+    host_zone_created: 'DNS zone created successfully'
+    something_went_wrong_dns: "Something went wrong while creating DNS Zone"
+    something_went_wrong_dns_reord: "Something went wrong while creating DNS Record"
+    something_went_wrong_dns_reord_update: "Something went wrong while updating DNS Record. Error: %{message}"
+    host_zone_record_updated: "DNS Record updated successfully"
+    host_zone_record_deleted: "DNS record deleted successfully"
+    content_cannot_be_blank: "Content cannot be blank"
+    content_invalid: "Invalid content for DNS Record"
+    required_field_missing: "Required Field is Missing"
+    invalid_zone_name: "Invalid Domain Name"
     mail_domain:
       create: Mail Domain created successfully.
       update: Mail Domain updated successfully.

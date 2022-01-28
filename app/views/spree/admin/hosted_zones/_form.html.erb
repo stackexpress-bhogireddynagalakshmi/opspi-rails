@@ -1,0 +1,38 @@
+<% content_for :page_title do %>
+ <div class="mt-2"></div>
+  <%= link_to Spree.t(:domains), spree.admin_hosted_zones_url %> /
+  <%= Spree.t(:new_domain) %>
+<% end %>
+
+
+<%=form_for :hosted_zones, url: admin_hosted_zones_path,html: {method: :post, onsubmit:"return validatename(this)"} do |f|%>
+  <fieldset>
+    <div class="form-group field">
+      <label>Domain Name (eg:example.com)</label>
+      <%=f.text_field :name, class: 'form-control', id:"dname", required: true %>
+    </div>
+          
+    <div class="form-group field">
+      <label >Active</label>
+      <%=f.check_box :status,class: 'mr-2', required: true%>
+    </div>
+    <%=submit_tag 'Create',class: 'btn btn-primary', onClick:"return validatename();"%>
+
+  </fieldset>
+<%end%>
+
+<script type="text/javascript">
+function validatename() {
+  
+    var dname = document.getElementById("dname").value;
+    var dname2 = document.getElementById("dname");
+    var re = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/;
+    if (re.test(dname)) {
+        return true;
+    }
+    else {
+        dname2.style.border = "red solid 1px";
+        return false;
+    }
+}
+</script>

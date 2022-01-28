@@ -1,0 +1,50 @@
+<% content_for :page_title do %>
+  DNS Domains
+<% end %>
+<% if current_spree_user.isp_config_id.present? %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_domain),
+    new_admin_hosted_zone_url,
+    class: "btn-success",
+      icon: 'add.svg',
+      id: 'admin_new_order' %>
+<% end  %>
+
+<% if @hosted_zones.any? %>
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+    <table class="table" id="listing_orders" data-hook data-nav-x-content>
+      <thead>
+        <tr data-hook="admin_orders_index_headers">
+          <th>Host Name</th>
+          <th>Status</th>
+          <th data-hook="admin_orders_index_header_actions" class="actions"></th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @hosted_zones.each do |hosted_zone| %>
+        <tr data-hook="admin_orders_index_rows">
+          <td><%=link_to hosted_zone.name, dns_admin_hosted_zone_path(hosted_zone.isp_config_host_zone_id) if hosted_zone.isp_config_host_zone_id.present?%></td>
+          <td><%="Active" if hosted_zone.status.eql?"1"%></td>
+          <td class='actions' data-hook="admin_orders_index_row_actions">
+            <span class="d-flex justify-content-end">
+              <%= link_to_edit_url dns_admin_hosted_zone_path(hosted_zone.isp_config_host_zone_id), title: "admin_edit_#{dom_id(hosted_zone)}", no_text: true if can?(:edit, hosted_zone) %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:no_dns_domain_found) %>
+  </div>
+<% end %>
+<% else %>
+<div class="alert alert-info no-objects-found">
+    <%= Spree.t(:you_need_to_purchase_linux_plan_to_continue) %>!
+ <%#= link_to(Spree.t(:add_one), new_admin_product_url) if can? :create, Spree::Product %>
+ </div>
+<%end%>
