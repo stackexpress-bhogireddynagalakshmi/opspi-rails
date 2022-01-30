@@ -12,6 +12,13 @@ Statement Period: <%=@invoice.name%><br/>
 Invoice Number: <%=@invoice.invoice_number%><br/>
 Amount: <%=number_to_currency(@invoice.balance)%><br/>
 <br/>
+<% if @pending_invoices.present? %>
+Pending invoices that need to be paid <%= @pending_invoices.each do |invoices| %>
+<%= invoices %>
+<% end %>
+Kindly pay for all the invoices.
+<%end%>
+<br/>
 We hate to do this but if we do not hear from you this account may be suspended. This means you will no longer be able to access to your Hosting Panel, manage existing resources or buy any new resources. You will still be able to log-in to the Billing and Cost Management page to pay your bill.
 <br/><br/>
 

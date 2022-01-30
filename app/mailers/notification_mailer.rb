@@ -3,6 +3,7 @@ class NotificationMailer < Spree::BaseMailer
   def unpaid_invoice_reminder
     @invoice = params[:invoice]
     @user    = params[:user]
+    @pending_invoices = params[:pending_invoices] if params[:pending_invoices]
     @current_store =  @user.account.spree_store
     @payment_source = @invoice.user.payment_sources.detect{|x|x.default?}
 

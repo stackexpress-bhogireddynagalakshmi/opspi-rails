@@ -14,10 +14,12 @@ module AppManager
 
     def user_unpaid_invoice_reminder
       invoice = @args.fetch(:invoice)
+      pending_invoices = @args.fetch(:pending_invoices)
 
       NotificationMailer.with(
         invoice: invoice,
-        user:    invoice.user
+        user:    invoice.user,
+        pending_invoices: pending_invoices
         )
       .unpaid_invoice_reminder
       .deliver

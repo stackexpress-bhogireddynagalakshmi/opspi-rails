@@ -1,11 +1,11 @@
 module InvoiceManager
   class InvoiceGracePeriodChecker < ApplicationService
-    attr_reader :invoice
+    attr_reader :invoice, :pending_invoices
 
     def initialize(invoice,options={})
       Rails.logger.info { "AccountGracePeriodChecker initialized"}
       @invoice = invoice
-     
+      @pending_invoices = options || []
     end
 
     def call
@@ -28,7 +28,8 @@ module InvoiceManager
         args = {
             invoice: invoice,
             notification: 'unpaid_invoice_reminder',
-            user: invoice.user
+            user: invoice.user,
+            pending_invoices: pending_invoices
           }
         
         AppManager::NotificationManager.new(args).call
