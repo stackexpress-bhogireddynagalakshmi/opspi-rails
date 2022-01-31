@@ -58,7 +58,11 @@
     </div> 
     <div class="form-group field">
       <label >Active</label>
+      <% if @hosted_zone.try(:active).eql?"Y"%>
+      <%=f.check_box :status,class: 'mr-2', checked: 'checked', required: true%>
+      <%else%>
       <%=f.check_box :status,class: 'mr-2', required: true%>
+      <%end%>
     </div> 
     <%=hidden_field_tag(:isp_config_host_zone_id, @hosted_zone.id)%>
     <%=submit_tag 'Update',class: 'btn btn-primary', onClick:"return validatename();"%>

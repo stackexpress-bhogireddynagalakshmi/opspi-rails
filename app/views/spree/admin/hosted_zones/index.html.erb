@@ -17,15 +17,15 @@
       <thead>
         <tr data-hook="admin_orders_index_headers">
           <th>Host Name</th>
-          <th>Status</th>
+          <!--th>Status</th-->
           <th data-hook="admin_orders_index_header_actions" class="actions"></th>
         </tr>
       </thead>
       <tbody>
       <% @hosted_zones.each do |hosted_zone| %>
         <tr data-hook="admin_orders_index_rows">
-          <td><%=link_to hosted_zone.origin, dns_admin_hosted_zone_path(hosted_zone.id)%></td>
-          <td><%="Active"%></td>
+          <td><%=link_to hosted_zone.origin, dns_admin_hosted_zone_path(hosted_zone.id), class: hosted_zone %></td>
+          <!--td><%="Active"%></td-->
           <td class='actions' data-hook="admin_orders_index_row_actions">
             <span class="d-flex justify-content-end">
               <%= link_to_edit_url edit_admin_hosted_zone_path(hosted_zone.id), no_text: true %>

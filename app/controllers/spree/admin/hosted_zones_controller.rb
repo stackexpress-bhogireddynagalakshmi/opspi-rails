@@ -11,14 +11,9 @@ class Spree::Admin::HostedZonesController < Spree::Admin::BaseController
     end
 
     def create
-        # result = HostedZone.create(host_zone_params)
-        @response = IspConfig::HostedZone.new(host_zone_params).create
-        set_flash
-        if @response[:success]
-          redirect_to admin_hosted_zones_path
-        else 
-          render :new
-        end 
+      @response = IspConfig::HostedZone.new(host_zone_params).create
+      set_flash
+      redirect_to admin_hosted_zones_path
     end
 
     def new; end
@@ -31,11 +26,7 @@ class Spree::Admin::HostedZonesController < Spree::Admin::BaseController
     def update
       @response  = IspConfig::HostedZone.new(host_zone_params).update(@zone_list.isp_config_host_zone_id)
       set_flash
-      if @response[:success]
-        redirect_to admin_hosted_zones_path
-      else
-        render :edit
-      end
+      redirect_to admin_hosted_zones_path
     end
 
     def destroy

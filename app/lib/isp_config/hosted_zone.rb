@@ -7,21 +7,25 @@ module IspConfig
     end
 
     def all_zones
-      response = query({
-        :endpoint => '/json.php?dns_zone_get_by_user',
-        :method => :GET,
-        :body => { 
-          client_id: hosted_zone.user.isp_config_id,
-          server_id: 1
-        }}
-      )
-      response.response.reject!{|x| host_zone_ids.exclude?(x.id.to_i)}
-      if  response.code == "ok"
-				{:success=>true, response: response}
-			else
-			 msg = "Something went wrong while Retrieving Record Info. Error: #{response.message}"
-			   		{:success=>false,:message=> msg}
-      end   
+      if hosted_zone.user.isp_config_id.present?
+        response = query({
+          :endpoint => '/json.php?dns_zone_get_by_user',
+          :method => :GET,
+          :body => { 
+            client_id: hosted_zone.user.isp_config_id,
+            server_id: 1
+          }}
+        )
+        response.response.reject!{|x| host_zone_ids.exclude?(x.id.to_i)}
+        if  response.code == "ok"
+          {:success=>true, response: response}
+        else
+        msg = "Something went wrong while Retrieving Record Info. Error: #{response.message}"
+              {:success=>false,:message=> msg}
+        end 
+      else
+        {:success=>false} 
+      end
     end
 
     def create
@@ -74,15 +78,15 @@ module IspConfig
 
     def update(primary_id)
       response = query({
-      :endpoint => "/json.php?dns_zone_get",
-      :method => :PATCH,
+      :endpoint => "/json.php?dns_zone_update",
+      :method => :PUT,
       :body => dns_hash.merge({primary_id: primary_id})
       })
       Rails.logger.debug { response.inspect}
         if response.code == "ok"
-          {:success=>true, :message=>I18n.t('isp_config.host_zone_record_updated')}
+          {:success=>true, :message=>I18n.t('isp_config.host_zone_updated')}
         else
-          {:success=>false,:message=> I18n.t('isp_config.something_went_wrong_dns_reord_update',message: response.message)}
+          {:success=>false,:message=> I18n.t('isp_config.something_went_wrong_dns_update',message: response.message)}
         end
     end
 
@@ -99,15 +103,13 @@ module IspConfig
 			   		{:success=>false,:message=> msg}
       end   
     end
+
     private
     def host_zone_ids
       @user = Spree::User.find_by_isp_config_id(hosted_zone.user.isp_config_id)
       user.hosted_zones.pluck(:isp_config_host_zone_id)
     end
-    # def hosted_zone_record
-    #   @hosted_zone_record ||= IspConfig::HostedZoneRecord.new(self)
-    # end
-
+    
     def dns_hash
       {
         "client_id":     hosted_zone[:isp_config_id],
@@ -115,7 +117,7 @@ module IspConfig
         server_id:       1,
         origin:          hosted_zone[:name],
         ns:              hosted_zone[:ns],
-        mbox:            hosted_zone[:mbox]+".",
+        mbox:            hosted_zone[:mbox],
         serial:          "1",
         refresh:         hosted_zone[:refresh],
         retry:           hosted_zone[:retry],

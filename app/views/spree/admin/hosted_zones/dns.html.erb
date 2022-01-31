@@ -193,7 +193,7 @@ display: block;
 
 <% content_for :page_title do %>
  <div class="mt-2"></div>
-  <%= link_to Spree.t(:dns_management_for), admin_hosted_zones_path %>
+  <%= link_to Spree.t(:dns_management), admin_hosted_zones_path %>
   <%= @hosted_zone.name %>
 <% end %>
 
@@ -414,7 +414,7 @@ display: block;
                     <div id="divCONTENT">
                       <div class="form-group input-control">
                         <label for="content">Content</label>
-                        <%=text_area_tag :content, params[:content], type:"text", class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_content", style:"margin-top: 0px; margin-bottom: 16px; height: 39px;", required: true if hosted_zone_record.type.eql?"TXT"%>
+                        <%=text_field_tag :content, params[:content], type:"text", class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_content", style:"margin-top: 0px; margin-bottom: 16px; height: 39px;", required: true if hosted_zone_record.type.eql?"TXT"%>
                         <div class="error"></div>
                       </div>
                     </div>
