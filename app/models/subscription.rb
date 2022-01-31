@@ -19,7 +19,7 @@ class Subscription < ApplicationRecord
     existing_subscription = self.where(status: true,user_id: opts[:user].try(:id),product_id: opts[:product].try(:id)).first
       if existing_subscription.present?
         validity = opts[:product].try(:validity) || DEFAULT_VALIDITY_DAYS
-        existing_subscription.update({status: true, start_date: Date.today, end_date: Date.today + validity.days})
+        existing_subscription.update({status: true, end_date: Date.today + validity.days})
       else
         self.create_fresh_subscription(opts)
         AppManager::AccountProvisioner.new(opts[:user],product: opts[:product],order: opts[:order]).call
