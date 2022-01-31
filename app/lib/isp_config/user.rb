@@ -142,7 +142,16 @@ module IspConfig
       @mailing_list ||= IspConfig::MailingList.new(user)
     end
 
+    def spam_filter_whitelist
+      @spam_filter ||= IspConfig::SpamFilterWhitelist.new(user)
+    end
+
+    def spam_filter_blacklist
+      @spam_filter ||= IspConfig::SpamFilterBlacklist.new(user)
+    end
+
     private
+
     def user_hash
       template = @product.isp_config_limit || @product.build_isp_config_limit
       address = user.addresses.first
