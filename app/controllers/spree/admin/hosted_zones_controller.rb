@@ -1,16 +1,46 @@
 class Spree::Admin::HostedZonesController < Spree::Admin::BaseController
   require 'isp_config/hosted_zone'
+  before_action :set_zone_list, only: [:edit,:update,:destroy]
     def index
-      @hosted_zones = current_spree_user.hosted_zones
+      @response = IspConfig::HostedZone.new(current_spree_user.isp_config).all_zones || []
+      if @response[:success]
+        @hosted_zones  = @response[:response].response
+      else
+        @hosted_zones = []
+      end
     end
 
     def create
-      response = validate_params(host_zone_params)
-      if response[:success]
-        result = HostedZone.create(host_zone_params)
-      else 
-        flash[:error] = response[:msg]
-      end 
+        # result = HostedZone.create(host_zone_params)
+        @response = IspConfig::HostedZone.new(host_zone_params).create
+        set_flash
+        if @response[:success]
+          redirect_to admin_hosted_zones_path
+        else 
+          render :new
+        end 
+    end
+
+    def new; end
+
+    def edit
+      @response = IspConfig::HostedZone.new(@zone_list).get_zone
+      @hosted_zone = @response[:response].response  if @response[:success].present?
+    end
+
+    def update
+      @response  = IspConfig::HostedZone.new(host_zone_params).update(@zone_list.isp_config_host_zone_id)
+      set_flash
+      if @response[:success]
+        redirect_to admin_hosted_zones_path
+      else
+        render :edit
+      end
+    end
+
+    def destroy
+      @response  = IspConfig::HostedZone.new(@zone_list).destroy(@zone_list.isp_config_host_zone_id)
+      set_flash
       redirect_to admin_hosted_zones_path
     end
 
@@ -23,6 +53,17 @@ class Spree::Admin::HostedZonesController < Spree::Admin::BaseController
     end
 
     private
+    def set_flash
+      if @response[:success] 
+        flash[:success] = @response[:message]
+      else
+        flash[:error] = @response[:message] 
+      end
+    end
+
+    def set_zone_list
+      @zone_list = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:id])
+    end
 
     def validate_params(dns_data)
         return {success: false,msg: I18n.t('isp_config.required_field_missing')} if dns_data[:name].blank? || dns_data[:status].blank?
@@ -33,7 +74,7 @@ class Spree::Admin::HostedZonesController < Spree::Admin::BaseController
     end
 
     def host_zone_params
-      params.require(:hosted_zones).permit(:name,:isp_config_host_zone_id,:status).merge!({user_id: current_spree_user.id})
+      params.require(:hosted_zones).permit(:name,:ns,:mbox,:refresh,:retry,:expire,:minimum,:ttl,:xfer,:also_notify,:update_acl,:isp_config_host_zone_id,:status,:hosted_zones,:commit).merge!({isp_config_id: current_spree_user.isp_config_id})
     end
 
 end
