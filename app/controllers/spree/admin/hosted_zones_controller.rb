@@ -66,14 +66,6 @@ class Spree::Admin::HostedZonesController < Spree::Admin::BaseController
       @zone_list = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:id])
     end
 
-    def validate_params(dns_data)
-        return {success: false,msg: I18n.t('isp_config.required_field_missing')} if dns_data[:name].blank? || dns_data[:ns].blank? || dns_data[:mbox].blank?
-
-        re = /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/
-        return  dns_data[:name].match?(re) ?  {success: true} :  {success: false,msg: I18n.t('isp_config.invalid_zone_name')}
-
-    end
-
     def host_zone_params
       params.require(:hosted_zones).permit(:name,:ns,:mbox,:refresh,:retry,:expire,:minimum,:ttl,:xfer,:also_notify,:update_acl,:isp_config_host_zone_id,:status).merge!({isp_config_id: current_spree_user.isp_config_id})
     end

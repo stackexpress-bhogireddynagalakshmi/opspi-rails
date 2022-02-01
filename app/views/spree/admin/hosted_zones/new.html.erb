@@ -75,19 +75,3 @@
     $('#FlashAlertsContainer').removeClass('d-none');
   });
 </script>
-
-<script type="text/javascript">
-function validatename() {
-  
-    var dname = document.getElementById("dname").value;
-    var dname2 = document.getElementById("dname");
-    var re = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/;
-    if (re.test(dname)) {
-        return true;
-    }
-    else {
-        dname2.style.border = "red solid 1px";
-        return false;
-    }
-}
-</script>
