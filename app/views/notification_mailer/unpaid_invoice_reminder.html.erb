@@ -14,7 +14,7 @@ Amount: <%=number_to_currency(@invoice.balance)%><br/>
 <br/>
 <% if @pending_invoices.present? %>
 Pending invoices that need to be paid <% @pending_invoices.drop(1).each do |invoices| %>
-<%= invoices %>
+<%= invoices %> <br/>
 <% end %>
 Kindly pay for all the invoices.
 <%end%>

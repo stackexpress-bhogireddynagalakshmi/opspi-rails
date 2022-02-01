@@ -2,10 +2,11 @@ module InvoiceManager
   class InvoiceGracePeriodChecker < ApplicationService
     attr_reader :invoice, :pending_invoices
 
-    def initialize(invoice,options={})
+    def initialize(invoice, options={})
       Rails.logger.info { "AccountGracePeriodChecker initialized"}
       @invoice = invoice
-      @pending_invoices = options || []
+      @pending_invoices = options[:pending_invoices] || []
+      @subscription = invoice.subscription
     end
 
     def call
@@ -13,7 +14,7 @@ module InvoiceManager
       return unless invoice.present?
       return unless invoice.active?
 
-      if Date.today > invoice.due_date.to_date
+      if Date.today > invoice.due_date.to_date && @subscription.panel_disabled_at.blank?
         AppManager::PanelAccessDisabler.new(invoice).call        
       else
         send_invoice_reminder_notification if invoice_is_in_grace_period
@@ -23,7 +24,6 @@ module InvoiceManager
     private
 
     def send_invoice_reminder_notification
-
       if invoice.last_reminder_sent_at.blank? || invoice.last_reminder_sent_at.to_date + 3.day <= Date.today
         args = {
             invoice: invoice,

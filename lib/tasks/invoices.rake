@@ -38,7 +38,7 @@ namespace :invoices do
         user.subscriptions.each do |subscription|
           invoice = subscription.invoices.active.first
           pending_invoice = subscription.invoices.active.pluck(:invoice_number)
-          InvoiceManager::InvoiceGracePeriodChecker.new(invoice,pending_invoice).call if invoice.present?
+          InvoiceManager::InvoiceGracePeriodChecker.new(invoice, pending_invoices: pending_invoice).call if invoice.present?
         end
       end
     end

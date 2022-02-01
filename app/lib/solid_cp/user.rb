@@ -35,15 +35,19 @@ module SolidCp
       #Active or Suspended or Cancelled or Pending
 
       def change_user_status(status)
-        response = super(message: { user_id: user.solid_cp_id,status: status})
+        return nil unless user.solid_cp_id.present?
+
+        response = super(message: { user_id: user.solid_cp_id, status: status})
         if response.success?
           {:success=>true, :message=>'SolidCP User status changed successfully',response: response}
         else
-          {:success=>false,:message=> 'Something went wrong.',response: response}
+          {:success=>false,:message=> 'Something went wrong.', response: response}
         end
       end
 
       def delete_user
+        return nil unless user.solid_cp_id.present?
+
         super(message: { user_id: user.solid_cp_id})
       end
 
