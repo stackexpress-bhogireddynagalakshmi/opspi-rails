@@ -1,27 +1,33 @@
 module IspConfig
 	class HostedZoneRecord < Base
-		attr_accessor :hosted_zone_record
+		attr_accessor :hosted_zone_record, :reg
 
     def initialize hosted_zone_record
       @hosted_zone_record = hosted_zone_record
       if hosted_zone_record[:type].eql?("A")
         @hosted_zone_record[:data] = hosted_zone_record[:ipv4]
+        @reg = IPV4_REGEX
       elsif hosted_zone_record[:type].eql?("AAAA")
         @hosted_zone_record[:data] = hosted_zone_record[:ipv6]
+        @reg = IPV6_REGEX
       elsif hosted_zone_record[:type].eql?("CNAME")
         @hosted_zone_record[:data] = hosted_zone_record[:target]
-      elsif hosted_zone_record[:type].eql?("DKIM")
-        @hosted_zone_record[:data] = hosted_zone_record[:dkim]
+        @reg = DNS_ORIGIN_ZONE_REGEX
       elsif hosted_zone_record[:type].eql?("MX")
         @hosted_zone_record[:data] = hosted_zone_record[:mailserver]
+        @reg = DNS_ORIGIN_ZONE_REGEX
       elsif hosted_zone_record[:type].eql?("NS")
         @hosted_zone_record[:data] = hosted_zone_record[:nameserver]
+        @reg = DNS_ORIGIN_ZONE_REGEX
       else
         @hosted_zone_record[:data] = hosted_zone_record[:content]
       end
     end
 
     def create
+      res = validate_params
+      return {:success => false, :message => res[:message]} unless res[:success]
+
         response = query({
           :endpoint => "/json.php?dns_#{hosted_zone_record[:type].downcase}_add",
           :method => :POST,
@@ -29,25 +35,19 @@ module IspConfig
         })
 
         Rails.logger.debug { response.inspect}
-        if response.code == "ok"
-          {:success=>true, :message=>I18n.t('isp_config.host_zone_record_created')} 
-        else
-          {:success=>false,:message=> I18n.t('isp_config.something_went_wrong_dns_reord',message: response.message)}
-        end
+        formatted_response(response,'create')
     end
 
     def update
+      res = validate_params
+      return {:success => false, :message => res[:message]} unless res[:success]
         response = query({
 		    :endpoint => "/json.php?dns_#{hosted_zone_record[:type].downcase}_update",
 		    :method => :PATCH,
 		    :body => edit_dns_record_hash
 			})
 			Rails.logger.debug { response.inspect}
-        if response.code == "ok"
-          {:success=>true, :message=>I18n.t('isp_config.host_zone_record_updated')}
-        else
-          {:success=>false,:message=> I18n.t('isp_config.something_went_wrong_dns_reord_update',message: response.message)}
-        end
+      formatted_response(response,'update')
     end
 
     def destroy
@@ -57,15 +57,33 @@ module IspConfig
 		    :body => {primary_id: hosted_zone_record[:id]} 
 			})
       Rails.logger.debug { response.inspect}
-			if  response.code == "ok"
-				{:success=>true, :message=>I18n.t('isp_config.host_zone_record_deleted')}
-			else
-			 msg = "Something went wrong while Deleting Record. Error: #{response.message}"
-			   		{:success=>false,:message=> msg}
-			end
+			formatted_response(response,'delete')
     end
 
     private
+
+    def validate_params
+      validation = ValidationManager::CustomValidator.new(hosted_zone_record,type: hosted_zone_record[:type], reg: reg).call
+      return {success: false, message: validation[1]} unless  validation[0]
+
+      return {success: true}
+    end
+
+    def formatted_response(response,action)
+      if  response.code == "ok"
+        {
+          :success=>true,
+          :message=>I18n.t("isp_config.host_zone_record.#{action}"),
+          response: response
+        }
+      else
+        { 
+          :success=>false,
+          :message=> I18n.t('isp_config.something_went_wrong',message: response.message),
+          response: response
+        }
+      end
+    end
 
     def hosted_zone(hosted_zone)
       @hosted_zone ||= IspConfig::HostedZone.new(hosted_zone)
@@ -74,7 +92,7 @@ module IspConfig
     def dns_record_hash
       {
         "params": {
-        server_id:       1,
+        server_id:       ENV['ISP_CONFIG_DNS_SERVER_ID'],
         zone:            hosted_zone_record[:hosted_zone_id], 
         name:            hosted_zone_record[:name],
         type:            hosted_zone_record[:type],
@@ -93,7 +111,7 @@ module IspConfig
         "client_id":    hosted_zone_record[:client_id],
         "primary_id":   hosted_zone_record[:primary_id],
         "params": {
-        server_id:       1,
+        server_id:       ENV['ISP_CONFIG_DNS_SERVER_ID'],
         zone:            hosted_zone_record[:hosted_zone_id], 
         name:            hosted_zone_record[:name],
         type:            hosted_zone_record[:type],

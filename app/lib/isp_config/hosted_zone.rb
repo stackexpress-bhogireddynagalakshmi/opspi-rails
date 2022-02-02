@@ -13,16 +13,11 @@ module IspConfig
           :method => :GET,
           :body => { 
             client_id: hosted_zone.user.isp_config_id,
-            server_id: 1
+            server_id: ENV['ISP_CONFIG_DNS_SERVER_ID']
           }}
         )
         response.response.reject!{|x| host_zone_ids.exclude?(x.id.to_i)}
-        if  response.code == "ok"
-          {:success=>true, response: response}
-        else
-        msg = "Something went wrong while Retrieving Record Info. Error: #{response.message}"
-              {:success=>false,:message=> msg}
-        end 
+        formatted_response(response,'all')
       else
         {:success=>false} 
       end
@@ -39,9 +34,9 @@ module IspConfig
       if response.code == "ok"
         @user = Spree::User.find_by_isp_config_id(hosted_zone[:isp_config_id])
         user.hosted_zones.create({isp_config_host_zone_id: response["response"]}) if response.code == "ok"
-        {:success=>true, :message=>I18n.t('isp_config.host_zone_created')} 
+        {:success=>true, :message=>I18n.t('isp_config.host_zone.create')} 
       else
-        {:success=>false,:message=> I18n.t('isp_config.something_went_wrong_dns',message: response.message)}
+        {:success=>false,:message=> I18n.t('isp_config.something_went_wrong',message: response.message)}
       end
     end
 
@@ -53,12 +48,7 @@ module IspConfig
           primary_id: hosted_zone.isp_config_host_zone_id
         }}
       )
-      if  response.code == "ok"
-				{:success=>true, response: response}
-			else
-			 msg = "Something went wrong while Retrieving Record Info. Error: #{response.message}"
-			   		{:success=>false,:message=> msg}
-      end   
+      formatted_response(response,'get')
     end
 
     def destroy(primary_id)
@@ -68,12 +58,7 @@ module IspConfig
       :body => {primary_id: primary_id} 
       })
       Rails.logger.debug { response.inspect}
-      if  response.code == "ok"
-        {:success=>true, :message=>I18n.t('isp_config.host_zone_deleted')}
-      else
-      msg = "Something went wrong while Deleting Record. Error: #{response.message}"
-            {:success=>false,:message=> msg}
-      end
+      formatted_response(response,'delete')
     end
 
     def update(primary_id)
@@ -83,11 +68,7 @@ module IspConfig
       :body => dns_hash.merge({primary_id: primary_id})
       })
       Rails.logger.debug { response.inspect}
-        if response.code == "ok"
-          {:success=>true, :message=>I18n.t('isp_config.host_zone_updated')}
-        else
-          {:success=>false,:message=> I18n.t('isp_config.something_went_wrong_dns_update',message: response.message)}
-        end
+      formatted_response(response,'update')
     end
 
     def get_all_hosted_zone_records
@@ -96,15 +77,27 @@ module IspConfig
 		    :method => :GET,
 		    :body => {zone_id: hosted_zone.isp_config_host_zone_id}
 			})
-			if  response.code == "ok"
-				{:success=>true, response: response}
-			else
-			 msg = "Something went wrong while Retrieving Record Info. Error: #{response.message}"
-			   		{:success=>false,:message=> msg}
-      end   
+			formatted_response(response,'all_records')
     end
 
     private
+
+    def formatted_response(response,action)
+      if  response.code == "ok"
+        {
+          :success=>true,
+          :message=>I18n.t("isp_config.host_zone.#{action}"),
+          response: response
+        }
+      else
+        { 
+          :success=>false,
+          :message=> I18n.t('isp_config.something_went_wrong',message: response.message),
+          response: response
+        }
+      end
+    end
+
     def host_zone_ids
       @user = Spree::User.find_by_isp_config_id(hosted_zone.user.isp_config_id)
       user.hosted_zones.pluck(:isp_config_host_zone_id)
@@ -114,7 +107,7 @@ module IspConfig
       {
         "client_id":     hosted_zone[:isp_config_id],
         "params": {
-        server_id:       1,
+        server_id:       ENV['ISP_CONFIG_DNS_SERVER_ID'],
         origin:          hosted_zone[:name],
         ns:              hosted_zone[:ns],
         mbox:            hosted_zone[:mbox],
