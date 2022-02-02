@@ -17,6 +17,7 @@ module ValidationManager
       end
   
       def validate_content
+        return [true] if type.eql?"TXT"
         matchers = @record_params[:data].match(reg)
         
         return [false, "Invalid Content for #{@type} Record"] if matchers.blank?
