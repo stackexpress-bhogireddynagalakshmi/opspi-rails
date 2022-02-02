@@ -14,7 +14,7 @@
   <fieldset>
     <div class="form-group field">
       <label>Domain Name (eg:example.com)</label>
-      <%=f.text_field :name, class: 'form-control', value: @hosted_zone.try(:origin), id:"dname", pattern:'(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]', title: "Please follow the correct format", required: true %>
+      <%=f.text_field :name, class: 'form-control', value: @hosted_zone.try(:origin), id:"dname", pattern: DNS_ORIGIN_ZONE_REGEX, title: "Please follow the correct format", required: true %>
     </div>
     <div class="form-group field">
       <label>NS (eg: ns1.example.com)</label>
@@ -22,7 +22,7 @@
     </div>
     <div class="form-group field">
       <label>Email (eg: webmaster.example.com)</label>
-      <%=f.text_field :mbox, class: 'form-control', value: @hosted_zone.try(:mbox), id:"mbox", pattern:'([\w\s\.]+\.)?\s*([\w\s]+\.)', title: "Please follow the format and end with '.'",required: true %>
+      <%=f.text_field :mbox, class: 'form-control', value: @hosted_zone.try(:mbox), id:"mbox", pattern: MBOX_EMAIL_REGEX, title: "Please follow the format and end with '.'",required: true %>
     </div>   
     <div class="form-group field">
       <label>Refresh (Seconds)</label>

@@ -58,34 +58,34 @@ class Spree::Admin::HostedZoneRecordsController < Spree::Admin::BaseController
 
         return {success: false,msg: I18n.t('isp_config.required_field_missing')} if r_data[:type].blank? || r_data[:name].blank? || r_data[:ipv4].blank?
 
-        re = /^(([0-9])|([1-9][0-9])|(1([0-9]{2}))|(2[0-4][0-9])|(25[0-5]))((\.(([0-9])|([1-9][0-9])|(1([0-9]{2}))|(2[0-4][0-9])|(25[0-5]))){3})$/
+        re = IPV4_REGEX
         return  r_data[:ipv4].match?(re) ?  {success: true} :  {success: false,msg: "Invalid IPv4"}
 
       elsif r_data[:type].eql?"AAAA"
 
         return {success: false,msg: I18n.t('isp_config.required_field_missing')} if r_data[:type].blank? || r_data[:name].blank? || r_data[:ipv6].blank?
 
-        re = /^\s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?\s*$/
+        re = IPV6_REGEX
         return r_data[:ipv6].match?(re) ?  {success: true} :  {success: false,msg: "Invalid IPv6"}
       
       elsif r_data[:type].eql?"CNAME"
 
         return {success: false,msg: I18n.t('isp_config.required_field_missing')} if r_data[:type].blank? || r_data[:name].blank? || r_data[:target].blank?
 
-        re = /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/
+        re = DNS_ORIGIN_ZONE_REGEX
         return  r_data[:target].match?(re) ?  {success: true} :  {success: false,msg: "Invalid cname"}
       elsif r_data[:type].eql?"MX"
 
         return {success: false,msg: I18n.t('isp_config.required_field_missing')} if r_data[:type].blank? || r_data[:name].blank? || r_data[:mailserver].blank? || r_data[:priority].blank?
 
-        re = /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/
+        re = DNS_ORIGIN_ZONE_REGEX
         return r_data[:mailserver].match?(re) ?  {success: true} :  {success: false,msg: "Invalid MX value"} 
 
       elsif r_data[:type].eql?"NS"
 
         return {success: false,msg: I18n.t('isp_config.required_field_missing')} if r_data[:type].blank? || r_data[:name].blank? || r_data[:nameserver].blank? 
 
-        re = /(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]/
+        re = DNS_ORIGIN_ZONE_REGEX
         return r_data[:nameserver].match?(re) ?  {success: true} :  {success: false,msg: "Invalid NS value"}
       elsif r_data[:type].eql?"TXT"
 
