@@ -15,7 +15,7 @@ module AppManager
 
 
       if invoice.subscription.plan.windows?
-        response  = user.solidcp.change_user_status('Suspended')
+        response  = user.solid_cp.change_user_status('Suspended')
         if response && response[:success] == true
           Rails.logger.info { "SolidCP account suspended for #{invoice.user.email}" }
 

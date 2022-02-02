@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_20_072953) do
+ActiveRecord::Schema.define(version: 2022_01_28_082048) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -86,14 +86,13 @@ ActiveRecord::Schema.define(version: 2021_12_20_072953) do
   end
 
   create_table "hosted_zone_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.integer "hosted_zone_id"
+    t.integer "hoste_zone_id"
     t.string "record_name"
     t.string "record_type"
     t.string "value"
-    t.string "routing_policy"
-    t.boolean "alias_name"
     t.string "ttl"
     t.integer "isp_config_host_zone_record_id"
+    t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -191,6 +190,35 @@ ActiveRecord::Schema.define(version: 2021_12_20_072953) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "isp_config_plans", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "isp_config_id"
+    t.string "isp_config_username"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "mail_domains", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "isp_config_mail_domain_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "mail_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "isp_config_mailuser_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "mailing_lists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "isp_config_mailing_list_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "packages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "solid_cp_package_id"
@@ -222,6 +250,13 @@ ActiveRecord::Schema.define(version: 2021_12_20_072953) do
     t.boolean "parent_quota_value"
     t.boolean "unlimited", default: false, null: false
     t.boolean "enabled"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "spam_filters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "isp_config_spam_filter_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -290,6 +325,19 @@ ActiveRecord::Schema.define(version: 2021_12_20_072953) do
     t.index ["position"], name: "index_spree_assets_on_position"
     t.index ["viewable_id"], name: "index_assets_on_viewable_id"
     t.index ["viewable_type", "type"], name: "index_assets_on_viewable_type_and_type"
+  end
+
+  create_table "spree_bookkeeping_documents", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "printable_type"
+    t.integer "printable_id"
+    t.string "template"
+    t.string "number"
+    t.string "firstname"
+    t.string "lastname"
+    t.string "email"
+    t.decimal "total", precision: 12, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "spree_calculators", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -735,6 +783,7 @@ ActiveRecord::Schema.define(version: 2021_12_20_072953) do
     t.integer "isp_config_master_template_id"
     t.integer "validity"
     t.integer "frequency"
+    t.boolean "main_panel_access_only", default: false
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_products_on_discontinue_on"
@@ -1335,6 +1384,7 @@ ActiveRecord::Schema.define(version: 2021_12_20_072953) do
     t.boolean "reseller_signup", default: false, null: false
     t.integer "reseller_club_customer_id"
     t.integer "reseller_club_contact_id"
+    t.boolean "terms_and_conditions", default: false
     t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
     t.index ["email"], name: "email_idx_unique", unique: true
