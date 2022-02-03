@@ -63,7 +63,7 @@ module IspConfig
     private
 
     def validate_params
-      validation = ValidationManager::CustomValidator.new(hosted_zone_record,type: hosted_zone_record[:type], reg: reg).call
+      validation = ValidationManager::DnsRecordValidator.new(hosted_zone_record,type: hosted_zone_record[:type], reg: reg).call
       return {success: false, message: validation[1]} unless  validation[0]
 
       return {success: true}

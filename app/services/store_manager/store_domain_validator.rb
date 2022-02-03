@@ -18,11 +18,11 @@ module StoreManager
 
        validate_uniqueness    
     end
-
+ 
     def validate_url_format
-      matchers = @domain.match(/^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$/)
-
-      return [false, 'Not a valid domain'] if matchers.blank?
+      # matchers = @domain.match(/^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$/)
+      matchers = ValidationManager::CustomValidator.validate(@domain,DOMAIN_REGEX)
+      return [false, 'Not a valid domain'] unless matchers[0]
 
       return [true]
 
