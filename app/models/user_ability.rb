@@ -16,5 +16,6 @@ class UserAbility
       can :manage, :hosted_zones
       can :manage, :hosted_zone_records
       can :manage, :websites
+      can :manage, :ftp_users
     end
 end

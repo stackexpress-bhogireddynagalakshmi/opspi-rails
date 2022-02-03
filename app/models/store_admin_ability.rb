@@ -36,6 +36,7 @@ class StoreAdminAbility
 
       can :manage, :statistics
       can :manage, :websites
+      can :manage, :ftp_users
 
       can :manage, :my_store
       can :manage, ::Spree::PaymentMethod unless TenantManager::TenantHelper.current_admin_tenant?
