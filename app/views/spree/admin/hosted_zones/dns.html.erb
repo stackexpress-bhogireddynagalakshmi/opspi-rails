@@ -30,7 +30,7 @@ fieldset {
 
 .grid-container {
     display: grid;
-    grid-template-columns: 3fr 5fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
     grid-gap: 10px;
 }
 
@@ -40,22 +40,10 @@ fieldset {
     grid-gap: 10px;
 }
 
-.grid-small {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 10px;
-}
-
 .grid-container-edit{
     display: grid;
-    grid-template-columns: 0.22fr 0.35fr 0.37fr 0.40fr;
+    grid-template-columns: 0.22fr 0.35fr 0.37fr 0.37fr 0.40fr;
     grid-gap: 10px
-}
-
-#divMX{
-  display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 10px;
 }
 
 .box{
@@ -212,10 +200,6 @@ display: block;
               <%=text_field_tag :ipv4, params[:ipv4], class:"form-control input-bx", id:"txtipv4" %>
               <div class="error"></div>
             </div>
-            <div class="form-group">
-              <label for="ttl" class="label-st">TTL</label>
-              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
-            </div>
           </div>
 
           <div id="divAAAA" class="grid-small">
@@ -223,10 +207,6 @@ display: block;
               <label for="ipv6" class="label-st">IPv6 address</label>
               <%=text_area_tag :ipv6, params[:ipv6], class:"form-control input-bx", id:"txtipv6",style:"margin-top: 0px; margin-bottom: 16px; height: 39px;"%>
               <div class="error"></div>
-            </div>
-            <div class="form-group">
-              <label for="ttl" class="label-st">TTL</label>
-              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
             </div>
           </div>
 
@@ -236,10 +216,6 @@ display: block;
               <%=text_field_tag :target,params[:target], class:"form-control input-bx", id:"txttarget" %>
                <div class="error"></div>
             </div>
-            <div class="form-group">
-              <label for="ttl" class="label-st">TTL</label>
-              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
-            </div>
           </div>
 
           <div id="divMX" class="grid-small">
@@ -247,14 +223,6 @@ display: block;
               <label for="mailserver" class="label-st">Mail Server</label>
               <%=text_field_tag :mailserver, params[:mailserver], class:"form-control input-bx", id:"txtmailserver" %>
               <div class="error"></div>
-            </div>
-            <div class="form-group">
-              <label for="ttl" class="label-st">TTL</label>
-              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
-            </div>
-            <div class="form-group">
-              <label for="priority" class="label-st">Priority</label>
-              <%=text_field_tag :priority, params[:priority], type:"number", class:"form-control input-bx", id:"txtpriority" %>
             </div>
           </div>
 
@@ -264,17 +232,9 @@ display: block;
               <%=text_field_tag :nameserver, params[:nameserver], class:"form-control input-bx", id:"txtnameserver" %>
               <div class="error"></div>
             </div>
-            <div class="form-group">
-              <label for="ttl" class="label-st">TTL</label>
-              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
-            </div>
           </div>
 
           <div id="divTXT" class="grid-small">
-            <div class="form-group" >
-              <label for="ttl" class="label-st">TTL</label>
-              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
-            </div>
             <div class="form-group">
               <label for="content" class="label-st">Content</label>
               <%=text_area_tag :content, params[:content], type:"text", class:"form-control input-bx", id:"txtcontent", style:"margin-top: 0px; margin-bottom: 16px; height: 39px;"%>
@@ -282,7 +242,26 @@ display: block;
           </div>
 
         </div>
-        
+        <div class="grid_3">
+          <div class="form-group">
+            <label for="ttl" >TTL</label>
+            <div class>
+            <div class="dropdownSX">
+              <div class="dropdownSX1">
+                <div class="dropdownSX2">
+                  <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control", id: "txtttl", required: "required" %>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div> 
+        <div id="divPRI" class="grid_4">
+          <div class="form-group">
+            <label for="priority" class="label-st">Priority</label>
+            <%=text_field_tag :priority, params[:priority], type:"number", class:"form-control input-bx", id:"txtpriority" %>
+          </div>
+        </div>      
     </div>
       <div class="float-right">
         <button class="btn btn-md btn-primary" type="submit">Save</button>
@@ -378,11 +357,6 @@ display: block;
                         <%=text_field_tag :mailserver, params[:mailserver], class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_mailserver", required: true if hosted_zone_record.type.eql?"MX" %>
                         <div class="error"></div>
                       </div>
-                      <div class="form-group input-control">
-                        <label for="priority">Priority</label>
-                        <%=text_field_tag :priority, params[:priority], type:"number", class:"form-control input-bx", value: hosted_zone_record.aux,  id:"edit_priority", required: true if hosted_zone_record.type.eql?"MX" %>
-                        <div class="error"></div>
-                      </div>
                     </div>
                     <% elsif hosted_zone_record.type.eql?("NS")%>
                     <div id="divNS">
@@ -417,6 +391,15 @@ display: block;
                       </div>
                     </div>
                   </div>
+                  <% if hosted_zone_record.type.eql?("MX")%>
+                    <div id="divMX">
+                      <div class="form-group input-control">
+                        <label for="priority">Priority</label>
+                        <%=text_field_tag :priority, params[:priority], type:"number", class:"form-control input-bx", value: hosted_zone_record.aux,  id:"edit_priority", required: true if hosted_zone_record.type.eql?"MX" %>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% end %>
                 </div>
                 <br/>
                   <div class="float-left">
@@ -455,28 +438,41 @@ function ClearFields() {
 
 $(document).ready(function(){
   showDiv('#divA')
+  $("#divPRI").hide()
+  $("#divPRI").find('input').removeAttr('required')
     $('#txttype').on('change', function() {
       if ( this.value == 'A')
       {
         showDiv("#divA")
+        $("#divPRI").hide()
+        $("#divPRI").find('input').removeAttr('required')
       }else if (this.value == 'AAAA')
       {
         showDiv("#divAAAA")
+        $("#divPRI").hide()
+        $("#divPRI").find('input').removeAttr('required')
       }else if (this.value == 'CNAME')
       {
          showDiv("#divCNAME")
-
+         $("#divPRI").hide()
+        $("#divPRI").find('input').removeAttr('required')
       }else if (this.value == 'MX')
       {
 
          showDiv("#divMX")
+         $("#divPRI").show()
+         $("#divPRI").find('input').attr('required','required')
 
       }else if (this.value == 'NS')
       {
          showDiv("#divNS")
+         $("#divPRI").hide()
+         $("#divPRI").find('input').removeAttr('required')
       }else if (this.value == 'TXT')
       {
         showDiv("#divTXT")
+        $("#divPRI").hide()
+        $("#divPRI").find('input').removeAttr('required')
       }else{
 
       }
