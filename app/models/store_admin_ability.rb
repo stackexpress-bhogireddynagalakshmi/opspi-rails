@@ -31,6 +31,8 @@ class StoreAdminAbility
       can :manage, :mailing_lists
       can :manage, :spam_filter_blacklists
       can :manage, :spam_filter_whitelists
+      can :manage, :hosted_zones
+      can :manage, :hosted_zone_records
 
 
       can :manage, :my_store
