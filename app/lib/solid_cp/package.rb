@@ -4,7 +4,7 @@ module SolidCp
 
     attr_reader :user
 
-    client wsdl: SOAP_PLAN_WSDL, endpoint: SOAP_PLAN_WSDL,log: SolidCp::Config.log
+    client wsdl: SOAP_PLAN_WSDL, endpoint: SOAP_PLAN_WSDL, log: SolidCp::Config.log
     global :read_timeout, SolidCp::Config.timeout
     global :open_timeout, SolidCp::Config.timeout
     global :basic_auth, SolidCp::Config.username, SolidCp::Config.password

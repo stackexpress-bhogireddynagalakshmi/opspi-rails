@@ -1,0 +1,453 @@
+<style type="text/css">
+table.table td .add {
+  display: none;
+ }
+
+fieldset {
+  margin: 2px;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+.search-bx{
+  width: 100%;
+  display: flex;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 3fr 5fr;
+    grid-gap: 10px;
+}
+
+.grid-small_1 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.grid-small {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.grid-container-edit{
+    display: grid;
+    grid-template-columns: 0.22fr 0.35fr 0.37fr 0.40fr;
+    grid-gap: 10px
+}
+
+#divMX{
+  display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.box{
+  border-color: #e0e0e0;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+}
+.first-row{
+  padding: 16px;
+}
+
+.form_1{
+  padding: 16px;
+}
+
+.label-st{
+font-weight: initial;
+margin-bottom: 4px;
+font-size: 16px;
+white-space: nowrap;
+display: block;
+} 
+.input-bx{
+  margin-right: 16px;
+  margin-bottom: 16px;
+  align-self: start;
+  grid-row: auto;
+  grid-column: auto;
+}
+
+.show-content{
+  height: 36px;
+  font-weight: bold;
+  align-items: center;
+    -webkit-box-align: center;
+    display: flex;
+}
+
+[data-toggle="collapse"] .fa:before {  
+  font-family: FontAwesome;
+  content: "\f0d7";
+}
+
+[data-toggle="collapse"].collapsed .fa:before {
+  content: "\f0da";
+} 
+
+.input-control.success input {
+    border-color: #09c372;
+}
+.input-control.error input {
+    border-color: #ff3860;
+}
+
+.input-control .error {
+    color: #ff3860;
+    font-size: 12px;
+    height: 13px;
+}
+
+.mx-data{
+  align-items: center;
+    -webkit-box-align: center;
+    justify-content: space-between;
+    -webkit-box-pack: justify;
+    display: flex;
+}
+
+.mx-data-1{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.priority-button{
+  pointer-events: bounding-box;
+  border: none;
+  color: rgb(49, 49, 49);
+  display: flex;
+}
+.button-style{
+  border-color: rgb(115, 102, 228);
+  padding-right: 7px;
+  padding-left: 7px;
+  padding-bottom: 2px;
+  padding-top: 2px;
+  color: rgb(34, 23, 133);
+  background-color: rgb(241, 240, 252);
+  font-weight: bold;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+.dropdownSX{
+  max-width: 100px;
+  width: 100%;
+}
+.dropdownSX1{
+  height: 35px;
+  margin-bottom: 0px;
+}
+.dropdownSX2{
+  text-align: left;
+  font-size: 14px;
+  margin-right: 8px;
+  position: relative;
+}
+</style>
+
+<% flash.each do |key, value| %>
+ <%= content_tag(:div, class: "alert alert-#{key} alert-dismissable") do %>
+  <%= value %>
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>   
+ <% end %> 
+<% end %>  
+
+<% content_for :page_title do %>
+ <div class="mt-2"></div>
+  <%= link_to Spree.t(:dns_management), admin_hosted_zones_path %>
+  <%= @hosted_zone.name %>
+<% end %>
+
+<div class="box">
+  <div class="form-inline first-row">
+    <button class="btn btn-md btn-primary" style="display:inline-block;margin-right:10px;" data-toggle="collapse" 
+                data-target="#collapseEX2" aria-expanded="false" aria-controls="collapseEX2" type="button" 
+                onclick="ClearFields();"}>Add Record</button>
+    <div class="form-group has-search">
+        <span class="fa fa-search form-control-feedback"></span>
+        <input type="text" class="form-control search-bx" id="searchBox" data-table="records-list" placeholder="Search" style="width: 970px;">
+    </div>
+  </div>
+  <%=form_tag admin_hosted_zone_hosted_zone_records_path(@hosted_zone), class:"collapse form_1", id: "collapseEX2", method: "post" do %>
+    <fieldset>
+    <div class="grid-container">
+
+       <div class="grid-small_1">
+          <div class="form-group ">
+            <label for="type" class="label-st">Type</label>
+            <%= select_tag :type, options_for_select(["A", "AAAA","CNAME","MX", "NS","TXT"]), class: "form-control input-bx", id:"txttype", required:"required"%>
+          </div>
+          <div class="form-group">
+              <label for="name" class="label-st">Name</label>
+              <%=text_field_tag :name,params[:name], class:"form-control input-bx", id:"txtname", required:"required" %>
+          </div> 
+        </div>
+
+        <div class="grid-child 2">
+          <div id="divA" class="grid-small">
+            <div class="form-group input-control" >
+              <label for="ipv4" class="label-st">IPv4 address</label>
+              <%=text_field_tag :ipv4, params[:ipv4], class:"form-control input-bx", id:"txtipv4" %>
+              <div class="error"></div>
+            </div>
+            <div class="form-group">
+              <label for="ttl" class="label-st">TTL</label>
+              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
+            </div>
+          </div>
+
+          <div id="divAAAA" class="grid-small">
+            <div class="form-group input-control">
+              <label for="ipv6" class="label-st">IPv6 address</label>
+              <%=text_area_tag :ipv6, params[:ipv6], class:"form-control input-bx", id:"txtipv6",style:"margin-top: 0px; margin-bottom: 16px; height: 39px;"%>
+              <div class="error"></div>
+            </div>
+            <div class="form-group">
+              <label for="ttl" class="label-st">TTL</label>
+              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
+            </div>
+          </div>
+
+          <div id="divCNAME"class="grid-small" >
+            <div class="form-group input-control">
+              <label for="target" class="label-st">Target</label>
+              <%=text_field_tag :target,params[:target], class:"form-control input-bx", id:"txttarget" %>
+               <div class="error"></div>
+            </div>
+            <div class="form-group">
+              <label for="ttl" class="label-st">TTL</label>
+              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
+            </div>
+          </div>
+
+          <div id="divMX" class="grid-small">
+            <div class="form-group input-control">
+              <label for="mailserver" class="label-st">Mail Server</label>
+              <%=text_field_tag :mailserver, params[:mailserver], class:"form-control input-bx", id:"txtmailserver" %>
+              <div class="error"></div>
+            </div>
+            <div class="form-group">
+              <label for="ttl" class="label-st">TTL</label>
+              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
+            </div>
+            <div class="form-group">
+              <label for="priority" class="label-st">Priority</label>
+              <%=text_field_tag :priority, params[:priority], type:"number", class:"form-control input-bx", id:"txtpriority" %>
+            </div>
+          </div>
+
+          <div id="divNS" class="grid-small">
+            <div class="form-group input-control">
+              <label for="nameserver" class="label-st">Nameserver</label>
+              <%=text_field_tag :nameserver, params[:nameserver], class:"form-control input-bx", id:"txtnameserver" %>
+              <div class="error"></div>
+            </div>
+            <div class="form-group">
+              <label for="ttl" class="label-st">TTL</label>
+              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
+            </div>
+          </div>
+
+          <div id="divTXT" class="grid-small">
+            <div class="form-group" >
+              <label for="ttl" class="label-st">TTL</label>
+              <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control input-bx", id: "txtttl" %>
+            </div>
+            <div class="form-group">
+              <label for="content" class="label-st">Content</label>
+              <%=text_area_tag :content, params[:content], type:"text", class:"form-control input-bx", id:"txtcontent", style:"margin-top: 0px; margin-bottom: 16px; height: 39px;"%>
+            </div>
+          </div>
+
+        </div>
+        
+    </div>
+      <div class="float-right">
+        <button class="btn btn-md btn-primary" type="submit">Save</button>
+        <button class="cancel-button btn btn-outline-secondary"  type="button">Cancel</button>
+      </div> 
+    </fieldset>
+  <% end %>
+  <% if @hosted_zone_records.any? %>
+  <div class="container pt-4">
+      <div class="table-responsive">
+        <table class="table" id="myTable">
+          <thead>
+            <tr>
+              <th class="col-md-2">Type</th>
+              <th class="col-md-3">Name</th>
+              <th class="col-md-3">Content</th>
+              <th class="col-md-2">TTL</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% @hosted_zone_records.each do |hosted_zone_record| %>
+            <tr id="<% hosted_zone_record.id %>">
+              <td class="col-md-2"><%= hosted_zone_record.type%></td>
+              <td class="col-md-3"><%= hosted_zone_record.name%></td>
+              <% if !hosted_zone_record.type.eql?("MX")%>
+              <td class="col-md-3"><%= hosted_zone_record.data%></td>
+              <%else%>
+              <td class="col-md-3">
+                <div class="mx-data">
+                  <div class="mx-data-1"><%= hosted_zone_record.data%></div>
+                  <% unless hosted_zone_record.aux.eql?("0")%>
+                  <button data-tip="true" type="button" class="priority-button" currentitem="false" title="Priority" style="cursor: pointer; background-color: transparent; padding: 0px;">
+                    <span class="button-style"><%= hosted_zone_record.aux unless hosted_zone_record.aux.eql?"0"%></span>
+                  </button>
+                  <%end%>
+                </div></td>
+              <%end%>
+              <td class="col-md-2"><%= hosted_zone_record.ttl %>
+              <td><a class="btn btn-link collapsed" data-toggle= "collapse" data-target= "#edit-form_<%=hosted_zone_record.id.to_s%>" 
+                            aria-expanded="false" aria-controls="edit-form_<%=hosted_zone_record.id.to_s%>", type="button",
+                            onclick="ClearFields();">Edit&nbsp;<i class="fa" aria-hidden="true">&nbsp;</i></a></td>
+            </tr>
+            <tr class="collapse" id="edit-form_<%=hosted_zone_record.id.to_s%>">
+            <td colspan="5"> 
+            <%=form_tag admin_hosted_zone_hosted_zone_record_path(@hosted_zone),  class:"form_2", id: "edit-form-clear-field", value: hosted_zone_record.id, method: "put" do %>
+              <fieldset>
+                <div class="grid-container-edit">
+                  <div class="grp1">
+                    <div class="form-group">
+                      <label for="type">Type</label>
+                      <div class>
+                        <div class="show-content"><%= hosted_zone_record.type%></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="grp2">
+                    <div class="form-group">
+                      <label for="name" >Name</label>
+                      <%=text_field_tag :name,params[:name], class:"form-control input-bx", value: hosted_zone_record.name, id:"edit_name", required: "required" %>
+                    </div>
+                  </div>
+
+                  <div class="grp3">
+                  <%if hosted_zone_record.type.eql?("A")%>
+                    <div id="divIPV4">
+                      <div class="form-group input-control">
+                        <label for="ipv4">IPv4 address</label>
+                        <%=text_field_tag :ipv4, params[:ipv4], class:"form-control input-bx",value: hosted_zone_record.data, id:"edit_ipv4", required: true if hosted_zone_record.type.eql?"A" %>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <%elsif hosted_zone_record.type.eql?("AAAA")%>
+                    <div id="divIPV6">
+                      <div class="form-group input-control">
+                        <label for="ipv6">IPv6 address</label>
+                        <%=text_field_tag :ipv6, params[:ipv6], class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_ipv6", required: true if hosted_zone_record.type.eql?"AAAA" %>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% elsif hosted_zone_record.type.eql?("CNAME")%>
+                    <div id="divTARGET">
+                      <div class="form-group input-control">
+                        <label for="target">Target</label>
+                        <%=text_field_tag :target,params[:target], class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_target", required: true if hosted_zone_record.type.eql?"CNAME" %>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% elsif hosted_zone_record.type.eql?("MX")%>
+                    <div id="divMX">
+                      <div class="form-group input-control">
+                        <label for="mailserver">Mail Server</label>
+                        <%=text_field_tag :mailserver, params[:mailserver], class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_mailserver", required: true if hosted_zone_record.type.eql?"MX" %>
+                        <div class="error"></div>
+                      </div>
+                      <div class="form-group input-control">
+                        <label for="priority">Priority</label>
+                        <%=text_field_tag :priority, params[:priority], type:"number", class:"form-control input-bx", value: hosted_zone_record.aux,  id:"edit_priority", required: true if hosted_zone_record.type.eql?"MX" %>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% elsif hosted_zone_record.type.eql?("NS")%>
+                    <div id="divNS">
+                      <div class="form-group input-control">
+                        <label for="nameserver">Nameserver</label>
+                        <%=text_field_tag :nameserver, params[:nameserver], class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_nameserver", required: true if hosted_zone_record.type.eql?"NS"%>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% else %>
+                    <div id="divCONTENT">
+                      <div class="form-group input-control">
+                        <label for="content">Content</label>
+                        <%=text_field_tag :content, params[:content], type:"text", class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_content", style:"margin-top: 0px; margin-bottom: 16px; height: 39px;", required: true if hosted_zone_record.type.eql?"TXT"%>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% end %>
+                  </div>
+
+                  <div class="grp4">
+                    <div class="form-group">
+                      <label for="ttl" >TTL</label>
+                      <div class>
+                      <div class="dropdownSX">
+                        <div class="dropdownSX1">
+                          <div class="dropdownSX2">
+                            <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]],hosted_zone_record.ttl), class: "form-control", id: "edit_ttl", required: "required" %>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br/>
+                  <div class="float-left">
+                  <%= link_to_delete "Delete", url: "/admin/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}"  %>
+                  </div>
+                  <div class="float-right">
+                    <%=hidden_field_tag(:primary_id, hosted_zone_record.id)%>
+                    <%=hidden_field_tag(:type, hosted_zone_record.type)%>
+                    <button class="btn btn-md btn-primary" type="submit" >Save</button>
+                    <button class="cancel-button btn btn-outline-secondary" id="edit-button_<%=hosted_zone_record.id.to_s%>" type="button">Cancel</button>
+                  </div>
+                </fieldset>
+              <% end %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <%end%>
+</div>
+
+<script type="text/javascript">
+function ClearFields() {
+  document.getElementById("collapseEX2").reset();
+  document.getElementById("edit-form-clear-field").reset();
+}
+
+  $(document).on("click", ".cancel-button", function() {
+  var collapse = $(this).closest(".collapse");
+  $(collapse).collapse('toggle');
+});
+</script>
+<%= javascript_pack_tag 'hosted_zone' %>

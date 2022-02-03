@@ -39,6 +39,13 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :hosted_zones do
+        member do
+          get :dns
+        end
+        resources :hosted_zone_records          
+      end
+
       namespace :mail do
         resources :domains    
         resources :mail_boxes  
