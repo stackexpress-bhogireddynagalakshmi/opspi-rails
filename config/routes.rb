@@ -60,6 +60,10 @@ Rails.application.routes.draw do
           end
         end
       end
+
+      namespace :sites do
+        resources :websites
+      end
       
     end
   end

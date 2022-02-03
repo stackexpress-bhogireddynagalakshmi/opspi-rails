@@ -15,5 +15,6 @@ class UserAbility
       can :manage, :mailing_lists
       can :manage, :hosted_zones
       can :manage, :hosted_zone_records
+      can :manage, :websites
     end
 end

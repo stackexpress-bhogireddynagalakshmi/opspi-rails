@@ -42,6 +42,9 @@ en:
     dns: DNS
     ftp: FTP
     statistics: Statistics 
+    sites: Sites
+    websites: Websites
+    ftp_users: FTP Users
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout

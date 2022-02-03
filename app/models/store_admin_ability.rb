@@ -33,7 +33,9 @@ class StoreAdminAbility
       can :manage, :spam_filter_whitelists
       can :manage, :hosted_zones
       can :manage, :hosted_zone_records
+
       can :manage, :statistics
+      can :manage, :websites
 
       can :manage, :my_store
       can :manage, ::Spree::PaymentMethod unless TenantManager::TenantHelper.current_admin_tenant?
