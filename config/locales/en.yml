@@ -41,6 +41,7 @@ en:
     ci_cd: CI/CD
     dns: DNS
     ftp: FTP
+    statistics: Statistics 
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout
