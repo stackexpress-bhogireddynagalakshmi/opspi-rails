@@ -154,6 +154,10 @@ module IspConfig
       @hosted_zone ||= IspConfig::HostedZone.new(user)
     end
 
+    def website
+      @website ||= IspConfig::Website.new(user)
+    end
+
     private
 
     def user_hash

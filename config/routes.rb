@@ -53,6 +53,10 @@ Rails.application.routes.draw do
         resources :spam_filter_blacklists
         resources :spam_filter_whitelists
       end
+
+      namespace :sites do
+        resources :websites
+      end
       
     end
   end

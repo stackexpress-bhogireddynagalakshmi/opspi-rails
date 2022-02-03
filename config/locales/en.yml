@@ -40,7 +40,9 @@ en:
     mail: Mail
     ci_cd: CI/CD
     dns: DNS
-    ftp: FTP
+    sites: Sites
+    websites: Websites
+    ftp_users: FTP Users
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout
