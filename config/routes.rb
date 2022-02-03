@@ -56,6 +56,7 @@ Rails.application.routes.draw do
 
       namespace :sites do
         resources :websites
+        resources :ftp_users
       end
       
     end

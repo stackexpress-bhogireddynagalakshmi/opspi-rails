@@ -20,6 +20,7 @@ module Spree
       base.has_many :spam_filters
       base.has_many :hosted_zones
       base.has_many :websites
+      base.has_many :ftp_users
 
       base.after_commit :update_user_tanent, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]

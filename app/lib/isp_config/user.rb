@@ -158,6 +158,10 @@ module IspConfig
       @website ||= IspConfig::Website.new(user)
     end
 
+    def ftp_user
+      @ftp_user ||= IspConfig::FtpUser.new(user)
+    end
+
     private
 
     def user_hash

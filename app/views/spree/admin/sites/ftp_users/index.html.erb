@@ -1,0 +1,63 @@
+<% content_for :page_title do %>
+ FTP Users
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_ftp_user),
+    new_admin_sites_ftp_user_path,
+    class: "btn-success",
+      icon: 'add.svg',
+      id: 'admin_new_ftp_user' %>
+<% end %>
+
+
+<% if @ftp_users.any? %>
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+    <table class="table" id="listing_orders" data-hook data-nav-x-content>
+      <thead>
+        <tr data-hook="admin_orders_index_headers">
+          <th>ID</th>
+          <th>Web Domain</th>
+          <th>username</th>
+          <th>User identifier (UID)</th>
+          <th>Group identifier (GID)</th>
+          <th>Directory</th>
+          <th>Active</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      <%@ftp_users.each do |ftp_user| %>
+        <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
+          <td><%=ftp_user.ftp_user_id%></td>
+          <td><%=ftp_user.parent_domain_id%></td>
+          <td><%=ftp_user.username%></td>
+          <td><%=ftp_user.uid%></td>
+          <td><%=ftp_user.gid%></td>
+          <td><%=ftp_user.dir%></td>
+          <td><%=FtpUser.actives[ftp_user.active] %></td>
+          <td>
+            <%=link_to 'Delete', admin_sites_ftp_user_path(ftp_user.ftp_user_id), method: :delete%>
+          </td>  
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    No FTP Users
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  })
+
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+</script>
