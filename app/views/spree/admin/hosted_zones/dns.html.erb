@@ -318,9 +318,10 @@ display: block;
                     <span class="button-style"><%= hosted_zone_record.aux unless hosted_zone_record.aux.eql?"0"%></span>
                   </button>
                   <%end%>
-                </div></td>
+                </div>
+              </td>
               <%end%>
-              <td class="col-md-2"><%= hosted_zone_record.ttl %>
+              <td class="col-md-2"><%= hosted_zone_record.ttl %></td>
               <td><a class="btn btn-link collapsed" data-toggle= "collapse" data-target= "#edit-form_<%=hosted_zone_record.id.to_s%>" 
                             aria-expanded="false" aria-controls="edit-form_<%=hosted_zone_record.id.to_s%>", type="button",
                             onclick="ClearFields();">Edit&nbsp;<i class="fa" aria-hidden="true">&nbsp;</i></a></td>
@@ -449,5 +450,84 @@ function ClearFields() {
   var collapse = $(this).closest(".collapse");
   $(collapse).collapse('toggle');
 });
+
+/////// show/hide 
+
+$(document).ready(function(){
+  showDiv('#divA')
+    $('#txttype').on('change', function() {
+      if ( this.value == 'A')
+      {
+        showDiv("#divA")
+      }else if (this.value == 'AAAA')
+      {
+        showDiv("#divAAAA")
+      }else if (this.value == 'CNAME')
+      {
+         showDiv("#divCNAME")
+
+      }else if (this.value == 'MX')
+      {
+
+         showDiv("#divMX")
+
+      }else if (this.value == 'NS')
+      {
+         showDiv("#divNS")
+      }else if (this.value == 'TXT')
+      {
+        showDiv("#divTXT")
+      }else{
+
+      }
+    });
+});
+ 
+function showDiv(divId){
+    var divs = ["#divA","#divAAAA","#divCNAME","#divMX",'#divNS','#divTXT'];
+ 
+    var result = divs.filter(function(elem){
+      return elem != divId; 
+    });
+
+    for (var div of result) {
+    $(div).hide()
+    $(div).find('input:text').val('');
+    $(div).find('textarea:text').val('');
+    $(div).find('input').removeAttr('required')
+    $(div).find('textarea').removeAttr('required')
+    $(div).find('select').removeAttr('required')
+    }
+    $(divId).show();
+    $(divId).find('input').attr('required','required')
+    $(divId).find('textarea').attr('required','required')
+    $(divId).find('select').attr('required','required')
+}
+
+
+/// search 
+
+const searchBox = document.getElementById('searchBox');
+const table = document.getElementById("myTable");
+const trs = table.tBodies[0].getElementsByTagName("tr");
+
+
+function performSearch() {
+  var filter = searchBox.value.toUpperCase();
+  for (var rowI = 0; rowI < trs.length; rowI++) {
+    var tds = trs[rowI].getElementsByTagName("td");
+    trs[rowI].style.display = "none";
+    for (var cellI = 0; cellI < tds.length; cellI++) {
+      if (tds[cellI].innerHTML.toUpperCase().indexOf(filter) > -1) {
+        trs[rowI].style.display = "";
+        continue;
+      }
+    }
+  }
+}
+
+searchBox.addEventListener('keyup', performSearch);
+
+//////////////////////////////////////////////////////////
 </script>
-<%= javascript_pack_tag 'hosted_zone' %>
+<%#= javascript_pack_tag 'hosted_zone' %>

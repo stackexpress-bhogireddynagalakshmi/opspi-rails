@@ -42,7 +42,9 @@ class Spree::Admin::HostedZonesController < Spree::Admin::BaseController
     def destroy
       @response  = IspConfig::HostedZone.new(@zone_list).destroy(@zone_list.isp_config_host_zone_id)
       set_flash
-      redirect_to admin_hosted_zones_path
+      respond_to do |format|
+        format.js {render inline: "location.reload();" }
+      end
     end
 
 
