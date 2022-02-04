@@ -9,7 +9,7 @@
       id: 'admin_new_domain' %>
 <% end %>
 
-<% if @domains.any? %>
+<% if @resources.any? %>
 <div data-nav-x-wrapper>
   <div data-nav-x-container>
     <table class="table" id="listing_orders" data-hook data-nav-x-content>
@@ -22,7 +22,7 @@
         </tr>
       </thead>
       <tbody>
-      <%@domains.each do |domain| %>
+      <%@resources.each do |domain| %>
         <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
           <td><%=domain.domain%></td>
           <td><%=domain.active%></td>
