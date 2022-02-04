@@ -1,5 +1,6 @@
 class Spree::Admin::MyStoreController < Spree::Admin::BaseController
   helper Spree::Admin::NavigationHelper
+  require 'store_domain_validator' 
 
   def index
     @store = current_store
@@ -44,7 +45,7 @@ class Spree::Admin::MyStoreController < Spree::Admin::BaseController
   def validate_custom_domian(custom_domain)
     return {success: false,msg: I18n.t('my_store.domain_cannot_be_blank')} if custom_domain.blank?
 
-    validation = StoreManager::StoreDomainValidator.new(custom_domain,current_store: current_store).call
+    validation = StoreDomainValidator.new(custom_domain,current_store: current_store).call
     return {success: false, msg: validation[1]} unless  validation[0]
 
     dns_resolver = DnsManager::CnameResolver.new(custom_domain).call

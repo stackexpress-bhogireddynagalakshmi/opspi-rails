@@ -1,4 +1,4 @@
-module ValidationManager
+# module ValidationManager
     class DnsRecordValidator < ApplicationService
      attr_reader :record_params,:type, :reg
     
@@ -55,4 +55,4 @@ module ValidationManager
       end
   
     end
-  end
+  # end

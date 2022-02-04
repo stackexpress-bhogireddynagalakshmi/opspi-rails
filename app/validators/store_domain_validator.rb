@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module StoreManager
+# module StoreManager
   class StoreDomainValidator < ApplicationService
    attr_reader :domain,:domain_with_https,:current_store
    require 'uri'
@@ -21,7 +21,7 @@ module StoreManager
  
     def validate_url_format
       # matchers = @domain.match(/^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$/)
-      matchers = ValidationManager::CustomValidator.validate(@domain,DOMAIN_REGEX)
+      matchers = CustomValidator.validate(@domain,DOMAIN_REGEX)
       return [false, 'Not a valid domain'] unless matchers[0]
 
       return [true]
@@ -42,4 +42,4 @@ module StoreManager
     end
 
   end
-end
+# end
