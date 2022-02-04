@@ -11,22 +11,24 @@
   <%= Spree.t(:new_mail_domain) %>
 <% end %>
 
-<% url =  @mail_domain.present? ?   admin_mail_domain_path(@mail_domain.domain_id) : admin_mail_domains_path%>
 
- <%=form_for "mail_domain", url: url, html: {method: @mail_domain.present? ? :put : :post} do |f|%> 
+<% url =  @api_resource.present? ?   admin_mail_domain_path(@api_resource.domain_id) : admin_mail_domains_path%>
 
-  <%=hidden_field_tag :domain_id, @mail_domain.try("domain_id")%>
+ <%=form_for "mail_domain", url: url, html: {method: @api_resource.present? ? :put : :post} do |f|%> 
+  <%resource  = @api_resource || @proxy_resource%>
+
+  <%=hidden_field_tag :domain_id, resource.try("domain_id")%>
   <fieldset>
     <div class="form-group field">
       <label>Mail Domain</label>
-      <%=f.text_field 'domain', value: @mail_domain.try(:domain), class: 'form-control'%>
+      <%=f.text_field 'domain', value: resource.try(:domain), class: 'form-control'%>
     </div>
           
     <div class="form-group field">
       <label>Active</label>
-      <%=f.select 'active',options_for_select([['Yes','y'],['No','n']],@mail_domain.try(:active)),{}, class: 'form-control'%>
+      <%=f.select 'active',options_for_select([['Yes','y'], ['No','n']], resource.try(:active)),{}, class: 'form-control'%>
     </div>
-    <%=submit_tag "#{@mail_domain.present? ? 'Update' : 'Add'} Mail Domain",class: 'btn btn-primary'%>
+    <%=submit_tag "#{resource.present? ? 'Update' : 'Add'} Mail Domain", class: 'btn btn-primary'%>
 
   </fieldset>
 <%end%>
