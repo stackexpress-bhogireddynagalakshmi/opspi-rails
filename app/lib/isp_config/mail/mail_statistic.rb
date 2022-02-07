@@ -1,5 +1,6 @@
 module IspConfig
-  class MailStatistic < Base
+  module Mail
+    class MailStatistic < Base
     attr_accessor :user
 
     def initialize user
@@ -53,5 +54,6 @@ module IspConfig
         server_id: ENV['ISP_CONFIG_WEB_SERVER_ID']
       }
     end
+  end
   end
 end
