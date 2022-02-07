@@ -94,4 +94,14 @@ module ApplicationHelper
     ENV['ISP_CONFIG_WEB_MAIL_HOST'].presence
   end
 
+  def  get_mail_domians
+    begin
+      domains = current_spree_user.isp_config.mail_domain.all
+      domains[:response].response.collect{|x|x.domain}
+    rescue Exception => e
+      Rails.logger.info{ e.message}
+      []
+    end
+  end
+
 end
