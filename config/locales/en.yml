@@ -137,6 +137,9 @@ en:
     domain_cannot_be_blank: "Custom domain can't be blank."
     domain_validated: "Custom domain successfully validated. Please check after few minutes."
 
+  general:
+    delete: 'Are you sure you want to delete?'
+
 
   devise:
     user_passwords:

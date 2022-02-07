@@ -90,4 +90,8 @@ module ApplicationHelper
   ]
   end
 
+  def get_web_mail_client_url
+    ENV['ISP_CONFIG_WEB_MAIL_HOST'].presence
+  end
+
 end
