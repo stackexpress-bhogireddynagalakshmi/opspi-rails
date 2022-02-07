@@ -1,6 +1,6 @@
 <ul id="sidebar-hosting_controls" class="border-top bg-white collapse nav nav-pills nav-stacked" data-hook="admin_hosting_controls_sub_tabs">
-    <%= tab Spree.t('dns'), url: spree.admin_hosted_zones_path%>
+    <%= tab Spree.t('dns'), url: spree.admin_hosted_zones_path, icon: "report.svg"%>
     <%= main_menu_tree Spree.t(:mail), icon: "report.svg", sub_menu: "mail", url: "#sidebar-mail" %>
     <%= main_menu_tree Spree.t(:statistics), icon: "report.svg", sub_menu: "statistics", url: "#mail-statistics" %>
-    <%= tab Spree.t('ftp'), url: '#'%>
+    <%= tab Spree.t('ftp'), url: '#', icon: "report.svg"%>
 </ul>
