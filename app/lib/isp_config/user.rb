@@ -131,23 +131,27 @@ module IspConfig
     end
 
     def mail_domain
-      @mail_domain ||= IspConfig::MailDomain.new(user)
+      @mail_domain ||= IspConfig::Mail::MailDomain.new(user)
+    end
+
+    def mail_statistics
+      @mail_domain ||= IspConfig::Mail::MailStatistic.new(user)
     end
 
     def mail_user
-      @mail_user ||= IspConfig::MailUser.new(user)
+      @mail_user ||= IspConfig::Mail::MailUser.new(user)
     end
 
     def mailing_list
-      @mailing_list ||= IspConfig::MailingList.new(user)
+      @mailing_list ||= IspConfig::Mail::MailingList.new(user)
     end
 
     def spam_filter_whitelist
-      @spam_filter ||= IspConfig::SpamFilterWhitelist.new(user)
+      @spam_filter ||= IspConfig::Mail::SpamFilterWhitelist.new(user)
     end
 
     def spam_filter_blacklist
-      @spam_filter ||= IspConfig::SpamFilterBlacklist.new(user)
+      @spam_filter ||= IspConfig::Mail::SpamFilterBlacklist.new(user)
     end
 
     def hosted_zone

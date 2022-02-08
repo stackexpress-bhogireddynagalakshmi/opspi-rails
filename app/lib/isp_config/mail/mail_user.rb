@@ -1,5 +1,6 @@
 module IspConfig
-  class SpamFilter < Base
+  module Mail
+    class MailUser < Base
     attr_accessor :user
 
     def initialize user
@@ -8,7 +9,7 @@ module IspConfig
 
     def find(id)
       response = query({
-        :endpoint => get_endpoint,
+        :endpoint => '/json.php?mail_user_get',
         :method => :GET,
         :body => { 
           primary_id: id
@@ -20,25 +21,27 @@ module IspConfig
 
     def create(params={})
       response = query({
-        :endpoint => create_endpoint,
+        :endpoint => '/json.php?mail_user_add',
         :method => :POST,
         :body => { 
           client_id: user.isp_config_id,
-          params: params.merge(server_params)
+          params: params.merge(server_params).merge({login: params[:email]})
         }}
       )
-      user.spam_filters.create({isp_config_spam_filter_id: response["response"]}) if response.code == "ok"
+
+      user.mail_users.create({isp_config_mailuser_id: response["response"]}) if response.code == "ok"
+      
       formatted_response(response,'create')
     end
 
     def update(primary_id,params={})
       response = query({
-        :endpoint => update_endpoint,
+        :endpoint => '/json.php?mail_user_update',
         :method => :POST,
         :body => { 
           client_id: user.isp_config_id,
           primary_id: primary_id,
-          params: params.merge(server_params)
+          params: params.merge(server_params).merge({login: params[:email]})
         }}
       )
 
@@ -47,44 +50,42 @@ module IspConfig
 
     def destroy(primary_id)
       response = query({
-        :endpoint => delete_endpoint,
+        :endpoint => '/json.php?mail_user_delete',
         :method => :DELETE,
         :body => { 
           client_id: user.isp_config_id,
           primary_id: primary_id
         }}
       )
-      user.spam_filters.find_by_isp_config_spam_filter_id(primary_id).destroy if response.code == "ok"
+      user.mail_users.find_by_isp_config_mailuser_id(primary_id).destroy if response.code == "ok"
+
       formatted_response(response,'delete')
     end
 
-    def all(type)
+    def all
       response = query({
-        :endpoint => get_endpoint,
+        :endpoint => '/json.php?mail_user_get',
         :method => :GET,
         :body => { 
           primary_id: "-1"
         }}
       )
-
-      response.response.reject!{ |x| list_ids.exclude?(x.wblist_id.to_i) }
-
-      response.response.reject!{ |x| x.wb != type }
+      response.response.reject!{|x| mail_user_ids.exclude?(x.mailuser_id.to_i)}
 
       formatted_response(response,'list')
     end
 
     private
 
-    def list_ids
-      user.spam_filters.pluck(:isp_config_spam_filter_id)
+    def mail_user_ids
+      user.mail_users.pluck(:isp_config_mailuser_id)
     end
 
     def formatted_response(response,action)
       if  response.code == "ok"
         {
           :success=>true,
-          :message=>I18n.t("isp_config.spam_filters.#{action}"),
+          :message=>I18n.t("isp_config.mail_user.#{action}"),
           response: response
         }
       else
@@ -98,8 +99,14 @@ module IspConfig
 
     def server_params
       {
-        server_id: ENV['ISP_CONFIG_WEB_SERVER_ID']
+        server_id: ENV['ISP_CONFIG_WEB_SERVER_ID'],
+        move_junk: 'n',
+        custom_mailfilter: 'spam',
+        purge_trash_days: 90,
+        purge_junk_days: 90
       }
     end
   end
+  end
+
 end
