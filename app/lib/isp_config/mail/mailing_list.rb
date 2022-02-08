@@ -1,14 +1,16 @@
 module IspConfig
-  class MailDomain < Base
+  module Mail
+    class MailingList < Base
     attr_accessor :user
 
     def initialize user
       @user = user
     end
 
+
     def find(id)
       response = query({
-        :endpoint => '/json.php?mail_domain_get',
+        :endpoint => '/json.php?mail_mailinglist_get',
         :method => :GET,
         :body => { 
           primary_id: id
@@ -20,21 +22,21 @@ module IspConfig
 
     def create(params={})
       response = query({
-        :endpoint => '/json.php?mail_domain_add',
+        :endpoint => '/json.php?mail_mailinglist_add',
         :method => :POST,
         :body => { 
           client_id: user.isp_config_id,
           params: params.merge(server_params)
         }}
       )
-      user.mail_domains.create({isp_config_mail_domain_id: response["response"]}) if response.code == "ok"
+      user.mailing_lists.create({isp_config_mailing_list_id: response["response"]}) if response.code == "ok"
       
       formatted_response(response,'create')
     end
 
     def update(primary_id,params={})
       response = query({
-        :endpoint => '/json.php?mail_domain_update',
+        :endpoint => '/json.php?mail_mailinglist_update',
         :method => :POST,
         :body => { 
           client_id: user.isp_config_id,
@@ -48,34 +50,34 @@ module IspConfig
 
     def destroy(primary_id)
       response = query({
-        :endpoint => '/json.php?mail_domain_delete',
+        :endpoint => '/json.php?mail_mailinglist_delete',
         :method => :DELETE,
         :body => { 
           client_id: user.isp_config_id,
           primary_id: primary_id
         }}
       )
-      user.mail_domains.find_by_isp_config_mail_domain_id(primary_id).destroy if response.code == "ok"
+      user.mailing_lists.find_by_isp_config_mailing_list_id(primary_id).destroy if response.code == "ok"
       formatted_response(response,'delete')
     end
 
     def all
       response = query({
-        :endpoint => '/json.php?mail_domain_get',
+        :endpoint => '/json.php?mail_mailinglist_get',
         :method => :GET,
         :body => { 
           primary_id: "-1"
         }}
       )
-      response.response.reject!{|x| mail_domain_ids.exclude?(x.domain_id.to_i)}
+      response.response.reject!{|x| maillist_ids.exclude?(x.mailinglist_id.to_i)}
 
       formatted_response(response,'list')
     end
 
     private
 
-    def mail_domain_ids
-      user.mail_domains.pluck(:isp_config_mail_domain_id)
+    def maillist_ids
+      user.mailing_lists.pluck(:isp_config_mailing_list_id)
     end
 
     def formatted_response(response,action)
@@ -99,5 +101,6 @@ module IspConfig
         server_id: ENV['ISP_CONFIG_WEB_SERVER_ID']
       }
     end
+  end
   end
 end

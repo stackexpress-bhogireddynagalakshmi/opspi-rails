@@ -24,7 +24,14 @@
 
     <div class="form-group field">
       <label>Email</label>
-      <%=f.email_field 'email', value: @mail_user.try(:email), class: 'form-control'%>
+
+      <div class="input-group">
+         <%=f.text_field 'email', value: @mail_user.try(:email).try(:split,'@').try(:first), class: 'form-control', required: true%>
+        <div class="input-group-append">
+          <span class="input-group-text">@</span>
+          <%=select_tag 'mail_domain', options_for_select(get_mail_domians), class: 'form-control'%>
+        </div>
+      </div>
     </div>
 
     <div class="form-group field">
@@ -83,7 +90,7 @@
       <%=f.check_box 'disablepop3', { value: 'y', checked: @mail_user&.disablepop3 == 'y' } , 'y', 'n'%>
     </div>
 
-    <%=submit_tag "#{@mail_domain.present? ? 'Update' : 'Add'} Mailbox",class: 'btn btn-primary'%>
+    <%=submit_tag "#{@mail_user.present? ? 'Update' : 'Add'} Mailbox",class: 'btn btn-primary'%>
 
   </fieldset>
 <%end%>

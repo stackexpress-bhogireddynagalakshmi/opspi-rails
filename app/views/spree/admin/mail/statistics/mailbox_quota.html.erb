@@ -1,34 +1,30 @@
 <% content_for :page_title do %>
- Domains
+ Mail Quota
 <% end %>
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_domian),
-    new_admin_mail_domain_path,
-    class: "btn-success",
-      icon: 'add.svg',
-      id: 'admin_new_domain' %>
 <% end %>
 
-<% if @resources.any? %>
+<% if @mailbox_quotas.any? %>
 <div data-nav-x-wrapper>
   <div data-nav-x-container>
     <table class="table" id="listing_orders" data-hook data-nav-x-content>
       <thead>
         <tr data-hook="admin_orders_index_headers">
-          <th>Domain Name</th>
-          <th>Active</th>
-          <th>Actions</th>
-         
+          <th>Email Address</th>
+          <th>Name</th>
+          <th>Used Space</th>
+          <th>Quota</th>
+          <th>Used %</th>
         </tr>
       </thead>
       <tbody>
-      <%@resources.each do |domain| %>
+      <%@mailbox_quotas.each do |mailbox_quota| %>
         <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
-          <td><%=domain.domain%></td>
-          <td><%=domain.active%></td>
-          <td><%=link_to 'Edit',edit_admin_mail_domain_path(id: domain.domain_id)%> |
-            <%=link_to 'Delete',admin_mail_domain_path(id: domain.domain_id), method: :delete, data: {confirm: t('general.delete')}%>
-          </td>  
+          <td><%=mailbox_quota.email%></td>
+          <td><%=mailbox_quota.name%></td>
+          <td><%=mailbox_quota.used%></td>
+          <td><%=mailbox_quota.quota%></td>
+          <td><%=mailbox_quota.used_percentage%></td>
         </tr>
       <% end %>
       </tbody>

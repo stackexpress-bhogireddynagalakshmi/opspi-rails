@@ -22,7 +22,9 @@ module Spree
         end
 
         def create
-          @response  = mail_user_api.create(mail_user_params)
+          mail_user_param = mail_user_params.merge({ email: formatted_email })
+          
+          @response  = mail_user_api.create(mail_user_param)
           set_flash
           if @response[:success]
             redirect_to admin_mail_mail_boxes_path
@@ -32,7 +34,8 @@ module Spree
         end
 
         def update
-          @response  = mail_user_api.update(@user.isp_config_mailuser_id, mail_user_params)
+          mail_user_param = mail_user_params.merge({ email: formatted_email })
+          @response  = mail_user_api.update(@user.isp_config_mailuser_id, mail_user_param)
           set_flash
            if @response[:success]
             redirect_to admin_mail_mail_boxes_path
@@ -70,6 +73,11 @@ module Spree
           @user = current_spree_user.mail_users.find_by_isp_config_mailuser_id(params[:id])
 
           redirect_to admin_mail_mail_boxes_path, notice: 'Not Authorized' if @user.blank?
+        end
+
+        def formatted_email
+          email = mail_user_params[:email].gsub("@", '')
+          "#{email}@#{params[:mail_domain]}"
         end
 
       end

@@ -41,6 +41,7 @@ en:
     ci_cd: CI/CD
     dns: DNS
     ftp: FTP
+    statistics: Statistics 
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout
@@ -135,6 +136,9 @@ en:
     cname_not_added: "Please add %{cname} as CNAME record in your DNS setting of %{custom_domain}."
     domain_cannot_be_blank: "Custom domain can't be blank."
     domain_validated: "Custom domain successfully validated. Please check after few minutes."
+
+  general:
+    delete: 'Are you sure you want to delete?'
 
 
   devise:
