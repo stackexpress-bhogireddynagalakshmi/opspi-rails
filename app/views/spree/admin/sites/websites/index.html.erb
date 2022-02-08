@@ -25,17 +25,7 @@
         </tr>
       </thead>
       <tbody>
-      <% @websites.each do |website| %>
-        <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
-          <td><%= website.domain_id %></td>
-          <td><%= website.domain %></td>
-          <td><%= website.document_root%></td>
-          <td><%= Website.actives[website.active] %></td> 
-          <td>
-            <%=link_to 'Delete',admin_sites_website_path(id: website.domain_id), method: :delete%>
-          </td>  
-        </tr>
-      <% end %>
+        <%= render partial: 'spree/admin/sites/websites/index', collection: @websites, as: :website %>
       </tbody>
     </table>
   </div>
@@ -54,5 +44,35 @@
 
   $(document).ready(function (argument) {
     $('#FlashAlertsContainer').removeClass('d-none');
+
   });
+
+  var updateWebDomain = function(element){
+    var webDomainId = element.attributes.data_web_domain_id.value;
+    var domainStatus = element.value;
+    if (domainStatus == 'y') {
+      var dataConfirm = "Are you sure to Deactivate this Domain?, This will affect your other services";
+      var active = 'n';
+    }
+    else {
+      var dataConfirm = "Are you sure to Activate this Domain?";
+      var active = 'y';
+    }
+
+    result = confirm(dataConfirm);
+    if (result) {
+      setTimeout(function(){
+        $.ajax({
+          type: "PATCH",
+          url: "/admin/sites/websites/"+webDomainId,
+          data: { 
+            website: {
+              active: active
+            }
+          }
+        });
+      } ,5);
+    }
+  }
 </script>
+

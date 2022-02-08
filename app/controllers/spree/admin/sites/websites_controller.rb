@@ -2,7 +2,7 @@ module Spree
   module Admin
      module Sites
       class WebsitesController < Spree::Admin::BaseController
-        before_action :set_website, only: [:destroy]
+        before_action :set_website, only: [:destroy, :update]
 
         def index
           response = website_api.all || []
@@ -27,6 +27,12 @@ module Spree
 
         def destroy
           @response  = website_api.destroy(@website.isp_config_website_id)
+          set_flash
+          redirect_to admin_sites_websites_path
+        end
+
+        def update
+          @response  = website_api.update(@website.isp_config_website_id, website_params)
           set_flash
           redirect_to admin_sites_websites_path
         end
