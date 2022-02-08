@@ -2,7 +2,7 @@ module Spree
   module Admin
      module Sites
       class FtpUsersController < Spree::Admin::BaseController
-        before_action :set_ftp_user, only: [:destroy]
+        before_action :set_ftp_user, only: [:destroy, :update]
         before_action :get_websites, only: [:new]
 
         def index
@@ -29,6 +29,12 @@ module Spree
 
         def destroy
           @response  = ftp_user_api.destroy(@ftp_user.isp_config_ftp_user_id)
+          set_flash
+          redirect_to admin_sites_ftp_users_path
+        end
+
+        def update
+          @response  = ftp_user_api.update(@ftp_user.isp_config_ftp_user_id, ftp_user_params)
           set_flash
           redirect_to admin_sites_ftp_users_path
         end
