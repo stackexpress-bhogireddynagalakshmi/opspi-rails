@@ -10,7 +10,7 @@
 <% end %>
 
 
-<% if @websites.any? %>
+<% if @resources.any? %>
 <div data-nav-x-wrapper>
   <div data-nav-x-container>
     <table class="table" id="listing_orders" data-hook data-nav-x-content>
@@ -25,7 +25,7 @@
         </tr>
       </thead>
       <tbody>
-        <%= render partial: 'spree/admin/sites/websites/index', collection: @websites, as: :website %>
+        <%= render partial: 'spree/admin/sites/websites/index', collection: @resources, as: :website %>
       </tbody>
     </table>
   </div>
