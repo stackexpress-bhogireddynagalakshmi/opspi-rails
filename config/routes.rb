@@ -38,12 +38,13 @@ Rails.application.routes.draw do
           post :setup_reseller_club
         end
       end
-
-      resources :hosted_zones do
-        member do
-          get :dns
+      namespace :dns do
+        resources :hosted_zones do
+          member do
+            get :dns
+          end
+          resources :hosted_zone_records          
         end
-        resources :hosted_zone_records          
       end
 
       namespace :mail do
