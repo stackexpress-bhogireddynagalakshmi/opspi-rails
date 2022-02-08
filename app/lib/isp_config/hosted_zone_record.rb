@@ -92,6 +92,7 @@ module IspConfig
    
     def dns_record_hash
       {
+        "client_id":    hosted_zone_record[:client_id],
         "params": {
         server_id:       ENV['ISP_CONFIG_DNS_SERVER_ID'],
         zone:            hosted_zone_record[:hosted_zone_id], 
