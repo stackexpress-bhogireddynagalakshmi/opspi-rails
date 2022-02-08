@@ -5,23 +5,23 @@
 <% end %>
 
 
-<% url =  (@website.present? && @website.try(:website_id).present?) ?   admin_sites_website_path(@website.website_id) : admin_sites_websites_path%>
+<% url =  (@api_resource.present? && @api_resource.try(:website_id).present?) ?   admin_sites_website_path(@api_resource.website_id) : admin_sites_websites_path%>
 
- <%=form_for "website", url: url, html: {method: @website.present? ? :put : :post} do |f|%> 
+ <%=form_for "website", url: url, html: {method: @api_resource.present? ? :put : :post} do |f|%> 
 
   <fieldset>
     <div class="form-group field">
       <label>Domain(eg: example.com)</label>
-      <%=f.text_field 'domain', value: @website.try(:domain), class: 'form-control'%>
+      <%=f.text_field 'domain', value: @api_resource.try(:domain), class: 'form-control'%>
     </div>
 
    
     <div class="form-group field">
       <label>Active</label>
-      <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @website.try(:active)),{}, class: 'form-control'%>
+      <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @api_resource.try(:active)),{}, class: 'form-control'%>
     </div>
    
-    <%=submit_tag "#{@website.present? ? 'Update' : 'Add'} Web Domain",class: 'btn btn-primary'%>
+    <%=submit_tag "#{@api_resource.present? ? 'Update' : 'Add'} Web Domain",class: 'btn btn-primary'%>
 
   </fieldset>
 <%end%>
