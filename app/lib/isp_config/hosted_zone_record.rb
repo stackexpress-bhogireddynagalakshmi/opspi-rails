@@ -1,5 +1,6 @@
 module IspConfig
 	class HostedZoneRecord < Base
+    require 'dns_record_validator' 
 		attr_accessor :hosted_zone_record, :reg
 
     def initialize hosted_zone_record
@@ -63,7 +64,7 @@ module IspConfig
     private
 
     def validate_params
-      validation = ValidationManager::CustomValidator.new(hosted_zone_record,type: hosted_zone_record[:type], reg: reg).call
+      validation = DnsRecordValidator.new(hosted_zone_record,type: hosted_zone_record[:type], reg: reg).call
       return {success: false, message: validation[1]} unless  validation[0]
 
       return {success: true}
@@ -91,6 +92,7 @@ module IspConfig
    
     def dns_record_hash
       {
+        "client_id":    hosted_zone_record[:client_id],
         "params": {
         server_id:       ENV['ISP_CONFIG_DNS_SERVER_ID'],
         zone:            hosted_zone_record[:hosted_zone_id], 

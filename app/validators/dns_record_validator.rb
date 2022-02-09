@@ -1,5 +1,5 @@
-module ValidationManager
-    class CustomValidator < ApplicationService
+# module ValidationManager
+    class DnsRecordValidator < ApplicationService
      attr_reader :record_params,:type, :reg
     
       def initialize(record_params, options = {})
@@ -18,9 +18,9 @@ module ValidationManager
   
       def validate_content
         return [true] if type.eql?"TXT"
-        matchers = @record_params[:data].match(reg)
+        matchers = CustomValidator.validate(@record_params[:data],reg)
         
-        return [false, "Invalid Content for #{@type} Record"] if matchers.blank?
+        return [false, "Invalid Content for #{@type} Record"] unless matchers[0]
   
         return [true]
       end
@@ -55,4 +55,4 @@ module ValidationManager
       end
   
     end
-  end
+  # end
