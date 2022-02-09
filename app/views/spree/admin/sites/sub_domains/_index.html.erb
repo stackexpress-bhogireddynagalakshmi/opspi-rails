@@ -1,0 +1,6 @@
+<tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
+  <td><%=sub_domain.domain%></td>
+  <td>
+    <%=link_to 'Delete', admin_sites_sub_domains_path(sub_domain.sub_domain_id), method: :delete%>
+  </td>
+</tr>

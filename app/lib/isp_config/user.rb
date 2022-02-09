@@ -162,6 +162,10 @@ module IspConfig
       @website ||= IspConfig::Website.new(user)
     end
 
+    def sub_domain
+      @sub_domain ||= IspConfig::SubDomain.new(user)
+    end
+
     def ftp_user
       @ftp_user ||= IspConfig::FtpUser.new(user)
     end
