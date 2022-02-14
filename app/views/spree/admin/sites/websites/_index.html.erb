@@ -7,8 +7,7 @@
       <%= check_box_tag('active', website.active, ('checked' if (website.active == 'y')), class: "custom-control-input", data_web_domain_id: website.domain_id, id: "data_web_domain_#{website.domain_id}", onclick: "updateWebDomain(this)" ) %>
       <label class="custom-control-label" for="data_web_domain_<%=website.domain_id %>"></label>
     </div>
-  </td> 
-  <td><%= Website.actives[website.active] %></td> 
+  </td>  
   <td>
     <%=link_to 'Delete',admin_sites_website_path(id: website.domain_id), method: :delete%>
   </td>  
