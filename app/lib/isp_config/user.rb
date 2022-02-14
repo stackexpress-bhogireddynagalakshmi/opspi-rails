@@ -155,8 +155,13 @@ module IspConfig
     end
 
     def hosted_zone
-      @hosted_zone ||= IspConfig::HostedZone.new(user)
+      @hosted_zone ||= IspConfig::Dns::HostedZone.new(user)
     end
+
+    def hosted_zone_record
+        @hosted_zone_record ||= IspConfig::Dns::HostedZoneRecord.new(user)
+    end
+    
 
     private
 
