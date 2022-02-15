@@ -101,5 +101,5 @@ end
   
   Spree::PermittedAttributes.product_attributes.push << field
 end
-
+Spree::PermittedAttributes.user_attributes.push << :main_panel_access_only
 

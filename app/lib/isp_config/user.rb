@@ -134,8 +134,12 @@ module IspConfig
       @mail_domain ||= IspConfig::Mail::MailDomain.new(user)
     end
 
+    def mail_forward
+      @mail_forward ||= IspConfig::Mail::MailForward.new(user)
+    end
+
     def mail_statistics
-      @mail_domain ||= IspConfig::Mail::MailStatistic.new(user)
+      @mail_statistics ||= IspConfig::Mail::MailStatistic.new(user)
     end
 
     def mail_user

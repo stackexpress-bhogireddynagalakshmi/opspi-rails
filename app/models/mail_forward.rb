@@ -1,0 +1,2 @@
+class MailForward < ApplicationRecord
+end

@@ -1,12 +1,12 @@
 <% content_for :page_title do %>
- Domains
+ Forwards
 <% end %>
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_domian),
-    new_admin_mail_domain_path,
+  <%= button_link_to Spree.t(:add_forward),
+    new_admin_mail_forward_path,
     class: "btn-success",
       icon: 'add.svg',
-      id: 'admin_new_domain' %>
+      id: 'admin_new_forward' %>
 <% end %>
 
 <% if @resources.any? %>
@@ -15,19 +15,20 @@
     <table class="table" id="listing_orders" data-hook data-nav-x-content>
       <thead>
         <tr data-hook="admin_orders_index_headers">
-          <th>Domain Name</th>
+          <th>Source</th>
+          <th>Destination</th>
           <th>Active</th>
           <th>Actions</th>
-         
         </tr>
       </thead>
       <tbody>
-      <%@resources.each do |domain| %>
+      <%@resources.each do |forward| %>
         <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
-          <td><%=domain.domain%></td>
-          <td><%=domain.active%></td>
-          <td><%=link_to 'Edit',edit_admin_mail_domain_path(id: domain.domain_id)%> |
-            <%=link_to 'Delete', admin_mail_domain_path(id: domain.domain_id, mail_domian: domain.domain), method: :delete, data: {confirm: t('isp_config.mail_domain.delete_alert')}%>
+          <td><%=forward.source%></td>
+          <td><%=forward.destination%></td>
+          <td><%=forward.active%></td>
+          <td><%=link_to 'Edit',edit_admin_mail_forward_path(id: forward.forwarding_id)%> |
+            <%=link_to 'Delete',admin_mail_forward_path(id: forward.forwarding_id), method: :delete, data: {confirm: t('general.delete')}%>
           </td>  
         </tr>
       <% end %>
