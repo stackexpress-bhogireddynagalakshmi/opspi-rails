@@ -134,8 +134,12 @@ module IspConfig
       @mail_domain ||= IspConfig::Mail::MailDomain.new(user)
     end
 
+    def mail_forward
+      @mail_forward ||= IspConfig::Mail::MailForward.new(user)
+    end
+
     def mail_statistics
-      @mail_domain ||= IspConfig::Mail::MailStatistic.new(user)
+      @mail_statistics ||= IspConfig::Mail::MailStatistic.new(user)
     end
 
     def mail_user
@@ -155,8 +159,13 @@ module IspConfig
     end
 
     def hosted_zone
-      @hosted_zone ||= IspConfig::HostedZone.new(user)
+      @hosted_zone ||= IspConfig::Dns::HostedZone.new(user)
     end
+
+    def hosted_zone_record
+        @hosted_zone_record ||= IspConfig::Dns::HostedZoneRecord.new(user)
+    end
+    
 
     def website
       @website ||= IspConfig::Website.new(user)

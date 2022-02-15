@@ -93,7 +93,7 @@ gem 'whenever', require: false
 gem 'exception_notification'
 gem 'typhoeus', '~> 1.4'
 gem 'iso_country_codes'
-
+gem 'activerecord-nulldb-adapter'
 
 ## DevOps Tools Start ##
 gem 'elastic-apm', groups: [:qa, :staging, :production]

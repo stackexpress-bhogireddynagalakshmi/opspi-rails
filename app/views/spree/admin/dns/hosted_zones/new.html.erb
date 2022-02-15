@@ -6,11 +6,11 @@
   }
 </style><% content_for :page_title do %>
  <div class="mt-2"></div>
-  <%= link_to Spree.t(:domains), spree.admin_hosted_zones_url %> /
+  <%= link_to Spree.t(:domains), spree.admin_dns_hosted_zones_url %> /
   <%= Spree.t(:new_domain) %>
 <% end %>
 
-<%=form_for :hosted_zones, url: admin_hosted_zones_path,html: {method: :post} do |f|%>
+<%=form_for :hosted_zones, url: admin_dns_hosted_zones_path,html: {method: :post} do |f|%>
   <fieldset>
     <div class="form-group field">
       <label>Domain Name (eg:example.com)</label>

@@ -1,6 +1,6 @@
 default: &default
   database: <%= ENV['DB_NAME'] %>
-  adapter: mysql2
+  adapter: <%= ENV['DB_ADAPTER'] ||= 'mysql2' %> 
   encoding: utf8mb4
   pool: 5
   host: <%= ENV['DB_HOST'] %>
