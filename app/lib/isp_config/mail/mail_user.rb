@@ -41,7 +41,7 @@ module IspConfig
         :body => { 
           client_id: user.isp_config_id,
           primary_id: primary_id,
-          params: params.merge(server_params).merge({login: params[:email]})
+          params: params.merge(server_params).merge({ login: params[:email]}).reject{|x,v| v.blank? }
         }}
       )
 
