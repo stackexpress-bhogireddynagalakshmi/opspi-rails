@@ -117,6 +117,7 @@ en:
       create: Mail Domain created successfully.
       update: Mail Domain updated successfully.
       delete: Mail Domain deleted successfully.
+      delete_alert: "Are you sure you want to delete?  You'll lose all data for your mailboxes. This action is not irreversible"
     mail_user:
       create: Mailbox created successfully.
       update: Mailbox updated successfully.
