@@ -1,0 +1,87 @@
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
+<style type="text/css">
+  .formSuccess{
+    color: green;
+  }
+
+  #at-sign{
+    border-radius: 0;
+  }
+</style>
+
+<%resource  = @api_resource || @proxy_resource%>
+<% content_for :page_title do %>
+ <div class="mt-2"></div>
+  <%= link_to Spree.t(:forward), admin_mail_forwards_path %> /
+  <%= resource.present? ? Spree.t(:edit_mail_forward) : Spree.t(:new_mail_forward) %>
+<% end %>
+
+<% url =  @api_resource.present? ?   admin_mail_forward_path(@api_resource.forwarding_id) : admin_mail_forwards_path%>
+
+ <%=form_for "mail_forward", url: url, html: {method: @api_resource.present? ? :put : :post} do |f|%> 
+
+  <%=hidden_field_tag :forwarding_id, resource.try("forwarding_id")%>
+  <%=f.hidden_field :type, value: 'forward'%>
+  <fieldset>
+    <div class="form-group field">
+      <label>Source</label>
+      <div class="input-group mb-3">
+        <%=f.text_field 'source', value: resource.try(:source).try(:split, '@').try(:first), class: 'form-control'%>
+        <span class="input-group-text" id='at-sign'>@</span>
+        <%=select_tag 'source_domain',options_for_select(@user_mail_domains.map(&:domain), resource.try(:source).try(:split, '@').try(:last)), class: 'form-control'%>
+      </div>
+    </div>
+
+    <div class="form-group field">
+      <label>Destination</label>
+      <%=f.text_area 'destination', value: resource.try(:destination), class: 'form-control', rows: 10, cols: 40%>
+    </div>
+          
+    <div class="form-group field">
+      <label>Active</label>
+      <%=f.select 'active',options_for_select([['Yes','y'], ['No','n']], resource.try(:active)),{}, class: 'form-control'%>
+    </div>
+
+    <div class="form-group field">
+      <div class="row">
+        <div class="col-2">
+          <label>Send as</label>
+        </div>
+        <div class="col-10">
+          <%= f.check_box :allow_send_as, {checked: resource.try(:allow_send_as) == 'y'}, 'y', 'n' %>
+          <small>Allow target to send mail using this address as origin (if target is internal)</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group field">
+      <div class="row">
+        <div class="col-2">
+          <label>Enable greylisting</label>
+        </div>
+        <div class="col-10">
+          <%= f.check_box :greylisting, {checked: resource.try(:greylisting) == 'y'}, 'y', 'n' %>
+        </div>
+      </div>
+    </div>
+
+    <%=submit_tag "#{resource.present? ? 'Update' : 'Add'} Mail Forward", class: 'btn btn-primary'%>
+
+  </fieldset>
+<%end%>
+
+<div>
+ 
+  <%if @response && @response["status"]=='ERROR'%>
+    <div style="color: red;" class="mt-3"><%=@response["message"]%></</div> 
+  <%end%>
+</div>
+
+
+
+
+<script type="text/javascript">
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+</script>
