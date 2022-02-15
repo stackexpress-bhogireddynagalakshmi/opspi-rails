@@ -12,7 +12,6 @@
 
 ActiveRecord::Schema.define(version: 2022_02_03_182319) do
 
-
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
     t.integer "store_id"
@@ -194,14 +193,6 @@ ActiveRecord::Schema.define(version: 2022_02_03_182319) do
     t.integer "limit_openvz_vm_template_id"
     t.integer "limit_client", default: 100, null: false
     t.integer "limit_aps"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "isp_config_plans", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "isp_config_id"
-    t.string "isp_config_username"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -791,7 +782,6 @@ ActiveRecord::Schema.define(version: 2022_02_03_182319) do
     t.integer "isp_config_master_template_id"
     t.integer "validity"
     t.integer "frequency"
-    t.boolean "main_panel_access_only", default: false
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_products_on_discontinue_on"
