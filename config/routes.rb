@@ -61,6 +61,16 @@ Rails.application.routes.draw do
         end
         resources :forwards
       end
+
+      namespace :sites do
+        resources :websites
+        resources :ftp_users
+      end
+
+      namespace :sites do
+        resources :websites
+        resources :ftp_users
+      end
       
     end
   end

@@ -1,0 +1,78 @@
+<% content_for :page_title do %>
+ Websites
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_website),
+    new_admin_sites_website_path,
+    class: "btn-success",
+      icon: 'add.svg',
+      id: 'admin_new_website' %>
+<% end %>
+
+
+<% if @resources.any? %>
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+    <table class="table" id="listing_orders" data-hook data-nav-x-content>
+      <thead>
+        <tr data-hook="admin_orders_index_headers">
+          <th>ID</th>
+          <th>Domain</th>
+          <th>Document Root</th>
+          <th>Active</th>
+          <th>Actions</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: 'spree/admin/sites/websites/index', collection: @resources, as: :website %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    No Websites
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  })
+
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+
+  });
+
+  var updateWebDomain = function(element){
+    var webDomainId = element.attributes.data_web_domain_id.value;
+    var domainStatus = element.value;
+    if (domainStatus == 'y') {
+      var dataConfirm = "Are you sure to Deactivate this Domain?, This will affect your other services";
+      var active = 'n';
+    }
+    else {
+      var dataConfirm = "Are you sure to Activate this Domain?";
+      var active = 'y';
+    }
+
+    result = confirm(dataConfirm);
+    if (result) {
+      setTimeout(function(){
+        $.ajax({
+          type: "PATCH",
+          url: "/admin/sites/websites/"+webDomainId,
+          data: { 
+            website: {
+              active: active
+            }
+          }
+        });
+      } ,5);
+    }
+  }
+</script>
+

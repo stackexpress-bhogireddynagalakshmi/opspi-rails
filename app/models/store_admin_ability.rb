@@ -33,6 +33,8 @@ class StoreAdminAbility
       can :manage, :spam_filter_whitelists
       can :manage, :hosted_zones
       can :manage, :hosted_zone_records
+      can :manage, :websites
+      can :manage, :ftp_users
       can :manage, :statistics
       can :manage, :forwards
 

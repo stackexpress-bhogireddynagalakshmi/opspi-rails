@@ -1,0 +1,78 @@
+<% content_for :page_title do %>
+ <div class="mt-2"></div>
+  <%= link_to Spree.t(:ftp_users), admin_sites_ftp_users_path %> /
+  <%= Spree.t(:new_ftp_user) %>
+<% end %>
+
+
+<% url =  @ftp_user.present? ?   admin_sites_ftp_user_path(@ftp_user.id) : admin_sites_ftp_users_path%>
+
+  <%= render partial: 'set_remaining_fields_value', collection: @websites, as: :website %>
+
+ <%=form_for "ftp_user", url: url, html: {method: @ftp_user.present? ? :put : :post} do |f|%> 
+
+  <fieldset>
+    <div class="form-group field">
+      <label>Web Domain(eg: example.com):</label>
+      <%= collection_select(:ftp_user, :parent_domain_id, @websites, :domain_id, :domain, {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+    </div>
+
+    <div class="form-group field">
+      <label>Username:</label>
+      <%=f.text_field 'username', value: @ftp_user.try(:username), class: 'form-control', placeholder: "Please enter UserName" %>
+    </div>
+
+    <div class="form-group field">
+      <label>Password:</label>
+      <%=f.password_field 'password', value: @ftp_user.try(:password), class: 'form-control', placeholder: "Please enter Password"%>
+    </div>
+
+    <div class="form-group field">
+      <label>Harddisk-Quota(MB):</label>
+      <%=f.text_field 'quota_size', value: (@ftp_user.try(:quota_size) ? @ftp_user.try(:quota_size) : -1) , class: 'form-control', type: 'number', placeholder: "Please enter Harddisk-Quota In MB (example: 1000)"%>
+    </div>
+
+    <div class="form-group field">
+      <label>Active</label>
+      <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @website.try(:active)),{}, class: 'form-control'%>
+    </div>
+
+    <div class="form-group field">
+      <label>User identifier (UID):</label>
+      <%=f.text_field 'uid', value: @ftp_user.try(:uid), class: 'form-control', readonly: true%>
+    </div>
+
+    <div class="form-group field">
+      <label>Group identifier (GID):</label>
+      <%=f.text_field 'gid', value: @ftp_user.try(:gid), class: 'form-control', readonly: true%>
+    </div>
+
+    <div class="form-group field">
+      <label>Directory:</label>
+      <%=f.text_field 'dir', value: '/var/www/clients/client312/web29', class: 'form-control', readonly: true %>
+    </div>
+
+    <%=submit_tag "#{@ftp_user.present? ? 'Update' : 'Add'} FTP User",class: 'btn btn-primary'%>
+
+  </fieldset>
+<% end %>
+
+<div style="color: red;" class="mt-3">
+  <%=@response[:message].html_safe if @response %>
+</</div> 
+
+
+
+
+<script type="text/javascript">
+  $('#ftp_user_parent_domain_id').change(function () {
+    var domain_id = $('#ftp_user_parent_domain_id').val();
+    var currentDomainId = $('#ftp_user_parent_domain_'+domain_id);
+    var dir  = currentDomainId.data("dir");
+    $('#ftp_user_dir').val(dir);
+    var uid  = currentDomainId.data("uid");
+    $('#ftp_user_uid').val(uid);
+    var gid  = currentDomainId.data("gid");
+    $('#ftp_user_gid').val(gid);
+  });
+</script>

@@ -1,0 +1,9 @@
+<ul id="sidebar-sites" class="border-top bg-grey collapse nav nav-pills nav-stacked" data-hook="admin_sites_sub_tabs" >
+    <li class="sidebar-menu-item d-block w-100 position-relative">
+      <%=link_to Spree.t(:websites), spree.admin_sites_websites_path,class: 'sidebar-submenu-item w-100 py-2 py-md-1 pl-3 d-block '%>
+    </li> 
+    <%= tab Spree.t('ftp_users'), url: spree.admin_sites_ftp_users_path %>
+</ul>
+
+
+

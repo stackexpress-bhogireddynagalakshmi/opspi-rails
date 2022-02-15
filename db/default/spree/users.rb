@@ -50,7 +50,8 @@ def create_admin_user
     password_confirmation: password,
     email: email,
     login: email,
-    account_id: 1
+    account_id: 1,
+    terms_and_conditions: true
   }
 
   load 'spree/user.rb'
