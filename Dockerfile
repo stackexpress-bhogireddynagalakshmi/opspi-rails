@@ -20,7 +20,7 @@ RUN apt-get install -y nodejs \
 # confirm installation
 RUN node -v
 RUN apt-get -y install
-RUN apt-get update && apt-get install -y mariadb-client
+RUN apt-get update
 RUN apt-get install mysql2 -v '0.5.3' -y
 RUN npm install --global yarn
 #RUN apt-get update && apt-get -y install cron
@@ -38,5 +38,6 @@ RUN bundle install
 COPY . /project
 EXPOSE 3000
 RUN  RAILS_ENV=production bundle exec rake assets:precompile DB_ADAPTER=nulldb
+
 #CMD [ "bundle", "exec", "rails", "server" ]
 CMD ["bin/run-docker-production.sh"]

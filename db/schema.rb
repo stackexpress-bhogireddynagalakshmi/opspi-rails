@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2022_01_28_082048) do
 
+
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
     t.integer "store_id"
