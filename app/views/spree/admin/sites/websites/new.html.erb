@@ -5,23 +5,51 @@
 <% end %>
 
 
-<% url =  (@api_resource.present? && @api_resource.try(:website_id).present?) ?   admin_sites_website_path(@api_resource.website_id) : admin_sites_websites_path%>
-
- <%=form_for "website", url: url, html: {method: @api_resource.present? ? :put : :post} do |f|%> 
+ <%=form_for "website", url: admin_sites_websites_path, html: {method: :post} do |f|%> 
 
   <fieldset>
     <div class="form-group field">
-      <label>Domain(eg: example.com)</label>
-      <%=f.text_field 'domain', value: @api_resource.try(:domain), class: 'form-control'%>
+      <label>IPv4-Address:</label>
+      <%=f.select 'ip_address',options_for_select([['*','*']], @proxy_resource.try(:ip_address)),{selected: '*'}, class: 'form-control select2-clear js-filterable' %>
     </div>
 
+    <div class="form-group field">
+      <label>IPv6-Address:</label>
+       <%=f.select 'ipv6_address',options_for_select([], @proxy_resource.try(:ipv6_address)),{}, class: 'form-control select2-clear js-filterable' %>
+    </div>
+
+    <div class="form-group field">
+      <label>Domain(eg: example.com)</label>
+      <%=f.text_field 'domain', value: @proxy_resource.try(:domain), class: 'form-control'%>
+    </div>
+
+    <div class="form-group field">
+      <label>Harddisk Quota(MB):</label>
+      <%=f.text_field 'hd_quota', value: (@proxy_resource.try(:hd_quota).present? ? @proxy_resource.hd_quota : -1), class: 'form-control', type: "number", min:"-1" %>
+    </div>
+
+    <div class="form-group field">
+      <label>Traffic Quota(MB):</label>
+      <%=f.text_field 'traffic_quota', value: (@proxy_resource.try(:traffic_quota).present? ? @proxy_resource.traffic_quota : -1 ), class: 'form-control'  %>
+    </div>
+
+    <div class="form-group field">
+      <label>Auto-Subdomain:</label>
+      <%=f.select 'subdomain',options_for_select([['www.','www'],['None','']], @proxy_resource.try(:subdomain)),{selected: 'www'}, class: 'form-control select2-clear js-filterable' %>
+    </div>
+
+    <div class="form-group field">
+      <label>PHP:</label>
+      <%=f.select 'php',options_for_select([['Mod-PHP','y']], @proxy_resource.try(:php)),{selected: 'y'}, class: 'form-control select2-clear js-filterable' %>
+    </div>
    
     <div class="form-group field">
       <label>Active</label>
-      <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @api_resource.try(:active)),{}, class: 'form-control'%>
+      <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @proxy_resource.try(:active)),{}, class: 'form-control select2-clear js-filterable'%>
+
     </div>
    
-    <%=submit_tag "#{@api_resource.present? ? 'Update' : 'Add'} Web Domain",class: 'btn btn-primary'%>
+    <%=submit_tag "Add Web Domain",class: 'btn btn-primary'%>
 
   </fieldset>
 <%end%>
