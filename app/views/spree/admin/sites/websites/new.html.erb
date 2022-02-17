@@ -19,8 +19,8 @@
     </div>
 
     <div class="form-group field">
-      <label>Domain(eg: example.com)</label>
-      <%=f.text_field 'domain', value: @proxy_resource.try(:domain), class: 'form-control'%>
+      <label>Select Domain:</label>
+      <%= collection_select(:website, :domain, @hosted_zones, :origin, :origin, {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
     </div>
 
     <div class="form-group field">

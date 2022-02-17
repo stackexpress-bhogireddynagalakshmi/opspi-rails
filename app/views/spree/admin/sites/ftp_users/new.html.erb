@@ -13,7 +13,7 @@
 
   <fieldset>
     <div class="form-group field">
-      <label>Web Domain(eg: example.com):</label>
+      <label>Select Domain:</label>
       <%= collection_select(:ftp_user, :parent_domain_id, @websites, :domain_id, :domain, {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
     </div>
 

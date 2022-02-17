@@ -2,6 +2,7 @@ module Spree
   module Admin
      module Sites
       class WebsitesController < Spree::Admin::IspConfigResourcesController
+        before_action :get_zone_list, only: [:new, :create]
 
         private
         def resource_id_field
@@ -26,6 +27,11 @@ module Spree
 
         def isp_config_api
           current_spree_user.isp_config.website
+        end
+
+        def get_zone_list
+          response = current_spree_user.isp_config.hosted_zone.all_zones || []
+          @hosted_zones  =response[:success] ? response[:response].response : []
         end
 
         def extra_isp_params
