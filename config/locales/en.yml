@@ -47,6 +47,7 @@ en:
     sites: Sites
     websites: Websites
     ftp_users: FTP Users
+    start_wizard: Start Wizard
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout

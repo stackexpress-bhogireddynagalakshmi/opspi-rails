@@ -22,7 +22,8 @@ module Spree
       base.has_many :websites
       base.has_many :ftp_users
       base.has_many :mail_forwards
-      
+      base.has_many :wizards
+     
       base.after_commit :update_user_tanent, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]
      

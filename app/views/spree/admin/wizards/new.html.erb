@@ -1,0 +1,112 @@
+<% content_for :page_title do %>
+ <div class="mt-2"></div>
+  <%= Spree.t(:start_wizard) %>
+<% end %>
+
+ <%=form_for spree_current_user, url: admin_wizards_path, html: {method: :post} do |f|%> 
+
+  <fieldset>
+    <div class="form-group field">
+      <label>Choose your domain</label>
+      <%= collection_select(:wizard, :domain, @hosted_zones, :origin, :origin, {prompt: 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+    </div>
+
+    <div class="form-group field">
+      <div class="custom-control custom-switch">
+        <%= check_box_tag('web', 'n', ('checked' if false), class: "custom-control-input", id: "wizard_web_service", onclick: "checkServiceStatus(this)" ) %>
+        <label class="custom-control-label" for="wizard_web_service">Web Services</label>
+      </div>
+    </div>
+
+    <div class="form-group field">
+      <div class="custom-control custom-switch">
+        <%= check_box_tag('mail', 'n', ('checked' if false), class: "custom-control-input", id: "wizard_mail_service", onclick: "checkServiceStatus(this)" ) %>
+        <label class="custom-control-label" for="wizard_mail_service">Mail Services</label>
+      </div>
+    </div>
+
+    <div id="wizard_mail">
+      <div class="row">
+        <div class="col-lg-12">
+          <div id="inputUsernameField">
+            <div class="form-group field ">
+              <label>Username:</label>
+              <%=f.text_field 'username', value: @resources.try(:username), class: 'form-control', placeholder: "Enter UserName"%>
+            </div>
+          </div>
+          <div id="newUserName"></div>
+          <button id="addRowUserName" type="button" class="btn btn-info" , data-field-count= '1' >Add UserName</button>
+        </div>
+      </div>
+    </div>
+
+    <%=submit_tag "Add wizard",class: 'btn btn-primary'%>
+
+  </fieldset>
+<% end %>
+
+<div style="color: red;" class="mt-3">
+  <%=@response[:message].html_safe if @response %>
+</</div> 
+
+<style type="text/css">
+</style>
+
+<script type="text/javascript">
+
+  $(document).ready(function (argument) {
+    var mailService = document.getElementById("wizard_mail_service");
+    var div = document.getElementById("wizard_mail"); 
+    if (mailService.value == 'n') {
+      div.style.display = "none"; 
+    } else{
+      div.style.display = "block"; 
+    }
+
+  });
+
+
+  var checkServiceStatus = function(element){
+    var serviceStatus = element.value;
+    var id = element.id;
+    var div = document.getElementById("wizard_mail"); 
+    
+    if (serviceStatus == 'n') {
+      element.value = 'y';
+      if (id == 'wizard_mail_service') {
+        div.style.display = "block"; 
+      }
+    } else {
+      element.value = 'n';
+      div.style.display = "none"; 
+    }
+  }
+
+  $("#addRowUserName").click(function () {
+
+    var fieldCount = $(this).data('field-count');
+    var html = '';
+    html += '<div id="inputUsernameField">';
+    html += '<div class="input-group mb-3">';
+    html += '<input type="text" name="username" class="form-control m-input" placeholder="Enter User Name" autocomplete="off">';
+    html += '<div class="input-group-append">';
+    html += '<button id="removeRowUserName" type="button" class="btn btn-danger">Remove</button>';
+    html += '</div>';
+    html += '</div>';
+    $('#newUserName').append(html);
+    $(this).data("field-count", fieldCount+1);
+    if (fieldCount >= 9) {
+      $("#addRowUserName").hide();
+    }
+  });
+
+  $(document).on('click', '#removeRowUserName', function () {
+    var fieldCount = $('#addRowUserName').data('field-count'); //get myvalue
+    $('#addRowUserName').data('field-count',(fieldCount-1));
+    $(this).closest('#inputUsernameField').remove();
+    if (fieldCount >= 10) {
+      $("#addRowUserName").show();
+    }
+  });
+
+</script>
