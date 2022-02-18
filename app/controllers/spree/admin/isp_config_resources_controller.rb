@@ -25,6 +25,8 @@ module Spree
           @response  = isp_config_api.create(resource_params)
           @proxy_resource = convert_to_mash(resource_params.to_h)
 
+          yield if block_given?
+
           set_flash
           if @response[:success]
             resource_index_path
@@ -37,6 +39,8 @@ module Spree
           @response  = isp_config_api.update(resource_id, resource_params)
           @proxy_resource = convert_to_mash(resource_params.to_h)
 
+          yield if block_given?
+          
           set_flash
           if @response[:success]
             resource_index_path
@@ -47,6 +51,9 @@ module Spree
 
         def destroy
           @response  = isp_config_api.destroy(resource_id)
+
+          yield if block_given?
+
           set_flash
           resource_index_path
         end

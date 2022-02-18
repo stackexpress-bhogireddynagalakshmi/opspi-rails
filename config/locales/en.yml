@@ -46,6 +46,9 @@ en:
     statistics: Statistics 
     sub_domains: Sub Domains
     subdomain_for_website: Sub Domain for Website
+    sites: Sites
+    websites: Websites
+    ftp_users: FTP Users
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout
@@ -121,6 +124,7 @@ en:
       create: Mail Domain created successfully.
       update: Mail Domain updated successfully.
       delete: Mail Domain deleted successfully.
+      delete_alert: "Are you sure you want to delete?  You'll lose all data for your mailboxes. This action is not irreversible"
     mail_user:
       create: Mailbox created successfully.
       update: Mailbox updated successfully.
@@ -134,6 +138,11 @@ en:
       add_whitelist: New Whitelist Record
       blacklist: Spamfilter Blacklist
       add_blacklist: New Blacklist Record
+    mail_forward:
+      create: Mail Forward created successfully.
+      update: Mail Forward updated successfully.
+      delete: Mail Forward deleted successfully.
+    
 
 
   my_store:

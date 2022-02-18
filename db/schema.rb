@@ -197,17 +197,16 @@ ActiveRecord::Schema.define(version: 2022_02_08_171934) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "isp_config_plans", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "mail_domains", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "isp_config_id"
-    t.string "isp_config_username"
+    t.integer "isp_config_mail_domain_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "mail_domains", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "mail_forwards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "isp_config_mail_domain_id"
+    t.integer "isp_config_mail_forward_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -790,7 +789,6 @@ ActiveRecord::Schema.define(version: 2022_02_08_171934) do
     t.integer "isp_config_master_template_id"
     t.integer "validity"
     t.integer "frequency"
-    t.boolean "main_panel_access_only", default: false
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_products_on_discontinue_on"

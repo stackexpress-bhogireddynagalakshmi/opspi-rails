@@ -24,9 +24,8 @@
   <%end%>
   
 <%end%>
-
- <%if spree_current_user.isp_config_id.present? %>
-
+<%spree_current_user.subscriptions.order('created_at desc').each do |subscription|%>
+ <%if spree_current_user.isp_config_id.present? && (TenantManager::TenantHelper.unscoped_query{ subscription.plan.server_type}.eql?"linux") && !TenantManager::TenantHelper.unscoped_query{ subscription.plan.main_panel_access_only}%>
   <%if spree_current_user.isp_config.get_password('isp_config').present?%>
   <div class="mt-5">
     <div style="padding: 20px 10px;background: aliceblue;">
@@ -49,6 +48,7 @@
       <strong>ISP Config Password</strong>:  <%=spree_current_user.solid_cp.get_password('isp_config')%>
    </div>
     <%spree_current_user.solid_cp.remove_passoword_key('isp_config')%>
+  <%end%>
   <%end%>
  
 <%end%>

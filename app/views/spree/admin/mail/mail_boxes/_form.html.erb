@@ -62,7 +62,7 @@
 
     <div class="form-group field">
       <label>Enable receiving</label>
-      <%=f.check_box 'postfix',{ value: 'y', checked: @mail_user&.postfix == 'y' || true}, 'y', 'n'%>
+      <%=f.check_box 'postfix',{ value: 'y', checked: @mail_user.present? ?  (@mail_user&.postfix == 'y' ? true : false) : true }, 'y', 'n'%>
     </div>
     
 
