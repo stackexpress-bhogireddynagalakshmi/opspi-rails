@@ -1,13 +1,14 @@
+# frozen_string_literal: true
+
 require "typhoeus"
 require 'addressable/uri'
 
 module ResellerClub
   class TyphoeusClient
-    attr_reader :url,:data,:success
+    attr_reader :url, :data, :success
 
-   
-    def initialize(url,params,opts= {})
-      @data = params 
+    def initialize(url, params, _opts = {})
+      @data = params
       @url  = url
       @success = false
     end
@@ -18,21 +19,19 @@ module ResellerClub
         method: data["http_method"].to_sym
       }
 
-      if ENV['RESELLER_CLUB_PROXY_SERVER'].present?
-        opts[:proxy] = ENV['RESELLER_CLUB_PROXY_SERVER']
-      end
+      opts[:proxy] = ENV['RESELLER_CLUB_PROXY_SERVER'] if ENV['RESELLER_CLUB_PROXY_SERVER'].present?
 
       if data["silent"]
-        Typhoeus::Request.new(url,opts).run
+        Typhoeus::Request.new(url, opts).run
       else
         Rails.logger.info { "URL:  #{fiter_sensitive_info(url)}" }
-        response =  Typhoeus::Request.new(url,opts).run
+        response = Typhoeus::Request.new(url, opts).run
         parsed_response = JSON.parse(true_false_or_text_bind.call(response.body))
-        Rails.logger.info { "ResellerClub Response: #{parsed_response }"}
-        
+        Rails.logger.info { "ResellerClub Response: #{parsed_response}" }
+
         @success = true if response.code == 200
 
-        return { success: @success, response: parsed_response }
+        { success: @success, response: parsed_response }
       end
     end
 
@@ -45,28 +44,30 @@ module ResellerClub
     end
 
     private
+
     def true_false_or_text(str)
-      if str == "true"
-        return {"response" => true}.to_json
-      elsif str == "false"
-        return {"response" => false}.to_json
-      elsif str.to_i.to_s == str
-        return {"code" => str}.to_json
+      case str
+      when "true"
+        { "response" => true }.to_json
+      when "false"
+        { "response" => false }.to_json
+      when str.to_i.to_s
+        { "code" => str }.to_json
       else
         begin
           JSON.parse(str)
-        rescue
-          return {"response" => str}.to_json
+        rescue StandardError
+          return { "response" => str }.to_json
         end
-        return str
+        str
       end
     end
 
     def fiter_sensitive_info(url)
       uri = Addressable::URI.parse(url)
-      params = uri.query_values 
-      params = params.reject { |k,v| Rails.application.config.filter_parameters.include?(k) }
-      uri.query_values = params 
+      params = uri.query_values
+      params = params.reject { |k, _v| Rails.application.config.filter_parameters.include?(k) }
+      uri.query_values = params
 
       uri.to_s
     end

@@ -1,23 +1,25 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
-     module Sites
+    module Sites
       class FtpUsersController < Spree::Admin::BaseController
-        before_action :set_ftp_user, only: [:destroy, :update]
+        before_action :set_ftp_user, only: %i[destroy update]
         before_action :get_websites, only: [:new]
 
         def index
-         response = ftp_user_api.all || []
-          if response[:success]
-            @ftp_users  = response[:response].response
-          else
-            @ftp_users = []
-          end
+          response = ftp_user_api.all || []
+          @ftp_users = if response[:success]
+                         response[:response].response
+                       else
+                         []
+                       end
         end
 
         def new; end
 
         def create
-          @response  = ftp_user_api.create(ftp_user_params)
+          @response = ftp_user_api.create(ftp_user_params)
           if @response[:success]
             set_flash
             redirect_to admin_sites_ftp_users_path
@@ -28,13 +30,13 @@ module Spree
         end
 
         def destroy
-          @response  = ftp_user_api.destroy(@ftp_user.isp_config_ftp_user_id)
+          @response = ftp_user_api.destroy(@ftp_user.isp_config_ftp_user_id)
           set_flash
           redirect_to admin_sites_ftp_users_path
         end
 
         def update
-          @response  = ftp_user_api.update(@ftp_user.isp_config_ftp_user_id, ftp_user_params)
+          @response = ftp_user_api.update(@ftp_user.isp_config_ftp_user_id, ftp_user_params)
           set_flash
           redirect_to admin_sites_ftp_users_path
         end
@@ -42,15 +44,16 @@ module Spree
         private
 
         def set_flash
-          if @response[:success] 
+          if @response[:success]
             flash[:success] = @response[:message]
           else
-            flash[:error] = @response[:message] 
+            flash[:error] = @response[:message]
           end
         end
-        
+
         def ftp_user_params
-          params.require("ftp_user").permit(:parent_domain_id, :username, :password, :quota_size, :active, :uid, :gid, :dir)
+          params.require("ftp_user").permit(:parent_domain_id, :username, :password, :quota_size, :active, :uid, :gid,
+                                            :dir)
         end
 
         def ftp_user_api
@@ -59,11 +62,11 @@ module Spree
 
         def get_websites
           response = current_spree_user.isp_config.website.all || []
-          if response[:success]
-            @websites  = response[:response].response
-          else
-            @websites = []
-          end
+          @websites = if response[:success]
+                        response[:response].response
+                      else
+                        []
+                      end
         end
 
         def set_ftp_user
@@ -71,8 +74,7 @@ module Spree
 
           redirect_to admin_sites_ftp_users_path, notice: 'Not Authorized' if @ftp_user.blank?
         end
-
       end
-     end
+    end
   end
 end

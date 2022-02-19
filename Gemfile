@@ -103,4 +103,5 @@ gem 'prawn'
 gem 'prawn-table'
 
 
-
+#gem 'deface', '~> 1.0', '>= 1.0.2'
+gem 'rubocop', require: false

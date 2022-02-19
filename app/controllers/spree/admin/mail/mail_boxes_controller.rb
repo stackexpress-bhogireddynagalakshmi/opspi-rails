@@ -1,30 +1,32 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
-     module Mail
+    module Mail
       # Mail Domain controller
       class MailBoxesController < Spree::Admin::BaseController
-        before_action :set_mail_box, only: [:edit,:update,:destroy]
+        before_action :set_mail_box, only: %i[edit update destroy]
 
         def index
           response = mail_user_api.all || []
-          if response[:success]
-            @mailboxes  = response[:response].response
-          else
-            @mailboxes = []
-          end
+          @mailboxes = if response[:success]
+                         response[:response].response
+                       else
+                         []
+                       end
         end
 
         def new; end
 
         def edit
           @response = mail_user_api.find(@user.isp_config_mailuser_id)
-          @mail_user = @response[:response].response  if @response[:success].present?
+          @mail_user = @response[:response].response if @response[:success].present?
         end
 
         def create
           mail_user_param = mail_user_params.merge({ email: formatted_email })
-          
-          @response  = mail_user_api.create(mail_user_param)
+
+          @response = mail_user_api.create(mail_user_param)
           set_flash
           if @response[:success]
             redirect_to admin_mail_mail_boxes_path
@@ -35,9 +37,9 @@ module Spree
 
         def update
           mail_user_param = mail_user_params.merge({ email: formatted_email })
-          @response  = mail_user_api.update(@user.isp_config_mailuser_id, mail_user_param)
+          @response = mail_user_api.update(@user.isp_config_mailuser_id, mail_user_param)
           set_flash
-           if @response[:success]
+          if @response[:success]
             redirect_to admin_mail_mail_boxes_path
           else
             render :edit
@@ -45,24 +47,25 @@ module Spree
         end
 
         def destroy
-          @response  = mail_user_api.destroy(@user.isp_config_mailuser_id)
+          @response = mail_user_api.destroy(@user.isp_config_mailuser_id)
           set_flash
           redirect_to admin_mail_mail_boxes_path
         end
 
         private
+
         def set_flash
-          if @response[:success] 
+          if @response[:success]
             flash[:success] = @response[:message]
           else
-            flash[:error] = @response[:message] 
+            flash[:error] = @response[:message]
           end
         end
 
         # mailboxes
         def mail_user_params
-          params.require("mailuser").permit(:name,:login,:email,:password,:quota,:cc,:forward_in_lda,:policy,:postfix,
-            :disablesmtp,:disabledeliver,:greylisting,:disableimap,:disablepop3)
+          params.require("mailuser").permit(:name, :login, :email, :password, :quota, :cc, :forward_in_lda, :policy, :postfix,
+                                            :disablesmtp, :disabledeliver, :greylisting, :disableimap, :disablepop3)
         end
 
         def mail_user_api
@@ -79,8 +82,7 @@ module Spree
           email = mail_user_params[:email].gsub("@", '')
           "#{email}@#{params[:mail_domain]}"
         end
-
       end
-     end
+    end
   end
 end

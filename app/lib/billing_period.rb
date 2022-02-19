@@ -1,21 +1,23 @@
+# frozen_string_literal: true
+
 class BillingPeriod
   attr_reader :subscription
 
   def initialize(subscription)
     @subscription = subscription
     @billing_period = TimeProvider.current_period
-  end    
+  end
 
   def start
     return unless subscription
 
-    last_invoice = subscription.invoices.where.not(status: ['final','archived']).last
+    last_invoice = subscription.invoices.where.not(status: %w[final archived]).last
 
     return (last_invoice.finished_on + 1.day) if last_invoice.present?
 
-    return subscription.start_date
+    subscription.start_date
 
-    #@billing_period.begin+subscription.current_started_on_day.days
+    # @billing_period.begin+subscription.current_started_on_day.days
   end
 
   def begin
@@ -29,5 +31,4 @@ class BillingPeriod
 
     start + validity.days
   end
-
 end

@@ -1,15 +1,16 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
-     module Mail
+    module Mail
       # Mail Whitelist Controller
       class SpamFilterWhitelistsController < SpamFiltersController
-
         def resource_index_path
           redirect_to admin_mail_spam_filter_whitelists_path
         end
 
         def filter_type_params
-          { wb: 'W'}
+          { wb: 'W' }
         end
 
         def isp_config_api
