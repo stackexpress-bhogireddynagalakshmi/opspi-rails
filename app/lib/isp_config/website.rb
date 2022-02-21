@@ -1,78 +1,80 @@
+# frozen_string_literal: true
+
 module IspConfig
   class Website < Base
     attr_accessor :user
 
-    def initialize user
+    def initialize(user)
       @user = user
     end
 
     def find(id)
       response = query({
-        :endpoint => '/json.php?sites_web_domain_get',
-        :method => :GET,
-        :body => { 
-          primary_id: id
-        }}
-      )
+                         endpoint: '/json.php?sites_web_domain_get',
+                         method: :GET,
+                         body: {
+                           primary_id: id
+                         }
+                       })
 
-      formatted_response(response,'find')
+      formatted_response(response, 'find')
     end
 
-    def create(params={})
+    def create(params = {})
       response = query({
-        :endpoint => '/json.php?sites_web_domain_add',
-        :method => :POST,
-        :body => { 
-          client_id: user.isp_config_id,
-          params: params.merge(server_params)
-        }}
-      )
+                         endpoint: '/json.php?sites_web_domain_add',
+                         method: :POST,
+                         body: {
+                           client_id: user.isp_config_id,
+                           params: params.merge(server_params)
+                         }
+                       })
 
-      user.websites.create({isp_config_website_id: response["response"]}) if response.code == "ok"
-      
-      formatted_response(response,'create')
+      user.websites.create({ isp_config_website_id: response["response"] }) if response.code == "ok"
+
+      formatted_response(response, 'create')
     end
 
-    def update(primary_id,params={})
+    def update(primary_id, params = {})
       response = query({
-        :endpoint => '/json.php?sites_web_domain_update',
-        :method => :POST,
-        :body => { 
-          client_id: user.isp_config_id,
-          primary_id: primary_id,
-          params: params.merge(server_params)
-        }}
-      )
+                         endpoint: '/json.php?sites_web_domain_update',
+                         method: :POST,
+                         body: {
+                           client_id: user.isp_config_id,
+                           primary_id: primary_id,
+                           params: params.merge(server_params)
+                         }
+                       })
 
-      formatted_response(response,'update')      
+      formatted_response(response, 'update')
     end
 
     def destroy(primary_id)
       response = query({
-        :endpoint => '/json.php?sites_web_domain_delete',
-        :method => :DELETE,
-        :body => { 
-          client_id: user.isp_config_id,
-          primary_id: primary_id
-        }}
-      )
+                         endpoint: '/json.php?sites_web_domain_delete',
+                         method: :DELETE,
+                         body: {
+                           client_id: user.isp_config_id,
+                           primary_id: primary_id
+                         }
+                       })
 
       user.websites.find_by_isp_config_website_id(primary_id).destroy if response.code == "ok"
-      formatted_response(response,'delete')
+      formatted_response(response, 'delete')
     end
 
     def all
       response = query({
-        :endpoint => '/json.php?sites_web_domain_get',
-        :method => :GET,
-        :body => { 
-          primary_id: "-1"
-        }}
-      )
-      
-      response.response.reject!{|x| website_ids.exclude?(x.domain_id.to_i)} if response.response
+                         endpoint: '/json.php?sites_web_domain_get',
+                         method: :GET,
+                         body: {
+                           primary_id: "-1"
+                         }
+                       })
 
-      formatted_response(response,'list')
+      response.response&.reject! { |x| website_ids.exclude?(x.domain_id.to_i) }
+
+      formatted_response(response, 'list')
     end
 
     private
@@ -81,17 +83,17 @@ module IspConfig
       user.websites.pluck(:isp_config_website_id)
     end
 
-    def formatted_response(response,action)
+    def formatted_response(response, action)
       if  response.code == "ok"
         {
-          :success=>true,
-          :message=>I18n.t("isp_config.website.#{action}"),
+          success: true,
+          message: I18n.t("isp_config.website.#{action}"),
           response: response
         }
       else
-        { 
-          :success=>false,
-          :message=> I18n.t('isp_config.something_went_wrong',message: response.message),
+        {
+          success: false,
+          message: I18n.t('isp_config.something_went_wrong', message: response.message),
           response: response
         }
       end

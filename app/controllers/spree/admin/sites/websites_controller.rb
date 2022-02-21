@@ -1,10 +1,13 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
-     module Sites
+    module Sites
       class WebsitesController < Spree::Admin::IspConfigResourcesController
         before_action :get_zone_list, only: [:new, :create]
 
         private
+
         def resource_id_field
           "isp_config_website_id"
         end
@@ -42,7 +45,6 @@ module Spree
             backup_format_db: 'gzip', traffic_quota_lock: 'n', http_port: '80', https_port: '443'
           }
         end
-
       end
     end
   end

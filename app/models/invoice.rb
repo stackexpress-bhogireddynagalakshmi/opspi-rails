@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 class Invoice < ApplicationRecord
   include AASM
 
-  acts_as_tenant :account,:class_name=>'::Account'
-  belongs_to :user,foreign_key: :user_id,class_name: 'Spree::User'
+  acts_as_tenant :account, class_name: '::Account'
+  belongs_to :user, foreign_key: :user_id, class_name: 'Spree::User'
   belongs_to :subscription
-  has_one :order,class_name: 'Spree::Order', primary_key: 'order_id', foreign_key: 'id',dependent: :destroy
+  has_one :order, class_name: 'Spree::Order', primary_key: 'order_id', foreign_key: 'id', dependent: :destroy
 
-  delegate :plan,to: :subscription
+  delegate :plan, to: :subscription
 
   before_validation :ensure_name
   before_validation :set_invoice_number
@@ -14,8 +16,7 @@ class Invoice < ApplicationRecord
   validates_presence_of :name, :started_on, :finished_on, :invoice_number
   validates :finalized_at, presence: true, if: ->(i) { i.final? }
 
-
-  aasm :status, column: 'status'  do
+  aasm :status, column: 'status' do
     state :active, initial: true
     state :processing
     state :final
@@ -27,7 +28,7 @@ class Invoice < ApplicationRecord
     end
 
     event :close, after: :set_closed_at do
-      transitions from: [:active,:processing,:closed], to: :closed
+      transitions from: %i[active processing closed], to: :closed
     end
 
     event :reopen do
@@ -35,11 +36,9 @@ class Invoice < ApplicationRecord
     end
 
     event :archive do
-      transitions from: [:active,:processing,:closed], to: :archived
+      transitions from: %i[active processing closed], to: :archived
     end
-    
   end
-
 
   def can_process?
     active? && billing_period_started?
@@ -49,7 +48,6 @@ class Invoice < ApplicationRecord
     (active? || processing?) && billing_period_started?
   end
 
-  
   def ensure_processable_or_fail
     # if can_process? && can_run_invoice_finalizer?
     #   self.processing_started_on = Time.current
@@ -59,9 +57,8 @@ class Invoice < ApplicationRecord
     #   raise InvoiceError, 'Invoice not ready for process!'
     # end
 
-    return true
+    true
   end
-
 
   def ensure_finalizable_or_fail
     # if can_finalize?
@@ -71,7 +68,7 @@ class Invoice < ApplicationRecord
     #   raise InvoiceError, 'Invoice not ready for finalization!'
     # end
 
-    return true
+    true
   end
 
   def billing_period_started?
@@ -129,7 +126,7 @@ class Invoice < ApplicationRecord
   def ensure_name
     if account && posting_date
       plan = TenantManager::TenantHelper.unscoped_query { Spree::Product.find_by_id(subscription.product_id) }
-      self.name  = "#{billing_month} Invoice for  #{plan.try(:name)}"
+      self.name = "#{billing_month} Invoice for  #{plan.try(:name)}"
     end
   end
 
@@ -143,5 +140,5 @@ class Invoice < ApplicationRecord
     result
   end
 
-  class InvoiceError <  StandardError; end
+  class InvoiceError < StandardError; end
 end
