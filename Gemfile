@@ -98,4 +98,9 @@ gem 'activerecord-nulldb-adapter'
 ## DevOps Tools Start ##
 gem 'elastic-apm', groups: [:qa, :staging, :production]
 ## DevOps Tools End ##
-#gem 'deface', '~> 1.0', '>= 1.0.2'
+
+gem 'prawn'
+gem 'prawn-table'
+
+
+
