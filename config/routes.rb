@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       namespace :sites do
         resources :websites
         resources :ftp_users
+        resources :sub_domains
       end
       
     end

@@ -7,7 +7,7 @@ class UserAbility
     apply_user_permissions(user) if user.respond_to?(:has_spree_role?) && user.has_spree_role?('user')
   end
 
-  def apply_user_permissions(_user)
+  def apply_user_permissions(user)
     can :read, :orders
     can :manage, :domain_registrations
     can :manage, :domains
@@ -17,5 +17,6 @@ class UserAbility
     can :manage, :hosted_zone_records
     can :manage, :websites
     can :manage, :ftp_users
+    can :manage, :sub_domains
   end
 end

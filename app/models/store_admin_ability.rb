@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class StoreAdminAbility
   include CanCan::Ability
 
@@ -36,6 +34,7 @@ class StoreAdminAbility
     can :manage, :ftp_users
     can :manage, :statistics
     can :manage, :forwards
+    can :manage, :sub_domains
 
     can :manage, :my_store
     can :manage, ::Spree::PaymentMethod unless TenantManager::TenantHelper.current_admin_tenant?
