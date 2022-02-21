@@ -1,0 +1,47 @@
+<% content_for :page_title do %>
+ Folder
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_protected_folder),
+    new_admin_sites_protected_folder_path,
+    class: "btn-success",
+      icon: 'add.svg',
+      id: 'admin_new_protected_user' %>
+<% end %>
+
+<% if @resources.any? %>
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+    <table class="table" id="listing_orders" data-hook data-nav-x-content>
+      <thead>
+        <tr data-hook="admin_orders_index_headers">
+          <th>ID</th>
+          <th>Parent Domain</th>
+          <th>Path</th>
+          <th>active</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: 'spree/admin/sites/protected_folders/index', collection: @resources, as: :protected_folder %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    You haven't registered the Folder yet.
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  })
+
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+
+</script>

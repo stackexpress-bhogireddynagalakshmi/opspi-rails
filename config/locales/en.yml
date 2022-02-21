@@ -42,13 +42,14 @@ en:
     dns: DNS
     sites: Sites
     websites: Websites
+    website: Website
+    web_access: Web Access
     ftp_users: FTP Users
     statistics: Statistics 
     sub_domains: Sub Domains
+    protected_folders: Protected Folders
+    protected_folder_users: Protected Folder Users
     subdomain_for_website: Sub Domain for Website
-    sites: Sites
-    websites: Websites
-    ftp_users: FTP Users
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout

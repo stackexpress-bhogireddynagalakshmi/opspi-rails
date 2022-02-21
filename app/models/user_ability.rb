@@ -18,5 +18,7 @@ class UserAbility
     can :manage, :websites
     can :manage, :ftp_users
     can :manage, :sub_domains
+    can :manage, :protected_folders
+    can :manage, :protected_folder_users
   end
 end
