@@ -1,59 +1,57 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
-     module Mail
+    module Mail
       # Mail Domain controller
       class DomainsController < Spree::Admin::IspConfigResourcesController
-
-
         def update
-           super do 
-              active = params[:mail_domain][:active]
-              dis = active == 'n' ?  'y' : 'n'
-              if @response[:response].code == "ok"
+          super do
+            active = params[:mail_domain][:active]
+            dis = active == 'n' ? 'y' : 'n'
+            if @response[:response].code == "ok"
 
-                domain = params[:mail_domain][:domain]
+              domain = params[:mail_domain][:domain]
 
-                result = current_spree_user.isp_config.mail_user.all
-                result[:response].response.each do |mail_user|
-                  if mail_user.email.include? (domain)
+              result = current_spree_user.isp_config.mail_user.all
+              result[:response].response.each do |mail_user|
+                next unless mail_user.email.include?(domain)
 
-                    current_spree_user.isp_config.mail_user.update( 
-                      mail_user.mailuser_id, 
-                  
-                      { 
-                        postfix:        active,
-                        disablesmtp:    dis,
-                        disableimap:    dis,
-                        disablepop3:    dis,
-                        disabledeliver: dis,
-                        greylisting:    active
-                      }
-                    )
-                  end
-                end
+                current_spree_user.isp_config.mail_user.update(
+                  mail_user.mailuser_id,
+                  {
+                    postfix: active,
+                    disablesmtp: dis,
+                    disableimap: dis,
+                    disablepop3: dis,
+                    disabledeliver: dis,
+                    greylisting: active
+                  }
+                )
               end
-           end
+            end
+          end
         end
 
-
         def destroy
-          super do 
-              if @response[:response].code == "ok" 
+          super do
+            if @response[:response].code == "ok"
 
-                domain = params[:mail_domian]
-                
-                result = current_spree_user.isp_config.mail_user.all
-                result[:response].response.each do |mail_user|
-                  if mail_user.email.include? (domain)
-                    current_spree_user.isp_config.mail_user.destroy(mail_user.mailuser_id)
-                  end
+              domain = params[:mail_domian]
+
+              result = current_spree_user.isp_config.mail_user.all
+              result[:response].response.each do |mail_user|
+                if mail_user.email.include?(domain)
+                  current_spree_user.isp_config.mail_user.destroy(mail_user.mailuser_id)
                 end
-
               end
-           end
+
+            end
+          end
         end
 
         private
+
         def resource_id_field
           "isp_config_mail_domain_id"
         end
@@ -63,7 +61,7 @@ module Spree
         end
 
         def resource_params
-          params.require("mail_domain").permit(:domain,:active)
+          params.require("mail_domain").permit(:domain, :active)
         end
 
         def resource_index_path

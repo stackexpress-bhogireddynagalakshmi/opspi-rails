@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module IspConfig
   module Mail
-     #whitelist API endpoints
+    # whitelist API endpoints
     class SpamFilterWhitelist < SpamFilter
       def get_endpoint
         '/json.php?mail_spamfilter_whitelist_get'
@@ -18,7 +20,7 @@ module IspConfig
         '/json.php?mail_spamfilter_whitelist_delete'
       end
 
-       def all
+      def all
         super('W')
       end
     end

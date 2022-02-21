@@ -1,16 +1,17 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
-     module Mail
+    module Mail
       # Mail Statistics controller
       class StatisticsController < Spree::Admin::BaseController
-        
         def mailbox_quota
           response = mail_statistics_api.all_mailbox_quotas || []
-          if response[:success]
-            @mailbox_quotas  = response[:response].response
-          else
-            @mailbox_quotas = []
-          end
+          @mailbox_quotas = if response[:success]
+                              response[:response].response
+                            else
+                              []
+                            end
         end
 
         def mailbox_traffic
@@ -23,11 +24,10 @@ module Spree
         end
 
         private
-        
+
         def mail_statistics_api
           current_spree_user.isp_config.mail_statistics
         end
-
       end
     end
   end

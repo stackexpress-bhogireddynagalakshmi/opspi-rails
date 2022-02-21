@@ -1,13 +1,17 @@
-module Spree
-    module PaypalControllerDecorator
-      def confirm
-        TenantManager::TenantHelper.unscoped_query {super}
-      end
+# frozen_string_literal: true
 
-       def line_item(item)
-          TenantManager::TenantHelper.unscoped_query {super}
-       end
+module Spree
+  module PaypalControllerDecorator
+    def confirm
+      TenantManager::TenantHelper.unscoped_query { super }
     end
+
+    def line_item(item)
+      TenantManager::TenantHelper.unscoped_query { super }
+    end
+  end
 end
 
-::Spree::PaypalController.prepend Spree::PaypalControllerDecorator if ::Spree::PaypalController.included_modules.exclude?(Spree::PaypalControllerDecorator)
+if ::Spree::PaypalController.included_modules.exclude?(Spree::PaypalControllerDecorator)
+  ::Spree::PaypalController.prepend Spree::PaypalControllerDecorator
+end

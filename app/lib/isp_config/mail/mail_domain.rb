@@ -1,105 +1,107 @@
+# frozen_string_literal: true
+
 module IspConfig
   module Mail
     class MailDomain < Base
-    attr_accessor :user
+      attr_accessor :user
 
-    def initialize user
-      @user = user
-    end
+      def initialize(user)
+        @user = user
+      end
 
-    def find(id)
-      response = query({
-        :endpoint => '/json.php?mail_domain_get',
-        :method => :GET,
-        :body => { 
-          primary_id: id
-        }}
-      )
+      def find(id)
+        response = query({
+                           endpoint: '/json.php?mail_domain_get',
+                           method: :GET,
+                           body: {
+                             primary_id: id
+                           }
+                         })
 
-      formatted_response(response,'find')
-    end
+        formatted_response(response, 'find')
+      end
 
-    def create(params={})
-      response = query({
-        :endpoint => '/json.php?mail_domain_add',
-        :method => :POST,
-        :body => { 
-          client_id: user.isp_config_id,
-          params: params.merge(server_params)
-        }}
-      )
-      user.mail_domains.create({isp_config_mail_domain_id: response["response"]}) if response.code == "ok"
-      
-      formatted_response(response,'create')
-    end
+      def create(params = {})
+        response = query({
+                           endpoint: '/json.php?mail_domain_add',
+                           method: :POST,
+                           body: {
+                             client_id: user.isp_config_id,
+                             params: params.merge(server_params)
+                           }
+                         })
+        user.mail_domains.create({ isp_config_mail_domain_id: response["response"] }) if response.code == "ok"
 
-    def update(primary_id,params={})
-      response = query({
-        :endpoint => '/json.php?mail_domain_update',
-        :method => :POST,
-        :body => { 
-          client_id: user.isp_config_id,
-          primary_id: primary_id,
-          params: params.merge(server_params)
-        }}
-      )
+        formatted_response(response, 'create')
+      end
 
-      formatted_response(response,'update')      
-    end
+      def update(primary_id, params = {})
+        response = query({
+                           endpoint: '/json.php?mail_domain_update',
+                           method: :POST,
+                           body: {
+                             client_id: user.isp_config_id,
+                             primary_id: primary_id,
+                             params: params.merge(server_params)
+                           }
+                         })
 
-    def destroy(primary_id)
-      response = query({
-        :endpoint => '/json.php?mail_domain_delete',
-        :method => :DELETE,
-        :body => { 
-          client_id: user.isp_config_id,
-          primary_id: primary_id
-        }}
-      )
-      user.mail_domains.find_by_isp_config_mail_domain_id(primary_id).destroy if response.code == "ok"
-      formatted_response(response,'delete')
-    end
+        formatted_response(response, 'update')
+      end
 
-    def all
-      response = query({
-        :endpoint => '/json.php?mail_domain_get',
-        :method => :GET,
-        :body => { 
-          primary_id: "-1"
-        }}
-      )
-      response.response.reject!{|x| mail_domain_ids.exclude?(x.domain_id.to_i)}
+      def destroy(primary_id)
+        response = query({
+                           endpoint: '/json.php?mail_domain_delete',
+                           method: :DELETE,
+                           body: {
+                             client_id: user.isp_config_id,
+                             primary_id: primary_id
+                           }
+                         })
+        user.mail_domains.find_by_isp_config_mail_domain_id(primary_id).destroy if response.code == "ok"
+        formatted_response(response, 'delete')
+      end
 
-      formatted_response(response,'list')
-    end
+      def all
+        response = query({
+                           endpoint: '/json.php?mail_domain_get',
+                           method: :GET,
+                           body: {
+                             primary_id: "-1"
+                           }
+                         })
+        response.response.reject! { |x| mail_domain_ids.exclude?(x.domain_id.to_i) }
 
-    private
+        formatted_response(response, 'list')
+      end
 
-    def mail_domain_ids
-      user.mail_domains.pluck(:isp_config_mail_domain_id)
-    end
+      private
 
-    def formatted_response(response,action)
-      if  response.code == "ok"
+      def mail_domain_ids
+        user.mail_domains.pluck(:isp_config_mail_domain_id)
+      end
+
+      def formatted_response(response, action)
+        if  response.code == "ok"
+          {
+            success: true,
+            message: I18n.t("isp_config.mail_domain.#{action}"),
+            response: response
+          }
+        else
+          {
+            success: false,
+            message: I18n.t('isp_config.something_went_wrong', message: response.message),
+            response: response
+          }
+        end
+      end
+
+      def server_params
         {
-          :success=>true,
-          :message=>I18n.t("isp_config.mail_domain.#{action}"),
-          response: response
-        }
-      else
-        { 
-          :success=>false,
-          :message=> I18n.t('isp_config.something_went_wrong',message: response.message),
-          response: response
+          server_id: ENV['ISP_CONFIG_WEB_SERVER_ID']
         }
       end
     end
-
-    def server_params
-      {
-        server_id: ENV['ISP_CONFIG_WEB_SERVER_ID']
-      }
-    end
-  end
   end
 end
