@@ -38,6 +38,11 @@ module ApplicationHelper
     date.strftime("%m/%d/%y")
   end
 
+  def format_date_with_century(date)
+    return unless date
+    date.strftime("%m/%d/%Y")
+  end
+
   def current_available_payment_methods(user)
     if user.present? && user.store_admin?
       TenantManager::TenantHelper.unscoped_query{TenantManager::TenantHelper.admin_tenant.payment_methods.available_on_front_end.select { |pm| pm.available_for_order?(self) }}
