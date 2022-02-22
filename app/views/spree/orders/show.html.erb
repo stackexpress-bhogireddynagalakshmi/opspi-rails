@@ -21,5 +21,10 @@
   <p class="order-show-number text-uppercase w-100 text-center">
     <%= accurate_title %> / <%= pretty_date(@order.completed_at) %>
   </p>
+
+  <div>
+    <%=link_to 'Print PDF', "/orders/#{@order.number}/order_pdf"%>
+  </div>
+
   <%= render partial: 'spree/shared/order_details', locals: { order: @order } %>
 </div>
