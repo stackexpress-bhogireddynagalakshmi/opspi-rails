@@ -62,7 +62,7 @@ class OrdersPdf
         pdf.move_down 5
         pdf.text "Invoice Date: #{format_date_with_century(@order.completed_at)}", size: 10
         pdf.move_down 5
-        pdf.text "Due Date: #{format_date_with_century(@invoice.due_date)}", size: 10
+        pdf.text "Due Date: #{format_date_with_century(@invoice.try(:due_date))}", size: 10
       end
     end
   end

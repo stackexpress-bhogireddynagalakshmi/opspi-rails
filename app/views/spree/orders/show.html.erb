@@ -23,7 +23,7 @@
   </p>
 
   <div>
-    <%=link_to 'Print PDF', "/orders/#{@order.number}/order_pdf"%>
+    <%=link_to 'Print PDF', "/orders/#{@order.number}/order_pdf", target: '_blank'%>
   </div>
 
   <%= render partial: 'spree/shared/order_details', locals: { order: @order } %>
