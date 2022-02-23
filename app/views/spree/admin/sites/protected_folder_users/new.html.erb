@@ -8,8 +8,9 @@
 
   <fieldset>
     <div class="form-group field">
-      <label>Select Domain:</label>
-      <%= collection_select(:protected_folder_user, :web_folder_id, @folders, :web_folder_id, :path, {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+      <label>Select Folder:</label>
+
+      <%= collection_select(:protected_folder_user, :web_folder_id, @folders, :web_folder_id, :folder, {:prompt => 'Select Web Folder'}, {class: 'select2-clear js-filterable'}) %>
     </div>
 
     <div class="form-group field">

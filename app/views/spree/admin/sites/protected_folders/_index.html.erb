@@ -1,6 +1,6 @@
 <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
   <td><%=protected_folder.web_folder_id%></td>
-  <td><%=protected_folder.parent_domain_id%></td>
+  <td><%=get_website_name(protected_folder.parent_domain_id, @websites)%></td>
   <td><%=protected_folder.path%></td>
   <td><%=ProtectedFolder.actives[protected_folder.active]%></td>
   <td>

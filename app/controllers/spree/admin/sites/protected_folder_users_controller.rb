@@ -2,7 +2,7 @@ module Spree
   module Admin
     module Sites
       class ProtectedFolderUsersController < Spree::Admin::IspConfigResourcesController
-        before_action :get_folder_list, only: [:new]
+        before_action :get_folder_list, only: [:new, :index]
 
         def create
           @response = current_spree_user.isp_config.protected_folder_user.create(protected_folder_user_params)
@@ -44,6 +44,15 @@ module Spree
         def get_folder_list
           response = current_spree_user.isp_config.protected_folder.all || []
           @folders = response[:success] ? response[:response].response : []
+          website_response = current_spree_user.isp_config.website.all || []
+          websites = website_response[:success] ? website_response[:response].response : []
+
+          @folders.map do |folder|
+            website = websites.select{|w| w if (w.domain_id == folder.parent_domain_id) }
+            domain_name = website.first.domain
+            path = folder["path"]
+            folder["folder"] = [domain_name, path].join(' ') if domain_name.present?
+          end
         end
       end
     end

@@ -1,6 +1,6 @@
 <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
   <td><%=protected_folder_user.web_folder_user_id%></td>
-  <td><%=protected_folder_user.web_folder_id%></td>
+  <td><%= get_folder_path_list(protected_folder_user.web_folder_id, @folders) %></td>
   <td><%=protected_folder_user.username%></td>
   <td><%=ProtectedFolder.actives[protected_folder_user.active]%></td> 
   <td>

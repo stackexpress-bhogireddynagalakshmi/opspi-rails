@@ -2,7 +2,7 @@ module Spree
   module Admin
     module Sites
       class ProtectedFoldersController < Spree::Admin::IspConfigResourcesController
-        before_action :get_website_list, only: [:new]
+        before_action :get_website_list, only: [:new, :index]
 
         def create
           @response = current_spree_user.isp_config.protected_folder.create(protected_folder_params)
