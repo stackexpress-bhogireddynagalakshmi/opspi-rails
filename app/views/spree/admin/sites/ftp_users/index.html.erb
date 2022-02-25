@@ -1,0 +1,79 @@
+<% content_for :page_title do %>
+ FTP Users
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_ftp_user),
+    new_admin_sites_ftp_user_path,
+    class: "btn-success",
+      icon: 'add.svg',
+      id: 'admin_new_ftp_user' %>
+<% end %>
+
+
+<% if @ftp_users.any? %>
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+    <table class="table" id="listing_orders" data-hook data-nav-x-content>
+      <thead>
+        <tr data-hook="admin_orders_index_headers">
+          <th>ID</th>
+          <th>Web Domain</th>
+          <th>username</th>
+          <th>User identifier (UID)</th>
+          <th>Group identifier (GID)</th>
+          <th>Directory</th>
+          <th>Active</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: 'spree/admin/sites/ftp_users/index', collection: @ftp_users, as: :ftp_user %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    No FTP Users
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  })
+
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+
+  var updateFtpUser = function(element){
+    var ftpUserId = element.attributes.data_ftp_user_id.value;
+    var domainStatus = element.value;
+    if (domainStatus == 'y') {
+      var dataConfirm = "Are you sure to Deactivate this Domain?, This will affect your other services";
+      var active = 'n';
+    }
+    else {
+      var dataConfirm = "Are you sure to Activate this Domain?";
+      var active = 'y';
+    }
+
+    result = confirm(dataConfirm);
+    if (result) {
+      setTimeout(function(){
+        $.ajax({
+          type: "PATCH",
+          url: "/admin/sites/ftp_users/"+ftpUserId,
+          data: { 
+            ftp_user: {
+              active: active
+            }
+          }
+        });
+      } ,5);
+    }
+  }
+
+</script>

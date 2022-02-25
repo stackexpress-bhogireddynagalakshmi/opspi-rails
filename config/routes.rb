@@ -38,13 +38,49 @@ Rails.application.routes.draw do
           post :setup_reseller_club
         end
       end
+      namespace :dns do
+        resources :hosted_zones do
+          member do
+            get :dns
+          end
+          resources :hosted_zone_records          
+        end
+      end
+
+      namespace :mail do
+        resources :domains    
+        resources :mail_boxes  
+        resources :mailing_lists  
+        resources :spam_filter_blacklists
+        resources :spam_filter_whitelists
+        resources :statistics do
+          collection do
+            get :mailbox_quota
+            get :mailbox_traffic
+          end
+        end
+        resources :forwards
+      end
+
+      namespace :sites do
+        resources :websites
+        resources :ftp_users
+      end
+
+      namespace :sites do
+        resources :websites
+        resources :ftp_users
+        resources :sub_domains
+      end
+      
     end
   end
-
+  
   get 'register-domain', :controller=> 'hosting',:action=> "register_domain"
   post 'search_domain', :controller=> 'hosting',:action=> "search_domain"
   get 'hosting/:slug', :controller=> 'hosting',:action=> "hosting_page"
   get 'servers/:slug', :controller=> 'hosting',:action=> "servers"
+  get 'orders/:id/order_pdf', :controller=> 'spree/orders', :action=> 'order_pdf'
 
   resources :hosting,:only=>[:index] do 
 

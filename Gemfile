@@ -31,6 +31,7 @@ gem 'bootsnap', '>= 1.4.4', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'pry-rails'
   gem 'brakeman'
   gem 'factory_bot'
   gem 'factory_bot_rails'
@@ -74,7 +75,7 @@ gem 'spree_i18n', github: 'spree-contrib/spree_i18n', branch: 'master'
 # gem 'spree_mail_settings', github: 'spree-contrib/spree_mail_settings'
 
 #gem 'spree_braintree_vzero', '~> 3.5'
-
+# gem 'spree_print_invoice', github: 'spree-contrib/spree_print_invoice', branch: 'master'
 gem 'spree_paypal_express', git: 'git://github.com/spree-contrib/better_spree_paypal_express'
 # gem 'httparty'
 # gem 'hashie'
@@ -92,8 +93,15 @@ gem 'whenever', require: false
 gem 'exception_notification'
 gem 'typhoeus', '~> 1.4'
 gem 'iso_country_codes'
-
+gem 'activerecord-nulldb-adapter'
 
 ## DevOps Tools Start ##
-gem 'elastic-apm'
+gem 'elastic-apm', groups: [:qa, :staging, :production]
 ## DevOps Tools End ##
+
+gem 'prawn'
+gem 'prawn-table'
+
+
+#gem 'deface', '~> 1.0', '>= 1.0.2'
+gem 'rubocop', require: false

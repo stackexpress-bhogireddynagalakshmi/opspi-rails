@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module AppManager
+  #Notification Manager Class
   class NotificationManager < ApplicationService
     def initialize(args)
       @args         = args
@@ -14,16 +15,17 @@ module AppManager
 
     def user_unpaid_invoice_reminder
       invoice = @args.fetch(:invoice)
+      pending_invoices = @args.fetch(:pending_invoices)
 
       NotificationMailer.with(
         invoice: invoice,
-        user:    invoice.user
+        user:    invoice.user,
+        pending_invoices: pending_invoices
         )
       .unpaid_invoice_reminder
       .deliver
 
       invoice.update(last_reminder_sent_at: Time.zone.now)
-      
     end
 
     def user_pannel_access_disabled
@@ -50,7 +52,6 @@ module AppManager
         )
       .pannel_access_enabled
       .deliver
-
     end
 
     def user_invoice_payment_captured
@@ -63,6 +64,5 @@ module AppManager
       .invoice_payment_captured
       .deliver
     end
-
   end
 end

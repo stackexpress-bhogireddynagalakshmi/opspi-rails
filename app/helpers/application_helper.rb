@@ -38,6 +38,11 @@ module ApplicationHelper
     date.strftime("%m/%d/%y")
   end
 
+  def format_date_with_century(date)
+    return unless date
+    date.strftime("%m/%d/%Y")
+  end
+
   def current_available_payment_methods(user)
     if user.present? && user.store_admin?
       TenantManager::TenantHelper.unscoped_query{TenantManager::TenantHelper.admin_tenant.payment_methods.available_on_front_end.select { |pm| pm.available_for_order?(self) }}
@@ -72,6 +77,36 @@ module ApplicationHelper
     return nil  if key.blank?
 
     key.gsub('.','_')
+  end
+
+
+  def get_priority_dropdown
+    [
+      ['1 - lowest',1],
+      [2, 2],
+      [3, 3],
+      [4, 4],
+      ['5 - medium', 5],
+      [6, 6],
+      [7, 7],
+      [8, 8],
+      [9, 9],
+      ['10 - highest', 10]
+  ]
+  end
+
+  def get_web_mail_client_url
+    ENV['ISP_CONFIG_WEB_MAIL_HOST'].presence
+  end
+
+  def  get_mail_domians
+    begin
+      domains = current_spree_user.isp_config.mail_domain.all
+      domains[:response].response.collect{|x|x.domain}
+    rescue Exception => e
+      Rails.logger.info{ e.message}
+      []
+    end
   end
 
 end

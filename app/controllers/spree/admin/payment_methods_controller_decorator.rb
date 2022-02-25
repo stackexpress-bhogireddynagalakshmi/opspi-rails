@@ -1,13 +1,14 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
-      module PaymentMethodsControllerDecorator
+    module PaymentMethodsControllerDecorator
+      def index
+        @payment_methods = @payment_methods.where(account_id: tenant_id)
+      end
 
-        def index
-          @payment_methods = @payment_methods.where(account_id: tenant_id)
-        end 
-        
-        ## Todo: Need to customize in callback way
-        def update
+      ## Todo: Need to customize in callback way
+      def update
         invoke_callbacks(:update, :before)
         payment_method_type = params[:payment_method].delete(:type)
         if @payment_method['type'].to_s != payment_method_type
@@ -21,7 +22,7 @@ module Spree
         attributes.each do |k, _v|
           attributes.delete(k) if k.include?('password') && attributes[k].blank?
         end
-        
+
         if @payment_method.update(attributes)
           invoke_callbacks(:update, :after)
           flash[:success] = Spree.t(:successfully_updated, resource: Spree.t(:payment_method))
@@ -32,27 +33,28 @@ module Spree
         end
       end
 
-        def find_resource
-          if parent_data.present?
-            parent.send(controller_name).where(account_id: tenant_id).find(params[:id])
-          else
-            base_scope = model_class.try(:for_store, current_store) || model_class
-            base_scope.where(account_id: tenant_id).find(params[:id])
-          end
+      def find_resource
+        if parent_data.present?
+          parent.send(controller_name).where(account_id: tenant_id).find(params[:id])
+        else
+          base_scope = model_class.try(:for_store, current_store) || model_class
+          base_scope.where(account_id: tenant_id).find(params[:id])
         end
-
-        private
-
-        def tenant_id
-          if TenantManager::TenantHelper.current_tenant.present?
-            TenantManager::TenantHelper.current_tenant.id
-          else
-            TenantManager::TenantHelper.admin_tenant.id
-          end
-        end
-
       end
-   end
+
+      private
+
+      def tenant_id
+        if TenantManager::TenantHelper.current_tenant.present?
+          TenantManager::TenantHelper.current_tenant.id
+        else
+          TenantManager::TenantHelper.admin_tenant.id
+        end
+      end
+    end
+  end
 end
 
-::Spree::Admin::PaymentMethodsController.prepend Spree::Admin::PaymentMethodsControllerDecorator if ::Spree::Admin::PaymentMethodsController.included_modules.exclude?(Spree::Admin::PaymentMethodsControllerDecorator)
+if ::Spree::Admin::PaymentMethodsController.included_modules.exclude?(Spree::Admin::PaymentMethodsControllerDecorator)
+  ::Spree::Admin::PaymentMethodsController.prepend Spree::Admin::PaymentMethodsControllerDecorator
+end

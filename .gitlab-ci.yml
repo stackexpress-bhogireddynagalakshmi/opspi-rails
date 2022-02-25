@@ -76,14 +76,6 @@ docker-build-dev:
   services:
     - docker:dind
   before_script:
-    - echo "$CI_REGISTRY"
-    - echo "$CI_REGISTRY_USER"
-    - echo "$CI_REGISTRY_PASSWORD"
-    - echo "$DB_PORT"
-    - echo "$DB_HOST"
-    - echo "$DB_NAME"
-    - echo "$DB_USERNAME"
-    - echo "$DB_PASSWORD"
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
     - docker build --build-arg DB_HOST=$DB_HOST --build-arg DB_NAME=$DB_NAME --build-arg DB_USERNAME=$DB_USERNAME --build-arg DB_PASSWORD=$DB_PASSWORD --build-arg DB_PORT=$DB_PORT --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .

@@ -29,7 +29,7 @@ module AppManager
         Rails.logger.info { "provision_isp_config_account is called " }
 
         if panels_access('isp_config')
-          IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id,order&.subscribable_product&.id)
+          IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id,product&.id)
           Rails.logger.info { "IspConfigProvisioningJob is scheduled to create user account on ISPConfig Account " }
         end
       end

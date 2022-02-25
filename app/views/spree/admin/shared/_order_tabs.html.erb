@@ -67,6 +67,7 @@
           class: "#{'active' if current == :payments} nav-link" %>
       </li>
     <% end %>
+    
 
     <% if can? :index, Spree::ReturnAuthorization %>
       <% if @order.completed? %>
@@ -98,5 +99,10 @@
           class: "#{'active' if current == :state_changes} nav-link" %>
       </li>
     <% end %>
+
+
+  
+
+
   </ul>
 <% end %>
