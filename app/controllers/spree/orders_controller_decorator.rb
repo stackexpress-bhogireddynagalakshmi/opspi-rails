@@ -33,9 +33,9 @@ module Spree
 
     def order_pdf
       file_path = "#{Rails.root}/tmp/order_pdf.pdf"
-      @order = Spree::Order.last
-
-      OrdersPdf.new(@order, file_path).call
+      @store = current_store
+      @order = TenantManager::TenantHelper.unscoped_query {current_spree_user.orders.find_by(number: params[:id])}
+      OrdersPdf.new(@order, current_spree_user, @store, file_path).call
       if File.exist?(file_path)
         File.open(file_path, 'r') do |f|
           send_data f.read.force_encoding('BINARY'), :filename => 'order.pdf', :type => "application/pdf", :disposition => "inline"
