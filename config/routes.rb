@@ -72,14 +72,17 @@ Rails.application.routes.draw do
       namespace :sites do
         resources :websites
         resources :ftp_users
+        resources :sub_domains
       end
       
     end
   end
+  
   get 'register-domain', :controller=> 'hosting',:action=> "register_domain"
   post 'search_domain', :controller=> 'hosting',:action=> "search_domain"
   get 'hosting/:slug', :controller=> 'hosting',:action=> "hosting_page"
   get 'servers/:slug', :controller=> 'hosting',:action=> "servers"
+  get 'orders/:id/order_pdf', :controller=> 'spree/orders', :action=> 'order_pdf'
 
   resources :hosting,:only=>[:index] do 
 

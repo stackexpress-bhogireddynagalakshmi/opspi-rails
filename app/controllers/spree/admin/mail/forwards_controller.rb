@@ -1,11 +1,12 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
-     module Mail
+    module Mail
       # Mail Forwards controller
       class ForwardsController < Spree::Admin::IspConfigResourcesController
-
-        before_action :get_current_user_mail_domains, only: [:new, :edit, :create, :update]
-        before_action :assemble_source_and_domain, only: [:create, :update]
+        before_action :get_current_user_mail_domains, only: %i[new edit create update]
+        before_action :assemble_source_and_domain, only: %i[create update]
 
         private
 
@@ -18,7 +19,7 @@ module Spree
         end
 
         def resource_params
-          params.require("mail_forward").permit(:source,:destination,:type,:active,:allow_send_as,:greylisting)
+          params.require("mail_forward").permit(:source, :destination, :type, :active, :allow_send_as, :greylisting)
         end
 
         def resource_index_path
@@ -31,11 +32,11 @@ module Spree
 
         def get_current_user_mail_domains
           response = current_spree_user.isp_config.mail_domain.all
-          if response[:success]
-            @user_mail_domains = response[:response].response
-          else
-            @user_mail_domains = []
-          end
+          @user_mail_domains = if response[:success]
+                                 response[:response].response
+                               else
+                                 []
+                               end
         end
 
         def assemble_source_and_domain

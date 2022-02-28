@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module IspConfig
   module Mail
-     #blacklist API endpoints
+    # blacklist API endpoints
     class SpamFilterBlacklist < SpamFilter
       def get_endpoint
         '/json.php?mail_spamfilter_blacklist_get'

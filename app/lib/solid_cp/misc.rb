@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module SolidCp
   class Misc
-
     def self.password_generator
       # chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
       # password = chars.last(10).split(//).sample
@@ -11,6 +12,5 @@ module SolidCp
       # password
       SecureRandom.hex
     end
-
   end
 end

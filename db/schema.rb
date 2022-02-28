@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_07_221035) do
+ActiveRecord::Schema.define(version: 2022_02_08_171934) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -789,6 +789,7 @@ ActiveRecord::Schema.define(version: 2022_02_07_221035) do
     t.integer "isp_config_master_template_id"
     t.integer "validity"
     t.integer "frequency"
+    t.boolean "main_panel_access_only", default: false
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_products_on_discontinue_on"
@@ -1444,6 +1445,13 @@ ActiveRecord::Schema.define(version: 2022_02_07_221035) do
     t.string "kind", default: "state"
     t.index ["default_tax"], name: "index_spree_zones_on_default_tax"
     t.index ["kind"], name: "index_spree_zones_on_kind"
+  end
+
+  create_table "sub_domains", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "isp_config_sub_domain_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "subscriptions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
