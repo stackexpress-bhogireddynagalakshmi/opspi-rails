@@ -3,44 +3,60 @@
   <%= Spree.t(:start_wizard) %>
 <% end %>
 
- <%=form_for spree_current_user, url: admin_wizards_path, html: {method: :post} do |f|%> 
+ <%=form_for 'wizard', url: admin_wizards_path, html: {method: :post} do |f|%> 
 
   <fieldset>
-    <div class="form-group field">
-      <label>Choose your domain</label>
-      <%= collection_select(:wizard, :domain, @hosted_zones, :origin, :origin, {prompt: 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
-    </div>
-
-    <div class="form-group field">
-      <div class="custom-control custom-switch">
-        <%= check_box_tag('web', 'n', ('checked' if false), class: "custom-control-input", id: "wizard_web_service", onclick: "checkServiceStatus(this)" ) %>
-        <label class="custom-control-label" for="wizard_web_service">Web Services</label>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <label>Choose your domain</label>
+          <%= collection_select(:wizard, :domain, @hosted_zones, :origin, :origin, {prompt: 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+        </div>
       </div>
     </div>
 
-    <div class="form-group field">
-      <div class="custom-control custom-switch">
-        <%= check_box_tag('mail', 'n', ('checked' if false), class: "custom-control-input", id: "wizard_mail_service", onclick: "checkServiceStatus(this)" ) %>
-        <label class="custom-control-label" for="wizard_mail_service">Mail Services</label>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <div class="custom-control custom-switch">
+            <%= check_box_tag('wizard[enable_web_service]', 'n', ('checked' if false), class: "custom-control-input", id: "wizard_web_service", onclick: "checkServiceStatus(this)" ) %>
+            <label class="custom-control-label" for="wizard_web_service">Enable Web Services</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <div class="custom-control custom-switch">
+            <%= check_box_tag('wizard[enable_mail_service]', 'n', ('checked' if false), class: "custom-control-input", id: "wizard_mail_service", onclick: "checkServiceStatus(this)" ) %>
+            <label class="custom-control-label" for="wizard_mail_service">Enable Mail Services</label>
+          </div>
+        </div>
       </div>
     </div>
 
     <div id="wizard_mail">
       <div class="row">
-        <div class="col-lg-12">
-          <div id="inputUsernameField">
-            <div class="form-group field ">
-              <label>Username:</label>
-              <%=f.text_field 'username', value: @resources.try(:username), class: 'form-control', placeholder: "Enter UserName"%>
+        <div class="col-lg-6">
+          <div class="form-group field">
+            <label>Email</label>
+            <div class="input-group">
+              <%= text_field_tag 'wizard[emails][]', '', class: 'form-control', placeholder: "Enter Email", "data-input-count" => 0 %>
+              <div class="input-group-append">
+                <span class="input-group-text" id="selected_domain_button">@</span>
+              </div>
             </div>
           </div>
-          <div id="newUserName"></div>
-          <button id="addRowUserName" type="button" class="btn btn-info" , data-field-count= '1' >Add UserName</button>
+
+          <div id="newMoreEmailAddress"></div>
+          <button id="addRowEmail" type="button" class="btn btn-info" , data-field-count= '1' >Add More Email Address</button>
         </div>
       </div>
     </div>
 
-    <%=submit_tag "Add wizard",class: 'btn btn-primary'%>
+    <%=submit_tag "Submit",class: 'btn btn-primary'%>
 
   </fieldset>
 <% end %>
@@ -63,8 +79,17 @@
       div.style.display = "block"; 
     }
 
+    var domain = $("#wizard_domain option:selected").text();
+    if (domain != "") {
+      $("#selected_domain_button").html('.@'+ domain);
+    }
+
   });
 
+  $('#wizard_domain').change(function () {
+    var domain = $("#wizard_domain option:selected").text();
+    $("#selected_domain_button").html('.@'+ domain);
+  });
 
   var checkServiceStatus = function(element){
     var serviceStatus = element.value;
@@ -82,30 +107,34 @@
     }
   }
 
-  $("#addRowUserName").click(function () {
-
-    var fieldCount = $(this).data('field-count');
+  $("#addRowEmail").click(function () {
+    var fieldCount = parseInt($(this).data('field-count'));
+    var inputCount = (fieldCount +1);
+    var domain = $("#wizard_domain option:selected").text();
     var html = '';
     html += '<div id="inputUsernameField">';
     html += '<div class="input-group mb-3">';
-    html += '<input type="text" name="username" class="form-control m-input" placeholder="Enter User Name" autocomplete="off">';
+    html += '<input type="text" name="wizard[emails][]" class="form-control m-input" placeholder="Enter Email" autocomplete="off" "data-input-count" = '+inputCount+'>';
     html += '<div class="input-group-append">';
-    html += '<button id="removeRowUserName" type="button" class="btn btn-danger">Remove</button>';
+    html += '<div class="input-group-append">';
+    html += '<span class="input-group-text" id="selected_domain_button">@'+domain+'</span>';
+    html += '</div>';
+    html += '<button id="removeRowEmail" type="button" class="btn btn-danger">Remove</button>';
     html += '</div>';
     html += '</div>';
-    $('#newUserName').append(html);
+    $('#newMoreEmailAddress').append(html);
     $(this).data("field-count", fieldCount+1);
     if (fieldCount >= 9) {
-      $("#addRowUserName").hide();
+      $("#addRowEmail").hide();
     }
   });
 
-  $(document).on('click', '#removeRowUserName', function () {
-    var fieldCount = $('#addRowUserName').data('field-count'); //get myvalue
-    $('#addRowUserName').data('field-count',(fieldCount-1));
+  $(document).on('click', '#removeRowEmail', function () {
+    var fieldCount = $('#addRowEmail').data('field-count'); //get myvalue
+    $('#addRowEmail').data('field-count',(fieldCount-1));
     $(this).closest('#inputUsernameField').remove();
     if (fieldCount >= 10) {
-      $("#addRowUserName").show();
+      $("#addRowEmail").show();
     }
   });
 

@@ -9,9 +9,17 @@
       id: 'admin_wizard' %>
 <% end %>
 
-<div class="alert alert-info no-objects-found">
-  You don't have any mail or web services active yet
-</div>
+<% if @resources.present? %>
+<%= render partial: 'spree/admin/wizards/enable_web_service' %>
+</br>
+</br>
+<%= render partial: 'spree/admin/wizards/enable_mail_service' %>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    You don't have any mail or web services active yet
+  </div>
+<% end %>
+
 
 <script type="text/javascript">
   $(document).ready(function (argument) {
