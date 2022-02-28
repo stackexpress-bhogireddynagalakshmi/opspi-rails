@@ -132,6 +132,11 @@ module SolidCp
       @plan ||= SolidCp::Plan.new(user, product)
     end
 
+    # HostingPlan API interface for the  user/Reseller
+    def web_domain
+      @web_domain ||= SolidCp::Dns::Domain.new(user)
+    end
+
     # Helper  method to render full_name
     def full_name
       "#{user.first_name} #{user.last_name}"
