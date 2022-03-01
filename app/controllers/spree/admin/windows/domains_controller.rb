@@ -13,8 +13,9 @@ module Spree
         def create
           @validation = validate_domain_name(resource_params[:domain_name])
           @proxy_resource = convert_to_mash(resource_params.to_h)
+
           if @validation[0]
-            @response = windows_api.add_domain(resource_params) 
+            @response = windows_api.create(resource_params) 
             if @response[:success] == true
               set_flash
               redirect_to resource_index_path
@@ -41,7 +42,7 @@ module Spree
         end
 
         def resource_params
-          params.require("web_domain").permit(:domain_name,:is_sub_domain, :hosting_allowed, :is_preview_domian, :is_domain_pointer, :enable_dns)
+          params.require("web_domain").permit(:domain_name,:is_sub_domain, :hosting_allowed, :is_preview_domian, :is_domain_pointer, :enable_dns,:point_website_id,:allow_subdomains,:create_webSite)
         end
 
         def resource_index_path

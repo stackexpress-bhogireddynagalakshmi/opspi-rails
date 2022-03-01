@@ -69,7 +69,8 @@ module SolidCp
           "DomainName" => params[:domain_name],
           "IsSubDomain" => false,
           "IsPreviewDomain" => false,
-          "IsDomainPointer" => true
+          "IsDomainPointer" => true,
+          "UserId" => user.solid_cp_id
         }}
         )
         if response.success? && response.body[:add_domain_response][:add_domain_result].to_i.positive? 
@@ -82,7 +83,7 @@ module SolidCp
           { success: false, message: 'Something went wrong. Please try again.', response: response }
         end
       end
-      alias :create :add_domain 
+      
 
       # @params
       # <DomainId>int</DomainId>
@@ -160,6 +161,45 @@ module SolidCp
       def disable_domain_dns(id)
         response = super(message: { domain_id: id })
       end
+
+
+      # @params
+      #  <packageId>int</packageId>
+      # <domainName>string</domainName>
+      # <domainType>Domain or SubDomain or ProviderSubDomain or DomainPointer</domainType>
+      # <createWebSite>boolean</createWebSite>
+      # <pointWebSiteId>int</pointWebSiteId>
+      # <pointMailDomainId>int</pointMailDomainId>
+      # <createDnsZone>boolean</createDnsZone>
+      # <createPreviewDomain>boolean</createPreviewDomain>
+      # <allowSubDomains>boolean</allowSubDomains>
+      # <hostName>string</hostName> 
+
+      def add_domain_with_provisioning(params={})
+
+        hash_params = {
+          "packageId" => user.packages.first.try(:solid_cp_package_id),
+          "domainName" => params[:domain_name],
+          "domainType" => 'Domain',
+          "createDnsZone" => params[:enable_dns] == "1",
+          "allowSubDomains" => params[:allow_subdomains] == "1",
+         }
+
+         if params["create_webSite"] == "1"
+            hash_params["createWebSite"] = false
+         else
+            hash_params["pointWebSiteId"] = params[:pointer_website_id]
+         end
+
+         response = super(message: hash_params )
+
+        if response.success? && response.body[:add_domain_with_provisioning_response][:add_domain_with_provisioning_result].to_i.positive? 
+          { success: true, message: 'Domain created successfully', response: response }
+        else
+          { success: false, message: 'Something went wrong. Please try again.', response: response }
+        end
+      end
+      alias :create :add_domain_with_provisioning 
 
 
       private
