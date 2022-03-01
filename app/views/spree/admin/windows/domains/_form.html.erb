@@ -24,6 +24,7 @@
     <div class="form-group field">
       <label>Web Domain Name</label>
       <%=f.text_field 'domain_name', value: resource.try(:domain_name), class: 'form-control'%>
+      <span id="domain-validation-msg" style="color: red;"> <%=@validation.try(:[],1)%></span>
     </div>
           
     <div class="form-group field">
