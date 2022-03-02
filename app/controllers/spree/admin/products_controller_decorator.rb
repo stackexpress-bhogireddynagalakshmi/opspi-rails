@@ -11,6 +11,8 @@ module Spree
           rescue StandardError
             []
           end
+        else
+          super
         end
       end
 
