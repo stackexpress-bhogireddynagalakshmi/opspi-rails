@@ -65,14 +65,13 @@ Rails.application.routes.draw do
       namespace :sites do
         resources :websites
         resources :ftp_users
-      end
-
-      namespace :sites do
-        resources :websites
-        resources :ftp_users
         resources :sub_domains
         resources :protected_folders
         resources :protected_folder_users
+      end
+
+      namespace :windows do
+        resources :domains
       end
       
     end

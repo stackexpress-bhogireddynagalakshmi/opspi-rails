@@ -49,6 +49,7 @@ en:
     sub_domains: Sub Domains
     protected_folders: Protected Folders
     protected_folder_users: Protected Folder Users
+    windows: Windows
     subdomain_for_website: Sub Domain for Website
     payment_states:
       balance_due: Approval Awaited
