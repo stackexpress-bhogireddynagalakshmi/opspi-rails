@@ -13,7 +13,13 @@ module Spree
 
         mail_response = registration_mail_domain if request_params[:enable_mail_service] == 'y'
         @resources.merge!(mail_response) if mail_response
-        render :index
+        if @response[:success]
+          flash[:success] = @response[:message]
+          render :index
+        else
+          flash[:error] = @response[:message]
+          redirect_to new_admin_wizard_path
+        end
       end
 
       def index; end
