@@ -5,7 +5,7 @@ module Spree
         before_action :get_website_list, only: [:new, :index]
 
         def create
-          @response = current_spree_user.isp_config.protected_folder.create(protected_folder_params)
+          @response = isp_config_api.create(protected_folder_params)
           if @response[:success]
             set_flash
             redirect_to admin_sites_protected_folders_path
