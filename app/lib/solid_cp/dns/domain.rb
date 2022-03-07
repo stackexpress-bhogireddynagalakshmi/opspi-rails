@@ -190,7 +190,7 @@ module SolidCp
          else
             hash_params["pointWebSiteId"] = params[:pointer_website_id]
          end
-
+         hash_params = hash_params.compact
          response = super(message: hash_params )
 
         if response.success? && response.body[:add_domain_with_provisioning_response][:add_domain_with_provisioning_result].to_i.positive? 

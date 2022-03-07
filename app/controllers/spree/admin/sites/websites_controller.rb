@@ -6,6 +6,18 @@ module Spree
       class WebsitesController < Spree::Admin::IspConfigResourcesController
         before_action :get_zone_list, only: [:new, :create]
 
+
+       def index
+          response = isp_config_api.all || []
+          @resources = if response[:success]
+                         response[:response].response
+                       else
+                         []
+                       end
+
+          @response = windows_api.all || []
+          @windows_resources = convert_to_mash(@response.body[:get_domains_response][:get_domains_result][:domain_info]) rescue []
+        end
         private
 
         def resource_id_field
@@ -17,7 +29,11 @@ module Spree
         end
 
         def resource_params
-          request_params.merge(extra_isp_params)
+          if params[:server_type].present? && params[:server_type] == 'windows'
+            windows_resource_params
+          else
+            request_params.merge(extra_isp_params)
+          end
         end
 
         def request_params
@@ -29,7 +45,15 @@ module Spree
         end
 
         def isp_config_api
-          current_spree_user.isp_config.website
+          if params[:server_type].present? && params[:server_type] == 'windows'
+            windows_api
+          else
+            current_spree_user.isp_config.website
+          end
+        end
+
+        def windows_api
+          current_spree_user.solid_cp.web_domain
         end
 
         def get_zone_list
@@ -45,6 +69,11 @@ module Spree
             backup_format_db: 'gzip', traffic_quota_lock: 'n', http_port: '80', https_port: '443'
           }
         end
+
+        def windows_resource_params
+          { domain_name:  params[:website]["domain"], create_webSite: "1", enable_dns: "0", allow_subdomains: "1" }
+        end
+
       end
     end
   end
