@@ -3,5 +3,6 @@
     <%= main_menu_tree Spree.t(:mail), icon: "report.svg", sub_menu: "mail", url: "#sidebar-mail" %>
     <%= main_menu_tree Spree.t(:sites), icon: "report.svg", sub_menu: "sites", url: "#sidebar-sites" %>
     <%= main_menu_tree Spree.t(:statistics), icon: "report.svg", sub_menu: "statistics", url: "#mail-statistics" %>
+    <%= tab Spree.t('start_wizard'), url: spree.admin_wizards_path, icon: "report.svg"%>
     <%= main_menu_tree Spree.t(:windows), icon: "report.svg", sub_menu: "windows", url: "#sidebar-windows" %>
 </ul>

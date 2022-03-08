@@ -30,7 +30,6 @@ module Spree
 
       base.after_commit :update_user_tanent, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]
-
       base.after_commit :save_subdomain_to_redis, on: [:create]
       base.accepts_nested_attributes_for :user_key, reject_if: :reject_if_key_blank
     end

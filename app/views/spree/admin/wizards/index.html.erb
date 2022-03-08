@@ -1,0 +1,29 @@
+<% content_for :page_title do %>
+ Wizards
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:start_wizard),
+    new_admin_wizard_path,
+    class: "btn-success",
+      icon: 'add.svg',
+      id: 'admin_wizard' %>
+<% end %>
+
+<% if @resources.present? %>
+<%= render partial: 'spree/admin/wizards/enable_web_service' %>
+</br>
+</br>
+<%= render partial: 'spree/admin/wizards/enable_mail_service' %>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    You don't have any mail or web services active yet
+  </div>
+<% end %>
+
+
+<script type="text/javascript">
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+</script>
+

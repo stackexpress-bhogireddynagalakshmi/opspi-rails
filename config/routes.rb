@@ -70,6 +70,8 @@ Rails.application.routes.draw do
         resources :protected_folder_users
       end
 
+      resources :wizards
+
       namespace :windows do
         resources :domains
       end

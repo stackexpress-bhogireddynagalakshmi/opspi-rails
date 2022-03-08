@@ -35,6 +35,7 @@ class StoreAdminAbility
     can :manage, :statistics
     can :manage, :forwards
     can :manage, :sub_domains
+    can :manage, :wizards
     can :manage, :protected_folders
     can :manage, :protected_folder_users
 

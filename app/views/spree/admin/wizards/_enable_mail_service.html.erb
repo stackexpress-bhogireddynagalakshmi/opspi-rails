@@ -1,0 +1,52 @@
+<% if @resources.present? %>
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+
+    <% if @resources[:mail_response].present? && @resources[:mail_response][:success] %>
+      <table class="table" id="listing_orders" data-hook data-nav-x-content>
+        <thead>
+          <tr data-hook="admin_orders_index_headers">
+            <th colspan="3">Email Domain</th>
+            <th colspan="3">MailBox</th>
+          </tr>
+          <tr data-hook="admin_orders_index_headers">
+            <th>ID</th>
+            <th>Active</th>
+            <th>Domain</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>password</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
+            <td><%= @resources[:mail_response][:response]["response"] if @resources[:mail_response] && @resources[:mail_response][:success]%></td>
+            <td><%= @resources[:mail_params][:active] if @resources[:mail_params]%></td>
+            <td><%= @resources[:mail_params][:domain] if @resources[:mail_params]%></td>
+            <% @resources[:mail_box_responses].each_with_index do |mailbox, index| %>
+              <% if mailbox[:mail_box_response][:success] %>
+                <% if index == 0 %>
+                  <td><%= mailbox[:mail_box_params][:name] if @resources[:ftp_user_response][:success]%></td>
+                  <td><%= mailbox[:mail_box_params][:email] if @resources[:ftp_user_response][:success]%></td>
+                  <td><%= mailbox[:mail_box_params][:password] if @resources[:ftp_user_response][:success]%></td>
+                <% else %>
+                  <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
+                    <td colspan="3"></td>
+                    <td><%= mailbox[:mail_box_params][:name] if @resources[:ftp_user_response][:success]%></td>
+                    <td><%= mailbox[:mail_box_params][:email] if @resources[:ftp_user_response][:success]%></td>
+                    <td><%= mailbox[:mail_box_params][:password] if @resources[:ftp_user_response][:success]%></td>
+                  </tr>
+                <% end %>
+              <% end %>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
+    <% else %>
+      Disabled
+    <% end %>
+
+    </p>
+  </div>
+</div>
+<% end %>
