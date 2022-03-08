@@ -181,16 +181,13 @@ module SolidCp
           "packageId" => user.packages.first.try(:solid_cp_package_id),
           "domainName" => params[:domain_name],
           "domainType" => 'Domain',
-          "createDnsZone" => params[:enable_dns] == "1",
-          "allowSubDomains" => params[:allow_subdomains] == "1",
+          "createWebSite" => true,
+          "createDnsZone" => false,
+          "createPreviewDomain" => false,
+          "allowSubDomains" => true,
+          "hostName"=> "",
          }
 
-         if params["create_webSite"] == "1"
-            hash_params["createWebSite"] = false
-         else
-            hash_params["pointWebSiteId"] = params[:pointer_website_id]
-         end
-         hash_params = hash_params.compact
          response = super(message: hash_params )
 
         if response.success? && response.body[:add_domain_with_provisioning_response][:add_domain_with_provisioning_result].to_i.positive? 
