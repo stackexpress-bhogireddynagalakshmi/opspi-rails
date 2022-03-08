@@ -178,6 +178,14 @@ module IspConfig
       @website ||= IspConfig::Website.new(user)
     end
 
+    def protected_folder
+      @protected_folder ||= IspConfig::ProtectedFolder.new(user)
+    end
+
+    def protected_folder_user
+      @protected_folder_user ||= IspConfig::ProtectedFolderUser.new(user)
+    end
+
     def sub_domain
       @sub_domain ||= IspConfig::SubDomain.new(user)
     end

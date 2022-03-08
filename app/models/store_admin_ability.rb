@@ -36,6 +36,8 @@ class StoreAdminAbility
     can :manage, :forwards
     can :manage, :sub_domains
     can :manage, :wizards
+    can :manage, :protected_folders
+    can :manage, :protected_folder_users
 
     can :manage, :my_store
     can :manage, ::Spree::PaymentMethod unless TenantManager::TenantHelper.current_admin_tenant?

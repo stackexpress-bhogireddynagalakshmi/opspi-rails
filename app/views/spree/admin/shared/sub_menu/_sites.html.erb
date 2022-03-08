@@ -1,10 +1,4 @@
-<ul id="sidebar-sites" class="border-top bg-grey collapse nav nav-pills nav-stacked" data-hook="admin_sites_sub_tabs" >
-    <li class="sidebar-menu-item d-block w-100 position-relative">
-      <%=link_to Spree.t(:websites), spree.admin_sites_websites_path,class: 'sidebar-submenu-item w-100 py-2 py-md-1 pl-3 d-block '%>
-    </li> 
-    <%= tab Spree.t('ftp_users'), url: spree.admin_sites_ftp_users_path %>
-    <%= tab Spree.t('subdomain_for_website'), url: spree.admin_sites_sub_domains_path %>
+<ul id="sidebar-sites" class="border-top bg-white collapse nav nav-pills nav-stacked" data-hook="admin_hosting_controls_sub_tabs">
+  <%= main_menu_tree Spree.t(:websites), icon: "report.svg", sub_menu: "websites", url: "#sidebar-websites" %>
+  <%= main_menu_tree Spree.t(:web_access), icon: "report.svg", sub_menu: "web_access", url: "#sidebar-web_access" %>
 </ul>
-
-
-
