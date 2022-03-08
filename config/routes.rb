@@ -66,6 +66,8 @@ Rails.application.routes.draw do
         resources :websites
         resources :ftp_users
         resources :sub_domains
+        resources :protected_folders
+        resources :protected_folder_users
       end
 
       namespace :windows do

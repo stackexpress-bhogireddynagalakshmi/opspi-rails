@@ -1,0 +1,2 @@
+class ProtectedFolderUser < ApplicationRecord
+end
