@@ -1,20 +1,21 @@
 GIT
-  remote: git://github.com/spree-contrib/better_spree_paypal_express
-  revision: 49c579ac7eb968bba67b97126bd4473f709174ad
-  specs:
-    spree_paypal_express (3.3.0)
-      paypal-sdk-merchant
-      spree_auth_devise (>= 3.1.0, < 5.0)
-      spree_core (>= 3.1.0, < 5.0)
-      spree_extension
-
-GIT
   remote: https://github.com/sass/sassc-ruby.git
   revision: 4fce2b635ca5d616a8b1381c64846410bc785ea4
   branch: master
   specs:
     sassc (2.4.0)
       ffi (~> 1.9)
+
+GIT
+  remote: https://github.com/spree-contrib/better_spree_paypal_express.git
+  revision: 49c579ac7eb968bba67b97126bd4473f709174ad
+  branch: master
+  specs:
+    spree_paypal_express (3.3.0)
+      paypal-sdk-merchant
+      spree_auth_devise (>= 3.1.0, < 5.0)
+      spree_core (>= 3.1.0, < 5.0)
+      spree_extension
 
 GIT
   remote: https://github.com/spree-contrib/spree_i18n.git
@@ -600,7 +601,8 @@ GEM
     websocket-extensions (0.1.5)
     whenever (1.0.0)
       chronic (>= 0.6.3)
-    xml-simple (1.1.8)
+    xml-simple (1.1.9)
+      rexml
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.4.2)
