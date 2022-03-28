@@ -20,7 +20,7 @@ module IspConfig
                            body: user_hash
                          })
 
-        Rails.logger.info { response.inspect }
+        Rails.logger.debug { response.inspect }
 
         if response.code == "ok"
           user.isp_config_id = response.response
@@ -42,7 +42,7 @@ module IspConfig
                            method: :GET,
                            body: user_hash.merge({ client_id: user.isp_config_id })
                          })
-        Rails.logger.info { response.inspect }
+        Rails.logger.debug { response.inspect }
         if response.code == "ok"
           { success: true, message: I18n.t('isp_config.user_updated'), response: response }
         else
@@ -61,7 +61,7 @@ module IspConfig
                            method: :GET,
                            body: { client_id: user.isp_config_id, params: { template_master: template_id } }
                          })
-        Rails.logger.info { response.inspect }
+        Rails.logger.debug { response.inspect }
 
         if response.code == "ok"
           { success: true, message: I18n.t('isp_config.template_updated'), response: response }
@@ -82,7 +82,8 @@ module IspConfig
                            method: :GET,
                            body: { client_id: user.isp_config_id, new_password: new_password }
                          })
-        Rails.logger.info { response.inspect }
+        Rails.logger.debug { response.inspect }
+
         if response.code == "ok"
           { success: true, message: 'IspConfig password updated successfully', response: response,
             new_password: new_password }
@@ -102,7 +103,7 @@ module IspConfig
                            method: :POST,
                            body: { client_id: user.isp_config_id, params: { canceled: 'y' } }
                          })
-        Rails.logger.info { response.inspect }
+        Rails.logger.debug { response.inspect }
         if response.code == "ok"
           { success: true, message: 'IspConfig account canceled successfully', response: response }
         else
@@ -121,7 +122,7 @@ module IspConfig
                            method: :POST,
                            body: { client_id: user.isp_config_id, params: { canceled: 'n' } }
                          })
-        Rails.logger.info { response.inspect }
+        Rails.logger.debug { response.inspect }
         if response.code == "ok"
           { success: true, message: 'IspConfig account enabled successfully', response: response }
         else
