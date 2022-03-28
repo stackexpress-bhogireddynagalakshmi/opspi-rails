@@ -13,10 +13,11 @@
 
   <fieldset>
     <div class="form-group field">
-      <label>Select Domain:</label>
-      <%= collection_select(:ftp_user, :parent_domain_id, @websites, :domain_id, :domain, {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+      <label>Select Hosting Type:</label>
+      <%= select_tag :server_type, options_for_select([['Linux','linux'],['Windows','windows']]), class: 'form-control', id: 'hosting_type'  %>
     </div>
 
+  
     <div class="form-group field">
       <label>Username:</label>
       <%=f.text_field 'username', value: @ftp_user.try(:username), class: 'form-control', placeholder: "Please enter UserName" %>
@@ -27,29 +28,49 @@
       <%=f.password_field 'password', value: @ftp_user.try(:password), class: 'form-control', placeholder: "Please enter Password"%>
     </div>
 
-    <div class="form-group field">
-      <label>Harddisk-Quota(MB):</label>
-      <%=f.text_field 'quota_size', value: (@ftp_user.try(:quota_size) ? @ftp_user.try(:quota_size) : -1) , class: 'form-control', type: 'number', placeholder: "Please enter Harddisk-Quota In MB (example: 1000)"%>
+    <div id="windows-fields" style="display: none;">
+      <div class="form-group field">
+      <label>Select Domain:</label>
+      <%= f.select(:domain, @windows_sites.pluck(:domain_name).uniq.reject{|x| x.include?("www")}, {:prompt => 'Select Web Domain'}, class: 'select2-clear js-filterable',id: "domain_name_dropdown" )%>
+      </div>   
+
+       <div class="form-group field">
+        <label>Folder:</label>
+        <%=f.text_field 'folder', value: "", class: 'form-control', disabled: true, id: "folder_path" %>
+      </div>   
     </div>
 
-    <div class="form-group field">
-      <label>Active</label>
-      <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @website.try(:active)),{}, class: 'form-control'%>
-    </div>
+     <div id="linux-fields" >
+       <div class="form-group field">
+        <label>Select Domain:</label>
+        <%= collection_select(:ftp_user, :parent_domain_id, @websites, :domain_id, :domain, {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+      </div>
 
-    <div class="form-group field">
-      <label>User identifier (UID):</label>
-      <%=f.text_field 'uid', value: @ftp_user.try(:uid), class: 'form-control', readonly: true%>
-    </div>
 
-    <div class="form-group field">
-      <label>Group identifier (GID):</label>
-      <%=f.text_field 'gid', value: @ftp_user.try(:gid), class: 'form-control', readonly: true%>
-    </div>
+      <div class="form-group field">
+        <label>Harddisk-Quota(MB):</label>
+        <%=f.text_field 'quota_size', value: (@ftp_user.try(:quota_size) ? @ftp_user.try(:quota_size) : -1) , class: 'form-control', type: 'number', placeholder: "Please enter Harddisk-Quota In MB (example: 1000)"%>
+      </div>
 
-    <div class="form-group field">
-      <label>Directory:</label>
-      <%=f.text_field 'dir', value: '/var/www/clients/client312/web29', class: 'form-control', readonly: true %>
+      <div class="form-group field">
+        <label>Active</label>
+        <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @website.try(:active)),{}, class: 'form-control'%>
+      </div>
+
+      <div class="form-group field">
+        <label>User identifier (UID):</label>
+        <%=f.text_field 'uid', value: @ftp_user.try(:uid), class: 'form-control', readonly: true%>
+      </div>
+
+      <div class="form-group field">
+        <label>Group identifier (GID):</label>
+        <%=f.text_field 'gid', value: @ftp_user.try(:gid), class: 'form-control', readonly: true%>
+      </div>
+
+      <div class="form-group field">
+        <label>Directory:</label>
+        <%=f.text_field 'dir', value: '/var/www/clients/client312/web29', class: 'form-control', readonly: true %>
+      </div>
     </div>
 
     <%=submit_tag "#{@ftp_user.present? ? 'Update' : 'Add'} FTP User",class: 'btn btn-primary'%>
@@ -74,5 +95,31 @@
     $('#ftp_user_uid').val(uid);
     var gid  = currentDomainId.data("gid");
     $('#ftp_user_gid').val(gid);
+  });
+
+</script>
+
+
+<script type="text/javascript">
+  
+  $(document).ready(function (argument) {
+    $("#hosting_type").on('change',function (argument) {
+      var val = $(this).val();
+      if (val=='linux') {
+        $('#linux-fields').show();
+        $('#windows-fields').hide();
+      } 
+      else
+      {
+        $('#linux-fields').hide();
+        $('#windows-fields').show();
+      }
+    });
+
+    $('#domain_name_dropdown').on('change', function(){
+      var val = $(this).val();
+      var folder = "\\"+val+"\\wwwroot"
+      $('#folder_path').val(folder)
+    });
   });
 </script>

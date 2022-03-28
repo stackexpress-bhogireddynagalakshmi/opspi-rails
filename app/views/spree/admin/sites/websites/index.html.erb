@@ -67,7 +67,7 @@
                 <td><%=domain.expiration_date%></td>
                 <td><%=domain.is_sub_domain? ? 'Sub-Domain' : "Top-level Domain" %></td>
                 
-                <td><%#=link_to 'Edit',edit_admin_windows_domain_path(id: domain.domain_id)%> 
+                <td><%=link_to 'Edit',edit_admin_windows_domain_path(id: domain.domain_id)%> |
                   <%=link_to 'Delete', admin_windows_domain_path(id: domain.domain_id), method: :delete, data: {confirm: t('isp_config.mail_domain.delete_alert')}%>
                 </td>  
               </tr>

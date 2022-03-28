@@ -137,11 +137,19 @@ module SolidCp
       @web_domain ||= SolidCp::Dns::Domain.new(user)
     end
 
+    # Virtual Direcyory API interface for the  user/Reseller
+    def virtual_directory
+      @virtual_directory ||= SolidCp::Dns::VirtualDirectory.new(user)
+    end
+
+    # FTP Account API interface for the  user/Reseller
+    def ftp_account
+      @ftp_account ||= SolidCp::FtpAccount.new(user)
+    end
+
     # Helper  method to render full_name
     def full_name
       "#{user.first_name} #{user.last_name}"
     end
   end
 end
-
-# SolidCp::User.client.build_request(:add_user).body

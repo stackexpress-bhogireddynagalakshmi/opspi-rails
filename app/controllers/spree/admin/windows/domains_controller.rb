@@ -1,21 +1,25 @@
 # frozen_string_literal: true
+
 module Spree
   module Admin
     module Windows
       # Domain controller
       class DomainsController < Spree::Admin::WindowsResourcesController
-
         def index
           @response = windows_api.all || []
-          @resources = convert_to_mash(@response.body[:get_domains_response][:get_domains_result][:domain_info]) rescue []
+          @resources = begin
+            convert_to_mash(@response.body[:get_domains_response][:get_domains_result][:domain_info])
+          rescue StandardError
+            []
+          end
         end
-       
+
         def create
           @validation = validate_domain_name(resource_params[:domain_name])
           @proxy_resource = convert_to_mash(resource_params.to_h)
 
           if @validation[0]
-            @response = windows_api.create(resource_params) 
+            @response = windows_api.create(resource_params)
             if @response[:success] == true
               set_flash
               redirect_to resource_index_path
@@ -23,14 +27,19 @@ module Spree
               render :new
             end
           else
-             render :new
+            render :new
           end
+        end
+
+        def update
+          response = current_spree_user.solid_cp.virtual_directory
+                                       .update(params[:website_id], resource_params.merge({ site_id: params[:website_id] }))
         end
 
         private
 
         def resource_id
-         params[:id]
+          params[:id]
         end
 
         def get_response_key
@@ -42,7 +51,8 @@ module Spree
         end
 
         def resource_params
-          params.require("web_domain").permit(:domain_name,:is_sub_domain, :hosting_allowed, :is_preview_domian, :is_domain_pointer, :enable_dns,:point_website_id,:allow_subdomains,:create_webSite)
+          params.require("web_domain").permit(:enable_parent_paths, :enable_directory_browsing,
+                                              :enable_dynamic_compression, :enable_static_compression)
         end
 
         def resource_index_path
@@ -58,7 +68,7 @@ module Spree
           matchers = CustomValidator.validate(domain_name, DOMAIN_REGEX)
           return [false, 'Not a valid domain'] unless matchers[0]
 
-          return [true]
+          [true]
         end
       end
     end

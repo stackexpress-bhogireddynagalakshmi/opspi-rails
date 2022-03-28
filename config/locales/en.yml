@@ -145,8 +145,12 @@ en:
       create: Mail Forward created successfully.
       update: Mail Forward updated successfully.
       delete: Mail Forward deleted successfully.
-    
 
+  windows:
+     ftp_account:
+      delete_alert: "Are you sure you want to delete this ftp user?"
+
+  
 
   my_store:
     cname_not_added: "Please add %{cname} as CNAME record in your DNS setting of %{custom_domain}."

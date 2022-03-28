@@ -9,6 +9,7 @@ module SolidCp
     SOAP_PLAN_WSDL = "#{SolidCp::Config.base_url}esPackages.asmx?wsdl".freeze
     SOAP_SERVER_WSDL = "#{SolidCp::Config.base_url}esServers.asmx?wsdl".freeze
     SOAP_WEB_SERVER_WSDL = "#{SolidCp::Config.base_url}esWebServers.asmx?wsdl".freeze
+    SOAP_FTP_WSDL= "#{SolidCp::Config.base_url}esFtpServers.asmx?wsdl".freeze
 
   end
 end
