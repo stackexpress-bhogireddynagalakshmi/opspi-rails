@@ -11,10 +11,10 @@ module InvoiceManager
     end
 
     def call
-  
-      return unless invoice.present?
-      return unless invoice.active?
-      return unless payment_source.present?
+
+      return nil unless invoice.present?
+      return nil unless invoice.active?
+      return nil unless payment_source.present?
         
       Rails.logger.info { "Finding or Creating order by invoice #{invoice.invoice_number}" }
       @order = InvoiceManager::OrderCreator.new(invoice).call #Issue

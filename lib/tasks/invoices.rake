@@ -12,7 +12,6 @@ namespace :invoices do
     end
   end
 
-
   desc "Auto Debit for the unpaid invoices"
   task  auto_payment: :environment do
     Account.all.each do |account|
@@ -28,7 +27,6 @@ namespace :invoices do
     end
   end
 
-
   desc "Disbale Pannel access on non payment of invoice after grace Period"
   task  disable_control_panel: :environment do
     Account.all.each do |account|
@@ -37,13 +35,12 @@ namespace :invoices do
         next unless user.subscriptions.any?
         user.subscriptions.each do |subscription|
           invoice = subscription.invoices.active.first
-          pending_invoice = subscription.invoices.active.pluck(:invoice_number)
-          InvoiceManager::InvoiceGracePeriodChecker.new(invoice, pending_invoices: pending_invoice).call if invoice.present?
+          pending_invoices = subscription.invoices.active.pluck(:invoice_number)
+          InvoiceManager::InvoiceGracePeriodChecker.new(invoice, pending_invoices: pending_invoices).call if invoice.present?
         end
       end
     end
   end
-
 
   desc "Enable Pannel access on successful payment of invoices"
   task  enable_control_panel: :environment do

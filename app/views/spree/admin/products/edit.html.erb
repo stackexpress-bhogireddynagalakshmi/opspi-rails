@@ -5,6 +5,11 @@
   <% end %>
 <% end %>
 
+<% if @product.hsphere? %>
+  Account ID: <b><%= current_store.account_id %></b> <br/>
+  Plan ID: <b><%= @product.id %></b> <br/><br/>
+<%end%>
+
 <%= render partial: 'spree/admin/shared/product_tabs', locals: {current: :details} %>
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
 

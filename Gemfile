@@ -102,3 +102,7 @@ gem 'prawn-table'
 
 #gem 'deface', '~> 1.0', '>= 1.0.2'
 gem 'rubocop', require: false
+
+
+gem "roo", "~> 2.8.0"
+gem 'roo-xls'

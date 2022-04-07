@@ -16,16 +16,19 @@ module ApplicationHelper
     text = ""
     if current_admin_tenant?
       user = TenantManager::TenantHelper.unscoped_query{order.user}
-          text+=link_to user.account.domain,get_tenant_host_for_resource_path(user), target: '_blank'
+        text+=link_to user.account.domain,get_tenant_host_for_resource_path(user), target: '_blank'
       end
   end
 
   def plan_type_values(user)
+
     if user.superadmin?
       Spree::Product::server_types.keys
     elsif user.store_admin?
-      TenantManager::TenantHelper.unscoped_query{current_spree_user.orders.collect{|o|o.products.pluck(:server_type)}.flatten}.uniq
+      TenantManager::TenantHelper.unscoped_query{current_spree_user.orders.collect{|o|o.products.pluck(:server_type)}.flatten}.uniq 
     end
+
+    # ["hsphere"]
   end
 
   def current_tenant
@@ -107,6 +110,23 @@ module ApplicationHelper
       Rails.logger.info{ e.message}
       []
     end
+  end
+
+  def months_dropdown
+    [
+      ['1 Month',  1],
+      ['2 Months', 2],
+      ['3 Months', 3],
+      ['4 Months', 4],
+      ['5 Months', 5],
+      ['6 Months', 6],
+      ['7 Months', 7],
+      ['8 Months', 8],
+      ['9 Months', 9],
+      ['10 Months', 10],
+      ['11 Months', 11],
+      ['12 Months', 12]
+    ]
   end
 
 end
