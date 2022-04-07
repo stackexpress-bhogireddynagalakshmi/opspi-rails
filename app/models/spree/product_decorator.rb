@@ -24,7 +24,8 @@ module Spree
       base.enum server_type: {
         windows: 0,
         linux: 1,
-        domain: 2
+        domain: 2,
+        hsphere: 3
       }
 
       base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on account_id]

@@ -5,6 +5,8 @@ class Subscription < ApplicationRecord
   belongs_to :plan, class_name: 'Spree::Product', foreign_key: 'product_id'
   has_many :invoices
 
+  delegate :server_type, to: :plan
+
   scope :active, -> { where(status: true) }
 
   # enum frequency: {
@@ -14,14 +16,15 @@ class Subscription < ApplicationRecord
   #   yearly: 3
   # }
 
-  DEFAULT_VALIDITY_DAYS = 30
+  DEFAULT_VALIDITY_DAYS = 1  # 1 month
 
   def self.subscribe!(opts)
     existing_subscription = where(status: true, user_id: opts[:user].try(:id),
                                   product_id: opts[:product].try(:id)).first
+
     if existing_subscription.present?
       validity = opts[:product].try(:validity) || DEFAULT_VALIDITY_DAYS
-      existing_subscription.update({ status: true, end_date: Date.today + validity.days })
+      existing_subscription.update({ status: true, end_date: Date.today + validity.months }) 
     else
       create_fresh_subscription(opts)
       AppManager::AccountProvisioner.new(opts[:user], product: opts[:product], order: opts[:order]).call
@@ -30,20 +33,28 @@ class Subscription < ApplicationRecord
 
   def self.create_fresh_subscription(opts)
     TenantManager::TenantHelper.unscoped_query do
-      validity = opts[:product].try(:validity) || DEFAULT_VALIDITY_DAYS
+      validity   = opts[:product].try(:validity) || DEFAULT_VALIDITY_DAYS
+      start_date = opts[:start_date].presence || Date.today
+      end_date   = opts[:end_date].presence ||  start_date + validity.months
 
       subscription = create({
-                              product_id: opts[:product].try(:id),
-                              user_id: opts[:user].try(:id),
-                              start_date: Date.today,
-                              end_date: Date.today + validity.days,
-                              price: opts[:product].price,
-                              status: true,
-                              frequency: 'monthly',
-                              validity: validity
+                              product_id:   opts[:product].try(:id),
+                              user_id:      opts[:user].try(:id),
+                              start_date:   start_date,
+                              end_date:     end_date,
+                              price:        opts[:product].price,
+                              status:       true,
+                              frequency:    opts[:frequency].presence || 'monthly',
+                              validity:     validity
                             })
 
-      InvoiceManager::InvoiceCreator.new(subscription, { payment_captured: true, order: opts[:order] }).call
+      payment_captured = if opts[:order].present?
+                           opts[:order].payment_state == 'paid'
+                        else
+                          false
+                        end
+
+      InvoiceManager::InvoiceCreator.new(subscription, { payment_captured: payment_captured, order: opts[:order] }).call
     end
   end
 

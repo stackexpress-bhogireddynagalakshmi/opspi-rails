@@ -14,9 +14,7 @@ module InvoiceManager
       ActiveRecord::Base.transaction do
         invoice = create_invoice
         add_fees_to_invoice(invoice)
-        # create_order_for_invoice(invoice)
         if payment_captured
-          # invoice.finalize! if invoice.may_finalize?
           invoice.close! if invoice.may_close?
           invoice.update_column :order_id, @order.id if @order.present?
         end
@@ -31,7 +29,6 @@ module InvoiceManager
         Rails.logger.info { "New Invoice created: #{invoice.name} for #{user.email}"}
       else
         Rails.logger.info { "Invoice Exists: #{invoice.name} for #{user.email}" }
-        #raise "Invoice already exists."
       end
       invoice
     end
@@ -52,7 +49,7 @@ module InvoiceManager
         started_on:  billing_period.start,
         finished_on: billing_period.end,
         account:     user.account,
-        due_date:    billing_period.end + DUE_DAYS.days
+        due_date:    billing_period.start + DUE_DAYS.days
       }
     end
 
@@ -63,6 +60,9 @@ module InvoiceManager
     def current_invoice_finder
       InvoiceFinder
     end
+
+    # this method enusre that invoice should be only generated 
+    # if not already generated for the current billing period
 
     def find_current_invoice
       last_invoice = subscription.invoices.last

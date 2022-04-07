@@ -14,7 +14,7 @@ module Spree
     def create_subscriptions!
       invoice = CustomInvoiceFinder.new(order_id: order.id).unscoped_execute
 
-      return if invoice # if Invoice Payment then no need to create subscription again
+      return if invoice # if Invoice Payment exist then no need to create subscription again
 
       order.create_subscriptions(self)
     end
