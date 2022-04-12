@@ -15,9 +15,9 @@ module InvoiceManager
       return nil unless invoice.active?
 
       if @subscription.plan.hsphere?
-        suspension_date = (invoice.started_on + 2.month).to_date # for hsphere suspension date is one month
+        suspension_date =  invoice.suspension_date || (invoice.started_on + 2.month).to_date # for hsphere suspension date is one month
       else
-        suspension_date = invoice.due_date.to_date
+        suspension_date = invoice.suspension_date || invoice.due_date.to_date
       end
 
       if Date.today > suspension_date && @subscription.panel_disabled_at.blank?
@@ -32,7 +32,7 @@ module InvoiceManager
 
     # if reminder is not yet sent then send first reminder and save the date
     # if first reminder is already sent then wait for next 3 days and send again
-    #  continue reminding the same unless  pannel access are disabled
+    # continue reminding the same unless  pannel access are disabled
 
     def send_invoice_reminder_notification
       if invoice.last_reminder_sent_at.blank? || invoice.last_reminder_sent_at.to_date + 3.day <= Date.today
