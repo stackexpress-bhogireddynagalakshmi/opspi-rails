@@ -5,6 +5,8 @@ module Spree
     module Mail
       # Mail Domain controller
       class DomainsController < Spree::Admin::IspConfigResourcesController
+        before_action :get_zone_list, only: [:new, :edit]
+        
         def update
           super do
             active = params[:mail_domain][:active]

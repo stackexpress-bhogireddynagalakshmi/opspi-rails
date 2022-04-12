@@ -56,11 +56,6 @@ module Spree
           current_spree_user.solid_cp.web_domain
         end
 
-        def get_zone_list
-          response = current_spree_user.isp_config.hosted_zone.all_zones || []
-          @hosted_zones  =response[:success] ? response[:response].response : []
-        end
-
         def extra_isp_params
           { type: 'vhost', parent_domain_id: 0, vhost_type: 'name', cgi: 'y', ssi: 'y', suexec: 'y',
             errordocs: 1, is_subdomainwww: 1, ruby: 'n', ssl: 'n', stats_type: 'webalizer',
