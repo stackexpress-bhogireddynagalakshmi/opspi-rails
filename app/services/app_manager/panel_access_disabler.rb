@@ -36,6 +36,10 @@ module AppManager
           Rails.logger.info { "Unable to suspend ISPConfig account for #{invoice.user.email}" }
         end
 
+      elsif invoice.subscription.plan.hsphere?
+
+        # TODO: Yet to implement
+
       else
         raise StandardError.new 'Subscription Pannel not supported #{invoice.subscription.plan.try(:server_type)}'
       end  

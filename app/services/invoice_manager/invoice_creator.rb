@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module InvoiceManager
   class InvoiceCreator < ApplicationService
-    attr_reader :user,:subscription, :billing_period,:payment_captured
+    attr_reader :user, :subscription, :billing_period, :payment_captured
 
-    def initialize(subscription, opts={})
+    def initialize(subscription, opts = {})
       @subscription       = subscription
       @user               = @subscription.user
-      @billing_period     ||= BillingPeriod.new(subscription)
+      @billing_period ||= BillingPeriod.new(subscription)
       @payment_captured   = opts[:payment_captured] || false
       @order              = opts[:order]
     end
@@ -26,7 +28,7 @@ module InvoiceManager
 
       if invoice.blank?
         invoice = Invoice.create!(invoice_params)
-        Rails.logger.info { "New Invoice created: #{invoice.name} for #{user.email}"}
+        Rails.logger.info { "New Invoice created: #{invoice.name} for #{user.email}" }
       else
         Rails.logger.info { "Invoice Exists: #{invoice.name} for #{user.email}" }
       end
@@ -43,13 +45,15 @@ module InvoiceManager
 
     def invoice_params
       billing_period = BillingPeriod.new(subscription)
-
-      { user: user,
+      {
+        user: user,
         subscription: subscription,
-        started_on:  billing_period.start,
+        started_on: billing_period.start,
         finished_on: billing_period.end,
-        account:     user.account,
-        due_date:    billing_period.start + DUE_DAYS.days
+        account: user.account,
+        due_date: billing_period.start + DUE_DAYS.days,
+        deletion_date: billing_period.start + 3.months,
+        suspension_date: get_suspention_date(billing_period)
       }
     end
 
@@ -57,20 +61,27 @@ module InvoiceManager
       InvoiceFeeCalculator.new(invoice).calculate_and_save
     end
 
-    def current_invoice_finder
-      InvoiceFinder
+    def get_suspention_date(billing_period)
+      suspension_date = if subscription.plan.hsphere?
+                          (billing_period.start + 2.month).to_date # for hsphere suspension date is one month
+                        else
+                          billing_period.start + DUE_DAYS.days
+                        end
     end
 
-    # this method enusre that invoice should be only generated 
+    # this method enusre that invoice should be only generated
     # if not already generated for the current billing period
-
     def find_current_invoice
       last_invoice = subscription.invoices.last
       return nil if last_invoice.blank?
       return nil if last_invoice.archived?
-      return nil if Date.today > last_invoice.finished_on 
+      return nil if Date.today > last_invoice.finished_on
 
-      return last_invoice
+      last_invoice
+    end
+
+    def current_invoice_finder
+      InvoiceFinder
     end
   end
 end
