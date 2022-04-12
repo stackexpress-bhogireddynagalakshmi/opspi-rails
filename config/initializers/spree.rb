@@ -59,3 +59,12 @@ Spree::BackendConfiguration.class_eval do
 end
 
 
+Rails.application.config.after_initialize do
+  Rails.application.config.spree.payment_methods  = [
+        Spree::PaymentMethod::Check,
+        Spree::Gateway::AuthorizeNetCim,
+        Spree::Gateway::StripeGateway,
+        Spree::Gateway::PayPalExpress
+      ]
+end
+
