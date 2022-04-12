@@ -68,7 +68,9 @@
       <%= main_menu_tree Spree.t(:hosting_controls), icon: "report.svg", sub_menu: "hosting_control", url: "#sidebar-hosting_controls" %>
     </ul>
 
-    <ul class="nav nav-sidebar border-bottom" id="sidebarOpsBot">
-      <%= main_menu_tree Spree.t(:opsbot), icon: "report.svg", sub_menu: "opsbot", url: "#sidebar-opsbot" %>
-    </ul>
+    <%if ENV['OPSBOT_ENABLED'] == "true" %>
+      <ul class="nav nav-sidebar border-bottom" id="sidebarOpsBot">
+        <%= main_menu_tree Spree.t(:opsbot), icon: "report.svg", sub_menu: "opsbot", url: "#sidebar-opsbot" %>
+      </ul>
+    <%end%>
 </nav>
