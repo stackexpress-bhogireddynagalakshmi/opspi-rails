@@ -20,9 +20,9 @@
   <%=hidden_field_tag :domain_id, resource.try("domain_id")%>
   <fieldset>
     <div class="form-group field">
-      <label>Mail Domain</label>
-      <%=f.text_field 'domain', value: resource.try(:domain), class: 'form-control'%>
-    </div>
+      <label>Select Domain:</label>
+      <%= f.select(:domain, options_for_select(@hosted_zones.collect{ |x| x.origin }), {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+     </div>
           
     <div class="form-group field">
       <label>Active</label>

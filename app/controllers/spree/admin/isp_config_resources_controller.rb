@@ -61,6 +61,11 @@ module Spree
 
       private
 
+      def get_zone_list
+          response = current_spree_user.isp_config.hosted_zone.all_zones || []
+          @hosted_zones  = response[:success] ? response[:response].response : []
+      end
+
       def set_flash
         if @response[:success]
           flash[:success] = @response[:message]
