@@ -195,6 +195,10 @@ module IspConfig
       @ftp_user ||= IspConfig::FtpUser.new(user)
     end
 
+    def site_builder
+      @site_builder ||= SitePro::SiteBuilder.new(user)
+    end
+
     private
 
     def user_hash

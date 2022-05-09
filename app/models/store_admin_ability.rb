@@ -35,6 +35,7 @@ class StoreAdminAbility
     # can :manage, :protected_folders
     # can :manage, :protected_folder_users
     # can :manage, :statistics
+    # can :manage, :site_builders
 
 
     can :manage, :my_store

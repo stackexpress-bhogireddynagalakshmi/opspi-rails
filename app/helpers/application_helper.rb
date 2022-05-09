@@ -112,6 +112,17 @@ module ApplicationHelper
     end
   end
 
+  def  get_dns_domains
+    begin
+      domains = current_spree_user.isp_config.hosted_zone.all_zones
+      domains[:response].response.collect{|x| x.origin}
+      # domains[:response].response.map{|k| k.values}
+    rescue Exception => e
+      Rails.logger.info{ e.message}
+      []
+    end
+  end
+
   def months_dropdown
     [
       ['1 Month',  1],
