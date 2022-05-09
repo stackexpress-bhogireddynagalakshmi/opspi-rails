@@ -2,6 +2,7 @@
 
 module Spree
   module OrdersControllerDecorator
+
     def edit
       if params[:invoice_number].present?
         invoice = CustomInvoiceFinder.new(invoice_number: params[:invoice_number]).unscoped_execute
@@ -44,7 +45,23 @@ module Spree
       else
         render plain: 'Could not print'
       end
-      
+    end
+
+    def check_authorization
+      return true if params[:action] == "order_pdf" && authorized_for_pdf?
+
+      super
+    end
+
+    def authorized_for_pdf?
+      @order = TenantManager::TenantHelper.unscoped_query {Spree::Order.find_by(number: params[:id])}
+
+      return false if @order.blank?
+      return true if current_spree_user.superadmin?
+      return true if current_spree_user.store_admin? && @order.account_id == current_spree_user.account_id
+      return true if current_spree_user.id == @order.user_id
+
+      return false
     end
   end
 end
