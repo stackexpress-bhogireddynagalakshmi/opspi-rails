@@ -17,7 +17,7 @@
   <% elsif field == "state" %>
     <div class="form-group mb-4">
       <%= address_field(address_form, :state, address_id) { address_state(address_form, address.country, address_id) } if Spree::Config[:address_requires_state] %>
-    </div>
+    </div> 
   <% elsif field == "zipcode" %>
     <div class="form-group mb-4">
       <%= address_field(address_form, :zipcode, address_id) { address_zipcode(address_form, address.country, address_id) } %>
@@ -33,78 +33,3 @@
 <% end %>
 
 <p class="text-right text-uppercase mb-5 checkout-content-inner-field"><span id="required_marker"><%= Spree.t(:required) %></span> <%= Spree.t(:required_fields) %></p>
-<script
-  src="https://code.jquery.com/jquery-3.6.0.min.js"
-  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-  crossorigin="anonymous"></script>
-<script type="text/javascript">
-function preventNumberInput(e){
-    var keyCode = (e.keyCode ? e.keyCode : e.which);
-    if (keyCode >= 1 && keyCode <= 64 || keyCode >= 91 && keyCode <= 96 || keyCode > 122 ){
-        e.preventDefault();
-    }
-}
-
-function preventAphabetInput(e){
-    var keyCode = (e.keyCode ? e.keyCode : e.which);
-    if (keyCode >= 48 && keyCode <= 57){
-       
-    }else{
-       e.preventDefault();
-    }
-}
-$(document).ready(function(){
-    $('#address_firstname').keypress(function(e) {
-        preventNumberInput(e);
-    });
-})
-
-$(document).ready(function(){
-    $('#address_lastname').keypress(function(e) {
-        preventNumberInput(e);
-    });
-})
-
-$(document).ready(function(){
-    $('#address_phone').keypress(function(e) {
-        preventAphabetInput(e);
-        max_length(e);
-    });
-})
-
-$(document).ready(function(){
-    $('#order_bill_address_attributes_firstname').keypress(function(e) {
-        preventNumberInput(e);
-    });
-})
-
-$(document).ready(function(){
-    $('#order_bill_address_attributes_lastname').keypress(function(e) {
-        preventNumberInput(e);
-    });
-})
-
-$(document).ready(function(){
-    $('#order_bill_address_attributes_phone').keypress(function(e) {
-        preventAphabetInput(e);
-        max_length_order(e);
-    });
-})
-
-
-function max_length(e){
-var myInput = document.getElementById("address_phone");
-if(myInput.value.length >= 10){
-e.preventDefault();
-}
-
-}
-
-function max_length_order(e){
-var myInput1 = document.getElementById("order_bill_address_attributes_phone");
-if(myInput1.value.length >= 10){
-e.preventDefault();
-}
-}
-
-</script>
