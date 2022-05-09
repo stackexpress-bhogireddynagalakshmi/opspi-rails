@@ -123,6 +123,10 @@ en:
     content_invalid: "Invalid content for DNS Record"
     required_field_missing: "Required Field is Missing"
     invalid_zone_name: "Invalid Domain Name"
+    website:
+      create: Web Domain created successfully.
+      update: Web Domain updated successfully.
+      delete: Web Domain deleted successfully.
     mail_domain:
       create: Mail Domain created successfully.
       update: Mail Domain updated successfully.
