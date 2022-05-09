@@ -44,4 +44,12 @@
     $('#FlashAlertsContainer').removeClass('d-none');
   });
 
+  if($("#sidebar-hosting_controls a").hasClass("collapsed")){
+    $('a').attr("aria-expanded","false");  
+  } else {
+    $('a').attr("aria-expanded","true");
+    $('#sidebar-hosting_controls').addClass("show");
+    $('#sidebar-web_access').addClass("show");
+  }
+
 </script>
