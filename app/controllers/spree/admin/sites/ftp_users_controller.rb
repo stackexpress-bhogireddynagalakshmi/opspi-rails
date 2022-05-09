@@ -21,6 +21,7 @@ module Spree
           rescue StandardError
             []
           end
+          @windows_resources = [@windows_resources].to_a.flatten
         end
 
         def new; end
