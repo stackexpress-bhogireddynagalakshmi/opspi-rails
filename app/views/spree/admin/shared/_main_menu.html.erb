@@ -52,7 +52,6 @@
     </ul>
   <% end %>
 
-
     <ul class="nav nav-sidebar border-bottom" id="sidebarDomain">
       <%= tab 'Domain Registrations', url: spree.admin_domain_registrations_path,  icon: 'report.svg'%>
     </ul>
@@ -63,10 +62,11 @@
     </ul>
     <%end%>
 
-
-    <ul class="nav nav-sidebar border-bottom" id="sidebarHostingControl">
-      <%= main_menu_tree Spree.t(:hosting_controls), icon: "report.svg", sub_menu: "hosting_control", url: "#sidebar-hosting_controls" %>
-    </ul>
+    <%if current_spree_user.end_user? %>
+      <ul class="nav nav-sidebar border-bottom" id="sidebarHostingControl">
+        <%= main_menu_tree Spree.t(:hosting_controls), icon: "report.svg", sub_menu: "hosting_control", url: "#sidebar-hosting_controls" %>
+      </ul>
+    <%end%>
 
     <%if ENV['OPSBOT_ENABLED'] == "true" %>
       <ul class="nav nav-sidebar border-bottom" id="sidebarOpsBot">

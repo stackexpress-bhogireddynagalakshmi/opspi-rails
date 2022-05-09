@@ -13,11 +13,24 @@ module Spree
 
         mail_response = registration_mail_domain if request_params[:enable_mail_service] == 'y'
         @resources.merge!(mail_response) if mail_response
-        if @response[:success]
-          flash[:success] = @response[:message]
+
+        if @resources[:web_response].present? && @resources[:web_response][:success] && @resources[:mail_response].present? && @resources[:mail_response][:success]
+          flash[:success] = "#{@resources[:web_response][:message]} #{@resources[:mail_response][:message]}"
           render :index
-        else
-          flash[:error] = @response[:message]
+        elsif @resources[:web_response].present? && @resources[:web_response][:success]
+          flash[:success] = @resources[:web_response][:message]
+          render :index
+        elsif @resources[:web_response].present? && !@resources[:web_response][:success]
+          flash[:error] = @resources[:web_response][:message]
+          redirect_to new_admin_wizard_path
+        elsif @resources[:mail_response].present? && @resources[:mail_response][:success]
+          flash[:success] = @resources[:mail_response][:message]
+          render :index
+        elsif @resources[:mail_response].present? && !@resources[:mail_response][:success]
+          flash[:error] = @resources[:mail_response][:message]
+          redirect_to new_admin_wizard_path
+        elsif @resources[:mail_response].nil? && @resources[:web_response].nil?
+          flash[:error] = "Something Went Wrong"
           redirect_to new_admin_wizard_path
         end
       end
@@ -112,7 +125,7 @@ module Spree
         response[:mail_response] = mail_response
         response[:mail_params] = mail_params
         mail_box_response = registration_mail_box if mail_response[:success] && mail_response[:response]
-        response.merge!(mail_box_response)
+        response.merge!(mail_box_response) unless mail_box_response.nil?
       end
 
       def mail_params
