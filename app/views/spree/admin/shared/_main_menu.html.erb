@@ -89,5 +89,12 @@ svg.innerHTML=`<path  fill="currentColor" d="M250.606,154.389l-150-149.996c-5.85
 
 $('.drop-menu-indicator').attr("viewBox","0 0 330 330");
 
-
+$('#sidebar-hosting_controls').on('click', function() {
+  if($("a").hasClass("collapsed")){
+    $('a').attr("aria-expanded","false");  
+  } else {
+    $('a').attr("aria-expanded","true");
+    $('#sidebar-hosting_controls').addClass("show");
+  }
+});
 </script>
