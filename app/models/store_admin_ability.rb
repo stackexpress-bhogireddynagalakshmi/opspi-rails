@@ -16,28 +16,26 @@ class StoreAdminAbility
     can :manage, ::Spree::StockLocation unless TenantManager::TenantHelper.current_admin_tenant?
     can :manage, ::Spree::StockMovement
     can :manage, ::Spree::Price
-
-    # can :manage, ::Spree::ReturnAuthorization
-    # can :manage, ::Spree::CustomerReturn
-    # can :manage, ::Spree::Admin::ReportsController
-    # can :manage, ::Spree::Promotion
-
+    
     can :manage, :domain_registrations
-    can :manage, :domains
-    can :manage, :mail_boxes
-    can :manage, :mailing_lists
-    can :manage, :spam_filter_blacklists
-    can :manage, :spam_filter_whitelists
-    can :manage, :hosted_zones
-    can :manage, :hosted_zone_records
-    can :manage, :websites
-    can :manage, :ftp_users
-    can :manage, :statistics
-    can :manage, :forwards
-    can :manage, :sub_domains
-    can :manage, :wizards
-    can :manage, :protected_folders
-    can :manage, :protected_folder_users
+
+    # Removing hosting control access for store admin as of May 9 2022
+    # can :manage, :domains
+    # can :manage, :mail_boxes
+    # can :manage, :mailing_lists
+    # can :manage, :spam_filter_blacklists
+    # can :manage, :spam_filter_whitelists
+    # can :manage, :hosted_zones
+    # can :manage, :hosted_zone_records
+    # can :manage, :websites
+    # can :manage, :ftp_users
+    # can :manage, :forwards
+    # can :manage, :sub_domains
+    # can :manage, :wizards
+    # can :manage, :protected_folders
+    # can :manage, :protected_folder_users
+    # can :manage, :statistics
+
 
     can :manage, :my_store
     can :manage, ::Spree::PaymentMethod unless TenantManager::TenantHelper.current_admin_tenant?
