@@ -29,20 +29,15 @@ module Spree
                @new_domain_ftp_response = create_web_domain
                
             end
-            
             if @new_domain_ftp_response[:ftp_user_response].present? && @new_domain_ftp_response[:ftp_user_response][:success]
-              @response = SitePro::SiteBuilder.new().create(site_builder_params.merge({username: @new_domain_ftp_response[:username],password: @new_domain_ftp_response[:password]}))
-              # byebug
+              @response = SitePro::SiteBuilder.new().create(site_builder_params.merge({username: @new_domain_ftp_response[:ftp_user_params][:username],password: @new_domain_ftp_response[:ftp_user_params][:password]}))
               if @response[:success] 
-                @response[:url] = "https://www.google.com/"
+                # redirect_to "#{@response[:response].url}"
+                flash[:success] = "Ftp user created successfully"
                 respond_to do |format|
                   format.js
                 end
-                # window.open('<%= https://www.google.com/" %>', '_blank');
-
-                # render :js => window.open('<%= "#{response[:response].url}" %>', '_blank');
-                # redirect_to "#{response[:response].url}"
-              else
+               else
                 flash[:error] = @response[:message]
                 redirect_to admin_site_builder_path
               end

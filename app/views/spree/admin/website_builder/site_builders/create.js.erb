@@ -1,1 +1,7 @@
-$("#redirect").html("<%= escape_javascript(render 'redirect_site_builder') %>");
+
+var status = <%= @response[:success] %>
+var url = <%= @response[:response].url %>
+
+if status{
+ window.open(url, '_blank');
+ }

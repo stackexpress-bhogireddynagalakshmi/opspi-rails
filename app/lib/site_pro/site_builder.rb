@@ -25,7 +25,7 @@ module SitePro
 
    
     def formatted_response(response, action)
-      if response
+      if response.url?
         {
           success: true,
           message: I18n.t("isp_config.ftp_user.#{action}"),
@@ -33,7 +33,7 @@ module SitePro
         }
       else
         {
-          success: true,
+          success: false,
           message: I18n.t('isp_config.something_went_wrong', message: response.message),
           response: response
         }
