@@ -32,11 +32,7 @@ module Spree
             if @new_domain_ftp_response[:ftp_user_response].present? && @new_domain_ftp_response[:ftp_user_response][:success]
               @response = SitePro::SiteBuilder.new().create(site_builder_params.merge({username: @new_domain_ftp_response[:ftp_user_params][:username],password: @new_domain_ftp_response[:ftp_user_params][:password]}))
               if @response[:success] 
-                # redirect_to "#{@response[:response].url}"
-                flash[:success] = "Ftp user created successfully"
-                respond_to do |format|
-                  format.js
-                end
+                redirect_to "#{@response[:response].url}"
                else
                 flash[:error] = @response[:message]
                 redirect_to admin_site_builder_path

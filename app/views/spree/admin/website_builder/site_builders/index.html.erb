@@ -3,7 +3,7 @@
 <%= Spree.t(:Website_builder) %>
 <% end %>
 
-<%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post}, remote: true do |f|%> 
+<%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
 
 <div class="form-group field">
   <label>Select Domain</label>
