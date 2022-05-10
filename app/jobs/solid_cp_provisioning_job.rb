@@ -55,7 +55,7 @@ class SolidCpProvisioningJob < ApplicationJob
         if product.solid_cp_plan_id.present?
           subscribe_to_solidcp_plan(user, product.solid_cp_plan_id)
         else
-          HostingPlanJob.perform(product_id)
+          HostingPlanJob.perform_now(product_id)
           raise StandardError,
                 "SolidCP Plan for this Product:##{product.id}-#{product.name} does not exist. HostingPlanJob started."
         end

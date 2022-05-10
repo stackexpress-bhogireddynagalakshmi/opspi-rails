@@ -5,11 +5,6 @@
   }
 </style>
 
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:mailbox), admin_mail_mail_boxes_path %> /
-  <%= Spree.t(:new_mailbox) %>
-<% end %>
 
 <!-- @mailinglist here is api object not database object -->
 <% url =  @mailinglist.present? ?   admin_mail_mailing_list_path(@mailinglist.mailinglist_id) : admin_mail_mailing_lists_path%>

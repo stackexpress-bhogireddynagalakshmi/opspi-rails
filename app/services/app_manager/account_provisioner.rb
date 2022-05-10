@@ -19,7 +19,8 @@ module AppManager
     def provison_solid_cp_account
       if panels_access('solid_cp')
         SolidCpProvisioningJob.set(wait: 3.second).perform_later(user.id, product&.id)
-        IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id, nil)
+        
+        IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id, product&.id)
         Rails.logger.info { "SolidCpProvisioningJob is scheduled to create user account on solid CP " }
       end
     end
