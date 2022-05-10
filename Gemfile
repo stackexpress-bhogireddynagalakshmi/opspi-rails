@@ -106,3 +106,4 @@ gem 'rubocop', require: false
 
 gem "roo", "~> 2.8.0"
 gem 'roo-xls'
+gem 'activejob-status'
