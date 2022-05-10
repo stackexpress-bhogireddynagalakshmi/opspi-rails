@@ -62,6 +62,10 @@ module Spree
       @isp_config ||= IspConfig::User.new(self)
     end
 
+    def site_builder
+      @site_builder ||= SitePro::SiteBuilder.new(self)
+    end
+
     def ensure_tanent_exists
       update_user_tanent
       if reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
