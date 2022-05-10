@@ -1,3 +1,4 @@
 base_url: <%=ENV["SITE_PRO_BUILDER_REMOTE_URL"]%>
 username: <%=ENV["SITE_PRO_API_USERNAME"]%>
 password: <%=ENV["SITE_PRO_API_PASSWORD"]%>
+api_url: <%=ENV["SITE_PRO_API_URL"]%>

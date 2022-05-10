@@ -9,7 +9,7 @@ module SitePro
                          body: {
                           type: "external",
                           domain: params[:mail_domain],
-                          apiUrl: "http://builder.opspi.com/",
+                          apiUrl: SitePro::Config.api_url,
                           lang: "en",
                           username: params[:username],
                           password: params[:password],

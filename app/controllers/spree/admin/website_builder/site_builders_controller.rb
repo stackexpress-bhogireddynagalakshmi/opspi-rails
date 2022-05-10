@@ -13,17 +13,16 @@ module Spree
             web_response  = current_spree_user.isp_config.website.all
             web_domain_id = web_response[:response].response.map{|k| k.domain_id if k[:domain] == site_builder_params[:mail_domain]}
             website = web_domain_id.compact
-            
             if website.present?
               ftp_user_response = current_spree_user.isp_config.ftp_user.all
-              parent_domain_id = ftp_user_response[:response].response.map{|k| k.parent_domain_id}
+              # parent_domain_id = ftp_user_response[:response].response.map{|k| k.parent_domain_id}
               ftp_user = ftp_user_response[:response].response.map{|k| [k.ftp_user_id,k.parent_domain_id] if k[:username] == "#{website.first}_site_builder"}
               ftp = ftp_user.compact
               if ftp.first.kind_of?(Array)
                 delete_ftp = current_spree_user.isp_config.ftp_user.destroy(ftp[0].first)
                 @new_domain_ftp_response = registration_web_ftp_user(ftp[0].last)
               else
-                @new_domain_ftp_response = registration_web_ftp_user(parent_domain_id.first)
+                @new_domain_ftp_response = registration_web_ftp_user(website.first)
               end
             else
                @new_domain_ftp_response = create_web_domain
