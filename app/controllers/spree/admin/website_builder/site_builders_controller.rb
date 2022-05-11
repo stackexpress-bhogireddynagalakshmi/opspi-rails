@@ -10,23 +10,24 @@ module Spree
           def new; end
 
           def create
-            web_response  = current_spree_user.isp_config.website.all
-            web_domain_id = web_response[:response].response.map{|k| k.domain_id if k[:domain] == site_builder_params[:mail_domain]}
-            website = web_domain_id.compact
-            if website.present?
-              ftp_user_response = current_spree_user.isp_config.ftp_user.all
-              # parent_domain_id = ftp_user_response[:response].response.map{|k| k.parent_domain_id}
-              ftp_user = ftp_user_response[:response].response.map{|k| [k.ftp_user_id,k.parent_domain_id] if k[:username] == "#{website.first}_site_builder"}
-              ftp = ftp_user.compact
-              if ftp.first.kind_of?(Array)
-                delete_ftp = current_spree_user.isp_config.ftp_user.destroy(ftp[0].first)
-                @new_domain_ftp_response = registration_web_ftp_user(ftp[0].last)
+            dns_record_res = create_dns_record
+            if dns_record_res[:success] 
+              website = get_web_domain_id
+              if website.present?
+                ftp = get_ftp_user(website)
+                if ftp.first.kind_of?(Array)
+                  delete_ftp = current_spree_user.isp_config.ftp_user.destroy(ftp[0].first)
+                  @new_domain_ftp_response = registration_web_ftp_user(ftp[0].last)
+                else
+                  @new_domain_ftp_response = registration_web_ftp_user(website.first)
+                end
               else
-                @new_domain_ftp_response = registration_web_ftp_user(website.first)
+                @new_domain_ftp_response = create_web_domain  
               end
             else
-               @new_domain_ftp_response = create_web_domain
-               
+              Rails.logger.debug{@new_domain_ftp_response.inspect}
+              flash[:error] = dns_record_res[:message]
+              redirect_to admin_site_builder_path
             end
             if @new_domain_ftp_response[:ftp_user_response].present? && @new_domain_ftp_response[:ftp_user_response][:success]
               @response = SitePro::SiteBuilder.new().create(site_builder_params.merge({username: @new_domain_ftp_response[:ftp_user_params][:username],password: @new_domain_ftp_response[:ftp_user_params][:password]}))
@@ -42,6 +43,34 @@ module Spree
               flash[:error] = "Something went wrong"
               redirect_to admin_site_builder_path
             end
+          end
+
+          def create_dns_record
+            host_zone_record_params = {}
+            dns_response = current_spree_user.isp_config.hosted_zone.all_zones
+            dns_domain = dns_response[:response].response.map{|k| k.id if k[:origin] == site_builder_params[:dns_domain_name]}
+            host_zone_record_params[:name] = site_builder_params[:dns_domain_name]
+            host_zone_record_params[:type] = "A"
+            host_zone_record_params[:ipv4] = ENV['ISPCONFIG_WEB_SERVER_IP']
+            host_zone_record_params[:hosted_zone_id] = dns_domain.first
+            host_zone_record_params[:client_id] = current_spree_user.isp_config_id
+            host_zone_record_params[:ttl] = 3600
+
+            
+            dns_record_response = current_spree_user.isp_config.hosted_zone_record.create(host_zone_record_params)
+          end
+
+          def get_web_domain_id
+            web_response  = current_spree_user.isp_config.website.all
+            web_domain_id = web_response[:response].response.map{|k| k.domain_id if k[:domain] == site_builder_params[:dns_domain_name]}
+            web_domain_id.compact
+          end
+
+          def get_ftp_user(website_id)
+            ftp_user_response = current_spree_user.isp_config.ftp_user.all
+            # parent_domain_id = ftp_user_response[:response].response.map{|k| k.parent_domain_id}
+            ftp_user = ftp_user_response[:response].response.map{|k| [k.ftp_user_id,k.parent_domain_id] if k[:username] == "#{website_id.first}_site_builder"}
+            ftp_user.compact
           end
 
           def create_web_domain
@@ -93,7 +122,7 @@ module Spree
           
           def web_params
             {
-              domain: site_builder_params[:mail_domain],
+              domain: site_builder_params[:dns_domain_name],
               active: 'y',
               ip_address: '*',
               type: 'vhost',
@@ -128,7 +157,7 @@ module Spree
           private
 
           def site_builder_params
-            params.permit(:mail_domain)
+            params.permit(:dns_domain_name)
           end
 
         end
