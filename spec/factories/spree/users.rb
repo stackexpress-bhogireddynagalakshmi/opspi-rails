@@ -6,6 +6,7 @@ FactoryBot.define do
     password { 'password' }
     confirmed_at { Time.zone.now }
     last_sign_in_ip { '0.0.0.0' }  
+    terms_and_conditions { true }
 
     trait :with_super_admin_role do
       after :create do |admin|

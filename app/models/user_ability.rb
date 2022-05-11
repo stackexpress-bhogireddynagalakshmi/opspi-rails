@@ -22,5 +22,6 @@ class UserAbility
     can :manage, :wizards
     can :manage, :protected_folders
     can :manage, :protected_folder_users
+    can :manage, :site_builders
   end
 end
