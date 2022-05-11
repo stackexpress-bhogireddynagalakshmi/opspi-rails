@@ -112,6 +112,16 @@ module ApplicationHelper
     end
   end
 
+  def  get_web_domians
+    begin
+      domains = current_spree_user.isp_config.website.all
+      domains[:response].response.collect{|x|x.domain}
+    rescue Exception => e
+      Rails.logger.info{ e.message}
+      []
+    end
+  end
+
   def  get_dns_domains
     begin
       domains = current_spree_user.isp_config.hosted_zone.all_zones
