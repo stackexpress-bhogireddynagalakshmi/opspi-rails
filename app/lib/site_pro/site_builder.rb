@@ -13,7 +13,7 @@ module SitePro
                           lang: "en",
                           username: params[:username],
                           password: params[:password],
-                          uploadDir: "/public_html"
+                          uploadDir: "/web"
                          }
                        })
 
