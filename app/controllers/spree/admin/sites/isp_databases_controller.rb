@@ -3,16 +3,16 @@
 module Spree
     module Admin
       module Sites
-        class DatabasesController < Spree::Admin::IspConfigResourcesController
+        class IspDatabasesController < Spree::Admin::IspConfigResourcesController
           before_action :get_website_list, only: [:new, :index]
 
           def create
             @response = isp_config_api.create(database_params)
             if @response[:success]
               set_flash
-              redirect_to admin_sites_databases_path
+              redirect_to admin_sites_isp_databases_path
             else
-              get_website_list
+              # get_website_list
               render :new
             end
           end
@@ -20,11 +20,11 @@ module Spree
           private
   
           def resource_id_field
-            "isp_config_protected_folder_id"
+            "isp_config_database_id"
           end
   
           def assoc
-            "databases"
+            "isp_databases"
           end
   
           def resource_params
@@ -36,7 +36,7 @@ module Spree
           end
   
           def resource_index_path
-            redirect_to admin_sites_databases_path
+            redirect_to admin_sites_isp_databases_path
           end
   
           def isp_config_api
@@ -44,7 +44,7 @@ module Spree
           end
   
           def get_website_list
-            response = current_spree_user.isp_config.website.all || []
+            response = current_spree_user.isp_config.database.all || []
             @websites = response[:success] ? response[:response].response : []
           end
         end

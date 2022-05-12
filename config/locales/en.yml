@@ -53,6 +53,7 @@ en:
     subdomain_for_website: Sub Domain for Website
     start_wizard: Start Wizard
     website_builder: Website Builder
+    database: Database
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout
