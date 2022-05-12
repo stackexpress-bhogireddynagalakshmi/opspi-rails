@@ -112,7 +112,7 @@ module IspConfig
       if  response.code == "ok"
         {
           success: true,
-          message: I18n.t("isp_config.host_zone.#{action}"),
+          message: I18n.t("isp_config.database.#{action}"),
           response: response
         }
       else
