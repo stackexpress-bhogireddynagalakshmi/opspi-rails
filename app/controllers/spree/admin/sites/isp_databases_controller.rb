@@ -12,10 +12,21 @@ module Spree
               set_flash
               redirect_to admin_sites_isp_databases_path
             else
-              # get_website_list
               render :new
             end
           end
+
+
+        def destroy
+          @response = isp_config_api.destroy(params)
+          set_flash
+          redirect_to admin_sites_isp_databases_path
+        end
+
+        def show
+          response = isp_config_api.find(params[:id])
+          @database = response[:success] ? response[:response].response : []
+        end
   
           private
   
@@ -43,10 +54,6 @@ module Spree
             current_spree_user.isp_config.database
           end
   
-          def get_website_list
-            response = current_spree_user.isp_config.database.all || []
-            @websites = response[:success] ? response[:response].response : []
-          end
         end
       end
     end

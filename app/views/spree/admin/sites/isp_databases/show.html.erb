@@ -1,0 +1,28 @@
+<% content_for :page_title do %>
+ <div class="mt-2"></div>
+  <%= link_to Spree.t(:database), admin_sites_isp_databases_path %> /
+  <%= @database.database_name %>
+<% end %>
+
+  <fieldset>
+    <div class="form-group field">
+      <label>Select Website:</label>
+      <%=select_tag 'web_domain_id', options_for_select(get_web_domians,@database.parent_domain_id), class: 'form-control', disabled: true%>
+    </div>
+
+    <div class="form-group field">
+      <label>Database Name:</label>
+      <%=text_field_tag 'database_name', @database.database_name, class: 'form-control', disabled: true %>
+    </div>
+
+     <div class="form-group field">
+      <label>Database User:</label>
+      <%=text_field_tag 'database_username', params[:db_user_name], class: 'form-control', disabled: true %>
+    </div>
+
+    <div class="form-group field">
+      <label>Active:</label>
+      <%=check_box_tag 'active', @database.active.eql?("y") ? "true" : "false", @database.active.eql?("y") ? true : false, disabled: "disabled" %>
+    </div>
+
+  </fieldset>
