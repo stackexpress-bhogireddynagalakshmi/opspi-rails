@@ -114,8 +114,8 @@ module IspConfig
           "params": {
             server_id: ENV['ISP_CONFIG_DNS_SERVER_ID'],
             origin: hosted_zone[:name],
-            ns:  ENV['ISPCONFIG_DNS_SERVER_NS1'],
-            mbox: hosted_zone[:mbox],
+            ns: ENV['ISPCONFIG_DNS_SERVER_NS1'],
+            mbox: mbox(hosted_zone[:mbox])+".",
             serial: "1",
             refresh: hosted_zone[:refresh],
             retry: hosted_zone[:retry],
@@ -128,6 +128,10 @@ module IspConfig
             update_acl: hosted_zone[:update_acl]
           }
         }
+      end
+
+      def mbox(mail_box)
+        mail_box.sub('@','.')
       end
     end
   end
