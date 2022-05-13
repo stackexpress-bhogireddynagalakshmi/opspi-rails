@@ -44,7 +44,7 @@ module IspConfig
                     client_id: user.isp_config_id,
                     params:{
                       server_id: ENV['ISP_CONFIG_WEB_SERVER_ID'],
-                      database_user: create_params[:database_username],
+                      database_user: "c" + user.isp_config_id.to_s + "_" + create_params[:database_name],
                       database_password: create_params[:database_password]
                     } 
                   }
@@ -132,7 +132,7 @@ module IspConfig
           server_id: ENV['ISP_CONFIG_WEB_SERVER_ID'],
           type: "mysql",
           parent_domain_id: database_params[:web_domain_id],
-          database_name: "c" + user.isp_config_id.to_s + database_params[:database_name],
+          database_name: "c" + user.isp_config_id.to_s + "_" + database_params[:database_name],
           database_user_id: database_params[:db_username],
           database_quota: "-1",
           database_ro_user_id: "0",
