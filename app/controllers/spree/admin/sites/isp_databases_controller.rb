@@ -4,7 +4,6 @@ module Spree
     module Admin
       module Sites
         class IspDatabasesController < Spree::Admin::IspConfigResourcesController
-          before_action :get_website_list, only: [:new, :index]
 
           def create
             @response = isp_config_api.create(database_params)
