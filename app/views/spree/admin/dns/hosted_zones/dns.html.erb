@@ -286,13 +286,13 @@ display: block;
           <% @hosted_zone_records.each do |hosted_zone_record| %>
             <tr id="<% hosted_zone_record.id %>">
               <td class="col-md-2"><%= hosted_zone_record.type%></td>
-              <td class="col-md-3"><%= hosted_zone_record.name%></td>
+              <td class="col-md-3"><%= hosted_zone_record.name.chomp(".")%></td>
               <% if !hosted_zone_record.type.eql?("MX")%>
-              <td class="col-md-3"><%= hosted_zone_record.data%></td>
+              <td class="col-md-3"><%= hosted_zone_record.data.chomp(".")%></td>
               <%else%>
               <td class="col-md-3">
                 <div class="mx-data">
-                  <div class="mx-data-1"><%= hosted_zone_record.data%></div>
+                  <div class="mx-data-1"><%= hosted_zone_record.data.chomp(".")%></div>
                   <% unless hosted_zone_record.aux.eql?("0")%>
                   <button data-tip="true" type="button" class="priority-button" currentitem="false" title="Priority" style="cursor: pointer; background-color: transparent; padding: 0px;">
                     <span class="button-style"><%= hosted_zone_record.aux unless hosted_zone_record.aux.eql?"0"%></span>
@@ -322,7 +322,7 @@ display: block;
                   <div class="grp2">
                     <div class="form-group">
                       <label for="name" >Name</label>
-                      <%=text_field_tag :name,params[:name], class:"form-control input-bx", value: hosted_zone_record.name, id:"edit_name", required: "required" %>
+                      <%=text_field_tag :name,params[:name], class:"form-control input-bx", value: hosted_zone_record.name.chomp("."), id:"edit_name", required: "required" %>
                     </div>
                   </div>
 
@@ -347,7 +347,7 @@ display: block;
                     <div id="divTARGET">
                       <div class="form-group input-control">
                         <label for="target">Target</label>
-                        <%=text_field_tag :target,params[:target], class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_target", required: true if hosted_zone_record.type.eql?"CNAME" %>
+                        <%=text_field_tag :target,params[:target], class:"form-control input-bx", value: hosted_zone_record.data.chomp("."), id:"edit_target", required: true if hosted_zone_record.type.eql?"CNAME" %>
                         <div class="error"></div>
                       </div>
                     </div>
@@ -355,7 +355,7 @@ display: block;
                     <div id="divMX">
                       <div class="form-group input-control">
                         <label for="mailserver">Mail Server</label>
-                        <%=text_field_tag :mailserver, params[:mailserver], class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_mailserver", required: true if hosted_zone_record.type.eql?"MX" %>
+                        <%=text_field_tag :mailserver, params[:mailserver], class:"form-control input-bx", value: hosted_zone_record.data.chomp("."), id:"edit_mailserver", required: true if hosted_zone_record.type.eql?"MX" %>
                         <div class="error"></div>
                       </div>
                     </div>
@@ -363,7 +363,7 @@ display: block;
                     <div id="divNS">
                       <div class="form-group input-control">
                         <label for="nameserver">Nameserver</label>
-                        <%=text_field_tag :nameserver, params[:nameserver], class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_nameserver", required: true if hosted_zone_record.type.eql?"NS"%>
+                        <%=text_field_tag :nameserver, params[:nameserver], class:"form-control input-bx", value: hosted_zone_record.data.chomp("."), id:"edit_nameserver", required: true if hosted_zone_record.type.eql?"NS"%>
                         <div class="error"></div>
                       </div>
                     </div>

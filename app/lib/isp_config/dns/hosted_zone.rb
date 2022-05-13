@@ -38,7 +38,7 @@ module IspConfig
         Rails.logger.debug { response.inspect }
         if response.code == "ok"
           user.hosted_zones.create({ isp_config_host_zone_id: response["response"] }) if response.code == "ok"
-          { success: true, message: I18n.t('isp_config.host_zone.create') }
+          { success: true, message: I18n.t('isp_config.host_zone.create'), response: response }
         else
           { success: false, message: I18n.t('isp_config.something_went_wrong', message: response.message) }
         end
