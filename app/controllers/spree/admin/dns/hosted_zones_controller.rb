@@ -19,10 +19,25 @@ module Spree
           @response = host_zone_api.create(host_zone_params)
           set_flash
           if @response[:success]
+            res = create_ns_records(@response[:response].response)
             redirect_to admin_dns_hosted_zones_path
           else
             render :new
           end
+        end
+
+        def create_ns_records(host_zone_id)
+          ns_record_params={
+                            type: "NS",
+                            name: host_zone_params[:name],
+                            ttl: "3600",
+                            hosted_zone_id: host_zone_id,
+                            client_id: current_spree_user.isp_config_id
+                          }
+          nameservers = [{nameserver: ENV['ISPCONFIG_DNS_SERVER_NS1']},{nameserver: ENV['ISPCONFIG_DNS_SERVER_NS2']}]
+          nameservers.each do |ns|
+            current_spree_user.isp_config.hosted_zone_record.create(ns_record_params.merge(ns))
+          end   
         end
 
         def new; end

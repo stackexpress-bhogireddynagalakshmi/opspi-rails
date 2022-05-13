@@ -103,9 +103,9 @@ module IspConfig
           "params": {
             server_id: ENV['ISP_CONFIG_DNS_SERVER_ID'],
             zone: hosted_zone_record[:hosted_zone_id],
-            name: hosted_zone_record[:name],
+            name: hosted_zone_record[:name]+".",
             type: hosted_zone_record[:type],
-            data: hosted_zone_record[:data],
+            data: record_data(hosted_zone_record[:type],hosted_zone_record[:data]),
             aux: hosted_zone_record[:priority],
             ttl: hosted_zone_record[:ttl],
             active: 'y',
@@ -114,6 +114,15 @@ module IspConfig
           }
         }
       end
+
+      def record_data(type, data)
+        if type.eql?("A") || type.eql?("AAAA") || type.eql?("TXT")
+          data
+        else
+          data+"."
+        end
+      end
+
     end
   end
 end
