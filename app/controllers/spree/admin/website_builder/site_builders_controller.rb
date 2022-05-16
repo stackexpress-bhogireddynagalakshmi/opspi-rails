@@ -52,7 +52,7 @@ module Spree
             host_zone_record_params[:name] = site_builder_params[:dns_domain_name]
             host_zone_record_params[:type] = "A"
             host_zone_record_params[:ipv4] = ENV['ISPCONFIG_WEB_SERVER_IP']
-            host_zone_record_params[:hosted_zone_id] = dns_domain.first
+            host_zone_record_params[:hosted_zone_id] = dns_domain.compact.first
             host_zone_record_params[:client_id] = current_spree_user.isp_config_id
             host_zone_record_params[:ttl] = 3600
 
@@ -62,7 +62,7 @@ module Spree
 
           def get_web_domain_id
             web_response  = current_spree_user.isp_config.website.all
-            web_domain_id = web_response[:response].response.map{|k| k.domain_id if k[:domain] == site_builder_params[:dns_domain_name]}
+            web_domain_id = web_response[:response].response.map{|k| k.domain_id if k[:domain] == site_builder_params[:dns_domain_name].chomp(".")}
             web_domain_id.compact
           end
 
