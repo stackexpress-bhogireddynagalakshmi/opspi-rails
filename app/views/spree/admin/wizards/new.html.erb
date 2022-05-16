@@ -9,8 +9,9 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group field">
-          <label>Choose your domain</label>
-          <%= collection_select(:wizard, :domain, @hosted_zones, :origin, :origin, {prompt: 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+          <label>Enter Domain Name</label>
+          <%#= collection_select(:wizard, :domain, @hosted_zones, :origin, :origin, {prompt: 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+          <%= f.text_field :domain, class: 'form-control'%>
         </div>
       </div>
     </div>
@@ -79,16 +80,19 @@
       div.style.display = "block"; 
     }
 
-    var domain = $("#wizard_domain option:selected").text();
+    var domain = $('#wizard_domain').val();
+    var domain = domain.replace("www.", "");
+
     if (domain != "") {
-      $("#selected_domain_button").html('.@'+ domain);
+      $("#selected_domain_button").html('@'+ domain);
     }
 
   });
 
   $('#wizard_domain').change(function () {
-    var domain = $("#wizard_domain option:selected").text();
-    $("#selected_domain_button").html('.@'+ domain);
+     var domain = $('#wizard_domain').val();
+     var domain = domain.replace("www.", "");
+    $("#selected_domain_button").html('@'+ domain);
   });
 
   var checkServiceStatus = function(element){
@@ -110,7 +114,8 @@
   $("#addRowEmail").click(function () {
     var fieldCount = parseInt($(this).data('field-count'));
     var inputCount = (fieldCount +1);
-    var domain = $("#wizard_domain option:selected").text();
+     var domain = $('#wizard_domain').val();
+     var domain = domain.replace("www.", "");
     var html = '';
     html += '<div id="inputUsernameField">';
     html += '<div class="input-group mb-3">';

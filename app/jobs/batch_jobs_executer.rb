@@ -22,7 +22,7 @@ class BatchJobsExecuter < ApplicationJob
     service_object.call
 
     unless service_object.success?
-      raise StandardError.new 'Unable to process at this time.'
+      raise StandardError.new "Unable to process at this time. #{service_object.response[:message]}"
     end
   end
 
@@ -41,7 +41,7 @@ class BatchJobsExecuter < ApplicationJob
   end
 
   def initialize_variables(user_id, parent_task_id, data)
-    @user_id        = user_id
+    @user       = Spree::User.find_by_id(user_id)
     @parent_task_id = parent_task_id
     @data           = data
   end
@@ -50,6 +50,8 @@ class BatchJobsExecuter < ApplicationJob
     case @data[:type]
     when 'create_dns_domain'
       TaskManager::HostingPanelTasks::DnsDomainTask
+    when 'create_dns_record'
+      TaskManager::HostingPanelTasks::DnsRecordTask
     when 'create_web_domain'
       TaskManager::HostingPanelTasks::WebDomainTask
     when 'create_mail_domain'
