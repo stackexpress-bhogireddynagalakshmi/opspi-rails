@@ -1,8 +1,11 @@
 # frozen_string_literal: true
+require 'concerns/session_notifications'
+
 class BatchJobsExecuter < ApplicationJob
   queue_as :default
 
   include ActiveJob::Status
+  include SessionNotifications
 
   def perform(user_id, parent_task_id, data)
     initialize_variables(user_id, parent_task_id, data)
@@ -22,11 +25,26 @@ class BatchJobsExecuter < ApplicationJob
     service_object.call
 
     unless service_object.success?
-      raise StandardError.new "Unable to process at this time. #{service_object.response[:message]}"
+      send_background_notification(user_id, nil, "Unable to process #{service_object.class} at this time.")
+      raise StandardError.new 'Unable to process at this time.'
     end
+
+    send_background_notification(user_id, "#{service_object.class} task completed", nil)
   end
 
   private
+
+  def send_background_notification(user_id,message, error)
+    session = {
+      user_id: user_id,
+    }
+
+    data = {
+      message: message
+    }
+
+    notify_session!(session, data, nil)
+  end
 
   def can_execute_now?
     return true if @parent_task_id.blank?
