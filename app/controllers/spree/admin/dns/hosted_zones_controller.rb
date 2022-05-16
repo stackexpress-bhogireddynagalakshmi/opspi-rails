@@ -30,6 +30,7 @@ module Spree
           ns_record_params={
                             type: "NS",
                             name: host_zone_params[:name],
+                            hosted_zone_name: host_zone_params[:name],
                             ttl: "3600",
                             hosted_zone_id: host_zone_id,
                             client_id: current_spree_user.isp_config_id
