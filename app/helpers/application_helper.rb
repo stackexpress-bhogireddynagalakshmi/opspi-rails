@@ -125,8 +125,7 @@ module ApplicationHelper
   def  get_dns_domains
     begin
       domains = current_spree_user.isp_config.hosted_zone.all_zones
-      domains[:response].response.collect{|x| x.origin}
-      # domains[:response].response.map{|k| k.values}
+      domains[:response].response.collect{|x| [x.origin.chomp("."),x.origin]}
     rescue Exception => e
       Rails.logger.info{ e.message}
       []
