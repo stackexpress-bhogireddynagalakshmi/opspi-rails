@@ -103,7 +103,7 @@ module IspConfig
           "params": {
             server_id: ENV['ISP_CONFIG_DNS_SERVER_ID'],
             zone: hosted_zone_record[:hosted_zone_id],
-            name: hosted_zone_record[:name]+".",
+            name: append_zone_name_with_record_name(hosted_zone_record[:name],hosted_zone_record[:hosted_zone_name]),
             type: hosted_zone_record[:type],
             data: record_data(hosted_zone_record[:type],hosted_zone_record[:data]),
             aux: hosted_zone_record[:priority],
@@ -113,6 +113,10 @@ module IspConfig
             serial: "1"
           }
         }
+      end
+
+      def append_zone_name_with_record_name(record_name,zone_name)
+        record_name+"."+zone_name+"."
       end
 
       def record_data(type, data)

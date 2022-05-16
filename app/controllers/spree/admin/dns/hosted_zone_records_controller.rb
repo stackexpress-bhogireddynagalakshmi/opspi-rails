@@ -5,18 +5,17 @@ module Spree
     module Dns
       class HostedZoneRecordsController < Spree::Admin::BaseController
         before_action :set_hosted_zone
-        # require 'isp_config/hosted_zone_record'
 
         def create
           @response = host_zone_record_api.create(host_zone_record_params)
           set_flash
-          redirect_to dns_admin_dns_hosted_zone_url(@hosted_zone.isp_config_host_zone_id)
+          redirect_to dns_admin_dns_hosted_zone_url(@hosted_zone.isp_config_host_zone_id)+"?dns_name=#{host_zone_record_params[:hosted_zone_name]}"
         end
 
         def update
           @response = host_zone_record_api.update(host_zone_record_params)
           set_flash
-          redirect_to dns_admin_dns_hosted_zone_url(@hosted_zone.isp_config_host_zone_id)
+          redirect_to dns_admin_dns_hosted_zone_url(@hosted_zone.isp_config_host_zone_id)+"?dns_name=#{host_zone_record_params[:hosted_zone_name]}"
         end
 
         def destroy
@@ -43,7 +42,7 @@ module Spree
 
         def host_zone_record_params
           params.permit(:name, :type, :ipv4, :ipv6, :publickey, :dkim, :target, :mailserver, :priority, :nameserver, :content,
-                        :hosted_zone_id, :ttl, :id, :client_id, :primary_id).merge!({ hosted_zone_id: @hosted_zone.isp_config_host_zone_id,
+                        :hosted_zone_id, :ttl, :id, :client_id, :primary_id, :hosted_zone_name).merge!({ hosted_zone_id: @hosted_zone.isp_config_host_zone_id,
                                                                                       client_id: current_spree_user.isp_config_id })
         end
 
