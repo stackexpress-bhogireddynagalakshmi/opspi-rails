@@ -1,181 +1,201 @@
+# frozen_string_literal: true
+
 module Spree
   module Admin
     class WizardsController < Spree::Admin::BaseController
-      before_action :get_zone_list, only: :new
-
+      def index; end
       def new; end
 
       def create
-        @resources = {}
+        @domain = wizard_params[:domain]
+        @tasks = []
 
-        website_response = registration_web_domain if request_params[:enable_web_service] == 'y'
-        @resources.merge!(website_response) if website_response
+        build_tasks
 
-        mail_response = registration_mail_domain if request_params[:enable_mail_service] == 'y'
-        @resources.merge!(mail_response) if mail_response
+        pp @tasks
 
-        if @resources[:web_response].present? && @resources[:web_response][:success] && @resources[:mail_response].present? && @resources[:mail_response][:success]
-          flash[:success] = "#{@resources[:web_response][:message]} #{@resources[:mail_response][:message]}"
-          render :index
-        elsif @resources[:web_response].present? && @resources[:web_response][:success]
-          flash[:success] = @resources[:web_response][:message]
-          render :index
-        elsif @resources[:web_response].present? && !@resources[:web_response][:success]
-          flash[:error] = @resources[:web_response][:message]
-          redirect_to new_admin_wizard_path
-        elsif @resources[:mail_response].present? && @resources[:mail_response][:success]
-          flash[:success] = @resources[:mail_response][:message]
-          render :index
-        elsif @resources[:mail_response].present? && !@resources[:mail_response][:success]
-          flash[:error] = @resources[:mail_response][:message]
-          redirect_to new_admin_wizard_path
-        elsif @resources[:mail_response].nil? && @resources[:web_response].nil?
-          flash[:error] = "Something Went Wrong"
-          redirect_to new_admin_wizard_path
-        end
+        TaskManager::TaskProcessor.new(current_spree_user, @tasks.flatten).call
+
+        flash[:success] = "Wizard Jobs Started. Your services will be activated in few miniutes"
+
+        redirect_to admin_wizards_path
       end
-
-      def index; end
 
       private
 
-      def request_params
-        params.require("wizard").permit(:domain, :enable_web_service, :enable_mail_service, emails: [])
-      end
+      def build_tasks
+        prepare_dns_task
 
-      def registration_web_domain
-        response = {}
-        web_response  = current_spree_user.isp_config.website.create(web_params)
-        response[:web_response] = web_response
-        response[:web_params] = web_params
-        if web_response[:success] && web_response[:response]
-          ftp_user_response = registration_web_ftp_user(web_response[:response][:response])
-          response.merge!(ftp_user_response)
+        if wizard_params[:enable_web_service] == 'y'
+          prepare_web_domain_task
+          prepare_ftp_account_task
         end
-        response
-      end
 
-      def registration_web_ftp_user(parent_domain_id)
-        response = {}
-        website  = current_spree_user.isp_config.website.find(parent_domain_id)
-        if website[:success] && website[:response]
-          ftp_user_params = ftp_users_resource_params(website[:response][:response])
-          ftp_user_response = current_spree_user.isp_config.ftp_user.create(ftp_user_params)
-          response[:ftp_user_response] = ftp_user_response
-          response[:ftp_user_params] = ftp_user_params
+        if wizard_params[:enable_mail_service] == 'y'
+          prepare_mail_domain_task
+          prepare_mail_box_task
         end
-        response
       end
 
-      def web_params
-        {
-          domain: request_params[:domain],
-          active: 'y',
-          ip_address: '*',
-          type: 'vhost',
-          parent_domain_id: 0,
-          vhost_type: 'name',
-          hd_quota: -1,
-          traffic_quota: -1,
-          cgi: 'y',
-          ssi: 'y',
-          suexec: 'y',
-          errordocs: 1,
-          is_subdomainwww: 1,
-          subdomain: 'www',
-          php: 'y',
-          ruby: 'n',
-          ssl: 'n',
-          stats_type: 'webalizer',
-          allow_override: 'All',
-          php_open_basedir: '/',
-          pm: 'ondemand',
-          pm_max_requests: 0,
-          pm_process_idle_timeout: 10,
-          backup_copies: 1,
-          backup_format_web: 'default',
-          backup_format_db: 'gzip',
-          traffic_quota_lock: 'n',
-          http_port: '80',
-          https_port: '443'
-        }
+      def prepare_dns_task
+        @tasks <<
+          [
+            {
+              id: 1,
+              type: "create_dns_domain",
+
+              data:
+                  {
+                    name: @domain,
+                    mbox: 'webmaster.example.com.',
+                    refresh: '7200',
+                    retry: '540',
+                    expire: '604800',
+                    minimum: '3600',
+                    ttl: '3600',
+                    xfer: '',
+                    also_notify: '',
+                    update_acl: '',
+                    status: '1'
+                  },
+              depends_on: nil,
+              sidekiq_job_id: nil
+            },
+
+            {
+              id: 20,
+              type: "create_dns_record",
+              domain: @domain,
+              data:
+                  {
+                    name: @domain,
+                    type: 'A',
+                    ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
+                    ipv6: '',
+                    hosted_zone_id: '',
+                    ttl: 60
+                  },
+              depends_on: 1,
+              sidekiq_job_id: nil
+            },
+
+            {
+              id: 21,
+              type: "create_dns_record",
+              domain: @domain,
+              data:
+                  {
+                    name: 'www',
+                    type: 'A',
+                    ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
+                    ipv6: '',
+                    hosted_zone_id: '',
+                    ttl: 60
+                  },
+              depends_on: 1,
+              sidekiq_job_id: nil
+            }
+
+          ]
       end
 
-      def ftp_users_resource_params(website)
-        {
-          parent_domain_id: website.domain_id,
-          username: set_ftp_username(website.domain),
-          password: SecureRandom.hex,
-          quota_size: -1,
-          active: 'y',
-          uid: website.system_user,
-          gid: website.system_group,
-          dir: website.document_root
-        }
+      def prepare_web_domain_task
+        @tasks <<
+          {
+            id: 2,
+            type: "create_web_domain",
+            data: {
+              server_type: 'linux',
+              ip_address: '',
+              ipv6_address: '',
+              domain: @domain,
+              hd_quota: '-1',
+              traffic_quota: '-1',
+              subdomain: 'www',
+              php: 'y',
+              active: 'y'
+            },
+            depends_on: nil,
+            sidekiq_job_id: nil
+          }
+      end
+
+      def prepare_mail_domain_task
+        @tasks <<
+          {
+            id: 3,
+            type: "create_mail_domain",
+            data: {
+              domain: @domain,
+              active: 'y'
+            },
+            depends_on: nil,
+            sidekiq_job_id: nil
+          }
+      end
+
+      def prepare_mail_box_task
+        emails = wizard_params[:emails]
+
+        emails.each_with_index do |email, idx|
+          @tasks <<
+            {
+              id: @tasks.size + idx,
+              type: "create_mail_box",
+              data: {
+                domain_name: @domain,
+                mail_domain: @domain,
+                email: "#{email}@#{@domain}",
+                password: SecureRandom.hex,
+                name: 'Test',
+                quota: '0',
+                cc: "user2@#{@domain}",
+                forward_in_lda: '0',
+                policy: '5',
+                postfix: 'y',
+                disablesmtp: 'n',
+                disabledeliver: 'n',
+                greylisting: 'n',
+                disableimap: 'n',
+                disablepop3: 'n'
+              },
+              depends_on: 3,
+              sidekiq_job_id: nil
+            }
+        end
+      end
+
+      def prepare_ftp_account_task
+        @tasks <<
+          {
+            id: @tasks.size + 1,
+            type: "create_ftp_account",
+            domain: @domain,
+            data: {
+              server_type: 'linux',
+              parent_domain_id: '', # needed
+              username: set_ftp_username(@domain),
+              password: SecureRandom.hex,
+              quota_size: '-1',
+              active: 'y',
+              uid: '', # needed
+              gid: '', # needed
+              dir: '' # needed
+            },
+            depends_on: 2,
+            sidekiq_job_id: nil
+          }
       end
 
       def set_ftp_username(domain)
+        domain = domain.gsub("www.", '')
+
         domain.gsub!('.', '_')
       end
 
-
-      def registration_mail_domain
-        response = {}
-        mail_response  = current_spree_user.isp_config.mail_domain.create(mail_params)
-        response[:mail_response] = mail_response
-        response[:mail_params] = mail_params
-        mail_box_response = registration_mail_box if mail_response[:success] && mail_response[:response]
-        response.merge!(mail_box_response) unless mail_box_response.nil?
+      def wizard_params
+        params.require("wizard").permit(:domain, :enable_web_service, :enable_mail_service, emails: [])
       end
-
-      def mail_params
-        {
-          domain: request_params[:domain],
-          active: 'y'
-        }
-      end
-
-
-      def registration_mail_box
-        mail_box = []
-        if request_params[:emails]
-          request_params[:emails].each do |email|
-            response = {}
-            mail_box_params = mail_box_resource_params(email)
-            mail_box_response = current_spree_user.isp_config.mail_user.create(mail_box_params)
-            response[:mail_box_response] = mail_box_response
-            response[:mail_box_params] = mail_box_params
-            mail_box << response
-          end
-        end
-        {mail_box_responses: mail_box}
-      end
-
-
-      def mail_box_resource_params(email)
-        {
-          name: email,
-          email: "#{email}@#{request_params[:domain]}",
-          password: SecureRandom.hex,
-          quota: "0",
-          cc: "",
-          forward_in_lda: "0",
-          policy: "0",
-          postfix: "y",
-          disablesmtp: "n",
-          disabledeliver: "n",
-          greylisting: "n",
-          disableimap: "n",
-          disablepop3: "n"
-        }
-      end
-
-
-      def get_zone_list
-        response = current_spree_user.isp_config.hosted_zone.all_zones || []
-        @hosted_zones  = response[:success] ? response[:response].response : []
-      end
-
     end
   end
 end
