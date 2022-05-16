@@ -4,15 +4,14 @@ module IspConfig
   module Dns
     class HostedZoneRecord < Base
       require 'dns_record_validator'
-      attr_accessor :hosted_zone_record, :reg
+      attr_accessor :user, :reg
 
-      def initialize(hosted_zone_record)
-        @hosted_zone_record = hosted_zone_record
+      def initialize(user)
+        @user = user
       end
 
       def create(create_params)
         res = validate_params(create_params)
-
         return { success: false, message: res[:message] } unless res[:success]
 
         dns_record_hash = dns_record_hash(create_params) if res[:success]

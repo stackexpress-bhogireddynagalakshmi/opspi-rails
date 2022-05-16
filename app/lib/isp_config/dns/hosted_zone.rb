@@ -6,7 +6,6 @@ module IspConfig
       attr_accessor :hosted_zone, :user
 
       def initialize(user)
-        # byebug
         @user = user
       end
 
@@ -20,6 +19,7 @@ module IspConfig
                                server_id: ENV['ISP_CONFIG_DNS_SERVER_ID']
                              }
                            })
+
           response.response.reject! { |x| host_zone_ids.exclude?(x.id.to_i) }
           formatted_response(response, 'all')
         else
@@ -110,11 +110,11 @@ module IspConfig
 
       def dns_hash(hosted_zone)
         {
-          "client_id": hosted_zone[:isp_config_id],
+          "client_id": user.isp_config_id,
           "params": {
             server_id: ENV['ISP_CONFIG_DNS_SERVER_ID'],
             origin: hosted_zone[:name],
-            ns: hosted_zone[:ns],
+            ns:  ENV['ISPCONFIG_DNS_SERVER_NS1'],
             mbox: hosted_zone[:mbox],
             serial: "1",
             refresh: hosted_zone[:refresh],
