@@ -32,8 +32,7 @@ module Spree
                             name: host_zone_params[:name],
                             hosted_zone_name: host_zone_params[:name],
                             ttl: "3600",
-                            hosted_zone_id: host_zone_id,
-                            client_id: current_spree_user.isp_config_id
+                            hosted_zone_id: host_zone_id
                           }
           nameservers = [{nameserver: ENV['ISPCONFIG_DNS_SERVER_NS1']},{nameserver: ENV['ISPCONFIG_DNS_SERVER_NS2']}]
           nameservers.each do |ns|

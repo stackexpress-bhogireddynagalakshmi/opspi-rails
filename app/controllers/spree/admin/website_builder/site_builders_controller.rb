@@ -48,11 +48,11 @@ module Spree
           def create_dns_record
             host_zone_record_params = {}
             dns_response = current_spree_user.isp_config.hosted_zone.all_zones
-            dns_domain = dns_response[:response].response.map{|k| k.id if k[:origin] == site_builder_params[:dns_domain_name]}
+            dns_domain = dns_response[:response].response.map{|k| k.id if k[:origin] == site_builder_params[:dns_domain_name]+"."}
             a_record_params={
               type: "A",
-              name: site_builder_params[:dns_domain_name].chomp("."),
-              hosted_zone_name: site_builder_params[:dns_domain_name].chomp("."),
+              name: site_builder_params[:dns_domain_name],
+              hosted_zone_name: site_builder_params[:dns_domain_name],
               ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
               ttl: "3600",
               hosted_zone_id: dns_domain.compact.first,
@@ -64,7 +64,7 @@ module Spree
 
           def get_web_domain_id
             web_response  = current_spree_user.isp_config.website.all
-            web_domain_id = web_response[:response].response.map{|k| k.domain_id if k[:domain] == site_builder_params[:dns_domain_name].chomp(".")}
+            web_domain_id = web_response[:response].response.map{|k| k.domain_id if k[:domain] == site_builder_params[:dns_domain_name]}
             web_domain_id.compact
           end
 
@@ -124,7 +124,7 @@ module Spree
           
           def web_params
             {
-              domain: site_builder_params[:dns_domain_name].chomp("."),
+              domain: site_builder_params[:dns_domain_name],
               active: 'y',
               ip_address: '*',
               type: 'vhost',
