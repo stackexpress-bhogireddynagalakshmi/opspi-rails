@@ -7,7 +7,8 @@
 
 <div class="form-group field">
   <label>Select Domain</label>
-   <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains), class: 'form-control field-size'%>
+   <%#=select_tag 'dns_domain_name', options_for_select(get_dns_domains), class: 'form-control field-size'%>
+   <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains), class: 'select2-clear js-filterable', prompt: 'Select Web Domain'%>
 </div> 
 
 <div class="input-group">

@@ -52,7 +52,7 @@ module Spree
             a_record_params={
               type: "A",
               name: site_builder_params[:dns_domain_name],
-              hosted_zone_name: site_builder_params[:dns_domain_name],
+              hosted_zone_name: nil,
               ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
               ttl: "3600",
               hosted_zone_id: dns_domain.compact.first,
