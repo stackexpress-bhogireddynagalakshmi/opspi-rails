@@ -198,7 +198,7 @@ display: block;
             <div class="input-group">
               <%=text_field_tag :name,params[:name], class:"form-control", id:"txtname", required:"required" %>
               <div class="input-group-append">
-                <span class="input-group-text">@<%= params[:dns_name]%></span>
+                <span class="input-group-text">.<%= params[:dns_name]%></span>
               </div>
             </div>
           </div>

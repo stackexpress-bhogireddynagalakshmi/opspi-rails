@@ -116,10 +116,12 @@ module IspConfig
       end
 
       def append_zone_name_with_record_name(record_name,zone_name)
-        unless zone_name.nil?
-          record_name+"."+zone_name+"."
-        else
+        if zone_name.nil? 
           record_name+"."
+        elsif zone_name.present? && zone_name.eql?(record_name)
+          record_name+"."
+        else
+          record_name+"."+zone_name+"."
         end
       end
 
