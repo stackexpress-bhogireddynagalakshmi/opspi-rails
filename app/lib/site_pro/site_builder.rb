@@ -8,7 +8,7 @@ module SitePro
                          header: authorization_header,
                          body: {
                           type: "external",
-                          domain: params[:mail_domain],
+                          domain: params[:dns_domain_name],
                           apiUrl: SitePro::Config.api_url,
                           lang: "en",
                           username: params[:username],
@@ -34,7 +34,7 @@ module SitePro
       else
         {
           success: false,
-          message: I18n.t('isp_config.something_went_wrong', message: "Site builder server failure"),
+          message: I18n.t('isp_config.something_went_wrong', message: response.error.message),
           response: response
         }
       end
