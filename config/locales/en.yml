@@ -53,6 +53,7 @@ en:
     subdomain_for_website: Sub Domain for Website
     start_wizard: Start Wizard
     website_builder: Website Builder
+    database: Database
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout
@@ -150,6 +151,10 @@ en:
       create: Mail Forward created successfully.
       update: Mail Forward updated successfully.
       delete: Mail Forward deleted successfully.
+    database: 
+      create: 'Database created successfully'
+      delete: 'Database deleted successfully'
+      update: 'Database updated successfully'
 
   windows:
      ftp_account:

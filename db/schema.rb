@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_12_072606) do
+ActiveRecord::Schema.define(version: 2022_05_11_162418) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -203,6 +203,13 @@ ActiveRecord::Schema.define(version: 2022_04_12_072606) do
     t.integer "user_id"
     t.integer "isp_config_id"
     t.string "isp_config_username"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "isp_databases", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "isp_config_database_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

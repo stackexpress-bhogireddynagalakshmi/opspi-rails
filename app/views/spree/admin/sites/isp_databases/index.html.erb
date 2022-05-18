@@ -1,14 +1,13 @@
 <% content_for :page_title do %>
- Sub Domain
+ Databases
 <% end %>
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_sub_domain),
-    new_admin_sites_sub_domain_path,
+  <%= button_link_to Spree.t(:add_database),
+    new_admin_sites_isp_database_path,
     class: "btn-success",
       icon: 'add.svg',
-      id: 'admin_new_sub_domain' %>
+      id: 'new_admin_database' %>
 <% end %>
-
 
 <% if @resources.any? %>
 <div data-nav-x-wrapper>
@@ -16,19 +15,20 @@
     <table class="table" id="listing_orders" data-hook data-nav-x-content>
       <thead>
         <tr data-hook="admin_orders_index_headers">
-          <th>Sub Domain</th>
+          <th>Database Name</th>
+          <th>Database User</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <%= render partial: 'spree/admin/sites/sub_domains/index', collection: @resources, as: :sub_domain %>
+        <%= render partial: 'spree/admin/sites/isp_databases/index', collection: @resources, as: :database %>
       </tbody>
     </table>
   </div>
 </div>
 <% else %>
   <div class="alert alert-info no-objects-found">
-    You haven't registered the Sub Domain yet.
+    You haven't created any Database yet.
   </div>
 <% end %>
 
