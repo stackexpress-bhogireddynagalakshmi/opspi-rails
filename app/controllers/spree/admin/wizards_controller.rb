@@ -3,29 +3,50 @@
 module Spree
   module Admin
     class WizardsController < Spree::Admin::BaseController
-      def index; end
+      include ApisHelper
+      before_action :set_batch_jobs, only: [:index, :show]
+
+      def index; end 
       def new; end
 
       def create
         @domain = wizard_params[:domain]
         @tasks = []
-
+        
         build_tasks
 
-        pp @tasks
-
-        TaskManager::TaskProcessor.new(current_spree_user, @tasks.flatten).call
-
+        TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
         flash[:success] = "Wizard Jobs Started. Your services will be activated in few miniutes"
 
-        redirect_to admin_wizards_path
+        set_batch_jobs
+
+        redirect_to admin_wizard_path(id: @batch_jobs.keys.last)
+      end
+
+      def show
+        @tasks =  @batch_jobs[params[:id]] || @batch_jobs[params[:id].to_i]
+      end
+
+      def reset_password
+        if params[:type] == 'create_mail_box'
+          mailboxes = mail_user_api.all
+          mailboxes = mailboxes[:response].response
+          mailbox   = mailboxes.detect{|x| x.email == params[:email]}
+          @password = SecureRandom.hex
+          @response = mail_user_api.update(mailbox.mailuser_id, { password: @password })
+        elsif  params[:type] == 'create_ftp_account'
+          ftp_users = ftp_user_api.all
+          ftp_users = ftp_users[:response].response
+          ftp_user  = ftp_users.detect{|x| x.username == params[:email]}
+          @password = SecureRandom.hex
+          @response = ftp_user_api.update(ftp_user.ftp_user_id, { password: @password })
+        end
       end
 
       private
 
       def build_tasks
         prepare_dns_task
-
         if wizard_params[:enable_web_service] == 'y'
           prepare_web_domain_task
           prepare_ftp_account_task
@@ -35,6 +56,8 @@ module Spree
           prepare_mail_domain_task
           prepare_mail_box_task
         end
+
+        @tasks = @tasks.flatten
       end
 
       def prepare_dns_task
@@ -43,7 +66,7 @@ module Spree
             {
               id: 1,
               type: "create_dns_domain",
-
+              domain: @domain,
               data:
                   {
                     name: @domain,
@@ -63,7 +86,7 @@ module Spree
             },
 
             {
-              id: 20,
+              id: SecureRandom.hex,
               type: "create_dns_record",
               domain: @domain,
               data:
@@ -80,7 +103,7 @@ module Spree
             },
 
             {
-              id: 21,
+              id: SecureRandom.hex,
               type: "create_dns_record",
               domain: @domain,
               data:
@@ -104,6 +127,7 @@ module Spree
           {
             id: 2,
             type: "create_web_domain",
+            domain: @domain,
             data: {
               server_type: 'linux',
               ip_address: '',
@@ -125,6 +149,7 @@ module Spree
           {
             id: 3,
             type: "create_mail_domain",
+            domain: @domain,
             data: {
               domain: @domain,
               active: 'y'
@@ -140,8 +165,10 @@ module Spree
         emails.each_with_index do |email, idx|
           @tasks <<
             {
-              id: @tasks.size + idx,
+              id: SecureRandom.hex,
               type: "create_mail_box",
+              domain: @domain,
+              actions: true,
               data: {
                 domain_name: @domain,
                 mail_domain: @domain,
@@ -171,6 +198,7 @@ module Spree
             id: @tasks.size + 1,
             type: "create_ftp_account",
             domain: @domain,
+            actions: true,
             data: {
               server_type: 'linux',
               parent_domain_id: '', # needed
@@ -195,6 +223,14 @@ module Spree
 
       def wizard_params
         params.require("wizard").permit(:domain, :enable_web_service, :enable_mail_service, emails: [])
+      end
+
+      def set_batch_jobs
+        @batch_jobs =  eval(AppManager::RedisWrapper.get("batch_jobs_user_id_#{current_spree_user.id}").to_s)
+
+        @batch_jobs = @batch_jobs.with_indifferent_access if @batch_jobs.present?
+
+        @batch_jobs
       end
     end
   end

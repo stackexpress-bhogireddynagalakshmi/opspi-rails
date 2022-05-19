@@ -8,13 +8,13 @@ module SessionNotifications
     return if session.blank?
 
     if error.present?
-      data = {
+      data.merge!({
         status:  :error,
         message: error
-      }
+      })
     end
 
-    ActionCable.server.broadcast target_channel(session), { data: data }
+    ActionCable.server.broadcast target_channel(session), data
 
   rescue StandardError => e
     Rails.logger.error { "Failed to notify session (#{session}): #{e.message}" }

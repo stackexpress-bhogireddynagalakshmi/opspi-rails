@@ -1,0 +1,29 @@
+<div class="row batch_job">
+  <div class="col-md-12">
+    <h6> Wizard status for <%=batch_job.first[:domain]%></h6>
+   
+    <table class="table">
+      <tr>
+        <th> Type </th>
+        <th> Data</th>
+        <th> Status </th>
+        <th> Action </th>
+      </tr>
+    <% batch_job.each do |job|%>
+    <tr id="<%=job[:sidekiq_job_id]%>">
+      <td> <%=job[:type]%></td>
+      <td> <%=get_data_for_task(job)%> </td>
+      <td class="status"> <%=get_task_status(job)%></td>
+      <th >
+       <% if job[:actions] == true %>
+        <%=link_to 'Reset Password', reset_password_admin_wizards_path(email: get_data_for_task(job), type: job[:type], div_id: job[:sidekiq_job_id]), remote: true%>
+        <div class='password-text'>
+          
+        </div>
+       <%end%>
+      </th>
+    </tr>
+    <%end%>
+    </table>
+  </div>
+</div>
