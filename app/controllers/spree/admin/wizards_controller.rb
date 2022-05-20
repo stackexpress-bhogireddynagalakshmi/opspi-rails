@@ -195,7 +195,7 @@ module Spree
       def prepare_ftp_account_task
         @tasks <<
           {
-            id: @tasks.size + 1,
+            id: SecureRandom.hex,
             type: "create_ftp_account",
             domain: @domain,
             actions: true,
