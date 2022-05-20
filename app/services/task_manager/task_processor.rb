@@ -13,6 +13,8 @@ module TaskManager
         dependendent_jobs = @tasks.select { |x| x[:depends_on] == parent_job[:id] }
         schedule_tasks(parent_job, dependendent_jobs)
       end
+
+      save_to_redis
     end
 
     private
@@ -39,6 +41,18 @@ module TaskManager
       else
         schedule_tasks(current_task, tasks)
       end
+    end
+
+    def save_to_redis
+      batch_jobs =  eval(AppManager::RedisWrapper.get("batch_jobs_user_id_#{@user.id}").to_s)
+      if batch_jobs.blank?
+        batch_jobs = {}.with_indifferent_access
+        batch_jobs["1"] = @tasks
+      else
+        batch_jobs[batch_jobs.size + 1] = @tasks
+      end
+
+      AppManager::RedisWrapper.set("batch_jobs_user_id_#{@user.id}", batch_jobs)
     end
   end
 end

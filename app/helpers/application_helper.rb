@@ -149,4 +149,40 @@ module ApplicationHelper
     ]
   end
 
+
+  def get_data_for_task(job)
+     case job[:type]
+    when 'create_dns_domain'
+      job[:data][:name]
+    when 'create_dns_record'
+       job[:data][:type] + " Record - "+ job[:data][:name]
+    when 'create_web_domain'
+      job[:data][:domain]
+    when 'create_mail_domain'
+      job[:data][:domain]
+    when 'create_mail_box'
+      job[:data][:email]
+    when 'create_ftp_account'
+      job[:data][:username]
+    else
+       "Unknown task type"
+    end
+  end
+
+  def get_task_status(job)
+    status = ActiveJob::Status.get(job[:sidekiq_job_id])
+    status = status[:status]
+    return status unless status == :completed
+
+    return "<i class='fa fa-check'></i> #{status}".html_safe
+  end
+
+  def get_wizard_status(batch_job)
+    statuses = []
+    batch_job.each do |job|
+      statuses << get_task_status(job)
+    end
+    (statuses.compact & [:failed, :working, :queued]).size > 0 ? 'In Progress' : 'Completed'
+  end
+
 end
