@@ -1,0 +1,24 @@
+<% content_for :page_title do %>
+ Wizards
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:start_wizard),
+    new_admin_wizard_path,
+    class: "btn-success",
+      icon: 'add.svg',
+      id: 'admin_wizard' %>
+<% end %>
+
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+
+      <%= render :partial=>'batch_job', locals: {batch_job: @tasks}%>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+</script>
+

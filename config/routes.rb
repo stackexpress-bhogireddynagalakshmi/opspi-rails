@@ -71,7 +71,11 @@ Rails.application.routes.draw do
         resources :isp_databases
       end
 
-      resources :wizards
+      resources :wizards do 
+        collection do
+          get :reset_password
+        end
+      end
 
       namespace :windows do
         resources :domains
