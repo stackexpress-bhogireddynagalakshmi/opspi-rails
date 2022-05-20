@@ -81,8 +81,8 @@ Rails.application.routes.draw do
         resources :domains
       end
       
-      get '/admin/website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"index", as: 'site_builder'
-      post '/admin/website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"create", as: 'site_builder_create'
+      get 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"index", as: 'site_builder'
+      post 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"create", as: 'site_builder_create'
 
     end
   end
