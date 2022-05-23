@@ -91,7 +91,7 @@
 </html>
 <script type="text/javascript">
   (function(d,t) {
-    var BASE_URL="https://app.chatwoot.com";
+    var BASE_URL=`<%= ENV['CHATWOOT_BASE_URL']%>`;
     var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
     g.src=BASE_URL+"/packs/js/sdk.js";
     g.defer = true;
@@ -99,9 +99,23 @@
     s.parentNode.insertBefore(g,s);
     g.onload=function(){
       window.chatwootSDK.run({
-        websiteToken: 'J1Ec2LWMo7pCe3UfZ5HPEtoy',
+        websiteToken: `<%= ENV['CHATWOOT_WEBSITE_TOKEN']%>`,
         baseUrl: BASE_URL
-      })
+      });
+      window.$chatwoot.setUser(`<%= current_spree_user.email %>`, {
+        email: `<%= current_spree_user.email %>`, // Email of the user
+        identifier_hash: `<%= identifier_hash_key %>`, // Identifier Hash generated based on the webwidget hmac_token
+      });
+      window.chatwootSettings = {
+        hideMessageBubble: true,
+        position: "left", // This can be left or right
+        locale: "en", // Language to be set
+        type: "expanded_bubble", // [standard, expanded_bubble]
+        darkMode: "auto", // [light, auto]
+        launcherTitle: "Chat with us",
+      };
+
+
     }
   })(document,"script");
 </script>

@@ -133,6 +133,10 @@ module ApplicationHelper
     end
   end
 
+  def identifier_hash_key
+    OpenSSL::HMAC.hexdigest('sha256', ENV['IDENTIFIER_HASH_KEY'], current_spree_user.email)
+  end
+
   def months_dropdown
     [
       ['1 Month',  1],
