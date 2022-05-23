@@ -16,7 +16,6 @@ Spree::Core::Engine.add_routes do
     get '/logout' => 'user_sessions#destroy', :as => :logout
     get '/signup' => 'user_registrations#new', :as => :signup
     post '/signup' => 'user_registrations#create', :as => :registration
-    get '/password/recover' => 'user_passwords#new', :as => :recover_password
     post '/password/recover' => 'user_passwords#create', :as => :reset_password
     get '/password/change' => 'user_passwords#edit', :as => :edit_password
     put '/password/change' => 'user_passwords#update', :as => :update_password

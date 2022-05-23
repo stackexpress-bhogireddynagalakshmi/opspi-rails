@@ -25,7 +25,8 @@ module Spree
           end
         end
 
-        def new; end
+        def new;
+        end
 
         def edit
           @response = host_zone_api.get_zone(@zone_list.isp_config_host_zone_id)

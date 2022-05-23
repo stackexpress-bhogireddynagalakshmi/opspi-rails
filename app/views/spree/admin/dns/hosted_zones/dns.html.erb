@@ -162,11 +162,23 @@ display: block;
  <% end %> 
 <% end %>  
 
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:dns_management), admin_dns_hosted_zones_path %>
-  <%#= @hosted_zone.name %>
-<% end %>
+<div class="header">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:dns_management), admin_dns_hosted_zones_path %>
+        <%#= @hosted_zone.name %>
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
 <div class="box">
   <div class="form-inline first-row">

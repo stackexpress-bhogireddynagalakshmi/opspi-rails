@@ -1,13 +1,25 @@
-<% content_for :page_title do %>
- Wizards
-<% end %>
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:start_wizard),
-    new_admin_wizard_path,
-    class: "btn-success",
-      icon: 'add.svg',
-      id: 'admin_wizard' %>
-<% end %>
+<div class="header">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        Wizards
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      <%= button_link_to Spree.t(:start_wizard),
+      new_admin_wizard_path,
+      class: "btn btn-primary lift",
+        icon: 'add.svg',
+        id: 'admin_wizard' %>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 
 <% if @resources.present? %>
 <%= render partial: 'spree/admin/wizards/enable_web_service' %>
@@ -15,8 +27,8 @@
 </br>
 <%= render partial: 'spree/admin/wizards/enable_mail_service' %>
 <% else %>
-  <div class="alert alert-info no-objects-found">
-    You don't have any mail or web services active yet
+  <div class="alert alert-secondary no-objects-found">
+    <label class="form-label" style="margin-top: 0.5rem;"> You don't have any mail or web services active yet</label>
   </div>
 <% end %>
 

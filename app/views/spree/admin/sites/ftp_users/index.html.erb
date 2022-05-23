@@ -1,13 +1,22 @@
-<% content_for :page_title do %>
- FTP Users
-<% end %>
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_ftp_user),
-    new_admin_sites_ftp_user_path,
-    class: "btn-success",
-      icon: 'add.svg',
-      id: 'admin_new_ftp_user' %>
-<% end %>
+<div class="header">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        FTP Users
+        </h1>
+      </div>
+      <div class="col-auto">
+      <%= button_link_to Spree.t(:add_ftp_user),
+      new_admin_sites_ftp_user_path,
+      class: "btn btn-primary lift",
+        icon: 'add.svg',
+        id: 'admin_new_ftp_user' %>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 <nav>

@@ -6,90 +6,209 @@
     max-height: calc(100vh - 200px);
     overflow-y: auto;
 }
+.col-lg-6 {
+    flex: 0 0 auto;
+    width: 100%;
+}
+.offset-lg-3 {
+    margin-left: 0;
+}
+.scroll {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
 </style>
-<%if current_admin_tenant?%>
-	<%=f.hidden_field :reseller_signup,:value=>true%>
-	
-	<div class="form-group mb-4">
-	  <%= f.text_field :business_name, class: 'spree-flat-input',required:true,placeholder: "business Name" %>
-	</div>
 
+<body class="d-flex align-items-center bg-auth border-top border-top-2 border-primary">
+<a class="navbar navbar-brand" href="<%= spree.root_path %>" style="margin-left: -100%;border-bottom: 0px;margin-top: -5%;">
+<%= image_tag 'OpsPi-logo.jpg', class: 'navbar-brand-img mx-auto' %>
+</a>
+    <!-- CONTENT
+    ================================================== -->
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 col-md-6 offset-xl-2 offset-md-1 order-md-2 mb-5 mb-md-0">
 
-	<div class="form-group mb-4">
-		<div class="input-group">
-			<div class="input-group-prepend">
-			    <span class="input-group-text" id="basic-addon3">https://</span>
-			</div>
-
-		   <%= f.text_field :subdomain, class: 'spree-flat-input form-control subdomain-field', placeholder: 'subdomain',required:true %>
-		  
-		  <div class="input-group-append">
-		    <span class="input-group-text" id="basic-addon2">.<%=ENV['BASE_DOMAIN']%></span>
-		  </div>
-
-		</div>
-	</div>
-
-<%end%>
-
-<!-- 
-<div class="form-group mb-4">
-  <%#= f.text_field :first_name, class: 'spree-flat-input', placeholder: Spree.t(:first_name) %>
-</div>
-
-<div class="form-group mb-4">
-  <%#= f.text_field :last_name, class: 'spree-flat-input', placeholder: Spree.t(:last_name) %>
-</div>
- -->
-
-<div class="form-group mb-4">
-  <%= f.email_field :email, class: 'spree-flat-input', placeholder: Spree.t(:email) %>
-</div>
-
-<div class="form-group mb-4">
-  <%= f.password_field :password, class: 'spree-flat-input', placeholder: Spree.t(:password) %>
-</div>
-
-<div class="form-group mb-4">
-  <%= f.password_field :password_confirmation, class: 'spree-flat-input', placeholder: Spree.t(:confirm_password) %>
-</div>
-<div data-hook="signup_below_password_fields"></div>
-
-<div class="form-group mb-4">
-  <%= f.check_box :terms_and_conditions,class: 'mr-2' %> I agree to the <%= link_to 'Terms&Conditions.', '/', remote: true, data: {:toggle => 'modal', :target => '#myModal'} %>
-</div>
-
-<div id="post-modal" class="modal fade"></div>
-
-<!-- Modal -->
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header pb-0 px-4 pt-4 border-0">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">
-            <%= icon(name: 'close',
-                     classes: 'd-block d-lg-none',
-                     width: 16,
-                     height: 16) %>
-            <%= icon(name: 'close',
-                     classes: 'd-none d-lg-block',
-                     width: 30,
-                     height: 30) %>
-          </span>
-        </button>
-      </div>
-      <div class="modal-body p-4">
-        <div class="container-fluid">
-          <div class="row justify-content-center align-items-center">
-              <%= Spree.t(:terms_and_conditions) %>
+          <!-- Image -->
+          <div class="text-center">
+          <%=image_tag('happiness')%>
           </div>
-          <div class="row pt-5 justify-content-center align-items-center product-added-modal-product">
-               <%= render partial: 'terms_condition' %>
-          </div>
+
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+        <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
+
+          <!-- Heading -->
+          <h3 class="display-4 text-center mb-3">
+            CREATE NEW ACCOUNT
+          </h3>
+
+
+          <!-- Form -->
+          <form>
+
+          <%if current_admin_tenant?%>
+            <%=f.hidden_field :reseller_signup,:value=>true%>
+            
+            <div class="form-group">
+            <label class="form-label">
+                Business Name
+              </label>
+
+              <%= f.text_field :business_name, class: 'form-control',required:true,placeholder: "Business Name" %>
+            </div>
+
+
+            <div class="form-group">
+            <label class="form-label">
+                Subdomain 
+              </label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon3">https://</span>
+                </div>
+
+                <%= f.text_field :subdomain, class: 'form-control', placeholder: 'Subdomain',required:true %>
+                
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">.<%=ENV['BASE_DOMAIN']%></span>
+                </div>
+
+              </div>
+            </div>
+
+          <%end%>
+
+            <!-- Email address -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label class="form-label">
+                Email Address
+              </label>
+
+              <!-- Input -->
+              <%= f.email_field :email, class: 'form-control', placeholder: Spree.t(:email) %>
+
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label class="form-label">
+                Password
+              </label>
+
+              <!-- Input group -->
+              <div class="input-group input-group-merge">
+
+                <!-- Input -->
+                <%= f.password_field :password, class: 'form-control', placeholder: Spree.t(:password) %>
+
+                <!-- Icon -->
+                <span class="input-group-text">
+                  <i class="fa fa-eye"></i>
+                </span>
+
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label class="form-label">
+                Confirm Password
+              </label>
+
+              <!-- Input group -->
+              <div class="input-group input-group-merge">
+
+                <!-- Input -->
+                <%= f.password_field :password_confirmation, class: 'form-control', placeholder: Spree.t(:confirm_password) %>
+
+                <!-- Icon -->
+                <span class="input-group-text">
+                  <i class="fa fa-eye"></i>
+                </span>
+
+              </div>
+            </div>
+            <div data-hook="signup_below_password_fields"></div>
+
+            <div class="form-check  mb-3">
+              <%= f.check_box :terms_and_conditions,class: 'form-check-input list-checkbox' %> I agree to the <%= link_to 'Terms&Conditions.', '#', remote: true, data: {:toggle => 'modal', :target => '#myModal'}, id:"terms_modal" %>
+            </div>
+
+            <!-- Submit -->
+            <%= f.submit Spree.t(:sign_up), class: 'btn btn-lg w-100 btn-primary mb-3' %>
+            
+
+            <!-- Link -->
+            <div class="text-center">
+              <small class="text-muted text-center">
+                Already have an account? <%= link_to Spree.t('log_in'), spree_login_path %>.
+              </small>
+            </div>
+
+
+          </form>
+
+          <div id="post-modal" class="modal fade"></div>
+          <!-- Modal -->
+
+          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-card card">
+                <div class="card-header">
+
+                  <!-- Title -->
+                  <h4 class="card-header-title" id="exampleModalCenterTitle">
+                    Terms and Conditions
+                  </h4>
+
+                  <!-- Close -->
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closebtn"></button>
+
+                </div>
+
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center align-items-center product-added-modal-product scroll">
+                        <%= render partial: 'terms_condition' %>
+                    </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div> <!-- / .row -->
+    </div> <!-- / .container -->
+</body>
+
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+  $("#terms_modal").on('click', function(event) {
+    $('#myModal').attr('aria-hidden','false');
+    $("#myModal").css('display','block');
+    $("#myModal").addClass("show");
+  });
+});
+
+$(document).ready(function() {
+  $("#closebtn").on('click', function(event) {
+    $('#myModal').attr('aria-hidden','true');
+    $("#myModal").css('display','none');
+    $("#myModal").removeClass("show");
+  });
+});
+
+</script>
+
+

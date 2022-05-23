@@ -2,6 +2,7 @@
 
 module Spree
   module UsersControllerDecorator
+
     def self.prepended(base)
       base.skip_before_action :load_object
       base.before_action :load_object

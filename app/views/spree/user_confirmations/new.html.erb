@@ -1,28 +1,66 @@
-<div class="container user-sessions user-sessions-new">
-   <%= render "spree/shared/error_messages", target: resource %>
-  <div class="row">
-    <div class="col-lg-6 offset-lg-3">
-      <div class="mb-3">
-        <div id="existing-customer" data-hook="login">
-          <div class="col-lg-11 mx-auto">
-          <h2 class="spree-mb-large spree-mt-large spree-header">Resend instructions</h2>
+<body class="d-flex align-items-center bg-auth border-top border-top-2 border-primary">
+<a class="navbar navbar-brand" href="<%= spree.root_path %>" style="border-bottom: 0px;margin-top: -47%;">
+<%= image_tag 'OpsPi-logo.jpg', class: 'navbar-brand-img mx-auto' %>
+</a>
+<%= render "spree/shared/error_messages", target: resource %>
+    <!-- CONTENT
+    ================================================== -->
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-12 col-md-6 offset-xl-2 offset-md-1 order-md-2 mb-5 mb-md-0">
 
-          <%= form_for(resource, as: resource_name, url: spree.spree_user_confirmation_path, html: { method: :post }) do |f| %>
-           
 
-            <div class="field">
-              <%= f.label :email %><br />
-              <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email),class: 'spree-flat-input' %>
-            </div>
-
-            <div class="actions mt-4">
-              <%= f.submit "Resend confirmation instructions",class: 'btn btn-primary btn-block spree-btn' %>
-            </div>
-          <% end %>
-
+          <!-- Image -->
+          <div class="text-center">
+          <%=image_tag('happiness')%>
           </div>
+
         </div>
-      </div>
-    </div>
-  </div>
-</div>
+        <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
+
+          <!-- Heading -->
+          <h1 class="display-4 text-center mb-3">
+          Resend Instructions
+          </h1>
+
+          <!-- Subheading -->
+          <p class="text-muted text-center mb-5">
+          </p>
+
+          <!-- Form -->
+          <%= form_for Spree.user_class.new, as: :spree_user, url: spree.spree_user_confirmation_path do |f| %>
+          <form>
+
+            <!-- Email address -->
+            <div class="form-group">
+
+              <!-- Label -->
+              <label class="form-label">
+                Email Address
+              </label>
+
+              <!-- Input -->
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email),class: 'form-control', placeholder: Spree.t(:email) %>
+
+            </div>
+
+            <!-- Submit -->
+            
+            <%= f.submit "Resend confirmation instructions",class: 'btn btn-lg w-100 btn-primary mb-3' %>
+
+            <!-- Link -->
+            <div class="text-center">
+              <small class="text-muted text-center">
+                Remember your password? <%= link_to Spree.t('log_in'), spree_login_path %>.
+              </small>
+            </div>
+
+          </form>
+          <%end%>
+
+        </div>
+      </div> <!-- / .row -->
+    </div> <!-- / .container -->
+
+
+  </body>

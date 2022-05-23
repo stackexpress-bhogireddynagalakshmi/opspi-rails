@@ -1,38 +1,50 @@
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
 
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:reseller_club), spree.admin_domain_registrations_url %> /
-  <%= Spree.t(:setup_reseller_club) %>
-<% end %>
+<div class="header">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:reseller_club), spree.admin_domain_registrations_url %> /
+        Setup Reseller Club
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
 
  <%=form_for spree_current_user, url: "/admin/domain_registrations/setup_reseller_club",html: {method: :post} do |f|%> 
   <%f.object.build_user_key if f.object.user_key.blank? %>
   <%=f.fields_for :user_key do |ff|%>
   <fieldset>
-    <div class="form-group field">
-      <label>Account Id</label>
+    <div class="form-group">
+      <label class="form-label">Account Id</label>
       <%=ff.text_field :reseller_club_account_id, class: 'form-control',required: true%>
     </div>
 
-    <div class="form-group field">
-      <label >API Key</label>
+    <div class="form-group">
+      <label class="form-label">API Key</label>
       <%=ff.text_field :reseller_club_account_key_enc,value: '', class: 'form-control',required: true%>
     </div>
     <%end%>
     
-     <div class="form-group field">
-      <label>Reseller Club Customer Id <span style="color: grey;margin-left: 10px;">(If you don't already have, We will create one)</span></label>
+     <div class="form-group">
+      <label class="form-label">Reseller Club Customer Id <span style="color: grey;margin-left: 10px;">(If you don't already have, We will create one)</span></label>
       <%=f.text_field :reseller_club_customer_id, class: 'form-control'%>
     </div>
 
-    <div class="form-group field">
-      <label>Reseller Club  Contact Id,<span  style="color: grey;margin-left: 10px;">(If you don't already have, We will create one)</span></label>
+    <div class="form-group">
+      <label class="form-label">Reseller Club  Contact Id,<span  style="color: grey;margin-left: 10px;">(If you don't already have, We will create one)</span></label>
       <%=f.text_field :reseller_club_contact_id, class: 'form-control'%>
     </div>
           
-    <%=submit_tag 'Save',class: 'btn btn-primary'%>
+    <%=submit_tag 'Save',class: 'btn btn-primary lift'%>
 
   </fieldset>
 <%end%>

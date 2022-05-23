@@ -1,7 +1,19 @@
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= Spree.t(:start_wizard) %>
-<% end %>
+<div class="header">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+          Start Wizard
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
  <%=form_for 'wizard', url: admin_wizards_path, html: {method: :post} do |f|%> 
 
@@ -9,7 +21,7 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group field">
-          <label>Enter Domain Name</label>
+          <label class="form-label">Enter Domain Name</label>
           <%#= collection_select(:wizard, :domain, @hosted_zones, :origin, :origin, {prompt: 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
           <%= f.text_field :domain, class: 'form-control'%>
         </div>
@@ -19,9 +31,9 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group field">
-          <div class="custom-control custom-switch">
-            <%= check_box_tag('wizard[enable_web_service]', 'n', ('checked' if false), class: "custom-control-input", id: "wizard_web_service", onclick: "checkServiceStatus(this)" ) %>
-            <label class="custom-control-label" for="wizard_web_service">Enable Web Services</label>
+          <div class="form-check">
+            <%= check_box_tag('wizard[enable_web_service]', 'n', ('checked' if false), class: "form-check-input list-checkbox", id: "wizard_web_service", onclick: "checkServiceStatus(this)" ) %>
+            <label class="form-check-label for="wizard_web_service">Enable Web Services</label>
           </div>
         </div>
       </div>
@@ -30,9 +42,9 @@
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group field">
-          <div class="custom-control custom-switch">
-            <%= check_box_tag('wizard[enable_mail_service]', 'n', ('checked' if false), class: "custom-control-input", id: "wizard_mail_service", onclick: "checkServiceStatus(this)" ) %>
-            <label class="custom-control-label" for="wizard_mail_service">Enable Mail Services</label>
+          <div class="form-check">
+            <%= check_box_tag('wizard[enable_mail_service]', 'n', ('checked' if false), class: "form-check-input list-checkbox", id: "wizard_mail_service", onclick: "checkServiceStatus(this)" ) %>
+            <label class="form-check-label" for="wizard_mail_service">Enable Mail Services</label>
           </div>
         </div>
       </div>
@@ -42,7 +54,7 @@
       <div class="row">
         <div class="col-lg-6">
           <div class="form-group field">
-            <label>Email</label>
+            <label class="form-label">Email</label>
             <div class="input-group">
               <%= text_field_tag 'wizard[emails][]', '', class: 'form-control', placeholder: "Enter Email", "data-input-count" => 0 %>
               <div class="input-group-append">
@@ -52,12 +64,12 @@
           </div>
 
           <div id="newMoreEmailAddress"></div>
-          <button id="addRowEmail" type="button" class="btn btn-info" , data-field-count= '1' >Add More Email Address</button>
+          <button id="addRowEmail" type="button" class="btn btn-primary lift" , data-field-count= '1' >Add More Email Address</button>
         </div>
       </div>
     </div>
 
-    <%=submit_tag "Submit",class: 'btn btn-primary'%>
+    <%=submit_tag "Submit",class: 'btn btn-primary lift'%>
 
   </fieldset>
 <% end %>

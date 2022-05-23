@@ -9,6 +9,7 @@ module Spree
       before_action :set_tld_pricing, only: [:new]
 
       def index
+        
         ActsAsTenant.current_tenant = nil
 
         @orders = if current_spree_user.superadmin?
@@ -22,9 +23,13 @@ module Spree
                          .order('spree_orders.created_at desc')
 
         @domains = @orders
+
+                
+        # render :layout => "dashkit_admin_layout"
       end
 
       def new
+        # render :layout => "dashkit_admin_layout"
         @order = current_domain_order
         cookies.signed[:token] = @order.token if @order.present?
         @product = TenantManager::TenantHelper.unscoped_query { Spree::Product.domain.first }
@@ -65,6 +70,7 @@ module Spree
       end
 
       def setup_reseller_club
+        # render :layout => "dashkit_admin_layout"
         if request.post?
           spree_current_user.update(user_params)
           flash.now[:success] = "ResellerClub credentials saved successfully"

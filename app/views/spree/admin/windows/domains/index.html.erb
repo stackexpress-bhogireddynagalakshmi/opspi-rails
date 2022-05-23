@@ -1,13 +1,24 @@
-<% content_for :page_title do %>
- Domains
-<% end %>
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_domian),
-    new_admin_windows_domain_path,
-    class: "btn-success",
-      icon: 'add.svg',
-      id: 'admin_new_domain' %>
-<% end %>
+<div class="header">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        Domains
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      <%= button_link_to Spree.t(:add_domian),
+      new_admin_windows_domain_path,
+      class: "btn btn-primary lift",
+        icon: 'add.svg',
+        id: 'admin_new_domain' %>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
 <% if @resources.any? %>
 <div data-nav-x-wrapper>

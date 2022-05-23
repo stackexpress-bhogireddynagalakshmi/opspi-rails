@@ -1,11 +1,30 @@
-<% content_for :page_title do %>
-  DNS Domains
-<% end %>
+<div class="header">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        DNS Domains
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      <%#= button_link_to Spree.t(:add_domain),
+      new_admin_dns_hosted_zone_url,
+      class: "btn btn-primary lift",
+        icon: 'add.svg',
+        id: 'admin_new_order' %>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 <% if current_spree_user.isp_config_id.present? %>
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:add_domain),
     new_admin_dns_hosted_zone_url,
-    class: "btn-success",
+    class: "btn btn-primary lift",
       icon: 'add.svg',
       id: 'admin_new_order' %>
 <% end  %>
@@ -44,9 +63,10 @@
   </div>
 <% end %>
 <% else %>
-<div class="alert alert-info no-objects-found">
-    <%= Spree.t(:you_need_to_purchase_linux_plan_to_continue) %>!
+<div class="alert alert-light no-objects-found">
+    <%#= Spree.t(:you_need_to_purchase_linux_plan_to_continue) %>
  <%#= link_to(Spree.t(:add_one), new_admin_product_url) if can? :create, Spree::Product %>
+ <label class="form-label" style="margin-top: 0.5rem;"> You Need To Purchase Linux Plan To Continue!</label>
  </div>
 <%end%>
 

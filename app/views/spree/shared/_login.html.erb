@@ -1,42 +1,126 @@
-<div class="col-lg-11 mx-auto">
-  <h3 class="spree-mb-large spree-mt-large spree-header"><%= Spree.t(:log_in_to_continue) %></h3>
-  <%= form_for Spree.user_class.new, as: :spree_user, url: spree_login_path do |f| %>
-    <div id="password-credentials" class="mb-4">
-      <div class="form-group mb-4">
-        <p class="form-group checkout-content-inner-field">
-          <%= f.email_field :email, class: 'spree-flat-input', placeholder: Spree.t(:email), value: params.dig(:spree_user, :email) %>
-        </p>
-      </div>
-      <div class="form-group mb-4">
-        <p class="form-group checkout-content-inner-field">
-          <%= f.password_field :password, class: 'spree-flat-input', placeholder: Spree.t(:password) %>
-        </p>
-      </div>
-    </div>
+<style type="text/css">
 
-    <% if Spree::Frontend::Config[:remember_me_enabled] %>
-      <div class="spree-checkbox-container mt-4 mt-sm-5 mt-lg-4 spree-mb-medium">
-        <div class="spree-checkbox">
-          <%= f.check_box :remember_me %>
-          <%= f.label :remember_me, '' %>
+.col-lg-6 {
+    flex: 0 0 auto;
+    width: 100%;
+}
+.offset-lg-3 {
+    margin-left: 0;
+}
+
+</style>
+
+<body class="d-flex align-items-center bg-auth border-top border-top-2 border-primary">
+<a class="navbar navbar-brand" href="<%= spree.root_path %>" style="margin-left: -100%;border-bottom: 0px;margin-top: -5%;">
+<%= image_tag 'OpsPi-logo.jpg', class: 'navbar-brand-img mx-auto' %>
+</a>
+<!-- CONTENT
+================================================== -->
+<div class="container mt-5">
+
+  <div class="row align-items-center">
+
+    <div class="col-12 col-md-6 offset-xl-2 offset-md-1 order-md-2 mb-5 mb-md-0">
+    <%= form_for Spree.user_class.new, as: :spree_user, url: spree_login_path do |f| %>
+      <!-- Image -->
+      <div class="text-center">
+
+        <%=image_tag('happiness')%>
+      </div>
+
+    </div>
+    <div class="col-12 col-md-5 col-xl-4 order-md-1 my-5">
+      <!-- Heading -->
+      <h1 class="display-4 text-center mb-3">
+        Sign in
+      </h1>
+
+      <!-- Subheading -->
+      <p class="text-muted text-center mb-5">
+        
+      </p>
+
+      <!-- Form -->
+      <form>
+
+        <!-- Email address -->
+        <div class="form-group">
+
+          <!-- Label -->
+          <label class="form-label">
+            Email Address
+          </label>
+
+          <!-- Input -->
+          <%= f.email_field :email, class: 'form-control', placeholder: Spree.t(:email), value: params.dig(:spree_user, :email) %>
+
         </div>
 
-        <%= f.label :remember_me, Spree.t(:remember_me), class: 'spree-checkbox-label' %>
-      </div>
+        <!-- Password -->
+        <div class="form-group">
+          <div class="row">
+            <div class="col">
+
+              <!-- Label -->
+              <label class="form-label">
+                Password
+              </label>
+
+            </div>
+            <div class="col-auto">
+
+              <!-- Help text -->
+              <% if spree.respond_to?(:reset_password_path) %>
+              <%= link_to Spree.t(:forgot_password), reset_password_path , class:"form-text small text-muted"%>
+              <%end%>
+            </div>
+          </div> <!-- / .row -->
+
+          <!-- Input group -->
+          <div class="input-group input-group-merge">
+
+            <!-- Input -->
+            <%= f.password_field :password, class: 'form-control', placeholder: Spree.t(:password) %>
+
+            <!-- Icon -->
+            <span class="input-group-text">
+              <i class="fa fa-eye" ></i>
+            </span>
+
+          </div>
+        </div>
+
+        <% if Spree::Frontend::Config[:remember_me_enabled] %>
+        <div class="form-check  mb-3">
+          <%= f.check_box :remember_me, class:"form-check-input list-checkbox" %>
+          <%= f.label :remember_me, '' ,class:"form-check-label"%>
+        </div>
+
     <% end %>
 
-    <%= f.submit Spree.t(:log_in), class: 'btn btn-primary btn-block spree-btn mt-2' %>
-  <% end %>
+        <!-- Submit -->
+        
+        <%= f.submit Spree.t(:log_in), class: 'btn btn-lg w-100 btn-primary mb-3' %>
 
-  <% if spree.respond_to?(:recover_password_path) %>
-    <div class="text-center forgot-password mb-4">
-      <%= link_to Spree.t(:forgot_password), spree.recover_password_path %>
-    </div>
-  <% end %>
+        <% if spree.respond_to?(:new_spree_user_confirmation_path) %>
+          <div class="text-center text-muted mb-4">
+            <%= link_to 'Resend Confirmation email', '/confirmations/new' %>
+          </div>
+        <% end %>
 
-  <% if spree.respond_to?(:new_spree_user_confirmation_path) %>
-    <div class="text-center forgot-password mb-4">
-      <%= link_to 'Resend Confirmation email', '/confirmations/new' %>
+        <!-- Link -->
+        <div class="text-center">
+          <small class="text-muted text-center">
+            Don't have an account yet? <%= link_to Spree.t('sign_up'), spree_signup_path %>.
+          </small>
+        </div>
+
+      </form>
+
     </div>
-  <% end %>
-</div>
+  </div> <!-- / .row -->
+</div> <!-- / .container -->
+
+<% end %>
+
+</body>
