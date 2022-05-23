@@ -21,17 +21,34 @@
 
 
 
-<% if @resources.present? %>
-<%= render partial: 'spree/admin/wizards/enable_web_service' %>
-</br>
-</br>
-<%= render partial: 'spree/admin/wizards/enable_mail_service' %>
-<% else %>
-  <div class="alert alert-secondary no-objects-found">
-    <label class="form-label" style="margin-top: 0.5rem;"> You don't have any mail or web services active yet</label>
-  </div>
-<% end %>
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+      <h5>List of Wizard jobs</h5>
+       <div class="row batch_job">
+          <div class="col-md-12">
+            <table class="table">
+              <tr>
+                <th style="width: 80%"> Domain </th>
+                <th> Status </th>
+                <th> Action </th>
+              </tr>
+               <%@batch_jobs.each do |key, batch_job|%>
+              
+                <tr>
+                  <td> <%= link_to batch_job.first[:domain] , admin_wizard_path(key)%> </td>
+                  <td> <%= get_wizard_status(batch_job)%></td>
+                  <td> <%= link_to 'View' , admin_wizard_path(key)%></td>
+                </tr>
+               <%end if @batch_jobs.present?%>
+            </table>
+          </div>
+        </div>
 
+
+         <%#= render :partial=>'batch_job', locals: {batch_job: batch_job}%>
+     
+  </div>
+</div>
 
 <script type="text/javascript">
   $(document).ready(function (argument) {

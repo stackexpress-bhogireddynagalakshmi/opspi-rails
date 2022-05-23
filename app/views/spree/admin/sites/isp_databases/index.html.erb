@@ -1,0 +1,44 @@
+<% content_for :page_title do %>
+ Databases
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_database),
+    new_admin_sites_isp_database_path,
+    class: "btn-success",
+      icon: 'add.svg',
+      id: 'new_admin_database' %>
+<% end %>
+
+<% if @resources.any? %>
+<div data-nav-x-wrapper>
+  <div data-nav-x-container>
+    <table class="table" id="listing_orders" data-hook data-nav-x-content>
+      <thead>
+        <tr data-hook="admin_orders_index_headers">
+          <th>Database Name</th>
+          <th>Database User</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: 'spree/admin/sites/isp_databases/index', collection: @resources, as: :database %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% else %>
+  <div class="alert alert-info no-objects-found">
+    You haven't created any Database yet.
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  })
+
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+</script>

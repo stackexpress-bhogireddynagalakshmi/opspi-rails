@@ -69,9 +69,14 @@ Rails.application.routes.draw do
         resources :sub_domains
         resources :protected_folders
         resources :protected_folder_users
+        resources :isp_databases
       end
 
-      resources :wizards
+      resources :wizards do 
+        collection do
+          get :reset_password
+        end
+      end
 
       namespace :windows do
         resources :domains

@@ -35,7 +35,7 @@ module IspConfig
                            body: dns_hash
                          })
 
-        Rails.logger.debug { response.inspect }
+       
         if response.code == "ok"
           user.hosted_zones.create({ isp_config_host_zone_id: response["response"] }) if response.code == "ok"
           { success: true, message: I18n.t('isp_config.host_zone.create') }
@@ -61,7 +61,8 @@ module IspConfig
                            method: :DELETE,
                            body: { primary_id: primary_id }
                          })
-        Rails.logger.debug { response.inspect }
+        
+        user.hosted_zones.find_by_isp_config_host_zone_id(primary_id).destroy if response.code == "ok"
         formatted_response(response, 'delete')
       end
 
@@ -72,7 +73,7 @@ module IspConfig
                            method: :PUT,
                            body: dns_hash.merge({ primary_id: primary_id })
                          })
-        Rails.logger.debug { response.inspect }
+        
         formatted_response(response, 'update')
       end
 
