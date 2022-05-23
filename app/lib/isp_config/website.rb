@@ -31,7 +31,7 @@ module IspConfig
                        })
 
       user.websites.create({ isp_config_website_id: response["response"] }) if response.code == "ok"
-
+      update(response.response, { document_root: "/var/www/clients/client#{user.isp_config_id}/web#{response.response}/sitepro" }) if response.code == "ok"
       formatted_response(response, 'create')
     end
 
