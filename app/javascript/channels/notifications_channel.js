@@ -13,10 +13,13 @@ consumer.subscriptions.create("NotificationsChannel", {
 
   received(data) {
     // Called when there's incoming data on the websocket for this channel
-    debugger
     console.log(data)
     if( data.job_status == "completed") {
       $('#'+data.job_id+" .status").html("<i class='fa fa-check'></i> "+ data.job_status)   
+
+      if (data.actions == true || data.actions == "true"){
+         $('#'+data.job_id+" .password a").removeClass('d-none');
+      }
     }
     else {
       $('#'+data.job_id+" .status").text(data.job_status)  

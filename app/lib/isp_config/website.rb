@@ -71,7 +71,7 @@ module IspConfig
                          }
                        })
 
-      # response.response&.reject! { |x| website_ids.exclude?(x.domain_id.to_i) }
+      response.response&.reject! { |x| website_ids.exclude?(x.domain_id.to_i) }
 
       formatted_response(response, 'list')
     end
