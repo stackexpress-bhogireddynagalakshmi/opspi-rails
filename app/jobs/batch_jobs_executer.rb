@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'concerns/session_notifications'
 
 class BatchJobsExecuter < ApplicationJob
@@ -11,13 +12,16 @@ class BatchJobsExecuter < ApplicationJob
     initialize_variables(user_id, parent_task_id, data)
 
     if can_execute_now?
-      Rails.logger.info {  "----------- #{service_class.name} Started--------" }
+      Rails.logger.info { "----------- #{service_class.name} Started--------" }
       process
-      Rails.logger.info {  "----------- #{service_class.name} Completed--------" }
+      Rails.logger.info { "----------- #{service_class.name} Completed--------" }
+      status.update(blocked: false)
     else
-      Rails.logger.info {  "----------- Putting back in Queue #{service_class.name}--------" }
-      
-      raise StandardError.new 'Parent Job not yet completed'
+      Rails.logger.info { "----------- Putting back in Queue #{service_class.name}--------" }
+      error = 'Parent Job not yet completed'
+      status.update(blocked: true, parent_task_id: parent_task_id, error_message: error)
+
+      raise StandardError, error
     end
   end
 
@@ -27,9 +31,11 @@ class BatchJobsExecuter < ApplicationJob
 
     unless service_object.success?
       status.update(error: true, message: service_object.response[:message])
+      error = "Unable to process #{service_object.class} at this time. #{service_object.response[:message]}"
+      send_background_notification(@user.id, nil, error)
+      status.update(error_message: error)
 
-      send_background_notification(@user.id, nil, "Unable to process #{service_object.class} at this time. #{service_object.response[:message]}")
-      raise StandardError.new 'Unable to process at this time.'
+      raise StandardError, error
     end
 
     send_background_notification(@user.id, "#{service_object.class} task completed", nil)
@@ -39,24 +45,24 @@ class BatchJobsExecuter < ApplicationJob
 
   def send_background_notification(user_id, message, error)
     session = {
-      user_id: user_id,
+      user_id: user_id
     }
 
-    status = ActiveJob::Status.get(self.job_id)[:status]
+    status = ActiveJob::Status.get(job_id)[:status]
     status = 'completed' if error.blank?
 
     data = {
       message: message,
-      job_id: self.job_id,
-      job_status: status,
+      job_id: job_id,
+      job_status: status
 
     }
 
-    if ['create_mail_box', 'create_ftp_account'].include?(@data[:type])
-      data[:actions] = true
-    else
-      data[:actions] = false
-    end
+    data[:actions] = if %w[create_mail_box create_ftp_account].include?(@data[:type])
+                       true
+                     else
+                       false
+                     end
 
     notify_session!(session, data, error)
   end
@@ -70,12 +76,11 @@ class BatchJobsExecuter < ApplicationJob
   def parent_task_completed?
     status = ActiveJob::Status.get(@parent_task_id)
 
-
     status.completed?
   end
 
   def initialize_variables(user_id, parent_task_id, data)
-    @user       = Spree::User.find_by_id(user_id)
+    @user = Spree::User.find_by_id(user_id)
     @parent_task_id = parent_task_id
     @data           = data
   end
@@ -91,7 +96,7 @@ class BatchJobsExecuter < ApplicationJob
     when 'create_mail_domain'
       TaskManager::HostingPanelTasks::MailDomainTask
     when 'create_mail_box'
-     TaskManager::HostingPanelTasks::MailBoxTask
+      TaskManager::HostingPanelTasks::MailBoxTask
     when 'create_ftp_account'
       TaskManager::HostingPanelTasks::FtpAccountTask
     when 'create_database'
