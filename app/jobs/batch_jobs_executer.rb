@@ -48,8 +48,15 @@ class BatchJobsExecuter < ApplicationJob
     data = {
       message: message,
       job_id: self.job_id,
-      job_status: status
+      job_status: status,
+
     }
+
+    if ['create_mail_box', 'create_ftp_account'].include?(@data[:type])
+      data[:actions] = true
+    else
+      data[:actions] = false
+    end
 
     notify_session!(session, data, error)
   end
