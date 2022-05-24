@@ -63,8 +63,8 @@ module Spree
       @isp_config ||= IspConfig::User.new(self)
     end
 
-    def site_builder
-      @site_builder ||= SitePro::SiteBuilder.new(self)
+    def chat_woot
+      @chat_woot ||= ChatWoot::ChatWootInbox.new(self)
     end
 
     def ensure_tanent_exists

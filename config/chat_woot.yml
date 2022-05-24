@@ -1,0 +1,4 @@
+base_url: <%=ENV["CHATWOOT_BASE_URL"]%>
+api_access_token: <%=ENV["CHATWOOT_API_ACCESS_TOKEN"]%>
+account_id: <%=ENV["CHATWOOT_ACCOUNT_ID"]%>
+platform_api_key: <%=ENV["CHATWOOT_PLATFORM_API_KEY"]%>
