@@ -17,11 +17,8 @@ consumer.subscriptions.create("NotificationsChannel", {
     if( data.job_status == "completed") {
       $('#'+data.job_id+" .status").html("<i class='fa fa-check'></i> "+ data.job_status)   
 
-      debugger
-
       if (data.actions == true || data.actions == "true"){
          $('#'+data.job_id+" .password a").removeClass('d-none');
-
       }
     }
     else {
