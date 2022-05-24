@@ -11,7 +11,11 @@ module TaskManager
     end
 
     def call
-      current_job = ::BatchJobsExecuter.perform_later(user.id, parent_job_id, current_task)
+      current_job = if parent_job_id.present?
+                      ::BatchJobsExecuter.set(wait: 3.second).perform_later(user.id, parent_job_id, current_task)
+                    else
+                      ::BatchJobsExecuter.perform_later(user.id, parent_job_id, current_task)
+                    end
 
       puts "scheduled #{current_task[:id]} -- #{current_task[:type]}:#{current_job.job_id} || parent_job: #{parent_job_id || 'nil'}"
 

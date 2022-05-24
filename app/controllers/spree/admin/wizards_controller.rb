@@ -4,15 +4,15 @@ module Spree
   module Admin
     class WizardsController < Spree::Admin::BaseController
       include ApisHelper
-      before_action :set_batch_jobs, only: [:index, :show]
+      before_action :set_batch_jobs, only: %i[index show]
 
-      def index; end 
+      def index; end
       def new; end
 
       def create
         @domain = wizard_params[:domain]
         @tasks = []
-        
+
         build_tasks
 
         TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
@@ -24,20 +24,21 @@ module Spree
       end
 
       def show
-        @tasks =  @batch_jobs[params[:id]] || @batch_jobs[params[:id].to_i]
+        @tasks = @batch_jobs[params[:id]] || @batch_jobs[params[:id].to_i]
       end
 
       def reset_password
-        if params[:type] == 'create_mail_box'
+        case params[:type]
+        when 'create_mail_box'
           mailboxes = mail_user_api.all
           mailboxes = mailboxes[:response].response
-          mailbox   = mailboxes.detect{|x| x.email == params[:email]}
+          mailbox   = mailboxes.detect { |x| x.email == params[:email] }
           @password = SecureRandom.hex
           @response = mail_user_api.update(mailbox.mailuser_id, { password: @password })
-        elsif  params[:type] == 'create_ftp_account'
+        when 'create_ftp_account'
           ftp_users = ftp_user_api.all
           ftp_users = ftp_users[:response].response
-          ftp_user  = ftp_users.detect{|x| x.username == params[:email]}
+          ftp_user  = ftp_users.detect { |x| x.username == params[:email] }
           @password = SecureRandom.hex
           @response = ftp_user_api.update(ftp_user.ftp_user_id, { password: @password })
         end
@@ -50,10 +51,12 @@ module Spree
         if wizard_params[:enable_web_service] == 'y'
           prepare_web_domain_task
           prepare_ftp_account_task
+          prepare_database_task
         end
 
         if wizard_params[:enable_mail_service] == 'y'
           prepare_mail_domain_task
+
           prepare_mail_box_task
         end
 
@@ -157,12 +160,30 @@ module Spree
             depends_on: nil,
             sidekiq_job_id: nil
           }
+
+        @tasks <<
+          {
+            id: SecureRandom.hex,
+            type: "create_dns_record",
+            domain: @domain,
+            data:
+                {
+                  name: @domain,
+                  type: 'MX',
+                  mailserver: "mail.#{get_sanitized_domain(@domain)}",
+                  hosted_zone_id: '', # needed at later stage
+                  ttl: 60,
+                  priority: 60
+                },
+            depends_on: 3,
+            sidekiq_job_id: nil
+          }
       end
 
       def prepare_mail_box_task
         emails = wizard_params[:emails]
 
-        emails.each_with_index do |email, idx|
+        emails.each_with_index do |email, _idx|
           @tasks <<
             {
               id: SecureRandom.hex,
@@ -215,6 +236,23 @@ module Spree
           }
       end
 
+      def prepare_database_task
+        @tasks <<
+          {
+            id: SecureRandom.hex,
+            type: "create_database",
+            domain: @domain,
+            data: {
+              web_domain_id: "", # needed in later stage
+              database_name: get_database_name(@domain),
+              database_username: get_database_user_name(@domain),
+              database_password: SecureRandom.hex
+            },
+            depends_on: 2,
+            sidekiq_job_id: nil
+          }
+      end
+
       def set_ftp_username(domain)
         domain = domain.gsub("www.", '')
 
@@ -226,11 +264,29 @@ module Spree
       end
 
       def set_batch_jobs
-        @batch_jobs =  eval(AppManager::RedisWrapper.get("batch_jobs_user_id_#{current_spree_user.id}").to_s)
+        @batch_jobs = eval(AppManager::RedisWrapper.get("batch_jobs_user_id_#{current_spree_user.id}").to_s)
 
         @batch_jobs = @batch_jobs.with_indifferent_access if @batch_jobs.present?
 
         @batch_jobs
+      end
+
+      def get_database_name(domain)
+        domain = domain.gsub("www.", '')
+        domain = domain.gsub('.', '_')
+
+        domain.to_s
+      end
+
+      def get_database_user_name(domain)
+        domain = domain.gsub("www.", '')
+        domain = domain.gsub('.', '_')
+
+        domain.to_s
+      end
+
+      def get_sanitized_domain(domain)
+        domain.gsub("www.", '')
       end
     end
   end
