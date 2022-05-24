@@ -16,25 +16,26 @@ module OpsPi
       Spree::UserRegistrationsController.layout "dashkit_layout"
       Spree::UserConfirmationsController.layout "dashkit_layout"
       Spree::UserPasswordsController.layout "dashkit_layout"
-      Spree::Admin::DomainRegistrationsController.layout "dashkit_admin_layout"
-      Spree::Admin::Dns::HostedZonesController.layout "dashkit_admin_layout"
-      Spree::Admin::Mail::DomainsController.layout "dashkit_admin_layout"
-      Spree::Admin::Mail::MailBoxesController.layout "dashkit_admin_layout"
-      Spree::Admin::Mail::MailingListsController.layout "dashkit_admin_layout"
-      Spree::Admin::Mail::SpamFilterBlacklistsController.layout "dashkit_admin_layout"
-      Spree::Admin::Mail::SpamFilterWhitelistsController.layout "dashkit_admin_layout"
-      Spree::Admin::Mail::ForwardsController.layout "dashkit_admin_layout"
-      Spree::Admin::Sites::WebsitesController.layout "dashkit_admin_layout"
-      Spree::Admin::Sites::SubDomainsController.layout "dashkit_admin_layout"
-      Spree::Admin::Sites::FtpUsersController.layout "dashkit_admin_layout"
-      Spree::Admin::Sites::ProtectedFoldersController.layout "dashkit_admin_layout"
-      Spree::Admin::Sites::ProtectedFolderUsersController.layout "dashkit_admin_layout"
-      Spree::Admin::WizardsController.layout "dashkit_admin_layout"
-      Spree::Admin::Windows::DomainsController.layout "dashkit_admin_layout"
-      Spree::Admin::WebsiteBuilder::SiteBuildersController.layout "dashkit_admin_layout"
-      Spree::Admin::UserSessionsController.layout "dashkit_admin_layout"
+      # Spree::Admin::DomainRegistrationsController.layout "dashkit_admin_layout"
+      # Spree::Admin::Dns::HostedZonesController.layout "dashkit_admin_layout"
+      # Spree::Admin::Mail::DomainsController.layout "dashkit_admin_layout"
+      # Spree::Admin::Mail::MailBoxesController.layout "dashkit_admin_layout"
+      # Spree::Admin::Mail::MailingListsController.layout "dashkit_admin_layout"
+      # Spree::Admin::Mail::SpamFilterBlacklistsController.layout "dashkit_admin_layout"
+      # Spree::Admin::Mail::SpamFilterWhitelistsController.layout "dashkit_admin_layout"
+      # Spree::Admin::Mail::ForwardsController.layout "dashkit_admin_layout"
+      # Spree::Admin::Sites::WebsitesController.layout "dashkit_admin_layout"
+      # Spree::Admin::Sites::SubDomainsController.layout "dashkit_admin_layout"
+      # Spree::Admin::Sites::FtpUsersController.layout "dashkit_admin_layout"
+      # Spree::Admin::Sites::ProtectedFoldersController.layout "dashkit_admin_layout"
+      # Spree::Admin::Sites::ProtectedFolderUsersController.layout "dashkit_admin_layout"
+      # Spree::Admin::WizardsController.layout "dashkit_admin_layout"
+      # Spree::Admin::Windows::DomainsController.layout "dashkit_admin_layout"
+      # Spree::Admin::WebsiteBuilder::SiteBuildersController.layout "dashkit_admin_layout"
+      # Spree::Admin::UserSessionsController.layout "dashkit_admin_layout"
+      # Spree::Admin::OrdersController.layout "dashkit_admin_layout"
+      # Spree::Admin::ReturnIndexController.layout "dashkit_admin_layout"
 
-      
       # Load application's model / class decorators
       Dir.glob(File.join(File.dirname(__FILE__), "../app/**/*_decorator*.rb")) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
@@ -52,7 +53,6 @@ module OpsPi
     config.active_storage.service = :digitalocean
     config.filter_parameters += ['api-key','auth-userid',:passwd]
 
-    
   
     # config.assets.precompile += %w( store/all.js store/all.css admin/all.js admin/all.css)
 
