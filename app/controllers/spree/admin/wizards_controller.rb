@@ -243,7 +243,6 @@ module Spree
             id: SecureRandom.hex,
             type: "create_database",
             domain: @domain,
-            actions: true,
             data: {
               web_domain_id: "", #needed in later stage
               database_name: get_database_name(@domain),
