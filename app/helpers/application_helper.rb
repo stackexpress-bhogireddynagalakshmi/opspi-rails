@@ -165,12 +165,15 @@ module ApplicationHelper
       job[:data][:email]
     when 'create_ftp_account'
       job[:data][:username]
+    when 'create_database'
+      job[:data][:database_name]
     else
        "Unknown task type"
     end
   end
 
   def get_task_status(job)
+    return nil if job[:sidekiq_job_id].blank?
     status = ActiveJob::Status.get(job[:sidekiq_job_id])
     status = status[:status]
     return status unless status == :completed

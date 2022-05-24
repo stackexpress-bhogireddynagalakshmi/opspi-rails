@@ -87,6 +87,8 @@ class BatchJobsExecuter < ApplicationJob
      TaskManager::HostingPanelTasks::MailBoxTask
     when 'create_ftp_account'
       TaskManager::HostingPanelTasks::FtpAccountTask
+    when 'create_database'
+      TaskManager::HostingPanelTasks::DatabaseTask
     else
       raise StandardError, "Unknown task type"
     end
