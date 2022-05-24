@@ -175,10 +175,9 @@ module Spree
                 ttl: 60,
                 priority: 60
               },
-          depends_on: 1,
+          depends_on: 3,
           sidekiq_job_id: nil
         }
-
       end
 
       def prepare_mail_box_task
