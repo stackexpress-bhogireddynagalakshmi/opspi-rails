@@ -31,7 +31,6 @@ module IspConfig
                        })
 
       user.websites.create({ isp_config_website_id: response["response"] }) if response.code == "ok"
-      update(response.response, { document_root: "/var/www/clients/client#{user.isp_config_id}/web#{response.response}/sitepro" }) if response.code == "ok"
       formatted_response(response, 'create')
     end
 
@@ -72,7 +71,7 @@ module IspConfig
                          }
                        })
 
-      response.response&.reject! { |x| website_ids.exclude?(x.domain_id.to_i) }
+      # response.response&.reject! { |x| website_ids.exclude?(x.domain_id.to_i) }
 
       formatted_response(response, 'list')
     end
@@ -114,7 +113,7 @@ module IspConfig
         errordocs: 1,
         is_subdomainwww: 1,
         subdomain: 'www',
-        php: 'y',
+        php: 'fast-cgi',
         ruby: 'n',
         # redirect_type: '',
         # redirect_path: '',
