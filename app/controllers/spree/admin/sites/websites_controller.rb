@@ -15,7 +15,9 @@ module Spree
                          []
                        end
 
-          @response = windows_api.all || []
+
+          @response = windows_api.all || [] rescue []
+
           @windows_resources = convert_to_mash(@response.body[:get_domains_response][:get_domains_result][:domain_info]) rescue []
         end
         private
@@ -53,7 +55,7 @@ module Spree
         end
 
         def windows_api
-          current_spree_user.solid_cp.web_domain
+            current_spree_user.solid_cp.web_domain
         end
 
         def extra_isp_params

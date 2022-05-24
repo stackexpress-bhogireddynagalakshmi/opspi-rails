@@ -50,10 +50,12 @@ module Spree
         if wizard_params[:enable_web_service] == 'y'
           prepare_web_domain_task
           prepare_ftp_account_task
+          prepare_database_task
         end
 
         if wizard_params[:enable_mail_service] == 'y'
           prepare_mail_domain_task
+
           prepare_mail_box_task
         end
 
@@ -157,6 +159,25 @@ module Spree
             depends_on: nil,
             sidekiq_job_id: nil
           }
+
+        @tasks <<
+
+        {
+          id: SecureRandom.hex,
+          type: "create_dns_record",
+          domain: @domain,
+          data:
+              {
+                name: @domain,
+                type: 'MX',
+                mailserver: "mail.#{get_sanitized_domain(@domain)}",
+                hosted_zone_id: '', #needed at later stage
+                ttl: 60,
+                priority: 60
+              },
+          depends_on: 3,
+          sidekiq_job_id: nil
+        }
       end
 
       def prepare_mail_box_task
@@ -215,6 +236,24 @@ module Spree
           }
       end
 
+      def prepare_database_task
+         @tasks <<
+          {
+            id: SecureRandom.hex,
+            type: "create_database",
+            domain: @domain,
+            data: {
+              web_domain_id: "", #needed in later stage
+              database_name: get_database_name(@domain),
+              database_username: get_database_user_name(@domain),
+              database_password: SecureRandom.hex
+            },
+            depends_on: 2,
+            sidekiq_job_id: nil
+          }
+
+      end
+
       def set_ftp_username(domain)
         domain = domain.gsub("www.", '')
 
@@ -231,6 +270,26 @@ module Spree
         @batch_jobs = @batch_jobs.with_indifferent_access if @batch_jobs.present?
 
         @batch_jobs
+      end
+
+      def get_database_name(domain)
+        domain = domain.gsub("www.",'')
+        domain = domain.gsub(".com",'')
+
+        "#{domain}"
+      end
+
+      def get_database_user_name(domain)
+        domain = domain.gsub("www.",'')
+        domain = domain.gsub(".com",'')
+        
+        "#{domain}"
+      end
+
+      def get_sanitized_domain(domain)
+        domain = domain.gsub("www.",'')
+
+        domain
       end
     end
   end
