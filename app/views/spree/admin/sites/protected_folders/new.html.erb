@@ -1,18 +1,8 @@
-<div class="header">
-  <div class="header-body">
-    <div class="row align-items-center">
-      <div class="col">
-        <h1 class="header-title">
-        <%= link_to Spree.t(:protected_folders), admin_sites_protected_folders_path %> /
-        <%= Spree.t(:web_folder) %>
-        </h1>
-      </div>
-      <div class="col-auto">
-      </div>
-    </div>
-
-  </div>
-</div>
+<% content_for :page_title do %>
+ <div class="mt-2"></div>
+  <%= link_to Spree.t(:protected_folders), admin_sites_protected_folders_path %> /
+  <%= Spree.t(:web_folder) %>
+<% end %>
 
 
 <% url =  @protected_folder.present? ?   admin_sites_protected_folder_path(@protected_folder.id) : admin_sites_protected_folders_path%>
@@ -20,22 +10,22 @@
  <%=form_for "protected_folder", url: url, html: {method: @protected_folder.present? ? :put : :post} do |f|%> 
 
   <fieldset>
-    <div class="form-group">
-      <label class="form-label">Select Website:</label>
-      <%= collection_select(:protected_folder, :parent_domain_id, @websites, :domain_id, :domain, {:prompt => 'Select Web Website'}, {class: 'form-select js-filterable'}) %>
+    <div class="form-group field">
+      <label>Select Website:</label>
+      <%= collection_select(:protected_folder, :parent_domain_id, @websites, :domain_id, :domain, {:prompt => 'Select Web Website'}, {class: 'select2-clear js-filterable'}) %>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Path:</label>
+    <div class="form-group field">
+      <label>Path:</label>
       <%=f.text_field 'path', value: "/", class: 'form-control', placeholder: "Please enter path" %>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Active</label>
-      <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @protected_folder.try(:active)),{}, class: 'form-select'%>
+    <div class="form-group field">
+      <label>Active</label>
+      <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @protected_folder.try(:active)),{}, class: 'form-control'%>
     </div>
 
-    <%=submit_tag "Add Folder",class: 'btn btn-primary lift'%>
+    <%=submit_tag "Add Folder",class: 'btn btn-primary'%>
 
   </fieldset>
 <% end %>

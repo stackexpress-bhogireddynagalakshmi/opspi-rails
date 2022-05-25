@@ -1,25 +1,13 @@
-<div class="header">
-  <div class="header-body">
-    <div class="row align-items-center">
-      <div class="col">
-        <h1 class="header-title">
-        Domain Registrations
-        </h1>
-        
-      </div>
-      <div class="col-auto">
-
-      <%= button_link_to Spree.t(:add_domian),
-      new_admin_domain_registration_url,
-      class: "btn btn-primary lift",
-        icon: 'add.svg',
-        id: 'admin_new_order' %>
-
-      </div>
-    </div>
-
-  </div>
-</div>
+<% content_for :page_title do %>
+ Domain Registrations
+<% end %>
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:add_domian),
+    new_admin_domain_registration_url,
+    class: "btn-success",
+      icon: 'add.svg',
+      id: 'admin_new_order' %>
+<% end %>
 
 <% if @domains.any? %>
 <div data-nav-x-wrapper>
@@ -76,10 +64,9 @@
   </div>
 </div>
 <% else %>
-  <div class="alert alert-light no-objects-found">
-    <%#= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Order))%>
-    <label class="form-label" style="margin-top: 0.5rem;"> No Orders found, <%= link_to(Spree.t(:add_one), new_admin_order_url) if can? :create, Spree::Order ,class:"form-label"%>!</label>
-    
+  <div class="alert alert-info no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: plural_resource_name(Spree::Order)) %>,
+    <%= link_to(Spree.t(:add_one), new_admin_order_url) if can? :create, Spree::Order %>!
   </div>
 <% end %>
 <%#= render 'spree/admin/shared/index_table_options', collection: @domains, simple: true %>

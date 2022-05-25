@@ -1,30 +1,18 @@
-<div class="header">
-  <div class="header-body">
-    <div class="row align-items-center">
-      <div class="col">
-        <h1 class="header-title">
-        Website Builder
-        </h1>
-        
-      </div>
-      <div class="col-auto">
-      </div>
-    </div>
-
-  </div>
-</div>
-
+<% content_for :page_title do %>
+<div class="mt-2"></div>
+<%= Spree.t(:Website_builder) %>
+<% end %>
 
 <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
 
-<div class="form-group">
-  <label class="form-label">Select Domain</label>
-   <%=select_tag 'mail_domain', options_for_select(get_dns_domains), class: 'form-select field-size'%>
+<div class="form-group field">
+  <label>Select Domain</label>
+   <%=select_tag 'mail_domain', options_for_select(get_dns_domains), class: 'form-control field-size'%>
 </div> 
 
 <div class="input-group">
     <div>
-     <%=submit_tag 'Get Started',class: 'btn btn-primary lift'%>
+     <%=submit_tag 'Get Started',class: 'btn btn-primary'%>
     </div>
 </div>
 <div class="redirect" onmouseover = "myFunction()">
