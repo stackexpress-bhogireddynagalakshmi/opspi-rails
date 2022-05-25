@@ -25,11 +25,9 @@ module Spree
         @domains = @orders
 
                 
-        # render :layout => "dashkit_admin_layout"
       end
 
       def new
-        # render :layout => "dashkit_admin_layout"
         @order = current_domain_order
         cookies.signed[:token] = @order.token if @order.present?
         @product = TenantManager::TenantHelper.unscoped_query { Spree::Product.domain.first }
@@ -70,7 +68,6 @@ module Spree
       end
 
       def setup_reseller_club
-        # render :layout => "dashkit_admin_layout"
         if request.post?
           spree_current_user.update(user_params)
           flash.now[:success] = "ResellerClub credentials saved successfully"
