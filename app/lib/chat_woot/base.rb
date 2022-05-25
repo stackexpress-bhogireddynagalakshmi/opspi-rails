@@ -4,8 +4,8 @@ module ChatWoot
     class Base
       include HTTParty
       
-      base_uri ChatWoot::Config.api_url
-  
+      base_uri ChatWoot::Config.base_url
+
       debug_output $stdout
   
      
@@ -16,7 +16,7 @@ module ChatWoot
         header = header.merge(opts[:header]) if opts[:header].present?
         response = self.class.send(method, opts[:endpoint], body: opts[:body].to_json, headers: header)
         data = response.parsed_response
-  
+
         if response.success?
           if [TrueClass, FalseClass, Integer].include?(data.class)
             data

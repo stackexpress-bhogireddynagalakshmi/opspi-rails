@@ -1,25 +1,25 @@
 module ChatWoot
     class Agent < Base
-      attr_accessor :user
-  
-      def initialize(user)
-        @user = user
+      attr_reader :account
+
+      def initialize(account, options = {})
+        @account = account
       end
   
-      def create(params = {})
+      def create
         response = query({
-                           endpoint: "/#{ChatWoot::Config.api_version}/accounts/#{ChatWoot::Config.account_id}/agents",
+                           endpoint: "/#{ChatWoot::Config.chatwoot_api_version}/accounts/#{ChatWoot::Config.account_id}/agents",
                            method: :POST,
                            header: authorization_user_header,
                            body: {
-                            name: "", ## reseller name
-                            email: "", ## reseller email
+                            name: account.name,
+                            email: account.admin_email,
                             role: "agent",  
                             availability_status: "available",
                             auto_offline: true
                            }
                          })
-  
+
         formatted_response(response, 'create')
       end
   
@@ -28,10 +28,10 @@ module ChatWoot
   
      
       def formatted_response(response, action)
-        if response.url?
+        if response.present? && response.id?
           {
             success: true,
-            message: I18n.t("isp_config.ftp_user.#{action}"),
+            message: "Added Successfully",
             response: response
           }
         else
@@ -41,12 +41,6 @@ module ChatWoot
             response: response
           }
         end
-      end
-  
-      def server_params
-        {
-          server_id: ENV['ISP_CONFIG_WEB_SERVER_ID']
-        }
       end
     end
   end

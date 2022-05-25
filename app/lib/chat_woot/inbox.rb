@@ -1,22 +1,22 @@
 module ChatWoot
   class Inbox < Base
-    attr_accessor :user
+    attr_reader :account
 
-    def initialize(user)
-      @user = user
+    def initialize(account, options = {})
+      @account = account
     end
 
-    def create(params = {})
+    def create
       response = query({
-                         endpoint: "/#{ChatWoot::Config.api_version}/accounts/#{ChatWoot::Config.account_id}/inboxes/",
+                         endpoint: "/#{ChatWoot::Config.chatwoot_api_version}/accounts/#{ChatWoot::Config.account_id}/inboxes/",
                          method: :POST,
                          header: authorization_user_header,
                          body: {
-                          name: "", ## website name
+                          name: account.name,
                           channel: {
                             type: "web_widget",
-                            website_url: "",  ## website url
-                            widget_color: "blue"
+                            website_url: account.url, 
+                            widget_color: "rgb(0, 156, 224)"
                           }
                          }
                        })
@@ -24,15 +24,29 @@ module ChatWoot
       formatted_response(response, 'create')
     end
 
+    def add_agent_to_inbox
+      response = query({
+                         endpoint: "/#{ChatWoot::Config.chatwoot_api_version}/accounts/#{ChatWoot::Config.account_id}/inbox_members",
+                         method: :POST,
+                         header: authorization_user_header,
+                         body: {
+                          inbox_id: account.inbox_id,
+                          user_ids: [ account.user_agent_id]
+                         }
+                       })
+
+      formatted_response(response, 'create')
+    end    
+
    
     private
 
    
     def formatted_response(response, action)
-      if response.url?
+      if response.present? && response.id?
         {
           success: true,
-          message: I18n.t("isp_config.ftp_user.#{action}"),
+          message: "Added Successfully",
           response: response
         }
       else
@@ -42,12 +56,6 @@ module ChatWoot
           response: response
         }
       end
-    end
-
-    def server_params
-      {
-        server_id: ENV['ISP_CONFIG_WEB_SERVER_ID']
-      }
     end
   end
 end
