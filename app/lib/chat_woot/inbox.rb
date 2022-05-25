@@ -52,7 +52,7 @@ module ChatWoot
       else
         {
           success: false,
-          message: I18n.t('isp_config.something_went_wrong', message: response.message),
+          message: I18n.t('isp_config.something_went_wrong'),
           response: response
         }
       end
