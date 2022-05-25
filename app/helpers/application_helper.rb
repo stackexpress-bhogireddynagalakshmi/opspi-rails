@@ -123,13 +123,14 @@ module ApplicationHelper
     []
   end
 
-  def get_dns_domains
-    domains = current_spree_user.isp_config.hosted_zone.all_zones
-    domains[:response].response.collect(&:origin)
-    # domains[:response].response.map{|k| k.values}
-  rescue Exception => e
-    Rails.logger.info { e.message }
-    []
+  def  get_dns_domains
+    begin
+      domains = current_spree_user.isp_config.hosted_zone.all_zones
+      domains[:response].response.collect{|x| x.origin.chomp(".")}
+    rescue Exception => e
+      Rails.logger.info{ e.message}
+      []
+    end
   end
 
   def months_dropdown
