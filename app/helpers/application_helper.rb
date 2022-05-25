@@ -133,9 +133,10 @@ module ApplicationHelper
     end
   end
 
-  def current_domain
-    # byebug
+  def current_domain_chat_widget
     chatwoot_user = ChatwootUser.where(store_account_id: current_spree_user.account.id).first
+    return nil if chatwoot_user.nil?
+    return ENV['CHATWOOT_ADMIN_WEBSITE_TOKEN'] if current_spree_user.store_admin?
     chatwoot_user.website_token
   end
 
