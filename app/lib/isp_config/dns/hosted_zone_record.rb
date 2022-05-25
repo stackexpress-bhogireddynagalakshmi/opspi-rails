@@ -99,13 +99,13 @@ module IspConfig
 
       def dns_record_hash(hosted_zone_record)
         {
-          "client_id": hosted_zone_record[:client_id],
+          "client_id": user.isp_config_id,
           "params": {
             server_id: ENV['ISP_CONFIG_DNS_SERVER_ID'],
             zone: hosted_zone_record[:hosted_zone_id],
-            name: hosted_zone_record[:name],
+            name: append_zone_name_with_record_name(hosted_zone_record[:name],hosted_zone_record[:hosted_zone_name]),
             type: hosted_zone_record[:type],
-            data: hosted_zone_record[:data],
+            data: record_data(hosted_zone_record[:type],hosted_zone_record[:data]),
             aux: hosted_zone_record[:priority],
             ttl: hosted_zone_record[:ttl],
             active: 'y',
@@ -114,6 +114,25 @@ module IspConfig
           }
         }
       end
+
+      def append_zone_name_with_record_name(record_name,zone_name)
+        if zone_name.nil? 
+          record_name+"."
+        elsif zone_name.present? && zone_name.eql?(record_name)
+          record_name+"."
+        else
+          record_name+"."+zone_name+"."
+        end
+      end
+
+      def record_data(type, data)
+        if type.eql?("A") || type.eql?("AAAA") || type.eql?("TXT")
+          data
+        else
+          data+"."
+        end
+      end
+
     end
   end
 end

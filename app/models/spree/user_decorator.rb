@@ -125,7 +125,7 @@ module Spree
 
     def active_for_authentication?
       if superadmin?
-        super && TenantManager::TenantHelper.current_admin_tenant?
+        super && TenantManager::TenantHelper.current_admin_tenant? || TenantManager::TenantHelper.current_tenant.blank?
       elsif store_admin?
         if TenantManager::TenantHelper.current_admin_tenant?
           super
@@ -178,6 +178,8 @@ module Spree
     end
 
     def ensure_terms_and_condition_accepted
+      return if TenantManager::TenantHelper.current_tenant.blank?
+      
       errors.add(:_, "Please accept the terms and conditions") unless terms_and_conditions
     end
   end

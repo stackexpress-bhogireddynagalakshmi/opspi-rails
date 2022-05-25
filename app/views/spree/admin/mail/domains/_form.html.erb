@@ -21,7 +21,7 @@
   <fieldset>
     <div class="form-group field">
       <label>Select Domain:</label>
-      <%= f.select(:domain, options_for_select(@hosted_zones.collect{ |x| x.origin }), {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+      <%= f.select(:domain, options_for_select(get_dns_domains), {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
      </div>
           
     <div class="form-group field">
