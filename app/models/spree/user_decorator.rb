@@ -178,6 +178,8 @@ module Spree
     end
 
     def ensure_terms_and_condition_accepted
+      return if TenantManager::TenantHelper.current_tenant.blank?
+      
       errors.add(:_, "Please accept the terms and conditions") unless terms_and_conditions
     end
   end
