@@ -99,18 +99,9 @@
     s.parentNode.insertBefore(g,s);
     g.onload=function(){
       window.chatwootSDK.run({
-        websiteToken: `<%= ENV['CHATWOOT_WEBSITE_TOKEN']%>`,
+        websiteToken: `<%= current_domain %>`,
         baseUrl: BASE_URL
       });
-      window.$chatwoot.setUser(`<%= current_spree_user.email %>`, {
-        email: `<%= current_spree_user.email %>`, // Email of the user
-        identifier_hash: `<%= identifier_hash_key %>`, // Identifier Hash generated based on the webwidget hmac_token
-      });
-      window.chatwootSettings = {
-        type: "expanded_bubble", // [standard, expanded_bubble]
-        darkMode: "auto", // [light, auto]
-        launcherTitle: "Chat with us",
-      }
     }
   })(document,"script");
 </script>

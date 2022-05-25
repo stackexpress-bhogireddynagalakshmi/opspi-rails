@@ -1,5 +1,5 @@
 module ChatWoot
-    class User < Base
+    class Agent < Base
       attr_accessor :user
   
       def initialize(user)
@@ -8,16 +8,15 @@ module ChatWoot
   
       def create(params = {})
         response = query({
-                           endpoint: "/platform/#{ChatWoot::Config.api_version}/users",
+                           endpoint: "/#{ChatWoot::Config.api_version}/accounts/#{ChatWoot::Config.account_id}/agents",
                            method: :POST,
-                           header: authorization_header,
+                           header: authorization_user_header,
                            body: {
-                            name: "external",
-                            channel: {
-                              type: "web_widget",
-                              website_url: "en",
-                              widget_color: "blue"
-                            }
+                            name: "", ## reseller name
+                            email: "", ## reseller email
+                            role: "agent",  
+                            availability_status: "available",
+                            auto_offline: true
                            }
                          })
   

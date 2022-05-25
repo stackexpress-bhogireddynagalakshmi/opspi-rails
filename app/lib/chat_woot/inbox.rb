@@ -8,14 +8,14 @@ module ChatWoot
 
     def create(params = {})
       response = query({
-                         endpoint: "/api/v1/accounts/#{ChatWoot::Config.account_id}/inboxes/",
+                         endpoint: "/#{ChatWoot::Config.api_version}/accounts/#{ChatWoot::Config.account_id}/inboxes/",
                          method: :POST,
                          header: authorization_user_header,
                          body: {
-                          name: "external",
+                          name: "", ## website name
                           channel: {
                             type: "web_widget",
-                            website_url: "en",
+                            website_url: "",  ## website url
                             widget_color: "blue"
                           }
                          }

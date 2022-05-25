@@ -4,7 +4,7 @@ module ChatWoot
     class Base
       include HTTParty
       
-      base_uri ChatWoot::Config.base_url
+      base_uri ChatWoot::Config.api_url
   
       debug_output $stdout
   

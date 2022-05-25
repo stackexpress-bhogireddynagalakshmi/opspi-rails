@@ -133,6 +133,12 @@ module ApplicationHelper
     end
   end
 
+  def current_domain
+    # byebug
+    chatwoot_user = ChatwootUser.where(store_account_id: current_spree_user.account.id).first
+    chatwoot_user.website_token
+  end
+
   def identifier_hash_key
     OpenSSL::HMAC.hexdigest('sha256', ENV['IDENTIFIER_HASH_KEY'], current_spree_user.email)
   end
