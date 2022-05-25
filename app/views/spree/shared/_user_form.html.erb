@@ -13,6 +13,12 @@
 .offset-lg-3 {
     margin-left: 0;
 }
+.navbar-img{
+  max-width: 100%;
+  max-height: 3.5rem;
+  margin-top: 2%;
+  margin-left:-3%;
+}
 .scroll {
     max-height: 400px;
     overflow-y: auto;
@@ -21,8 +27,8 @@
 </style>
 
 <body class="d-flex align-items-center bg-auth border-top border-top-2 border-primary">
-<a class="navbar navbar-brand" href="<%= spree.root_path %>" style="margin-left: -100%;border-bottom: 0px;margin-top: -5%;">
-<%= image_tag 'OpsPi-logo.jpg', class: 'navbar-brand-img mx-auto' %>
+<a href="<%= spree.root_path %>">
+<%= image_tag 'OpsPi-logo.jpg', class: "navbar-img" %>
 </a>
     <!-- CONTENT
     ================================================== -->
