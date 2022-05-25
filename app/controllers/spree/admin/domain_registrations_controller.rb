@@ -9,6 +9,7 @@ module Spree
       before_action :set_tld_pricing, only: [:new]
 
       def index
+        
         ActsAsTenant.current_tenant = nil
 
         @orders = if current_spree_user.superadmin?
@@ -22,6 +23,8 @@ module Spree
                          .order('spree_orders.created_at desc')
 
         @domains = @orders
+
+                
       end
 
       def new

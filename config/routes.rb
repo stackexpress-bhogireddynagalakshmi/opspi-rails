@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   devise_scope :spree_user do
     get '/confirmations/new' => 'spree/user_confirmations#new', :as => :new_confirmation
+    get '/password/recover' => 'spree/user_passwords#new', :as => :recover_password
   end
   
   Spree::Core::Engine.routes.draw do

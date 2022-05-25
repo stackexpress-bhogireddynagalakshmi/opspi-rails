@@ -1,0 +1,16 @@
+<div class="container user-registration user-registration-new">
+   <%= render "spree/shared/error_messages", target: resource %>
+  <div class="row">
+    <div class="col-lg-6 offset-lg-3">
+      <div class="mb-3">
+        <div id="new-customer" data-hook="login">
+        <%= form_for Spree.user_class.new, as: :spree_user, url: spree.registration_path do |f| %>
+        <div data-hook="signup_inside_form">
+        <%= render partial: 'spree/shared/user_form', locals: { f: f, remember_me_field: true } %>
+        </div>
+        <%end%>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
