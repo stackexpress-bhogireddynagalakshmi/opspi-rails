@@ -38,7 +38,7 @@ module IspConfig
        
         if response.code == "ok"
           user.hosted_zones.create({ isp_config_host_zone_id: response["response"] }) if response.code == "ok"
-          { success: true, message: I18n.t('isp_config.host_zone.create') }
+          { success: true, message: I18n.t('isp_config.host_zone.create'), response: response }
         else
           { success: false, message: I18n.t('isp_config.something_went_wrong', message: response.message) }
         end
@@ -113,9 +113,9 @@ module IspConfig
           "client_id": user.isp_config_id,
           "params": {
             server_id: ENV['ISP_CONFIG_DNS_SERVER_ID'],
-            origin: hosted_zone[:name],
-            ns:  ENV['ISPCONFIG_DNS_SERVER_NS1'],
-            mbox: hosted_zone[:mbox],
+            origin: hosted_zone[:name]+".",
+            ns: ENV['ISPCONFIG_DNS_SERVER_NS1']+".",
+            mbox: mbox(hosted_zone[:mbox])+".",
             serial: "1",
             refresh: hosted_zone[:refresh],
             retry: hosted_zone[:retry],
@@ -128,6 +128,10 @@ module IspConfig
             update_acl: hosted_zone[:update_acl]
           }
         }
+      end
+
+      def mbox(mail_box)
+        mail_box.sub('@','.')
       end
     end
   end

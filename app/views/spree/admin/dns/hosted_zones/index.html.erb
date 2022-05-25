@@ -43,11 +43,11 @@
       <tbody>
       <% @hosted_zones.each do |hosted_zone| %>
         <tr data-hook="admin_orders_index_rows">
-          <td><%=link_to hosted_zone.origin, dns_admin_dns_hosted_zone_path(hosted_zone.id), class: hosted_zone %></td>
+          <td><%=link_to hosted_zone.origin.chomp("."), dns_admin_dns_hosted_zone_path(hosted_zone.id, :dns_name => hosted_zone.origin.chomp(".")), class: hosted_zone %></td>
           <!--td><%="Active"%></td-->
           <td class='actions' data-hook="admin_orders_index_row_actions">
             <span class="d-flex justify-content-end">
-              <%= link_to_edit_url edit_admin_dns_hosted_zone_path(hosted_zone.id), no_text: true %>
+              <%#= link_to_edit_url edit_admin_dns_hosted_zone_path(hosted_zone.id), no_text: true %>
               <%= link_to_delete "Delete", url: admin_dns_hosted_zone_path(hosted_zone.id), no_text: true %>
             </span>
           </td>

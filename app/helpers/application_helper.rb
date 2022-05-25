@@ -42,13 +42,13 @@ module ApplicationHelper
   def format_date(date)
     return unless date
 
-    date.strftime("%m/%d/%y")
+    date.strftime("%Y-%m-%d")
   end
 
   def format_date_with_century(date)
     return unless date
 
-    date.strftime("%m/%d/%Y")
+    date.strftime("%Y-%m-%d")
   end
 
   def current_available_payment_methods(user)
@@ -123,13 +123,14 @@ module ApplicationHelper
     []
   end
 
-  def get_dns_domains
-    domains = current_spree_user.isp_config.hosted_zone.all_zones
-    domains[:response].response.collect(&:origin)
-    # domains[:response].response.map{|k| k.values}
-  rescue Exception => e
-    Rails.logger.info { e.message }
-    []
+  def  get_dns_domains
+    begin
+      domains = current_spree_user.isp_config.hosted_zone.all_zones
+      domains[:response].response.collect{|x| x.origin.chomp(".")}
+    rescue Exception => e
+      Rails.logger.info{ e.message}
+      []
+    end
   end
 
   def months_dropdown
@@ -175,13 +176,11 @@ module ApplicationHelper
 
     status = ActiveJob::Status.get(job[:sidekiq_job_id])
 
-    # byebug
     status = if status[:blocked]
                :queued
              else
                status[:status]
              end
-    # status = status[:status]
 
     return status unless status == :completed
 

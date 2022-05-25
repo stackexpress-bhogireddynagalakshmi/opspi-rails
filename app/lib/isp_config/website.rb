@@ -31,7 +31,6 @@ module IspConfig
                        })
 
       user.websites.create({ isp_config_website_id: response["response"] }) if response.code == "ok"
-
       formatted_response(response, 'create')
     end
 
@@ -114,7 +113,7 @@ module IspConfig
         errordocs: 1,
         is_subdomainwww: 1,
         subdomain: 'www',
-        php: 'y',
+        php: 'fast-cgi',
         ruby: 'n',
         # redirect_type: '',
         # redirect_path: '',
