@@ -16,8 +16,7 @@
 .navbar-img{
   max-width: 100%;
   max-height: 3.5rem;
-  margin-top: 2%;
-  margin-left:-3%;
+  margin-left:5px;
 }
 .scroll {
     max-height: 400px;
@@ -27,7 +26,7 @@
 </style>
 
 <body class="d-flex align-items-center bg-auth border-top border-top-2 border-primary">
-<a href="<%= spree.root_path %>">
+<a href="<%= spree.root_path %>" style="position:absolute;left:0;top:0;margin-top:6px">
 <%= image_tag 'OpsPi-logo.jpg', class: "navbar-img" %>
 </a>
     <!-- CONTENT
