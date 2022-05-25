@@ -109,11 +109,11 @@
               <div class="input-group input-group-merge">
 
                 <!-- Input -->
-                <%= f.password_field :password, class: 'form-control', placeholder: Spree.t(:password) %>
+                <%= f.password_field :password, class: 'form-control pwd', placeholder: Spree.t(:password) %>
 
                 <!-- Icon -->
-                <span class="input-group-text">
-                  <i class="fa fa-eye"></i>
+                <span class="input-group-text eye_icon">
+                  <i class="fe fe-eye"></i>
                 </span>
 
               </div>
@@ -131,11 +131,11 @@
               <div class="input-group input-group-merge">
 
                 <!-- Input -->
-                <%= f.password_field :password_confirmation, class: 'form-control', placeholder: Spree.t(:confirm_password) %>
+                <%= f.password_field :password_confirmation, class: 'form-control pwd1', placeholder: Spree.t(:confirm_password) %>
 
                 <!-- Icon -->
-                <span class="input-group-text">
-                  <i class="fa fa-eye"></i>
+                <span class="input-group-text eye_icon1">
+                  <i class="fe fe-eye"></i>
                 </span>
 
               </div>
@@ -212,6 +212,26 @@ $(document).ready(function() {
     $("#myModal").css('display','none');
     $("#myModal").removeClass("show");
   });
+});
+
+$(document).ready(function() {
+  $(".eye_icon").on('click',function() {
+    if ($(".pwd").prop('type') === 'password') {
+        $(".pwd").prop('type', 'text');
+    } else {
+        $(".pwd").prop('type', 'password');
+    }
+});
+});
+
+$(document).ready(function() {
+  $(".eye_icon1").on('click',function() {
+    if ($(".pwd1").prop('type') === 'password') {
+        $(".pwd1").prop('type', 'text');
+    } else {
+        $(".pwd1").prop('type', 'password');
+    }
+});
 });
 
 </script>
