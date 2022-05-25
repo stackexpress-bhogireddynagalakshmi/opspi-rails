@@ -42,13 +42,13 @@ module ApplicationHelper
   def format_date(date)
     return unless date
 
-    date.strftime("%m/%d/%y")
+    date.strftime("%Y-%m-%d")
   end
 
   def format_date_with_century(date)
     return unless date
 
-    date.strftime("%m/%d/%Y")
+    date.strftime("%Y-%m-%d")
   end
 
   def current_available_payment_methods(user)
@@ -175,13 +175,11 @@ module ApplicationHelper
 
     status = ActiveJob::Status.get(job[:sidekiq_job_id])
 
-    # byebug
     status = if status[:blocked]
                :queued
              else
                status[:status]
              end
-    # status = status[:status]
 
     return status unless status == :completed
 
