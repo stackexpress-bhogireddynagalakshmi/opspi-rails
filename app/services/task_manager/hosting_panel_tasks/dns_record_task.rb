@@ -5,14 +5,14 @@ module TaskManager
       def call
         case task[:type]
         when 'create_dns_record'
-          create_dns_domain
+          create_dns_record
         when 'update_dns_record'
         when 'delete_dns_record'
         end
       end
 
       private
-      def create_dns_domain
+      def create_dns_record
         @response = isp_config_api.create(resource_params)
       end
 
@@ -22,6 +22,8 @@ module TaskManager
         if response[:success]
           hosted_zones = response[:response].response
           hosted_zone  = hosted_zones.detect{|x| x.origin == @task[:domain]}
+          hosted_zone  = hosted_zones.detect{|x| x.origin == "#{@task[:domain]}."} if hosted_zone.blank?
+
           @data[:hosted_zone_id] = hosted_zone.id
 
           return @data

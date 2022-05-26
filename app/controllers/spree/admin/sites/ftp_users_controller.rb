@@ -15,8 +15,8 @@ module Spree
                          []
                        end
 
-          @response = windows_api.all || []
           @windows_resources = begin
+            @response = windows_api.all || []
             convert_to_mash(@response.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
           rescue StandardError
             []

@@ -28,7 +28,7 @@ module AppManager
     def provision_isp_config_account
       if panels_access('isp_config')
         IspConfigProvisioningJob.set(wait: 3.second).perform_later(user.id, product&.id)
-        SolidCpProvisioningJob.set(wait: 3.second).perform_later(user.id, nil)
+        # SolidCpProvisioningJob.set(wait: 3.second).perform_later(user.id, nil)
         Rails.logger.info { "IspConfigProvisioningJob is scheduled to create user account on ISPConfig Account " }
       end
     end
