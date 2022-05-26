@@ -13,16 +13,23 @@ module Spree
 
       def create
         @domain = wizard_params[:domain]
-        @tasks = []
 
-        build_tasks
+        if VALID_DOMAIN_REGEX.match?(@domain)
+          @tasks = []
+          
+          build_tasks
+          
+          TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
+          
+          flash[:success] = "Wizard Jobs Started. Your services will be activated in few miniutes"
+          
+          set_batch_jobs
 
-        TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
-        flash[:success] = "Wizard Jobs Started. Your services will be activated in few miniutes"
-
-        set_batch_jobs
-
-        redirect_to admin_wizard_path(id: @batch_jobs.keys.last)
+          redirect_to admin_wizard_path(id: @batch_jobs.keys.last)
+        else
+          @error = 'Invalid domain name'
+          render 'new'
+        end
       end
 
       def show
@@ -75,7 +82,7 @@ module Spree
               data:
                   {
                     name: @domain,
-                    mbox: 'webmaster.example.com.',
+                    mbox: "admin@#{get_sanitized_domain(@domain)}",
                     refresh: '7200',
                     retry: '540',
                     expire: '604800',
@@ -84,7 +91,7 @@ module Spree
                     xfer: '',
                     also_notify: '',
                     update_acl: '',
-                    status: '1'
+                    status: '1',
                   },
               depends_on: nil,
               sidekiq_job_id: nil

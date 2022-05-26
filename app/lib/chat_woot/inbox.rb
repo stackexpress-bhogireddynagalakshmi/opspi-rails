@@ -4,6 +4,7 @@ module ChatWoot
 
     def initialize(account, options = {})
       @account = account
+      @agent_id = options[:agent_id]
     end
 
     def create
@@ -31,7 +32,7 @@ module ChatWoot
                          header: authorization_user_header,
                          body: {
                           inbox_id: account.inbox_id,
-                          user_ids: [ account.user_agent_id]
+                          user_ids: [ @agent_id ]
                          }
                        })
 
