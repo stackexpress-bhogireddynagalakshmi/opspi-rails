@@ -28,7 +28,6 @@ module Spree
       base.has_many :protected_folders
       base.has_many :protected_folder_users
       base.has_many :isp_databases
-      base.has_one :chatwoot_users
 
       base.after_commit :update_user_tanent, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]
