@@ -5,6 +5,7 @@ module Spree
     module Mail
       # Mail Domain controller
       class MailBoxesController < Spree::Admin::BaseController
+        before_action :ensure_hosting_panel_access
         before_action :set_mail_box, only: %i[edit update destroy]
 
         def index

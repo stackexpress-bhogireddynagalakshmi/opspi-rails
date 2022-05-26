@@ -5,6 +5,7 @@ module Spree
     module Dns
       class HostedZonesController < Spree::Admin::BaseController
         # require 'isp_config/hosted_zone'
+        before_action :ensure_hosting_panel_access
         before_action :set_zone_list, only: %i[edit update destroy dns]
         def index
           @response = host_zone_api.all_zones || []

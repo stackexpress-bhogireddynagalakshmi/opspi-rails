@@ -4,7 +4,6 @@
     <%= main_menu_tree Spree.t(:sites), icon: "report.svg", sub_menu: "sites", url: "#sidebar-sites" %>
     <%= main_menu_tree Spree.t(:statistics), icon: "report.svg", sub_menu: "statistics", url: "#mail-statistics" %>
     <%= tab Spree.t('start_wizard'), url: spree.admin_wizards_path, icon: "report.svg"%>
-    <%= main_menu_tree Spree.t(:windows), icon: "report.svg", sub_menu: "windows", url: "#sidebar-windows" %>
     <%= tab Spree.t('website_builder'), url: admin_site_builder_path, icon: "report.svg"%>
-     <%= tab Spree.t(:database), url: admin_sites_isp_databases_path, icon: "report.svg"%>
+    <%= tab Spree.t(:database), url: admin_sites_isp_databases_path, icon: "report.svg"%>
 </ul>

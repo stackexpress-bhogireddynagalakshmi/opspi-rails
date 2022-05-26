@@ -4,7 +4,9 @@ module Spree
   module Admin
     class WizardsController < Spree::Admin::BaseController
       include ApisHelper
+      
       before_action :set_batch_jobs, only: %i[index show]
+      before_action :ensure_hosting_panel_access
 
       def index; end
       def new; end

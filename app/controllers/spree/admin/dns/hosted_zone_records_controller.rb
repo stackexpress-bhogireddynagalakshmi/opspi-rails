@@ -4,6 +4,7 @@ module Spree
   module Admin
     module Dns
       class HostedZoneRecordsController < Spree::Admin::BaseController
+        before_action :ensure_hosting_panel_access
         before_action :set_hosted_zone
 
         def create
