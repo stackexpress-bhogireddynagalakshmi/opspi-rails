@@ -30,6 +30,10 @@ module Spree
       raise
     end
 
+    def registration
+      render :layout => "dashkit_layout"
+    end
+
     def load_order_with_lock
       if params[:invoice_number].present?
         invoice = CustomInvoiceFinder.new(invoice_number: params[:invoice_number]).unscoped_execute
