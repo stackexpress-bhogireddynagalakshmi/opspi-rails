@@ -18,12 +18,25 @@
 <a  href="<%= spree.root_path %>" style="position:absolute;left:0;top:0;margin-top: 4px;">
 <%= image_tag 'OpsPi-logo.jpg', class: "navbar-img" %>
 </a>
+
 <!-- CONTENT
 ================================================== -->
 <div class="container mt-5">
 
-  <div class="row align-items-center">
+<% flash.each do |key, value| %>
+  <div id="errorExplanation" class="alert alert-danger alert-dismissible d-flex justify-content-center mb-0 fade show" data-hook>
+     <ul class="mb-0 pl-0" style="list-style-type: none;">
+         <li><%= value %></li>
+     </ul>
 
+     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     <br>
+  </div>
+  <% end %>
+  
+
+<%#= flash_messages %>
+  <div class="row align-items-center">
     <div class="col-12 col-md-6 offset-xl-2 offset-md-1 order-md-2 mb-5 mb-md-0">
     <%= form_for Spree.user_class.new, as: :spree_user, url: spree_login_path do |f| %>
       <!-- Image -->
@@ -140,5 +153,10 @@ $(document).ready(function() {
     }
 });
 });
+
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+
 
 </script>
