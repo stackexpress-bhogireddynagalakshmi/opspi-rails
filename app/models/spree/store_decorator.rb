@@ -42,9 +42,9 @@ module Spree
           chat_agent = ChatWoot::Agent.new(self).create
           chat_inbox = ChatWoot::Inbox.new(self).create
           if chat_agent[:success] && chat_inbox[:success]
-            chatwoot_user = ChatwootUser.new({ user_agent_id: chat_agent[:response].id, store_account_id: account.id, user_id: store_admin.id, inbox_id: chat_inbox[:response].id, website_token: chat_inbox[:response].website_token})
+            chatwoot_user = ChatwootUser.new({ store_account_id: account.id, inbox_id: chat_inbox[:response].id, website_token: chat_inbox[:response].website_token})
             chatwoot_user.save!
-            ChatWoot::Inbox.new(chatwoot_user).add_agent_to_inbox
+            ChatWoot::Inbox.new(chatwoot_user,agent_id: chat_agent[:response].id).add_agent_to_inbox
           end
         end
 
