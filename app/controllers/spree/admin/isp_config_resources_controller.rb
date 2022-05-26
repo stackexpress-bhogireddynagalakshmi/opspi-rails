@@ -4,6 +4,7 @@ module Spree
   module Admin
     # Mail Domain controller
     class IspConfigResourcesController < Spree::Admin::BaseController
+      before_action :ensure_hosting_panel_access
       before_action :set_resource, only: %i[edit update destroy]
 
       def index
@@ -99,6 +100,7 @@ module Spree
           data
         end
       end
+
     end
   end
 end

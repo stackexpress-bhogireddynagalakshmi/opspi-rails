@@ -10,4 +10,17 @@ class ApplicationController < ActionController::Base
   before_action do
     set_tenant
   end
+
+  def ensure_hosting_panel_access
+    return nil if current_spree_user.isp_config_id.present? && current_spree_user.solid_cp_id.present?
+
+    respond_to do |format|
+      format.json { head :forbidden, content_type: 'text/html' }
+      format.html do 
+          
+        render 'spree/shared/access_denied'
+       end
+      format.js { head :forbidden, content_type: 'text/js' }
+    end
+  end
 end

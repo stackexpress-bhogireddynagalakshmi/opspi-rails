@@ -169,7 +169,7 @@ en:
 
   general:
     delete: 'Are you sure you want to delete?'
-
+    access_denied: 'You are not allowed to access this page. Please contact the Admin'
 
   devise:
     user_passwords:
