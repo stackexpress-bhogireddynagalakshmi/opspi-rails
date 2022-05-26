@@ -1,3 +1,4 @@
+
 # frozen_string_literal: true
 
 module Spree
@@ -5,6 +6,7 @@ module Spree
     module Mail
       # Mail Statistics controller
       class StatisticsController < Spree::Admin::BaseController
+        before_action :ensure_hosting_panel_access
         def mailbox_quota
           response = mail_statistics_api.all_mailbox_quotas || []
           @mailbox_quotas = if response[:success]

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_11_162418) do
+ActiveRecord::Schema.define(version: 2022_05_25_084306) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -69,6 +69,16 @@ ActiveRecord::Schema.define(version: 2022_05_11_162418) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "chatwoot_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "website_token"
+    t.integer "user_agent_id"
+    t.integer "inbox_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "store_account_id"
   end
 
   create_table "friendly_id_slugs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -1426,6 +1436,7 @@ ActiveRecord::Schema.define(version: 2022_05_11_162418) do
     t.string "opsbot_public_id"
     t.integer "hsphere_user_id"
     t.integer "hsphere_account_id"
+    t.integer "chatwoot_id"
     t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
     t.index ["email"], name: "email_idx_unique", unique: true

@@ -133,6 +133,14 @@ module ApplicationHelper
     end
   end
 
+  def current_domain_chat_widget
+    return nil if current_spree_user.nil?
+    chatwoot_user = ChatwootUser.where(store_account_id: current_spree_user.account.id).first
+    return nil if chatwoot_user.nil?
+    return ENV['CHATWOOT_ADMIN_WEBSITE_TOKEN'] if current_spree_user.store_admin?
+    chatwoot_user.website_token
+  end
+
   def months_dropdown
     [
       ['1 Month',  1],

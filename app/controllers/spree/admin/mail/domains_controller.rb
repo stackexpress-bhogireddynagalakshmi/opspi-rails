@@ -60,7 +60,7 @@ module Spree
                 current_spree_user.isp_config.mail_user.update(
                   mail_user.mailuser_id,
                   {
-                    postfix: active,
+                    postfix:  active,
                     disablesmtp: dis,
                     disableimap: dis,
                     disablepop3: dis,
