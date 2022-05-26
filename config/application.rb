@@ -16,6 +16,7 @@ module OpsPi
       Spree::UserRegistrationsController.layout "dashkit_layout"
       Spree::UserConfirmationsController.layout "dashkit_layout"
       Spree::UserPasswordsController.layout "dashkit_layout"
+      Spree::CheckoutController.layout "dashkit_layout"
       # Spree::Admin::DomainRegistrationsController.layout "dashkit_admin_layout"
       # Spree::Admin::Dns::HostedZonesController.layout "dashkit_admin_layout"
       # Spree::Admin::Mail::DomainsController.layout "dashkit_admin_layout"
@@ -35,6 +36,13 @@ module OpsPi
       # Spree::Admin::UserSessionsController.layout "dashkit_admin_layout"
       # Spree::Admin::OrdersController.layout "dashkit_admin_layout"
       # Spree::Admin::ReturnIndexController.layout "dashkit_admin_layout"
+      # Spree::Admin::ProductsController.layout "dashkit_admin_layout"
+      # Spree::Admin::OptionTypesController.layout "dashkit_admin_layout"
+      # Spree::Admin::PropertiesController.layout "dashkit_admin_layout"
+      # Spree::Admin::PrototypesController.layout "dashkit_admin_layout"
+      # Spree::Admin::TaxonomiesController.layout "dashkit_admin_layout"
+      # Spree::Admin::TaxonsController.layout "dashkit_admin_layout"
+      # Spree::Admin::PromotionsController.layout "dashkit_admin_layout"
 
       # Load application's model / class decorators
       Dir.glob(File.join(File.dirname(__FILE__), "../app/**/*_decorator*.rb")) do |c|
