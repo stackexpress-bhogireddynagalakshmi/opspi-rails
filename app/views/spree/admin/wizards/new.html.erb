@@ -11,7 +11,10 @@
         <div class="form-group field">
           <label>Enter Domain Name</label>
           <%#= collection_select(:wizard, :domain, @hosted_zones, :origin, :origin, {prompt: 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
-          <%= f.text_field :domain, class: 'form-control'%>
+          <%= f.text_field :domain, value: @domain, class: 'form-control'%>
+          <%if @error.present?%>
+            <span style="color: red"> <%=@error%></span>
+          <%end%>
         </div>
       </div>
     </div>
