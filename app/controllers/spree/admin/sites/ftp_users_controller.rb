@@ -101,9 +101,9 @@ module Spree
                       else
                         []
                       end
-          @windows_sites = current_spree_user.solid_cp.web_domain.all || []
-
+          
           @windows_sites = begin
+            @windows_sites = current_spree_user.solid_cp.web_domain.all || []
             convert_to_mash(@windows_sites.body[:get_domains_response][:get_domains_result][:domain_info])
           rescue StandardError
             []
