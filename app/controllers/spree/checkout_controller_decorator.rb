@@ -2,6 +2,15 @@
 
 module Spree
   module CheckoutControllerDecorator
+
+    def registration
+      render :layout => "dashkit_layout"
+    end
+
+    def edit
+      render :layout => "spree/layouts/checkout"
+    end
+
     # Updates the order and advances to the next state (when possible.)
     def update
       update_payments_methods_attributes_params
@@ -30,9 +39,7 @@ module Spree
       raise
     end
 
-    def registration
-      render :layout => "dashkit_layout"
-    end
+
 
     def load_order_with_lock
       if params[:invoice_number].present?
