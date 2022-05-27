@@ -60,6 +60,9 @@ module Spree
         if wizard_params[:enable_web_service] == 'y'
           prepare_web_domain_task
           prepare_ftp_account_task
+        end
+
+        if wizard_params[:enable_db_service] == 'y'
           prepare_database_task
         end
 
@@ -264,12 +267,13 @@ module Spree
 
       def set_ftp_username(domain)
         domain = domain.gsub("www.", '')
+        domain = domain.gsub('-', '_')
 
         domain.gsub!('.', '_')
       end
 
       def wizard_params
-        params.require("wizard").permit(:domain, :enable_web_service, :enable_mail_service, emails: [])
+        params.require("wizard").permit(:domain, :enable_web_service, :enable_mail_service, :enable_db_service, emails: [])
       end
 
       def set_batch_jobs
@@ -282,6 +286,7 @@ module Spree
 
       def get_database_name(domain)
         domain = domain.gsub("www.", '')
+        domain = domain.gsub('-', '_')
         domain = domain.gsub('.', '_')
 
         domain.to_s
