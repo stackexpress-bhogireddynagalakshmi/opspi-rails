@@ -30,6 +30,17 @@
       </div>
     </div>
 
+      <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <div class="custom-control custom-switch">
+            <%= check_box_tag('wizard[enable_db_service]', 'n', ('checked' if false), class: "custom-control-input", id: "wizard_db_service", onclick: "checkServiceStatus(this)" ) %>
+            <label class="custom-control-label" for="wizard_db_service">Enable Datanase Services</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="row">
       <div class="col-lg-6">
         <div class="form-group field">

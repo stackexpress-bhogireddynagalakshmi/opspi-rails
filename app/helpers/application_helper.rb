@@ -24,7 +24,7 @@ module ApplicationHelper
   def plan_type_values(user)
     if user.superadmin?
       Spree::Product.server_types.keys
-    elsif user.store_admin?
+    elsif user.store_admin? || user.end_user?
       TenantManager::TenantHelper.unscoped_query do
         current_spree_user.orders.collect do |o|
           o.products.pluck(:server_type)
