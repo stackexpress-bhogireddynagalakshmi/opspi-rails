@@ -209,6 +209,8 @@ module ApplicationHelper
     batch_job.each do |job|
       statuses << get_task_status(job)
     end
-    (statuses.compact & %i[failed working queued]).size.positive? ? 'In Progress' : 'Completed'
+    return 'Failed' if statuses.compact.size.zero?
+
+    return (statuses.compact & %i[failed working queued]).size.positive? ? 'In Progress' : 'Completed'
   end
 end
