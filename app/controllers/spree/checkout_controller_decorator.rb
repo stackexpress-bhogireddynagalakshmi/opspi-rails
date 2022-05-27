@@ -7,6 +7,10 @@ module Spree
       render :layout => "dashkit_layout"
     end
 
+    def update_registration
+      render :layout => "dashkit_layout"
+    end
+
     def edit
       render :layout => "spree/layouts/checkout"
     end
