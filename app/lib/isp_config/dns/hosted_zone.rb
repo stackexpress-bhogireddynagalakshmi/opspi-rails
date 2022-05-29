@@ -37,8 +37,7 @@ module IspConfig
 
        
         if response.code == "ok"
-          user.hosted_zones.create({ isp_config_host_zone_id: response["response"] }) if response.code == "ok"
-          res = create_ns_records(response["response"],create_params)
+          user.hosted_zones.create({ isp_config_host_zone_id: response["response"] })
           { success: true, message: I18n.t('isp_config.host_zone.create'), response: response }
         else
           { success: false, message: I18n.t('isp_config.something_went_wrong', message: response.message) }
