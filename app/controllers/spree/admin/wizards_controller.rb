@@ -52,7 +52,7 @@ module Spree
         when 'create_database'
           db_users  = db_user_api.all
           db_users  = db_users[:response].response
-          db_user   = db_users.detect { |x| x.database_user == "c6_#{params[:email]}" }
+          db_user   = db_users.detect { |x| x.database_user == "c#{current_spree_user.isp_config_id}_#{params[:email]}" }
           @response = db_user_api.update_database_user_password(
             db_user.database_user_id, { database_password: @password }
             )
