@@ -11,39 +11,11 @@ module Spree
           @response = current_spree_user.isp_config.mail_domain.create(resource_params)
           set_flash
           if @response[:success]
-            create_mx_response = create_mx_record
             resource_index_path
           else
             render :new
           end
         end
-
-        def create_mx_record
-          unless get_dns_domain_id.nil?
-            mx_record_params = {}
-            mx_record_params={
-              type: "MX",
-              name: resource_params[:domain],
-              hosted_zone_name: nil,
-	            priority: "10",
-              ttl: "3600",
-              hosted_zone_id: get_dns_domain_id,
-              client_id: current_spree_user.isp_config_id
-            }
-            mailservers = [{mailserver: ENV['ISPCONFIG_MAIL_SERVER_01']},{mailserver: ENV['ISPCONFIG_MAIL_SERVER_02']}]
-            mailservers.each do |mx|
-              current_spree_user.isp_config.hosted_zone_record.create(mx_record_params.merge(mx))
-            end   
-          end       
-        end
-
-        def get_dns_domain_id
-          dns_response  = current_spree_user.isp_config.hosted_zone.all_zones
-          dns_domain_id = dns_response[:response].response.map{|x| x.id if x[:origin] == resource_params[:domain]+"."}
-          dns_domain_id.compact.first
-        end
-
-
 
         def update
           super do

@@ -182,7 +182,7 @@ module ApplicationHelper
     when 'create_ftp_account'
       job[:data][:username]
     when 'create_database'
-      job[:data][:database_name]
+      job[:data][:database_username]
     else
       "Unknown task type"
     end
