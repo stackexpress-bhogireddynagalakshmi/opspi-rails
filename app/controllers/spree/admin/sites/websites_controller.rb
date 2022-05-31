@@ -34,7 +34,13 @@ module Spree
           if params[:server_type].present? && params[:server_type] == 'windows'
             windows_resource_params
           else
-            request_params.merge(extra_isp_params)
+            _request_params = request_params
+            
+            if _request_params[:domain][-1] == '.'
+              _request_params[:domain] = _request_params[:domain][0..-2]
+            end
+
+             _request_params.merge(extra_isp_params)
           end
         end
 

@@ -9,4 +9,7 @@ module ApisHelper
     current_spree_user.isp_config.ftp_user
   end
 
+  def db_user_api
+    current_spree_user.isp_config.database
+  end
 end
