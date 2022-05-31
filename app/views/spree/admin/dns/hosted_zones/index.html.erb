@@ -1,54 +1,65 @@
-<% content_for :page_title do %>
-  DNS Domains
-<% end %>
-<% if current_spree_user.isp_config_id.present? %>
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_domain),
-    new_admin_dns_hosted_zone_url,
-    class: "btn-success",
-      icon: 'add.svg',
-      id: 'admin_new_order' %>
-<% end  %>
+<style>
+.btn-size{
+  padding: 0.3rem 0.45rem;
+    font-size: 0.8rem;
+}
+</style>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        DNS Domains
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      <% if current_spree_user.isp_config_id.present? %>
+        <%= button_link_to Spree.t(:add_domain),
+        new_admin_dns_hosted_zone_url,
+        class: "btn btn-primary lift",
+          icon: 'add.svg',
+          id: 'admin_new_order' %>
+      <% end  %>
+      </div>
+    </div>
 
-<% if @hosted_zones.any? %>
-<div data-nav-x-wrapper>
-  <div data-nav-x-container>
-    <table class="table" id="listing_orders" data-hook data-nav-x-content>
-      <thead>
-        <tr data-hook="admin_orders_index_headers">
-          <th>Host Name</th>
-          <!--th>Status</th-->
-          <th data-hook="admin_orders_index_header_actions" class="actions"></th>
-        </tr>
-      </thead>
-      <tbody>
-      <% @hosted_zones.each do |hosted_zone| %>
-        <tr data-hook="admin_orders_index_rows">
-          <td><%=link_to hosted_zone.origin.chomp("."), dns_admin_dns_hosted_zone_path(hosted_zone.id, :dns_name => hosted_zone.origin.chomp(".")), class: hosted_zone %></td>
-          <!--td><%="Active"%></td-->
-          <td class='actions' data-hook="admin_orders_index_row_actions">
-            <span class="d-flex justify-content-end">
-              <%#= link_to_edit_url edit_admin_dns_hosted_zone_path(hosted_zone.id), no_text: true %>
-              <%= link_to_delete "Delete", url: admin_dns_hosted_zone_path(hosted_zone.id), no_text: true %>
-            </span>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
   </div>
 </div>
+
+<% if @hosted_zones.any? %>
+<div class="card">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="table-layout: fixed; width:100%">
+  <thead>
+    <tr>
+    <th>Host Name</th>
+    <!--th>Status</th-->
+    <th data-hook="admin_orders_index_header_actions" style="text-align: end;">Action</th>
+    </tr>
+  </thead>
+  <tbody class="fs-base">
+  <% @hosted_zones.each do |hosted_zone| %>
+    <tr data-hook="admin_orders_index_rows">
+      <td><%=link_to hosted_zone.origin.chomp("."), dns_admin_dns_hosted_zone_path(hosted_zone.id, :dns_name => hosted_zone.origin.chomp(".")), class: hosted_zone %></td>
+      <!--td><%="Active"%></td-->
+      <td data-hook="admin_orders_index_row_actions">
+        <span class="d-flex justify-content-end">
+          <%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_dns_hosted_zone_path(hosted_zone.id),class:"btn btn-success btn-size",style:"margin-right:4px"%>
+          <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_dns_hosted_zone_path(hosted_zone.id), class:"btn btn-danger btn-size"%>
+        </span>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+</div>
 <% else %>
-  <div class="alert alert-info no-objects-found">
-    <%= Spree.t(:no_dns_domain_found) %>
+  <div class="alert alert-secondary no-objects-found">
+    <label class="form-label" style="margin-top: 0.5rem;"> No Dns Domain Found</label>
   </div>
 <% end %>
-<% else %>
-<div class="alert alert-info no-objects-found">
-    <%= Spree.t(:you_need_to_purchase_linux_plan_to_continue) %>!
- <%#= link_to(Spree.t(:add_one), new_admin_product_url) if can? :create, Spree::Product %>
- </div>
-<%end%>
 
 <script type="text/javascript">
   
