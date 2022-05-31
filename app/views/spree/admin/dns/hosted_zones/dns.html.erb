@@ -153,13 +153,6 @@ display: block;
 } */
 </style>
 
-<% flash.each do |key, value| %>
- <%= content_tag(:div, class: "alert alert-#{key} alert-dismissable") do %>
-  <%= value %>
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>   
- <% end %> 
-<% end %>  
-
 <div class="header mt-4">
   <div class="header-body">
     <div class="row align-items-center">
@@ -223,7 +216,8 @@ display: block;
     </div> <!-- / .row -->
   </div>
 
-  
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @hosted_zone } %>
+
   <%=form_tag admin_dns_hosted_zone_hosted_zone_records_path(@hosted_zone), class:"collapse form_1", id: "collapseEX2", method: "post" do %>
     <fieldset>
     <div class="grid-container">

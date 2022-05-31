@@ -27,6 +27,8 @@
   </div>
 </div>
 
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @hosted_zone } %>
+
 <% if @hosted_zones.any? %>
 <div class="card">
 <div class="table-responsive">
