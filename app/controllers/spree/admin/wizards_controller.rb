@@ -111,69 +111,69 @@ module Spree
               sidekiq_job_id: nil
             },
 
-            {
-              id: SecureRandom.hex,
-              type: "create_dns_record",
-              domain: @domain,
-              data:
-                  {
-                    name: @domain,
-                    type: 'A',
-                    ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
-                    ipv6: '',
-                    hosted_zone_id: '',
-                    ttl: 60
-                  },
-              depends_on: 1,
-              sidekiq_job_id: nil
-            },
+            # {
+            #   id: SecureRandom.hex,
+            #   type: "create_dns_record",
+            #   domain: @domain,
+            #   data:
+            #       {
+            #         name: @domain,
+            #         type: 'A',
+            #         ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
+            #         ipv6: '',
+            #         hosted_zone_id: '',
+            #         ttl: 60
+            #       },
+            #   depends_on: 1,
+            #   sidekiq_job_id: nil
+            # },
 
-            {
-              id: SecureRandom.hex,
-              type: "create_dns_record",
-              domain: @domain,
-              data:
-                  {
-                    name: 'www',
-                    type: 'A',
-                    ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
-                    ipv6: '',
-                    hosted_zone_id: '',
-                    ttl: 60
-                  },
-              depends_on: 1,
-              sidekiq_job_id: nil
-            },
-            {
-              id: SecureRandom.hex,
-              type: "create_dns_record",
-              domain: @domain,
-              data:
-                  {
-                    name: @domain,
-                    type: 'NS',
-                    nameserver: ENV['ISPCONFIG_DNS_SERVER_NS1'],
-                    hosted_zone_id: '',
-                    ttl: 3600
-                  },
-              depends_on: 1,
-              sidekiq_job_id: nil
-            },
-            {
-              id: SecureRandom.hex,
-              type: "create_dns_record",
-              domain: @domain,
-              data:
-                  {
-                    name: @domain,
-                    type: 'NS',
-                    nameserver: ENV['ISPCONFIG_DNS_SERVER_NS2'],
-                    hosted_zone_id: '',
-                    ttl: 3600
-                  },
-              depends_on: 1,
-              sidekiq_job_id: nil
-            }
+            # {
+            #   id: SecureRandom.hex,
+            #   type: "create_dns_record",
+            #   domain: @domain,
+            #   data:
+            #       {
+            #         name: 'www',
+            #         type: 'A',
+            #         ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
+            #         ipv6: '',
+            #         hosted_zone_id: '',
+            #         ttl: 60
+            #       },
+            #   depends_on: 1,
+            #   sidekiq_job_id: nil
+            # },
+            # {
+            #   id: SecureRandom.hex,
+            #   type: "create_dns_record",
+            #   domain: @domain,
+            #   data:
+            #       {
+            #         name: @domain,
+            #         type: 'NS',
+            #         nameserver: ENV['ISPCONFIG_DNS_SERVER_NS1'],
+            #         hosted_zone_id: '',
+            #         ttl: 3600
+            #       },
+            #   depends_on: 1,
+            #   sidekiq_job_id: nil
+            # },
+            # {
+            #   id: SecureRandom.hex,
+            #   type: "create_dns_record",
+            #   domain: @domain,
+            #   data:
+            #       {
+            #         name: @domain,
+            #         type: 'NS',
+            #         nameserver: ENV['ISPCONFIG_DNS_SERVER_NS2'],
+            #         hosted_zone_id: '',
+            #         ttl: 3600
+            #       },
+            #   depends_on: 1,
+            #   sidekiq_job_id: nil
+            # }
 
           ]
       end
@@ -214,23 +214,23 @@ module Spree
             sidekiq_job_id: nil
           }
 
-        @tasks <<
-          {
-            id: SecureRandom.hex,
-            type: "create_dns_record",
-            domain: @domain,
-            data:
-                {
-                  name: @domain,
-                  type: 'MX',
-                  mailserver: "mail.#{get_sanitized_domain(@domain)}",
-                  hosted_zone_id: '', # needed at later stage
-                  ttl: 60,
-                  priority: 60
-                },
-            depends_on: 3,
-            sidekiq_job_id: nil
-          }
+        # @tasks <<
+        #   {
+        #     id: SecureRandom.hex,
+        #     type: "create_dns_record",
+        #     domain: @domain,
+        #     data:
+        #         {
+        #           name: @domain,
+        #           type: 'MX',
+        #           mailserver: "mail.#{get_sanitized_domain(@domain)}",
+        #           hosted_zone_id: '', # needed at later stage
+        #           ttl: 60,
+        #           priority: 60
+        #         },
+        #     depends_on: 3,
+        #     sidekiq_job_id: nil
+        #   }
       end
 
       def prepare_mail_box_task

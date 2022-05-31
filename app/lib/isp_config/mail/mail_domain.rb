@@ -30,7 +30,9 @@ module IspConfig
                              params: params.merge(server_params)
                            }
                          })
-        user.mail_domains.create({ isp_config_mail_domain_id: response["response"] }) if response.code == "ok"
+        if response.code == "ok"
+          user.mail_domains.create({ isp_config_mail_domain_id: response["response"] }) 
+        end
 
         formatted_response(response, 'create')
       end
@@ -77,6 +79,8 @@ module IspConfig
 
       private
 
+     
+
       def mail_domain_ids
         user.mail_domains.pluck(:isp_config_mail_domain_id)
       end
@@ -102,6 +106,7 @@ module IspConfig
           server_id: ENV['ISP_CONFIG_WEB_SERVER_ID']
         }
       end
+
     end
   end
 end

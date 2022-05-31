@@ -20,8 +20,7 @@ module Spree
 
         def create_mx_record
           unless get_dns_domain_id.nil?
-            mx_record_params = {}
-            mx_record_params={
+            mx_record_params = {
               type: "MX",
               name: resource_params[:domain],
               hosted_zone_name: nil,
@@ -42,8 +41,6 @@ module Spree
           dns_domain_id = dns_response[:response].response.map{|x| x.id if x[:origin] == resource_params[:domain]+"."}
           dns_domain_id.compact.first
         end
-
-
 
         def update
           super do
