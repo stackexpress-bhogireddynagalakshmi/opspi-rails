@@ -1,57 +1,75 @@
-<% content_for :page_title do %>
- MailBoxes
-<% end %>
+<style>
+.btn-size{
+  padding: 0.3rem 0.45rem;
+    font-size: 0.8rem;
+}
+</style>
 
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_mail_box),
-    new_admin_mail_mail_box_path,
-    class: "btn-success",
-      icon: 'add.svg',
-      id: 'admin_new_domain' %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        Mail Boxes
+        </h1>
+      </div>
+      <div class="col-auto">
+      <%= button_link_to Spree.t(:add_mail_box),
+      new_admin_mail_mail_box_path,
+      class: "btn btn-primary lift",
+        icon: 'add.svg',
+        id: 'admin_new_domain' %>
 
-<% if @mailboxes.any? %>
-<div data-nav-x-wrapper>
-  <div data-nav-x-container>
-    <table class="table" id="listing_orders" data-hook data-nav-x-content>
-      <thead>
-        <tr data-hook="admin_orders_index_headers">
-          <th>Email</th>
-          <th>Realname</th>
-          <th>AutoRespond</th>
-          <th>Receiving</th>
-          <th>SMTP</th>
-          <th>Inbox</th>
-          <th>IMAP</th>
-          <th>POP3</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-      <%@mailboxes.each do |mailbox| %>
-        <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
-          <td><%= mailbox.email%></td>
-          <td><%= mailbox.name%></td>
-          <td><%= mailbox.autoresponder %></td>
-          <td><%= mailbox.postfix %></td>
-          <td><%= mailbox.postfix %></td>
-          <td><%= ['y','n'].reject{|x| x == mailbox.disablesmtp}[0]%></td>
-          <td><%= ['y','n'].reject{|x| x == mailbox.disableimap}[0]%></td>
-          <td><%= ['y','n'].reject{|x| x == mailbox.disablepop3}[0]%></td>
-          <td>
-            <%=link_to 'Webmail', get_web_mail_client_url, target: '_blank'%> | 
-            <%=link_to 'Edit',edit_admin_mail_mail_box_path(id: mailbox.mailuser_id)%> |
-            <%=link_to 'Delete',admin_mail_mail_box_path(id: mailbox.mailuser_id), method: :delete, data: {confirm: t('general.delete')}%>
-          </td>  
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<% if @mailboxes.any? %>
+<div class="card">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="width:100%">
+  <thead>
+    <tr>
+    <th>Email</th>
+    <th>Realname</th>
+    <th>AutoRespond</th>
+    <th>Receiving</th>
+    <th>SMTP</th>
+    <th>Inbox</th>
+    <th>IMAP</th>
+    <th>POP3</th>
+    <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody class="fs-base">
+  <%@mailboxes.each do |mailbox| %>
+    <tr data-hook="admin_orders_index_rows">
+      <td><%= mailbox.email%></td>
+      <td><%= mailbox.name%></td>
+      <td><%= mailbox.autoresponder %></td>
+      <td><%= mailbox.postfix %></td>
+      <td><%= mailbox.postfix %></td>
+      <td><%= ['y','n'].reject{|x| x == mailbox.disablesmtp}[0]%></td>
+      <td><%= ['y','n'].reject{|x| x == mailbox.disableimap}[0]%></td>
+      <td><%= ['y','n'].reject{|x| x == mailbox.disablepop3}[0]%></td>
+      <td>
+      <span class="d-flex">
+        <%=link_to '<i class="fe fe-mail"></i>'.html_safe, get_web_mail_client_url, target: '_blank' , class:"btn btn-primary btn-size", style:"margin-right:2%"%>  
+        <%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_mail_box_path(id: mailbox.mailuser_id),class:"btn btn-success btn-size", style:"margin-right:2%"%> 
+        <%=link_to '<i class="fe fe-trash"></i>'.html_safe,admin_mail_mail_box_path(id: mailbox.mailuser_id), method: :delete, data: {confirm: t('general.delete')},class:"btn btn-danger btn-size"%>
+      </span>
+      </td>  
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+</div>
 <% else %>
-  <div class="alert alert-info no-objects-found">
-  
+  <div class="alert alert-secondary no-objects-found">
+  <label class="form-label" style="margin-top: 0.5rem;"> No Mail Boxes Found </label>
   </div>
 <% end %>
 

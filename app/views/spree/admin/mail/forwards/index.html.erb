@@ -1,47 +1,63 @@
-<% content_for :page_title do %>
- Forwards
-<% end %>
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_forward),
-    new_admin_mail_forward_path,
-    class: "btn-success",
-      icon: 'add.svg',
-      id: 'admin_new_forward' %>
-<% end %>
+<style>
+.btn-size{
+  padding: 0.3rem 0.45rem;
+    font-size: 0.8rem;
+}
+</style>
 
-<% if @resources.any? %>
-<div data-nav-x-wrapper>
-  <div data-nav-x-container>
-    <table class="table" id="listing_orders" data-hook data-nav-x-content>
-      <thead>
-        <tr data-hook="admin_orders_index_headers">
-          <th>Source</th>
-          <th>Destination</th>
-          <th>Active</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-      <%@resources.each do |forward| %>
-        <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
-          <td><%=forward.source%></td>
-          <td><%=forward.destination%></td>
-          <td><%=forward.active%></td>
-          <td><%=link_to 'Edit',edit_admin_mail_forward_path(id: forward.forwarding_id)%> |
-            <%=link_to 'Delete',admin_mail_forward_path(id: forward.forwarding_id), method: :delete, data: {confirm: t('general.delete')}%>
-          </td>  
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        Forwards
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      <%= button_link_to Spree.t(:add_forward),
+      new_admin_mail_forward_path,
+      class: "btn btn-primary lift",
+        icon: 'add.svg',
+        id: 'admin_new_forward' %>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<% if @resources.any? %>
+<div class="card">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="width:100%">
+  <thead>
+    <tr>
+    <th>Source</th>
+    <th>Destination</th>
+    <th>Active</th>
+    <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody class="fs-base">
+  <%@resources.each do |forward| %>
+    <tr data-hook="admin_orders_index_rows" >
+      <td><%=forward.source%></td>
+      <td><%=forward.destination%></td>
+      <td><%=forward.active%></td>
+      <td><%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_forward_path(id: forward.forwarding_id),class:"btn btn-success btn-size"%> 
+        <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_mail_forward_path(id: forward.forwarding_id), method: :delete, data: {confirm: t('general.delete')},class:"btn btn-danger btn-size"%>
+      </td>  
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+</div>
 <% else %>
-  <div class="alert alert-info no-objects-found">
-  
+  <div class="alert alert-secondary no-objects-found">
+  <label class="form-label" style="margin-top: 0.5rem;"> No Forwards found.</label>
   </div>
 <% end %>
-
 
 <script type="text/javascript">
   

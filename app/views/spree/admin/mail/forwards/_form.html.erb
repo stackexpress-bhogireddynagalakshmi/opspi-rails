@@ -1,4 +1,4 @@
-<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @api_resource } %>
 <style type="text/css">
   .formSuccess{
     color: green;
@@ -10,11 +10,22 @@
 </style>
 
 <%resource  = @api_resource || @proxy_resource%>
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:forward), admin_mail_forwards_path %> /
-  <%= resource.present? ? Spree.t(:edit_mail_forward) : Spree.t(:new_mail_forward) %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:forward), admin_mail_forwards_path %> /
+        <%= resource.present? ? Spree.t(:edit_mail_forward) : Spree.t(:new_mail_forward) %>
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <% url =  @api_resource.present? ?   admin_mail_forward_path(@api_resource.forwarding_id) : admin_mail_forwards_path%>
 
@@ -23,49 +34,49 @@
   <%=hidden_field_tag :forwarding_id, resource.try("forwarding_id")%>
   <%=f.hidden_field :type, value: 'forward'%>
   <fieldset>
-    <div class="form-group field">
-      <label>Source</label>
+    <div class="form-group">
+      <label class="form-label">Source</label>
       <div class="input-group mb-3">
-        <%=f.text_field 'source', value: resource.try(:source).try(:split, '@').try(:first), class: 'form-control'%>
+        <%=f.text_field 'source', value: resource.try(:source).try(:split, '@').try(:first), class: 'form-control',style:"width: 65%;"%>
         <span class="input-group-text" id='at-sign'>@</span>
-        <%=select_tag 'source_domain',options_for_select(@user_mail_domains.map(&:domain), resource.try(:source).try(:split, '@').try(:last)), class: 'form-control'%>
+        <%=select_tag 'source_domain',options_for_select(@user_mail_domains.map(&:domain), resource.try(:source).try(:split, '@').try(:last)), class: 'form-select'%>
       </div>
     </div>
 
-    <div class="form-group field">
-      <label>Destination</label>
+    <div class="form-group">
+      <label class="form-label">Destination</label>
       <%=f.text_area 'destination', value: resource.try(:destination), class: 'form-control', rows: 10, cols: 40%>
     </div>
           
-    <div class="form-group field">
-      <label>Active</label>
-      <%=f.select 'active',options_for_select([['Yes','y'], ['No','n']], resource.try(:active)),{}, class: 'form-control'%>
+    <div class="form-group">
+      <label class="form-label">Active</label>
+      <%=f.select 'active',options_for_select([['Yes','y'], ['No','n']], resource.try(:active)),{}, class: 'form-select'%>
     </div>
 
-    <div class="form-group field">
+    <div class="form-check">
       <div class="row">
         <div class="col-2">
-          <label>Send as</label>
+          <label class="form-check-label">Send as</label>
         </div>
         <div class="col-10">
-          <%= f.check_box :allow_send_as, {checked: resource.try(:allow_send_as) == 'y'}, 'y', 'n' %>
+          <%= f.check_box :allow_send_as, {checked: resource.try(:allow_send_as) == 'y', class:"form-check-input list-checkbox"}, 'y', 'n' %>
           <small>Allow target to send mail using this address as origin (if target is internal)</small>
         </div>
       </div>
     </div>
 
-    <div class="form-group field">
+    <div class="form-check mb-4">
       <div class="row">
         <div class="col-2">
-          <label>Enable greylisting</label>
+          <label class="form-check-label">Enable greylisting</label>
         </div>
         <div class="col-10">
-          <%= f.check_box :greylisting, {checked: resource.try(:greylisting) == 'y'}, 'y', 'n' %>
+          <%= f.check_box :greylisting, {checked: resource.try(:greylisting) == 'y' , class:"form-check-input list-checkbox"}, 'y', 'n' %>
         </div>
       </div>
     </div>
 
-    <%=submit_tag "#{resource.present? ? 'Update' : 'Add'} Mail Forward", class: 'btn btn-primary'%>
+    <%=submit_tag "#{resource.present? ? 'Update' : 'Add'} Mail Forward", class: 'btn btn-primary lift mb-4'%>
 
   </fieldset>
 <%end%>

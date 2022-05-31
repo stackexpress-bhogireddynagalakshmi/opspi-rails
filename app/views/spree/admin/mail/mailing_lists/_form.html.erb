@@ -1,4 +1,4 @@
-<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @mailinglist } %>
 <style type="text/css">
   .formSuccess{
     color: green;
@@ -12,30 +12,30 @@
  <%=form_for "mailinglist", url: url, html: {method: @mailinglist.present? ? :put : :post} do |f|%> 
 
   <%=hidden_field_tag :domain_id, @mail_domain.try("domain_id")%>
-  <fieldset>
-    <div class="form-group field">
-      <label>Domain</label>
+  <form>
+    <div class="form-group">
+      <label class="form-label">Domain</label>
       <%=f.text_field 'domain', value: @mailinglist.try(:domain), class: 'form-control',required: true%>
     </div>
 
-    <div class="form-group field">
-      <label>Listname</label>
+    <div class="form-group">
+      <label class="form-label">Listname</label>
       <%=f.text_field 'listname', value: @mailinglist.try(:listname), class: 'form-control',required: true%>
     </div>
 
-    <div class="form-group field">
-      <label>Email</label>
+    <div class="form-group">
+      <label class="form-label">Email</label>
       <%=f.email_field 'email', value: @mailinglist.try(:email), class: 'form-control'%>
     </div>
 
-    <div class="form-group field">
-      <label>Password</label>
+    <div class="form-group">
+      <label class="form-label">Password</label>
       <%=f.password_field 'password', class: 'form-control'%>
     </div>
 
-    <%=submit_tag "#{@mail_domain.present? ? 'Update' : 'Add'} Mailing List",class: 'btn btn-primary'%>
+    <%=submit_tag "#{@mail_domain.present? ? 'Update' : 'Add'} Mailing List",class: 'btn btn-primary lift'%>
 
-  </fieldset>
+</form>
 <%end%>
 
 <div>
