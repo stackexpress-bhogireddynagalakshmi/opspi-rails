@@ -27,6 +27,8 @@
   </div>
 </div>
 
+<%= flash_messages %>
+
 <% url =  @api_resource.present? ?   admin_mail_forward_path(@api_resource.forwarding_id) : admin_mail_forwards_path%>
 
  <%=form_for "mail_forward", url: url, html: {method: @api_resource.present? ? :put : :post} do |f|%> 
@@ -95,4 +97,5 @@
   $(document).ready(function (argument) {
     $('#FlashAlertsContainer').removeClass('d-none');
   });
+
 </script>

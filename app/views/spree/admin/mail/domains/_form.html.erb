@@ -23,7 +23,7 @@
   </div>
 </div>
 
-
+<%= flash_messages %>
 
 <% url =  @api_resource.present? ?   admin_mail_domain_path(@api_resource.domain_id) : admin_mail_domains_path%>
 
@@ -63,4 +63,5 @@
   $(document).ready(function (argument) {
     $('#FlashAlertsContainer').removeClass('d-none');
   });
+
 </script>

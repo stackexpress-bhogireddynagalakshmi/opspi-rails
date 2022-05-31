@@ -25,7 +25,7 @@
   </div>
 </div>
 
-
+<%= flash_messages %>
 
 <% if @mailing_lists.any? %>
 <div class="card">
@@ -68,5 +68,11 @@
 <script type="text/javascript">
   $(document).ready(function (argument) {
     $('#FlashAlertsContainer').removeClass('d-none');
+  });
+
+  $(document).ready(function (argument) {
+    $('.alert').addClass('alert-dismissible d-flex mb-0 fade show');
+    $('.close').addClass('btn-close');
+    document.querySelector('.close').innerText = "";
   });
 </script>

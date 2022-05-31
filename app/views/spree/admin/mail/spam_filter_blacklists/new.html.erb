@@ -15,7 +15,7 @@
   </div>
 </div>
 
-
+<%= flash_messages %>
 <% action_path = @filter.present? ?   admin_mail_spam_filter_blacklist_path(@filter.wblist_id) : admin_mail_spam_filter_blacklists_path%>
 
 <%= render partial: 'spree/admin/mail/spam_filters/form', locals: {action_path: action_path} %>

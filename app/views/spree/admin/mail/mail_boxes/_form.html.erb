@@ -22,6 +22,8 @@
   </div>
 </div>
 
+<%= flash_messages %>
+
 <% url =  @mail_user.present? ?   admin_mail_mail_box_path(@mail_user.mailuser_id) : admin_mail_mail_boxes_path%>
 
  <%=form_for "mailuser", url: url, html: {method: @mail_user.present? ? :put : :post} do |f|%> 

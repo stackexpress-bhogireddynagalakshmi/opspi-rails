@@ -13,3 +13,4 @@ import "channels"
 // ActiveStorage.start()
 // Theme
 import '../theme/theme'
+import '../theme/alertflash'
