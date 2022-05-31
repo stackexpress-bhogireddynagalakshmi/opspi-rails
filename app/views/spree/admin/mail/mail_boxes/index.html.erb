@@ -50,7 +50,7 @@
       <td><%= mailbox.name%></td>
       <td><%= mailbox.autoresponder %></td>
       <td><%= mailbox.postfix %></td>
-      <td><%= mailbox.postfix %></td>
+      <td><%= mailbox.disablesmtp %></td>
       <td><%= ['y','n'].reject{|x| x == mailbox.disablesmtp}[0]%></td>
       <td><%= ['y','n'].reject{|x| x == mailbox.disableimap}[0]%></td>
       <td><%= ['y','n'].reject{|x| x == mailbox.disablepop3}[0]%></td>
