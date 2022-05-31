@@ -23,13 +23,7 @@ fieldset {
     color: #aaa;
 }
 
-.search-bx{
-  width: 100%;
-  display: flex;
-}
-#searchBox{
-  width: 970px;
-}
+
 
 .grid-container {
     display: grid;
@@ -333,7 +327,7 @@ display: block;
   <% if @hosted_zone_records.any? %>
   <div class="card">
   <div class="table-responsive">
-  <table class="table table-sm card-table" style="table-layout: fixed; width:100%">
+  <table class="table table-sm card-table" style="table-layout: fixed; width:100%" id="myTable">
     <thead>
       <tr>
       <th class="col-md-2">Type</th>
@@ -464,7 +458,6 @@ display: block;
                     </div>
                     <% end %>
                     <br/>
-
                     <div class="grp5">
                     <div class="form-group input-control">
                     <%= link_to_delete "Delete", url: "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}"  ,class:'form-control'%>
@@ -507,7 +500,9 @@ $(document).ready(function() {
   });
 });
 </script>
+
 <script type="text/javascript">
+
 function ClearFields() {
   document.getElementById("collapseEX2").reset();
   document.getElementById("edit-form-clear-field").reset();
