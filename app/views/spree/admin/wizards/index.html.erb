@@ -1,42 +1,51 @@
-<% content_for :page_title do %>
- Hosting Panel Wizards
-<% end %>
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:start_wizard),
-    new_admin_wizard_path,
-    class: "btn-success",
-      icon: 'add.svg',
-      id: 'admin_wizard' %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        Wizards
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      <%= button_link_to Spree.t(:start_wizard),
+      new_admin_wizard_path,
+      class: "btn btn-primary lift",
+        icon: 'add.svg',
+        id: 'admin_wizard' %>
+      </div>
+    </div>
 
-<div data-nav-x-wrapper>
-  <div data-nav-x-container>
-      <h5>List of Wizard jobs</h5>
-       <div class="row batch_job">
-          <div class="col-md-12">
-            <table class="table">
-              <tr>
-                <th style="width: 80%"> Domain </th>
-                <th> Status </th>
-                <th> Action </th>
-              </tr>
-               <%@batch_jobs.each do |key, batch_job|%>
-              
-                <tr>
-                  <td> <%= link_to batch_job.first[:domain] , admin_wizard_path(key)%> </td>
-                  <td> <%= get_wizard_status(batch_job)%></td>
-                  <td> <%= link_to 'View' , admin_wizard_path(key)%></td>
-                </tr>
-               <%end if @batch_jobs.present?%>
-            </table>
-          </div>
-        </div>
-
-
-         <%#= render :partial=>'batch_job', locals: {batch_job: batch_job}%>
-     
   </div>
 </div>
+
+
+<h4>List of Wizard jobs</h4>
+<div class="card">
+    <div class="table-responsive">
+    <table class="table table-sm card-table" style="table-layout: fixed; width:100%">
+      <thead>
+        <tr>
+        <th style="width: 70%"> Domain </th>
+        <th> Status </th>
+        <th> Action </th>
+        </tr>
+      </thead>
+      <tbody class="fs-base">
+      <%@batch_jobs.each do |key, batch_job|%>
+              
+        <tr>
+          <td> <%= link_to batch_job.first[:domain] , admin_wizard_path(key)%> </td>
+          <td> <%= get_wizard_status(batch_job)%></td>
+          <td> <%= link_to 'View' , admin_wizard_path(key)%></td>
+        </tr>
+       <%end if @batch_jobs.present?%>
+      </tbody>
+    </table>
+</div>
+</div>
+
+
 
 <script type="text/javascript">
   $(document).ready(function (argument) {
