@@ -48,7 +48,7 @@
       <td data-hook="admin_orders_index_row_actions">
         <span class="d-flex justify-content-end">
           <%#=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_dns_hosted_zone_path(hosted_zone.id),class:"btn btn-success btn-size",style:"margin-right:4px"%>
-          <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_dns_hosted_zone_path(hosted_zone.id), class:"btn btn-danger btn-size"%>
+          <%= link_to_delete "Delete", url: admin_dns_hosted_zone_path(hosted_zone.id), no_text: true ,method: :delete%>
         </span>
       </td>
     </tr>
