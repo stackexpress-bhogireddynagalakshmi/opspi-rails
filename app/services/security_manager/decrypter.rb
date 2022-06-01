@@ -5,8 +5,8 @@ module SecurityManager
   class Decrypter
     
     def initialize(encypted_text, options={})
-      @private_key_file = File.join(Rails.root, 'config', 'reseller_api_enc_private.pem')
-      @password      = ENV['RESELLER_API_ENC_PASSPHRASE']
+      @private_key_file = ENV['OPSPI_RSA_PRIVATE_KEY_FILE_PATH']
+      @password      = ENV['OPSPI_RSA_ENC_PASSPHRASE']
       @encypted_text = encypted_text
     end
 
