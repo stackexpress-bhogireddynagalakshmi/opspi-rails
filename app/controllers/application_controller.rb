@@ -12,7 +12,8 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_hosting_panel_access
-    return nil if current_spree_user.isp_config_id.present? && current_spree_user.solid_cp_id.present?
+    return nil if current_spree_user.isp_config_id.present? || current_spree_user.solid_cp_id.present?
+    
 
     respond_to do |format|
       format.json { head :forbidden, content_type: 'text/html' }
