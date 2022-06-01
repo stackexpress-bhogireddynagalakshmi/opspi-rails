@@ -27,7 +27,7 @@
   </div>
 </div>
 
-<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @hosted_zone } %>
+<%= flash_messages %>
 
 <% if @hosted_zones.any? %>
 <div class="card">

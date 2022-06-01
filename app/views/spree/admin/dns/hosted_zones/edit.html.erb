@@ -22,16 +22,7 @@
   </div>
 </div>
 
-<% flash.each do |key, value| %>
-  <div id="errorExplanation" class="alert alert-danger alert-dismissible d-flex justify-content-center mb-2 fade show" data-hook>
-     <ul class="mb-0 pl-0" style="list-style-type: none;">
-         <li><%= value %></li>
-     </ul>
-
-     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-     <br>
-  </div>
-  <% end %>
+<%= flash_messages %>
 
 <%=form_for "hosted_zones", url: admin_dns_hosted_zone_path(@hosted_zone.id),html: {method: :put} do |f|%>
   <fieldset>

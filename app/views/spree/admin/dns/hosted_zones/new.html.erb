@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @hosted_zone } %>
+<%= flash_messages %>
 
 <%=form_for :hosted_zones, url: admin_dns_hosted_zones_path,html: {method: :post} do |f|%>
   <fieldset>
