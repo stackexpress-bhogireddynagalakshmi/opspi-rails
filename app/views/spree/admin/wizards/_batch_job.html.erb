@@ -19,9 +19,9 @@
       <th class="password">
        <% if job[:actions] == true %>
         <%=link_to 'Reset Password', reset_password_admin_wizards_path(email: get_data_for_task(job), type: job[:type], div_id: job[:sidekiq_job_id]), remote: true, class: "#{status.to_s.include?('completed') ? '' : 'd-none'}"%>
-        <div class='password-text'>
-          
-        </div>
+          <div class='password-text'>
+            
+          </div>
        <%end%>
       </th>
     </tr>
