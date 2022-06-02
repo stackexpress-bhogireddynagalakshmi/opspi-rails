@@ -311,8 +311,8 @@ display: block;
     </div>
       <%=hidden_field_tag(:hosted_zone_name, params[:dns_name])%>
       <div class="float-right">
-        <button class="btn btn-md btn-primary" type="submit">Save</button>
-        <button class="cancel-button btn btn-outline-secondary"  type="button">Cancel</button>
+        <button class="cancel-button btn btn-outline-secondary"  type="button" style="float:right;">Cancel</button>
+        <button class="btn btn-md btn-primary" type="submit" style="float:right;margin-right:4px">Save</button>
       </div> 
     </fieldset>
   <% end %>
@@ -451,19 +451,15 @@ display: block;
                       </div>
                     </div>
                     <% end %>
-                    <br/>
-                    <div class="grp5">
-                    <div class="form-group input-control">
-                    <%= link_to_delete "Delete", url: "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}"  ,class:'form-control'%>
-                    </div>
-
-                </div>
-
 
                 </div>
                 
+
+                <div class="form-group input-control">
+                <%= link_to_delete "Delete", url: "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}"  ,class:'form-control' ,method: :delete%>
+                </div>
                   
-                  <div class="float-right">
+                  <div>
                     <%=hidden_field_tag(:primary_id, hosted_zone_record.id)%>
                     <%=hidden_field_tag(:type, hosted_zone_record.type)%>
                     <button class="cancel-button btn btn-outline-secondary" style="float:right" id="edit-button_<%=hosted_zone_record.id.to_s%>" type="button">Cancel</button>
