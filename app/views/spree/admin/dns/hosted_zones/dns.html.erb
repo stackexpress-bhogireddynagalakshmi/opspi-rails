@@ -204,7 +204,7 @@ display: block;
         <div class="dropdown">
 
           <!-- Toggle -->
-          <button class="btn btn-sm btn-white" type="button" data-bs-toggle="collapse" data-target="#collapseEX2" aria-expanded="false" aria-controls="collapseEX2" onclick="ClearFields();" id="filter_open">
+          <button class="btn btn-sm btn-white" type="button" data-bs-toggle="collapse" data-target="#collapseEX2" aria-expanded="false" aria-controls="collapseEX2"  id="filter_open">
              Add Record <span class="badge bg-primary ms-1 d-none">0</span>
           </button>
 
@@ -311,7 +311,7 @@ display: block;
     </div>
       <%=hidden_field_tag(:hosted_zone_name, params[:dns_name])%>
       <div class="float-right">
-        <button class="cancel-button btn btn-outline-secondary"  type="button" style="float:right;">Cancel</button>
+        <button class="btn btn-outline-secondary"  type="button" style="float:right;" id="close1">Cancel</button>
         <button class="btn btn-md btn-primary" type="submit" style="float:right;margin-right:4px">Save</button>
       </div> 
     </fieldset>
@@ -453,13 +453,11 @@ display: block;
                     <% end %>
 
                 </div>
-                
-
-                <div class="form-group input-control">
-                <%= link_to_delete "Delete", url: "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}"  ,class:'form-control' ,method: :delete%>
-                </div>
                   
                   <div>
+
+                    <%= link_to_delete "Delete", url: "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}"  ,class:'form-control' ,method: :delete, style:"margin-top:10px"%>
+                    
                     <%=hidden_field_tag(:primary_id, hosted_zone_record.id)%>
                     <%=hidden_field_tag(:type, hosted_zone_record.type)%>
                     <button class="cancel-button btn btn-outline-secondary" style="float:right" id="edit-button_<%=hosted_zone_record.id.to_s%>" type="button">Cancel</button>
@@ -487,6 +485,14 @@ $(document).ready(function() {
         $("#collapseEX2").css('display','block');
         $("#collapseEX2").addClass("show");
       }
+  });
+});
+
+$(document).ready(function() {
+  $("#close1").on('click', function(event) {
+      $("#collapseEX2").css('display','none');
+        $("#collapseEX2").removeClass("show");
+      
   });
 });
 </script>

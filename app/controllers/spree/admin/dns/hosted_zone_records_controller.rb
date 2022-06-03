@@ -24,7 +24,8 @@ module Spree
           set_flash
           respond_to do |format|
             format.js { render inline: "location.reload();" }
-            format.html { redirect_to  dns_admin_dns_hosted_zone_url(@hosted_zone.isp_config_host_zone_id)+"?dns_name=#{host_zone_record_params[:hosted_zone_name]}"}
+            format.html { redirect_to request.referrer }
+            # format.html { redirect_to  dns_admin_dns_hosted_zone_url(@hosted_zone.isp_config_host_zone_id)+"?dns_name=#{host_zone_record_params[:hosted_zone_name]}"}
           end
         end
 
