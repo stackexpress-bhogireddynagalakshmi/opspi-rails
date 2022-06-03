@@ -32,6 +32,12 @@ list-style-type: none;
 padding-bottom:5.5em;
 }
 
+.testtext {
+white-space:break-spaces;
+overflow-wrap: anywhere;
+width:230px
+}
+
 </style>
 
 <!-- Navbar -->
@@ -531,7 +537,7 @@ padding-bottom:5.5em;
 
             <!-- Menu -->
             <div class="dropdown-menu overflow-hidden" aria-labelledby="sidebarIconCopy">
-              <li class="dropdown-item px-0 text-center bg-light" href="#"><span class="d-block text-dark py-2 px-4"><%= try_spree_current_user.email %></span></li>
+              <li class="dropdown-item px-0 text-center bg-light " href="#"><span class="d-block text-dark py-2 px-2 testtext"><%= try_spree_current_user.email %></span></li>
               <hr class="dropdown-divider m-0">
               <li>
                 <% if spree.respond_to? :root_path %>
