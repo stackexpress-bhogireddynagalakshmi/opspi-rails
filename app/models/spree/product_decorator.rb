@@ -25,25 +25,30 @@ module Spree
         windows: 0,
         linux: 1,
         domain: 2,
-        hsphere: 3
+        hsphere: 3,
+        reseller_plan: 4
       }
 
       base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on account_id]
     end
 
     def ensure_plan_id_or_template_id
-      if windows?
+      if windows?  #TODO we may remove windows and linux option as seprate plan later
         update(isp_config_master_template_id: nil)
-        return if solid_cp_master_plan_id.present? && TenantManager::TenantHelper.current_tenant.blank?
+        return nil if solid_cp_master_plan_id.present? && TenantManager::TenantHelper.current_tenant.blank?
 
         update(solid_cp_master_plan_id: account.spree_store.solid_cp_master_plan_id)
 
         HostingPlanJob.perform_later(id)
+
       elsif linux?
         update(solid_cp_master_plan_id: nil)
-        return if isp_config_master_template_id.present?
+        return nil if isp_config_master_template_id.present?
 
         update(isp_config_master_template_id: account.spree_store.isp_config_master_template_id)
+      elsif reseller_plan?
+        update(solid_cp_master_plan_id: solid_cp_master_plan_id)
+        update(solid_cp_plan_id: solid_cp_master_plan_id)
       end
     end
 
@@ -96,4 +101,3 @@ end
                                   { plan_quotas_attributes: %i[quota_name plan_quota_group_id solid_cp_quota_group_id solid_cp_quota_id quota_value unlimited enabled parent_quota_value id] }] }].each do |field|
   Spree::PermittedAttributes.product_attributes.push << field
 end
-Spree::PermittedAttributes.user_attributes.push << :main_panel_access_only
