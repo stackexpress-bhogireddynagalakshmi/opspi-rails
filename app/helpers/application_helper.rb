@@ -23,8 +23,10 @@ module ApplicationHelper
 
   def plan_type_values(user)
     if user.superadmin?
-      [['Reseller Plan', 'reseller_plan'], ['Hsphere Plan', 'hsphere']]
-    elsif  user.store_admin? || user.end_user?
+      [['Reseller Hosting Plan', 'reseller_plan'], ['Hsphere Plan', 'hsphere'], ['Domain Reselling Plan', 'domain']]
+    elsif user.store_admin?
+      [['Windows Hosting Plan', 'windows'], ['Linux Hosting Plan', 'linux']]
+    elsif  user.end_user?
       TenantManager::TenantHelper.unscoped_query do
         current_spree_user.orders.collect do |o|
           o.products.pluck(:server_type)
