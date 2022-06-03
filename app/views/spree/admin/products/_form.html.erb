@@ -37,16 +37,7 @@
       <%= f.number_field :validity, class: 'form-control', required: :required,placeholder: '30' %>
       <%= f.error_message_on :validity %>
     <% end %>
- 
 
-    </div>
-
-    <div data-hook="admin_product_form_main_panel_access_only">
-        <%= f.field_container :main_panel_access_only, class: ['form-group'] do %>
-        <%= f.check_box :main_panel_access_only,class: 'mr-2'%>
-        <%= f.label :main_panel_access_only, raw(Spree.t(:main_panel_access_only)) %>
-        <%= f.error_message_on :main_panel_access_only %>
-      <% end %>
     </div>
 
    <%if current_spree_user.superadmin?%>
@@ -71,7 +62,7 @@
         <%@form = f%>
         <%=render_hosting_plan_quota_partial(@product,spree_current_user,@product.solid_cp_master_plan_id)%>
       </div>
-    <%elsif @product.linux?%>
+    <%elsif @product.linux? || @product.reseller_plan?%>
     <div id="isp_config_limits">
         <%=render :partial=>'isp_config_quota_form',:locals=>{f: f}%>
     </div>

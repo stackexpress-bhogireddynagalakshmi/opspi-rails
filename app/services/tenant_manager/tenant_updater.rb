@@ -16,13 +16,14 @@ module TenantManager
         Rails.logger.info { "TenantUpdater is called. " }
         return if account.blank?
         return if order.blank?
-        return unless TenantManager::TenantHelper.current_admin_tenant?
+        return unless TenantManager::TenantHelper.current_admin_tenant? # return if current store is not super admin store
+
         
-        if panels_access('solid_cp')
-           setup_solid_cp_access
+        if @order.panels_access('solid_cp') || @order.panels_access('reseller_plan')
+          setup_solid_cp_access
         end
 
-        if panels_access('isp_config')
+        if @order.panels_access('isp_config')
           setup_isp_config_access
         end
 
@@ -33,35 +34,26 @@ module TenantManager
       def setup_solid_cp_access
       
         Rails.logger.info { 
-          "setup_panels_access method is called. SolidCP Access: #{panels_access('solid_cp')} " 
+          "setup_panels_access method is called. SolidCP Access: #{@order.panels_access('solid_cp')} " 
         }
       
         account.update_column :solid_cp_access, true 
         account.spree_store.update_column :solid_cp_access, true
 
-        account.spree_store.update(solid_cp_master_plan_id: order.subscribable_products.windows.first.solid_cp_master_plan_id)
+        solid_cp_plan_id = order.subscribable_products.pluck(:solid_cp_master_plan_id).last
+
+        account.spree_store.update(solid_cp_master_plan_id: solid_cp_plan_id)
       end
 
       #ISP config Access to tenant & Master Plan id set for a spree store
       def setup_isp_config_access
 
         Rails.logger.info { "setup_panels_access method is called. ISPConfig Access: #{panels_access('isp_config')} " }
+
         account.update_column :isp_config_access, true 
           account.spree_store.update_column :isp_config_access, true 
+        
         account.spree_store.update(isp_config_master_template_id: order.subscribable_products.linux.first.isp_config_master_template_id) rescue nil
-      end
-
-
-      private
-      def panels_access(panel)
-        @panels = []
-        if order.present?        
-          order.line_items.each do |line_item|
-            panel_name = line_item.product.windows? ? 'solid_cp' : 'isp_config' 
-            @panels << panel_name  if !@panels.include?(panel)
-          end
-        end
-        @panels.include?(panel)
       end
   end
 end

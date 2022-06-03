@@ -14,7 +14,7 @@
   <fieldset>
     <div class="form-group field">
       <label>Select Hosting Type:</label>
-      <%= select_tag :server_type, options_for_select(plan_type_values(current_spree_user)), class: 'form-control', id: 'hosting_type'  %>
+      <%= select_tag :server_type, options_for_select(['linux', 'windows']), class: 'form-control', id: 'hosting_type'  %>
     </div>
 
   

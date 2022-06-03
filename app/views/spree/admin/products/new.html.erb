@@ -14,29 +14,28 @@
     <% end %>
 
     <div data-hook="admin_product_form_server_type">
+      
       <%= f.field_container :server_type, class: ['form-group'] do %>
       <%= f.label :plan_type, raw(Spree.t(:plan_type) + required_span_tag) %>
       <%= f.select :server_type, options_for_select(plan_type_values(current_spree_user),f.object.server_type),{include_blank: true},class: 'form-control title' %>
       <%= f.error_message_on :server_type %>
     <% end %>
 
-    <div data-hook="admin_product_form_main_panel_access_only">
-        <%= f.field_container :main_panel_access_only, class: ['form-group'] do %>
-        <%= f.check_box :main_panel_access_only,class: 'mr-2'%>
-        <%= f.label :main_panel_access_only, raw(Spree.t(:main_panel_access_only)) %>
-        <%= f.error_message_on :main_panel_access_only %>
-      <% end %>
-    </div>
+    <%if current_spree_user.superadmin?%>
+      <div data-hook="admin_product_form_reseller_product">
+         <%= f.field_container :solid_cp_master_plan_id, class: ['form-group'] do %>
+          <%= f.label :solid_cp_master_plan_id, raw(Spree.t(:solid_cp_plan) + required_span_tag) %>
+          <%= f.select :solid_cp_master_plan_id, options_for_select(SolidCp::Plan.master_plans_dropdown,f.object.solid_cp_master_plan_id),{prompt: '--Select--'},class: 'form-control title', id: 'product_solid_cp_master_plan' %>
+          <%= f.error_message_on :solid_cp_master_plan_id %>
+        <% end %>
 
-   <%if current_spree_user.superadmin?%>
-    <div data-hook="admin_product_form_reseller_product">
         <%= f.field_container :reseller_product, class: ['form-group'] do %>
           <%= f.check_box :reseller_product,class: 'mr-2',checked: true%>
           <%= f.label :reseller_product, raw(Spree.t(:reseller_product)) %>
           <%= f.error_message_on :reseller_product %>
         <% end %>
-     </div>
-   <%end%>
+      </div>
+    <%end%>
 
     <div data-hook="admin_product_form_subscribable">
         <%= f.field_container :subscribable, class: ['form-group'] do %>
@@ -53,16 +52,10 @@
     </div>
     
     <div id="solid_cp_quota_group_div" class="d-none">
-      <%if current_spree_user.superadmin?%>
-        <%= f.field_container :solid_cp_master_plan_id, class: ['form-group'] do %>
-          <%= f.label :solid_cp_master_plan_id, raw(Spree.t(:solid_cp_plan) + required_span_tag) %>
-          <%= f.select :solid_cp_master_plan_id, options_for_select(SolidCp::Plan.master_plans_dropdown,f.object.solid_cp_master_plan_id),{prompt: '--Select--'},class: 'form-control title' %>
-          <%= f.error_message_on :solid_cp_master_plan_id %>
-        <% end %>
-      <%else%>
-        <%=f.hidden_field :solid_cp_master_plan_id,value: current_store.solid_cp_master_plan_id %>
+      <%if current_spree_user.store_admin?%>
+        <%=f.hidden_field :solid_cp_master_plan_id, value: current_store.solid_cp_master_plan_id %>
       <%end%>
-      
+
       <div id="product_quota_groups">
         <%@form = f%>
         <%=render :partial=>'solid_cp_quota_form',:locals=>{f: f,solid_cp_plan_id: ""} if current_spree_user.store_admin?%>
@@ -193,7 +186,7 @@
           $('#solid_cp_quota_group_div').removeClass('d-none');
           $('#isp_config_template_div').addClass('d-none');
         } 
-        else if(type == 'linux'){
+        else if(type == 'linux' || type == 'reseller_plan'){
           $('#solid_cp_quota_group_div').addClass('d-none');
           $('#isp_config_template_div').removeClass('d-none');
         }
