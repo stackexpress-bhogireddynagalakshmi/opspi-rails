@@ -109,6 +109,26 @@ module Spree
     def not_a_check_payment?
       payments.last.check_number.blank?
     end
+
+    def panels_access(panel)
+      @panels = []
+      if self.present?
+        self.line_items.each do |line_item|
+          next if line_item.product.blank?
+
+          if line_item.product.windows?
+            panel_name = 'solid_cp'
+          elsif line_item.product.linux?
+            panel_name = 'isp_config'
+          elsif line_item.product.reseller_plan?
+            panel_name = 'reseller_plan'
+          end
+              
+          @panels << panel_name unless @panels.include?(panel)
+        end
+      end
+      @panels.include?(panel)
+    end
   end
 end
 

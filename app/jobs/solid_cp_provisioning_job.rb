@@ -29,12 +29,15 @@ class SolidCpProvisioningJob < ApplicationJob
     user.solid_cp.package.add_package(plan_id)
   end
 
-  # this will provision the store Admin/Reseller Account and also creates hosting space for the reseller on solidcp panel
+  # this will provision the store Admin/Reseller 
+  # Account and also creates hosting space for the reseller on solidcp panel
   def provision_store_admin_account(user, product_id)
     response = user.solid_cp.add_user('Reseller', RESELLER_ROLE_ID)
 
     if product_id.present?
-      solid_cp_master_plan_id = user.spree_store.solid_cp_master_plan_id
+      product = Spree::Product.find(product_id)
+      solid_cp_master_plan_id = product.solid_cp_master_plan_id
+
       if response[:success] == true
         subscribe_to_solidcp_plan(user, solid_cp_master_plan_id) if user.packages.count <= 1
       else
