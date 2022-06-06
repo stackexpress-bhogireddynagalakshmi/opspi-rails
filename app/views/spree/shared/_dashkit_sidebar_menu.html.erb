@@ -32,6 +32,12 @@ list-style-type: none;
 padding-bottom:5.5em;
 }
 
+.testtext {
+white-space:break-spaces;
+overflow-wrap: anywhere;
+width:230px
+}
+
 </style>
 
 <!-- Navbar -->
@@ -448,7 +454,7 @@ padding-bottom:5.5em;
                 </div>
                 </li>
 
-                <!--<li class="nav-item">
+               <!-- <li class="nav-item">
                 <a class="nav-link" href="#mail-statistics" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="mail-statistics" id="sidebar_statistics_dropdown">
                     Statistics
                 </a>
@@ -473,7 +479,7 @@ padding-bottom:5.5em;
                     Start Wizard
                   </a>
                 </li>
-                <!-- <li class="nav-item">
+               <!-- <li class="nav-item">
                 <a class="nav-link" href="#sidebar-windows" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-windows" id="sidebar_windows_dropdown">
                     Windows
                 </a>
@@ -506,6 +512,7 @@ padding-bottom:5.5em;
         <%end%>
         </ul>
 
+        </ul>
         </div>
         <div class="mt-auto"></div>
 
@@ -531,7 +538,7 @@ padding-bottom:5.5em;
 
             <!-- Menu -->
             <div class="dropdown-menu overflow-hidden" aria-labelledby="sidebarIconCopy">
-              <li class="dropdown-item px-0 text-center bg-light" href="#"><span class="d-block text-dark py-2 px-4"><%= try_spree_current_user.email %></span></li>
+              <li class="dropdown-item px-0 text-center bg-light " href="#"><span class="d-block text-dark py-2 px-2 testtext"><%= try_spree_current_user.email %></span></li>
               <hr class="dropdown-divider m-0">
               <li>
                 <% if spree.respond_to? :root_path %>
@@ -593,6 +600,7 @@ padding-bottom:5.5em;
 
 
         </div>
+
 
 </div> <!-- / .navbar-collapse -->
 

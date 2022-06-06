@@ -1,47 +1,62 @@
-<% content_for :page_title do %>
- Mailing List
-<% end %>
+<style>
+.btn-size{
+  padding: 0.3rem 0.45rem;
+    font-size: 0.8rem;
+}
+</style>
 
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:add_mailing_list),
-    new_admin_mail_mailing_list_path,
-    class: "btn-success",
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        Mailing List
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      <%= button_link_to Spree.t(:add_mailing_list),
+      new_admin_mail_mailing_list_path,
+      class: "btn btn-primary lift",
       icon: 'add.svg' %>
-<% end %>
+      </div>
+    </div>
 
-<% if @mailing_lists.any? %>
-<div data-nav-x-wrapper>
-  <div data-nav-x-container>
-    <table class="table" id="listing_orders" data-hook data-nav-x-content>
-      <thead>
-        <tr data-hook="admin_orders_index_headers">
-          <th>Listname</th>
-          <th>domain</th>
-          
-          
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-      <%@mailing_lists.each do |mailing_list| %>
-        <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
-          <td><%= mailing_list.listname%></td>
-          <td><%= mailing_list.domain%></td>
-             <td><%=link_to 'Edit',edit_admin_mail_mailing_list_path(id: mailing_list.mailinglist_id)%> |
-            <%=link_to 'Delete',admin_mail_mailing_list_path(id: mailing_list.mailinglist_id), method: :delete, data: {confirm: t('general.delete')}%>
-          </td>  
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
   </div>
 </div>
+
+<%= flash_messages %>
+
+<% if @mailing_lists.any? %>
+<div class="card">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="table-layout: fixed; width:100%">
+  <thead>
+    <tr>
+    <th>Listname</th>
+    <th>Domain</th>
+    <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody class="fs-base">
+  <%@mailing_lists.each do |mailing_list| %>
+    <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
+      <td><%= mailing_list.listname%></td>
+      <td><%= mailing_list.domain%></td>
+         <td><%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_mailing_list_path(id: mailing_list.mailinglist_id) ,class:"btn btn-success btn-size"%> |
+        <%=link_to '<i class="fe fe-trash"></i>'.html_safe,admin_mail_mailing_list_path(id: mailing_list.mailinglist_id), method: :delete, data: {confirm: t('general.delete')} ,class:"btn btn-danger btn-size"%>
+      </td>  
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+</div>
 <% else %>
-  <div class="alert alert-info no-objects-found">
-  
+  <div class="alert alert-secondary no-objects-found">
+  <label class="form-label" style="margin-top: 0.5rem;"> No Mailing Lists found</label>
   </div>
 <% end %>
-
 
 <script type="text/javascript">
   
@@ -53,5 +68,11 @@
 <script type="text/javascript">
   $(document).ready(function (argument) {
     $('#FlashAlertsContainer').removeClass('d-none');
+  });
+
+  $(document).ready(function (argument) {
+    $('.alert').addClass('alert-dismissible d-flex mb-0 fade show');
+    $('.close').addClass('btn-close');
+    document.querySelector('.close').innerText = "";
   });
 </script>

@@ -1,44 +1,24 @@
-<% content_for :page_title do %>
- Mail Traffic
-<% end %>
-<% content_for :page_actions do %>
-<% end %>
-
-<%# if @mailbox_stats.any? %>
-<div data-nav-x-wrapper>
-  <div data-nav-x-container>
-    <div class="alert alert-info no-objects-found">
-      Coming Soon!!!
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        Mail Traffic
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
     </div>
-    <!-- <table class="table" id="listing_orders" data-hook data-nav-x-content>
-      <thead>
-        <tr data-hook="admin_orders_index_headers">
-          <th>Email Address</th>
-          <th>This Month</th>
-          <th>Last Month</th>
-          <th>This Year</th>
-          <th>Last Year</th>
-        </tr>
-      </thead>
-      <tbody>
-      <%#@mailbox_stats.each do |mailbox_stat| %>
-        <tr data-hook="admin_orders_index_rows" class="<%#= cycle('odd', 'even') %>">
-          <td><%#=mailbox_stat.email%></td>
-          <td><%#=mailbox_stat.this_month%></td>
-          <td><%#=mailbox_stat.last_month%></td>
-          <td><%#=mailbox_stat.this_year%></td>
-          <td><%#=mailbox_stat.last_year%></td>
-        </tr>
-      <%# end %>
-      </tbody>
-    </table> -->
+
   </div>
 </div>
-<%# else %>
-  <!-- <div class="ale#rt alert-info no-objects-found">
-  
-  </div> -->
-<%# end %>
+
+<div class="alert alert-secondary no-objects-found">
+      Coming Soon!!!
+</div>
+
+
 
 
 <script type="text/javascript">

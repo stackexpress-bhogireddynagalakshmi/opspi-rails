@@ -13,3 +13,4 @@ Rails.start()
 // ActiveStorage.start()
 // Theme
 import '../theme/theme'
+import '../theme/alertflash'
