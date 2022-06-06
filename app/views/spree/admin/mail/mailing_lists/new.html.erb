@@ -1,7 +1,20 @@
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:mail), admin_mail_mailing_lists_path %> /
-  <%= Spree.t(:add_mailing_list) %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:mail), admin_mail_mailing_lists_path %> /
+        Add Mailing List
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%= flash_messages %>
 
 <%= render partial: 'spree/admin/mail/mailing_lists/form' %>

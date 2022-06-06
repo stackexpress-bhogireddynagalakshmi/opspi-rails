@@ -1,38 +1,49 @@
-<% content_for :page_title do %>
- Mail Quota
-<% end %>
-<% content_for :page_actions do %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        Mail Quota
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
 
-<% if @mailbox_quotas.any? %>
-<div data-nav-x-wrapper>
-  <div data-nav-x-container>
-    <table class="table" id="listing_orders" data-hook data-nav-x-content>
-      <thead>
-        <tr data-hook="admin_orders_index_headers">
-          <th>Email Address</th>
-          <th>Name</th>
-          <th>Used Space</th>
-          <th>Quota</th>
-          <th>Used %</th>
-        </tr>
-      </thead>
-      <tbody>
-      <%@mailbox_quotas.each do |mailbox_quota| %>
-        <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
-          <td><%=mailbox_quota.email%></td>
-          <td><%=mailbox_quota.name%></td>
-          <td><%=mailbox_quota.used%></td>
-          <td><%=mailbox_quota.quota%></td>
-          <td><%=mailbox_quota.used_percentage%></td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
   </div>
 </div>
+
+<% if @mailbox_quotas.any? %>
+<div class="card">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="table-layout: fixed; width:100%">
+  <thead>
+    <tr>
+    <th>Email Address</th>
+    <th>Name</th>
+    <th>Used Space</th>
+    <th>Quota</th>
+    <th>Used %</th>
+    </tr>
+  </thead>
+  <tbody class="fs-base">
+  <%@mailbox_quotas.each do |mailbox_quota| %>
+    <tr data-hook="admin_orders_index_rows">
+      <td><%=mailbox_quota.email%></td>
+      <td><%=mailbox_quota.name%></td>
+      <td><%=mailbox_quota.used%></td>
+      <td><%=mailbox_quota.quota%></td>
+      <td><%=mailbox_quota.used_percentage%></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+</div>
+
 <% else %>
-  <div class="alert alert-info no-objects-found">
+  <div class="alert alert-secondary no-objects-found">
   
   </div>
 <% end %>
