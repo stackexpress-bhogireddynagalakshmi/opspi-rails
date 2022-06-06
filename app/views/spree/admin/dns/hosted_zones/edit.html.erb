@@ -4,64 +4,82 @@
   .formSuccess{
     color: green;
   }
-</style><% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:domains), spree.admin_dns_hosted_zones_url %> /
-  <%= @hosted_zone.try(:origin) %>
-<% end %>
+</style>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:domains), spree.admin_dns_hosted_zones_url %> /
+        <%= @hosted_zone.try(:origin) %>
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%= flash_messages %>
 
 <%=form_for "hosted_zones", url: admin_dns_hosted_zone_path(@hosted_zone.id),html: {method: :put} do |f|%>
   <fieldset>
-    <div class="form-group field">
-      <label>Domain Name (eg:example.com)</label>
+    <div class="form-group">
+      <label class="form-label">Domain Name (eg:example.com)</label>
       <%=f.text_field :name, class: 'form-control', value: @hosted_zone.try(:origin), id:"dname", pattern: DNS_ORIGIN_ZONE_REGEX, title: "Please follow the correct format", required: true %>
     </div>
-    <div class="form-group field">
-      <label>Email (eg: webmaster.example.com)</label>
-      <%=f.text_field :mbox, class: 'form-control', value: @hosted_zone.try(:mbox), id:"mbox", pattern: MBOX_EMAIL_REGEX, title: "Please follow the correct format",required: true %>
+    <div class="form-group">
+      <label class="form-label">NS (eg: ns1.example.com)</label>
+      <%=f.text_field :ns, class: 'form-control', value: @hosted_zone.try(:ns), id:"ns", required: true %>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email (eg: webmaster.example.com)</label>
+      <%=f.text_field :mbox, class: 'form-control', value: @hosted_zone.try(:mbox), id:"mbox", pattern: MBOX_EMAIL_REGEX, title: "Please follow the format and end with '.'",required: true %>
     </div>   
-    <div class="form-group field">
-      <label>Refresh (Seconds)</label>
+    <div class="form-group">
+      <label class="form-label">Refresh (Seconds)</label>
       <%=f.text_field :refresh, class: 'form-control', value: @hosted_zone.try(:refresh), id:"refresh" %>
     </div> 
-    <div class="form-group field">
-      <label>Retry (Seconds)</label>
+    <div class="form-group">
+      <label class="form-label">Retry (Seconds)</label>
       <%=f.text_field :retry, class: 'form-control', value: @hosted_zone.try(:retry),id:"retry" %>
     </div>  
-    <div class="form-group field">
-      <label>Expire (Seconds)</label>
+    <div class="form-group">
+      <label class="form-label">Expire (Seconds)</label>
       <%=f.text_field :expire, class: 'form-control',value: @hosted_zone.try(:expire), id:"expire" %>
     </div>  
-    <div class="form-group field">
-      <label>Minimum (negative cache ttl) (Seconds)</label>
+    <div class="form-group">
+      <label class="form-label">Minimum (negative cache ttl) (Seconds)</label>
       <%=f.text_field :minimum, class: 'form-control',value: @hosted_zone.try(:minimum), id:"minimum" %>
     </div>  
-    <div class="form-group field">
-      <label>TTL (Seconds)</label>
+    <div class="form-group">
+      <label class="form-label">TTL (Seconds)</label>
       <%=f.text_field :ttl, class: 'form-control', value: @hosted_zone.try(:ttl), id:"ttl" %>
     </div> 
-    <div class="form-group field">
-      <label>Allow zone transfer to these IPs (comma separated list)</label>
+    <div class="form-group">
+      <label class="form-label">Allow zone transfer to these IPs (comma separated list)</label>
       <%=f.text_field :xfer, class: 'form-control', value: @hosted_zone.try(:xfer), id:"xfer" %>
     </div>  
-    <div class="form-group field">
-      <label>Also Notify</label>
+    <div class="form-group">
+      <label class="form-label">Also Notify</label>
       <%=f.text_field :also_notify, class: 'form-control', value: @hosted_zone.try(:also_notify), id:"also_notify" %>
     </div>  
-    <div class="form-group field">
-      <label>Update ACL</label>
+    <div class="form-group">
+      <label class="form-label">Update ACL</label>
       <%=f.text_field :update_acl, class: 'form-control', value: @hosted_zone.try(:update_acl), id:"update_acl" %>
     </div> 
-    <div class="form-group field">
-      <label >Active</label>
+    <div class="form-check">
+      <label class="form-check-label">Active</label>
       <% if @hosted_zone.try(:active).eql?"Y"%>
-      <%=f.check_box :status,class: 'mr-2', checked: 'checked'%>
+      <%=f.check_box :status,class: 'form-check-input list-checkbox mr-2', checked: 'checked'%>
       <%else%>
-      <%=f.check_box :status,class: 'mr-2'%>
+      <%=f.check_box :status,class: 'form-check-input list-checkbox mr-2'%>
       <%end%>
     </div> 
     <%=hidden_field_tag(:isp_config_host_zone_id, @hosted_zone.id)%>
-    <%=submit_tag 'Update',class: 'btn btn-primary'%>
+    <%=submit_tag 'Update',class: 'btn btn-primary lift mb-4'%>
 
   </fieldset>
 <%end%>
