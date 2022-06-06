@@ -1,9 +1,20 @@
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:ftp_users), admin_sites_ftp_users_path %> /
-  <%= Spree.t(:new_ftp_user) %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:ftp_users), admin_sites_ftp_users_path %> /
+        New FTP User
+        </h1>
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
 
+  </div>
+</div>
+
+<%= flash_messages %>
 
 <% url =  @ftp_user.present? ?   admin_sites_ftp_user_path(@ftp_user.id) : admin_sites_ftp_users_path%>
 
@@ -12,76 +23,75 @@
  <%=form_for "ftp_user", url: url, html: {method: @ftp_user.present? ? :put : :post} do |f|%> 
 
   <fieldset>
-    <div class="form-group field">
-      <label>Select Hosting Type:</label>
-      <%= select_tag :server_type, options_for_select(['linux', 'windows']), class: 'form-control', id: 'hosting_type'  %>
+    <div class="form-group">
+      <label class="form-label">Select Hosting Type:</label>
+      <%= select_tag :server_type, options_for_select(plan_type_values(current_spree_user)), class: 'form-select', id: 'hosting_type'  %>
     </div>
 
   
-    <div class="form-group field">
-      <label>Username:</label>
+    <div class="form-group">
+      <label class="form-label">Username:</label>
       <%=f.text_field 'username', value: @ftp_user.try(:username), class: 'form-control', placeholder: "Please enter UserName" %>
     </div>
 
-    <div class="form-group field">
-      <label>Password:</label>
+    <div class="form-group">
+      <label class="form-label">Password:</label>
       <%=f.password_field 'password', value: @ftp_user.try(:password), class: 'form-control', placeholder: "Please enter Password"%>
     </div>
 
     <div id="windows-fields" style="display: none;">
-      <div class="form-group field">
-      <label>Select Domain:</label>
-      <%= f.select(:domain, @windows_sites.pluck(:domain_name).uniq.reject{|x| x.include?("www")}, {:prompt => 'Select Web Domain'}, class: 'select2-clear js-filterable',id: "domain_name_dropdown" )%>
+      <div class="form-group">
+      <label class="form-label">Select Domain:</label>
+      <%= f.select(:domain, @windows_sites.pluck(:domain_name).uniq.reject{|x| x.include?("www")}, {:prompt => 'Select Web Domain'}, class: 'form-select js-filterable',id: "domain_name_dropdown" )%>
       </div>   
 
-       <div class="form-group field">
-        <label>Folder:</label>
+       <div class="form-group">
+        <label class="form-label">Folder:</label>
         <%=f.text_field 'folder', value: "", class: 'form-control', disabled: true, id: "folder_path" %>
       </div>   
     </div>
 
      <div id="linux-fields" >
-       <div class="form-group field">
-        <label>Select Domain:</label>
-        <%= collection_select(:ftp_user, :parent_domain_id, @websites, :domain_id, :domain, {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+       <div class="form-group">
+        <label class="form-label">Select Domain:</label>
+        <%= collection_select(:ftp_user, :parent_domain_id, @websites, :domain_id, :domain, {:prompt => 'Select Web Domain'}, {class: 'form-select js-filterable'}) %>
       </div>
 
 
-      <div class="form-group field">
-        <label>Harddisk-Quota(MB):</label>
+      <div class="form-group">
+        <label class="form-label">Harddisk-Quota(MB):</label>
         <%=f.text_field 'quota_size', value: (@ftp_user.try(:quota_size) ? @ftp_user.try(:quota_size) : -1) , class: 'form-control', type: 'number', placeholder: "Please enter Harddisk-Quota In MB (example: 1000)"%>
       </div>
 
-      <div class="form-group field">
-        <label>Active</label>
-        <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @website.try(:active)),{}, class: 'form-control'%>
+      <div class="form-group">
+        <label class="form-label">Active</label>
+        <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @website.try(:active)),{}, class: 'form-select'%>
       </div>
 
-      <div class="form-group field">
-        <label>User identifier (UID):</label>
+      <div class="form-group">
+        <label class="form-label">User identifier (UID):</label>
         <%=f.text_field 'uid', value: @ftp_user.try(:uid), class: 'form-control', readonly: true%>
       </div>
 
-      <div class="form-group field">
-        <label>Group identifier (GID):</label>
+      <div class="form-group">
+        <label class="form-label">Group identifier (GID):</label>
         <%=f.text_field 'gid', value: @ftp_user.try(:gid), class: 'form-control', readonly: true%>
       </div>
 
-      <div class="form-group field">
-        <label>Directory:</label>
+      <div class="form-group">
+        <label class="form-label">Directory:</label>
         <%=f.text_field 'dir', value: '/var/www/clients/client312/web29', class: 'form-control', readonly: true %>
       </div>
     </div>
 
-    <%=submit_tag "#{@ftp_user.present? ? 'Update' : 'Add'} FTP User",class: 'btn btn-primary'%>
+    <%=submit_tag "#{@ftp_user.present? ? 'Update' : 'Add'} FTP User",class: 'btn btn-primary lift mb-4'%>
 
   </fieldset>
 <% end %>
 
 <div style="color: red;" class="mt-3">
   <%=@response[:message].html_safe if @response %>
-</</div> 
-
+</div> 
 
 
 

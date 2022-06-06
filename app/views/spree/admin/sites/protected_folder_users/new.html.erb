@@ -1,46 +1,59 @@
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:protected_folders), admin_sites_protected_folders_path %> /
-  <%= Spree.t(:web_folder) %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:protected_folders), admin_sites_protected_folders_path %> /
+        <%= Spree.t(:web_folder) %>
+        </h1>
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%= flash_messages %>
 
  <%=form_for "protected_folder_user", url: admin_sites_protected_folder_users_path, html: {method: :post, id: 'protected_folder_user_form'} do |f|%> 
 
   <fieldset>
-    <div class="form-group field">
-      <label>Select Folder:</label>
+    <div class="form-group">
+      <label class="form-label">Select Folder:</label>
 
-      <%= collection_select(:protected_folder_user, :web_folder_id, @folders, :web_folder_id, :folder, {:prompt => 'Select Web Folder'}, {class: 'select2-clear js-filterable'}) %>
+      <%= collection_select(:protected_folder_user, :web_folder_id, @folders, :web_folder_id, :folder, {:prompt => 'Select Web Folder'}, {class: 'form-select js-filterable'}) %>
     </div>
 
-    <div class="form-group field">
-      <label>UserName:</label>
+    <div class="form-group">
+      <label class="form-label">UserName:</label>
       <%=f.text_field 'username', class: 'form-control', placeholder: "Please enter username" %>
     </div>
 
-    <div class="form-group field">
-      <label>Password:</label>
+    <div class="form-group">
+      <label class="form-label">Password:</label>
       <%=f.password_field 'password', class: 'form-control', placeholder: "Please enter password" %>
     </div>
 
-    <div class="form-group field">
-      <label>Repeat Password:</label>
+    <div class="form-group">
+      <label class="form-label">Repeat Password:</label>
       <%=f.password_field 'repeat_password', class: 'form-control', placeholder: "Please enter password" %>
     </div>
 
-    <div class="form-group field">
-      <label>Active</label>
-      <%=f.select 'active',options_for_select(ProtectedFolder.actives.collect{ |k, v| [v, k]}, @protected_folder.try(:active)),{}, class: 'form-control'%>
+    <div class="form-group">
+      <label class="form-label">Active</label>
+      <%=f.select 'active',options_for_select(ProtectedFolder.actives.collect{ |k, v| [v, k]}, @protected_folder.try(:active)),{}, class: 'form-select'%>
     </div>
 
-    <%=submit_tag "Add Folder User",class: 'btn btn-primary'%>
+    <%=submit_tag "Add Folder User",class: 'btn btn-primary lift'%>
 
   </fieldset>
 <% end %>
 
 <div style="color: red;" class="mt-3">
   <%=@response[:message].html_safe if @response %>
-</</div> 
+</div> 
+
 
 <script type="text/javascript">
   $( "#protected_folder_user_form" ).submit(function( event ) {
