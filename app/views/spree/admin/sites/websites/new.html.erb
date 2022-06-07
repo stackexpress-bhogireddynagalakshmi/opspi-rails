@@ -24,47 +24,19 @@
       <label class="form-label">Select Domain:</label>
       <%= collection_select(:website, :domain, @hosted_zones, :origin, :origin, {:prompt => 'Select Web Domain'}, {class: 'form-select js-filterable'}) %>
      </div>
-     <div class="form-group">
-      <label class="form-label">Select Hosting Type:</label>
-      <%= select_tag :server_type, options_for_select([['Linux','linux'],['Windows','windows']]), class: 'form-select', id: 'hosting_type'  %>
+     <div class="form-group field">
+      <label>Select Hosting Type:</label>
+      <%= select_tag :server_type, options_for_select(plan_type_values(current_spree_user)), class: 'form-control', id: 'hosting_type'  %>
      </div>
 
 
     <div id="linux-fields" >
-      <div class="form-group">
-        <label class="form-label">IPv4-Address:</label>
-        <%=f.select 'ip_address',options_for_select([['*','*']], @proxy_resource.try(:ip_address)),{selected: '*'}, class: 'form-select js-filterable' %>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">IPv6-Address:</label>
-         <%=f.select 'ipv6_address',options_for_select([], @proxy_resource.try(:ipv6_address)),{}, class: 'form-select js-filterable' %>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Harddisk Quota(MB):</label>
-        <%=f.text_field 'hd_quota', value: (@proxy_resource.try(:hd_quota).present? ? @proxy_resource.hd_quota : -1), class: 'form-control', type: "number", min:"-1" %>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Traffic Quota(MB):</label>
-        <%=f.text_field 'traffic_quota', value: (@proxy_resource.try(:traffic_quota).present? ? @proxy_resource.traffic_quota : -1 ), class: 'form-control'  %>
-      </div>
 
       <div class="form-group">
         <label class="form-label">Auto-Subdomain:</label>
         <%=f.select 'subdomain',options_for_select([['www.','www'],['None','']], @proxy_resource.try(:subdomain)),{selected: 'www'}, class: 'form-select  js-filterable' %>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">PHP:</label>
-        <%=f.select 'php',options_for_select([['Mod-PHP','y']], @proxy_resource.try(:php)),{selected: 'y'}, class: 'form-select js-filterable' %>
-      </div>
-     
-      <div class="form-group">
-        <label class="form-label">Active</label>
-        <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @proxy_resource.try(:active)),{}, class: 'form-select js-filterable'%>
-      </div>
     </div>
    
     <%=submit_tag "Add Website",class: 'btn btn-primary lift mb-4'%>
