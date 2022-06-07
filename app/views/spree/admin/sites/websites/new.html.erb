@@ -14,45 +14,17 @@
      </div>
      <div class="form-group field">
       <label>Select Hosting Type:</label>
-      <%= select_tag :server_type, options_for_select([['Linux','linux'],['Windows','windows']]), class: 'form-control', id: 'hosting_type'  %>
+      <%= select_tag :server_type, options_for_select(plan_type_values(current_spree_user)), class: 'form-control', id: 'hosting_type'  %>
      </div>
 
 
     <div id="linux-fields" >
-      <div class="form-group field">
-        <label>IPv4-Address:</label>
-        <%=f.select 'ip_address',options_for_select([['*','*']], @proxy_resource.try(:ip_address)),{selected: '*'}, class: 'form-control select2-clear js-filterable' %>
-      </div>
-
-      <div class="form-group field">
-        <label>IPv6-Address:</label>
-         <%=f.select 'ipv6_address',options_for_select([], @proxy_resource.try(:ipv6_address)),{}, class: 'form-control select2-clear js-filterable' %>
-      </div>
-
-      <div class="form-group field">
-        <label>Harddisk Quota(MB):</label>
-        <%=f.text_field 'hd_quota', value: (@proxy_resource.try(:hd_quota).present? ? @proxy_resource.hd_quota : -1), class: 'form-control', type: "number", min:"-1" %>
-      </div>
-
-      <div class="form-group field">
-        <label>Traffic Quota(MB):</label>
-        <%=f.text_field 'traffic_quota', value: (@proxy_resource.try(:traffic_quota).present? ? @proxy_resource.traffic_quota : -1 ), class: 'form-control'  %>
-      </div>
 
       <div class="form-group field">
         <label>Auto-Subdomain:</label>
         <%=f.select 'subdomain',options_for_select([['www.','www'],['None','']], @proxy_resource.try(:subdomain)),{selected: 'www'}, class: 'form-control select2-clear js-filterable' %>
       </div>
 
-      <div class="form-group field">
-        <label>PHP:</label>
-        <%=f.select 'php',options_for_select([['Mod-PHP','y']], @proxy_resource.try(:php)),{selected: 'y'}, class: 'form-control select2-clear js-filterable' %>
-      </div>
-     
-      <div class="form-group field">
-        <label>Active</label>
-        <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}, @proxy_resource.try(:active)),{}, class: 'form-control select2-clear js-filterable'%>
-      </div>
     </div>
    
     <%=submit_tag "Add Website",class: 'btn btn-primary'%>
