@@ -34,13 +34,7 @@ module Spree
           if params[:server_type].present? && params[:server_type] == 'windows'
             windows_resource_params
           else
-            _request_params = request_params
-            
-            if _request_params[:domain][-1] == '.'
-              _request_params[:domain] = _request_params[:domain][0..-2]
-            end
-
-             _request_params.merge(extra_isp_params)
+            request_params.merge(extra_isp_params)
           end
         end
 
@@ -68,7 +62,7 @@ module Spree
           { type: 'vhost', parent_domain_id: 0, vhost_type: 'name', cgi: 'y', ssi: 'y', suexec: 'y',
             errordocs: 1, is_subdomainwww: 1, ruby: 'n', ssl: 'n', stats_type: 'webalizer',
             allow_override: 'All', php_open_basedir: '/', pm: 'ondemand', pm_max_requests: 0,
-            pm_process_idle_timeout: 10, backup_copies: 1, backup_format_web: 'default',
+            pm_process_idle_timeout: 10, backup_copies: 1, backup_format_web: 'default', active: 'y',
             backup_format_db: 'gzip', traffic_quota_lock: 'n', http_port: '80', https_port: '443'
           }
         end
