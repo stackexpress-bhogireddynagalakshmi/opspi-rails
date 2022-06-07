@@ -21,6 +21,8 @@ module IspConfig
     end
 
     def create(params = {})
+      params = sanitze(params)
+
       response = query({
                          endpoint: '/json.php?sites_web_domain_add',
                          method: :POST,
@@ -35,6 +37,7 @@ module IspConfig
     end
 
     def update(primary_id, params = {})
+      params = sanitze(params)
       response = query({
                          endpoint: '/json.php?sites_web_domain_update',
                          method: :POST,
@@ -96,6 +99,13 @@ module IspConfig
           response: response
         }
       end
+    end
+
+    def sanitze(params)
+      return params if  params[:domain].blank?
+      params[:domain] = params[:domain][0..-2]  if  params[:domain][-1] == '.'
+
+      return params
     end
 
     def server_params

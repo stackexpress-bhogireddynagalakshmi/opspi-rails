@@ -6,11 +6,26 @@
   <td><%=ftp_user.gid%></td>
   <td><%=ftp_user.dir%></td>
   <td>
-    <div class="custom-control custom-switch">
-      <%= check_box_tag('active', ftp_user.active, ('checked' if (ftp_user.active == 'y')), class: "custom-control-input", data_ftp_user_id: ftp_user.ftp_user_id, id: "data_ftp_user_#{ftp_user.ftp_user_id}", onclick: "updateFtpUser(this)" ) %>
-      <label class="custom-control-label" for="data_ftp_user_<%=ftp_user.ftp_user_id %>"></label>
+    <div class="form-check form-switch">
+      <%= check_box_tag('active', ftp_user.active, ('checked' if (ftp_user.active == 'y')), class: "form-check-input", data_ftp_user_id: ftp_user.ftp_user_id, id: "data_ftp_user_#{ftp_user.ftp_user_id}", onclick: "updateFtpUser(this)" ) %>
+      <label class="form-check-label" for="data_ftp_user_<%=ftp_user.ftp_user_id %>"></label>
     </div>
   <td>
-    <%=link_to 'Delete', admin_sites_ftp_user_path(ftp_user.ftp_user_id), method: :delete%>
+  <span>
+  <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size', method: :delete do %>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+    </svg>
+  <% end %>
+  </span>
+    <%#=link_to 'Delete', admin_sites_ftp_user_path(ftp_user.ftp_user_id), method: :delete%>
   </td>  
 </tr>
+
+<style>
+.btn-size{
+  padding: 0.3rem 0.45rem;
+    font-size: 0.8rem;
+}
+</style>

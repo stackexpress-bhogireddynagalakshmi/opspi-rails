@@ -1,10 +1,21 @@
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:spamfilter_blacklists), admin_mail_spam_filter_blacklists_path %> /
-  <%= Spree.t(:new_spamfilter_blacklists) %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:spamfilter_blacklists), admin_mail_spam_filter_blacklists_path %> /
+        <%= Spree.t(:new_spamfilter_blacklists) %>
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
 
+  </div>
+</div>
 
+<%= flash_messages %>
 <% action_path = @filter.present? ?   admin_mail_spam_filter_blacklist_path(@filter.wblist_id) : admin_mail_spam_filter_blacklists_path%>
 
 <%= render partial: 'spree/admin/mail/spam_filters/form', locals: {action_path: action_path} %>

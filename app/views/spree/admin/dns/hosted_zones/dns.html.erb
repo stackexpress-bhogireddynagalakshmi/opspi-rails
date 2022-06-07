@@ -23,13 +23,7 @@ fieldset {
     color: #aaa;
 }
 
-.search-bx{
-  width: 100%;
-  display: flex;
-}
-#searchBox{
-  width: 970px;
-}
+
 
 .grid-container {
     display: grid;
@@ -159,46 +153,87 @@ display: block;
 } */
 </style>
 
-<% flash.each do |key, value| %>
- <%= content_tag(:div, class: "alert alert-#{key} alert-dismissable") do %>
-  <%= value %>
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>   
- <% end %> 
-<% end %>  
-
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:dns_management), admin_dns_hosted_zones_path %>/
-  <%= params[:dns_name] %>
-<% end %>
-
-<div class="box">
-  <div class="form-inline first-row">
-    <button class="btn btn-md btn-primary" style="display:inline-block;margin-right:10px;" data-toggle="collapse" 
-                data-target="#collapseEX2" aria-expanded="false" aria-controls="collapseEX2" type="button" 
-                onclick="ClearFields();">Add Record</button>
-    <div class="form-group has-search">
-        <span class="fa fa-search form-control-feedback"></span>
-        <input type="text" class="form-control search-bx" id="searchBox" data-table="records-list" placeholder="Search">
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:dns_management), admin_dns_hosted_zones_path %>/
+        <%= params[:dns_name] %>
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
     </div>
+
   </div>
-  
+</div>
+
+<%= flash_messages %>
+
+<div class="card" id="dealsList">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+
+        <!-- Form -->
+        <form>
+          <div class="input-group input-group-flush input-group-merge input-group-reverse">
+            <input class="form-control list-search" type="search" id="searchBox" data-table="records-list" placeholder="Search">
+            <span class="input-group-text">
+              <i class="fa fa-search"></i>
+            </span>
+          </div>
+        </form>
+
+      </div>
+      <div class="col-auto me-n3">
+
+        <!-- Select -->
+        <form>
+
+        </form>
+
+      </div>
+      <div class="col-auto">
+
+
+
+        <!-- Dropdown -->
+        <div class="dropdown">
+
+          <!-- Toggle -->
+          <button class="btn btn-sm btn-white" type="button" data-bs-toggle="collapse" data-target="#collapseEX2" aria-expanded="false" aria-controls="collapseEX2"  id="filter_open">
+             Add Record <span class="badge bg-primary ms-1 d-none">0</span>
+          </button>
+
+        
+
+        </div>
+
+      </div>
+    </div> <!-- / .row -->
+  </div>
+
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @hosted_zone } %>
+
   <%=form_tag admin_dns_hosted_zone_hosted_zone_records_path(@hosted_zone), class:"collapse form_1", id: "collapseEX2", method: "post" do %>
     <fieldset>
     <div class="grid-container">
 
        <div class="grid-small_1">
-          <div class="form-group ">
-            <label for="type" class="label-st">Type</label>
-            <%= select_tag :type, options_for_select(["A", "AAAA","CNAME","MX", "NS","TXT"]), class: "form-control input-bx", id:"txttype", required:"required"%>
+          <div class="form-group">
+            <label for="type" class="form-label">Type</label>
+            <%= select_tag :type, options_for_select(["A", "AAAA","CNAME","MX", "NS","TXT"]), class: "form-select", id:"txttype", required:"required"%>
           </div>
           <div class="form-group field">
-            <label for="name" class="label-st">Name</label>
+            <label for="name" class="form-label">Name</label>
 
             <div class="input-group">
               <%=text_field_tag :name,params[:name], class:"form-control", id:"txtname", required:"required" %>
-              <div class="input-group-append">
-                <span class="input-group-text">.<%= params[:dns_name]%></span>
+              <div class="input-group-text">
+                <span>.<%= params[:dns_name]%></span>
               </div>
             </div>
           </div>
@@ -207,23 +242,23 @@ display: block;
         <div class="grid-child 2">
           <div id="divA" class="grid-small">
             <div class="form-group input-control" >
-              <label for="ipv4" class="label-st">IPv4 address</label>
-              <%=text_field_tag :ipv4, params[:ipv4], class:"form-control input-bx", id:"txtipv4" %>
+              <label for="ipv4" class="form-label">IPv4 address</label>
+              <%=text_field_tag :ipv4, params[:ipv4], class:"form-control", id:"txtipv4" %>
               <div class="error"></div>
             </div>
           </div>
 
           <div id="divAAAA" class="grid-small">
             <div class="form-group input-control">
-              <label for="ipv6" class="label-st">IPv6 address</label>
-              <%=text_area_tag :ipv6, params[:ipv6], class:"form-control input-bx", id:"txtipv6",style:"margin-top: 0px; margin-bottom: 16px; height: 39px;"%>
+              <label for="ipv6" class="form-label">IPv6 address</label>
+              <%=text_area_tag :ipv6, params[:ipv6], class:"form-control", id:"txtipv6",style:"margin-top: 0px; margin-bottom: 16px; height: 39px;"%>
               <div class="error"></div>
             </div>
           </div>
 
           <div id="divCNAME"class="grid-small" >
             <div class="form-group input-control">
-              <label for="target" class="label-st">Target</label>
+              <label for="target" class="form-label">Target</label>
               <%=text_field_tag :target,params[:target], class:"form-control input-bx", id:"txttarget" %>
                <div class="error"></div>
             </div>
@@ -231,7 +266,7 @@ display: block;
 
           <div id="divMX" class="grid-small">
             <div class="form-group input-control">
-              <label for="mailserver" class="label-st">Mail Server</label>
+              <label for="mailserver" class="form-label">Mail Server</label>
               <%=text_field_tag :mailserver, params[:mailserver], class:"form-control input-bx", id:"txtmailserver" %>
               <div class="error"></div>
             </div>
@@ -239,7 +274,7 @@ display: block;
 
           <div id="divNS" class="grid-small">
             <div class="form-group input-control">
-              <label for="nameserver" class="label-st">Nameserver</label>
+              <label for="nameserver" class="form-label">Nameserver</label>
               <%=text_field_tag :nameserver, params[:nameserver], class:"form-control input-bx", id:"txtnameserver" %>
               <div class="error"></div>
             </div>
@@ -247,7 +282,7 @@ display: block;
 
           <div id="divTXT" class="grid-small">
             <div class="form-group">
-              <label for="content" class="label-st">Content</label>
+              <label for="content" class="form-label">Content</label>
               <%=text_area_tag :content, params[:content], type:"text", class:"form-control input-bx", id:"txtcontent", style:"margin-top: 0px; margin-bottom: 16px; height: 39px;"%>
             </div>
           </div>
@@ -255,12 +290,12 @@ display: block;
         </div>
         <div class="grid_3">
           <div class="form-group">
-            <label for="ttl" class="label-st">TTL</label>
+            <label for="ttl" class="form-label">TTL</label>
             <div class>
             <div class="dropdownSX">
               <div class="dropdownSX1">
                 <div class="dropdownSX2">
-                  <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-control", id: "txtttl", required: "required" %>
+                  <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-select", id: "txtttl", required: "required" %>
                 </div>
               </div>
             </div>
@@ -276,23 +311,25 @@ display: block;
     </div>
       <%=hidden_field_tag(:hosted_zone_name, params[:dns_name])%>
       <div class="float-right">
-        <button class="btn btn-md btn-primary" type="submit">Save</button>
-        <button class="cancel-button btn btn-outline-secondary"  type="button">Cancel</button>
+        <button class="btn btn-outline-secondary"  type="button" style="float:right;" id="close1">Cancel</button>
+        <button class="btn btn-md btn-primary" type="submit" style="float:right;margin-right:4px">Save</button>
       </div> 
     </fieldset>
   <% end %>
+
+
   <% if @hosted_zone_records.any? %>
-  <div class="container pt-4">
-      <div class="table-responsive">
-        <table class="table" id="myTable">
-          <thead>
-            <tr>
-              <th class="col-md-2">Type</th>
-              <th class="col-md-3">Name</th>
-              <th class="col-md-3">Content</th>
-              <th class="col-md-2">TTL</th>
-            </tr>
-          </thead>
+  <div class="card">
+  <div class="table-responsive">
+  <table class="table table-sm card-table" style="table-layout: fixed; width:100%" id="myTable">
+    <thead>
+      <tr>
+      <th class="col-md-2">Type</th>
+      <th class="col-md-3">Name</th>
+      <th class="col-md-3">Content</th>
+      <th class="col-md-2">TTL</th>
+      </tr>
+    </thead>
           <tbody>
           <% @hosted_zone_records.each do |hosted_zone_record| %>
             <tr id="<% hosted_zone_record.id %>">
@@ -325,7 +362,7 @@ display: block;
                 <div class="grid-container-edit">
                   <div class="grp1">
                     <div class="form-group">
-                      <label for="type">Type</label>
+                      <label for="type" class="form-label">Type</label>
                       <div class>
                         <div class="show-content"><%= hosted_zone_record.type%></div>
                       </div>
@@ -333,7 +370,7 @@ display: block;
                   </div>
                   <div class="grp2">
                     <div class="form-group">
-                      <label for="name" >Name</label>
+                      <label for="name" class="form-label">Name</label>
                       <%=text_field_tag :name,params[:name], class:"form-control input-bx", value: hosted_zone_record.name.eql?(params[:dns_name]+".") ? hosted_zone_record.name.chomp(".") : hosted_zone_record.name.chomp("."+params[:dns_name]+"."), id:"edit_name", required: "required" %>
                     </div>
                   </div>
@@ -342,7 +379,7 @@ display: block;
                   <%if hosted_zone_record.type.eql?("A")%>
                     <div id="divIPV4">
                       <div class="form-group input-control">
-                        <label for="ipv4">IPv4 address</label>
+                        <label for="ipv4" class="form-label">IPv4 address</label>
                         <%=text_field_tag :ipv4, params[:ipv4], class:"form-control input-bx",value: hosted_zone_record.data, id:"edit_ipv4", required: true if hosted_zone_record.type.eql?"A" %>
                         <div class="error"></div>
                       </div>
@@ -350,7 +387,7 @@ display: block;
                     <%elsif hosted_zone_record.type.eql?("AAAA")%>
                     <div id="divIPV6">
                       <div class="form-group input-control">
-                        <label for="ipv6">IPv6 address</label>
+                        <label for="ipv6" class="form-label">IPv6 address</label>
                         <%=text_field_tag :ipv6, params[:ipv6], class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_ipv6", required: true if hosted_zone_record.type.eql?"AAAA" %>
                         <div class="error"></div>
                       </div>
@@ -358,7 +395,7 @@ display: block;
                     <% elsif hosted_zone_record.type.eql?("CNAME")%>
                     <div id="divTARGET">
                       <div class="form-group input-control">
-                        <label for="target">Target</label>
+                        <label for="target" class="form-label">Target</label>
                         <%=text_field_tag :target,params[:target], class:"form-control input-bx", value: hosted_zone_record.data.chomp("."), id:"edit_target", required: true if hosted_zone_record.type.eql?"CNAME" %>
                         <div class="error"></div>
                       </div>
@@ -366,7 +403,7 @@ display: block;
                     <% elsif hosted_zone_record.type.eql?("MX")%>
                     <div id="divMX">
                       <div class="form-group input-control">
-                        <label for="mailserver">Mail Server</label>
+                        <label for="mailserver" class="form-label">Mail Server</label>
                         <%=text_field_tag :mailserver, params[:mailserver], class:"form-control input-bx", value: hosted_zone_record.data.chomp("."), id:"edit_mailserver", required: true if hosted_zone_record.type.eql?"MX" %>
                         <div class="error"></div>
                       </div>
@@ -374,7 +411,7 @@ display: block;
                     <% elsif hosted_zone_record.type.eql?("NS")%>
                     <div id="divNS">
                       <div class="form-group input-control">
-                        <label for="nameserver">Nameserver</label>
+                        <label for="nameserver" class="form-label">Nameserver</label>
                         <%=text_field_tag :nameserver, params[:nameserver], class:"form-control input-bx", value: hosted_zone_record.data.chomp("."), id:"edit_nameserver", required: true if hosted_zone_record.type.eql?"NS"%>
                         <div class="error"></div>
                       </div>
@@ -382,7 +419,7 @@ display: block;
                     <% else %>
                     <div id="divCONTENT">
                       <div class="form-group input-control">
-                        <label for="content">Content</label>
+                        <label for="content" class="form-label">Content</label>
                         <%=text_field_tag :content, params[:content], type:"text", class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_content", style:"margin-top: 0px; margin-bottom: 16px; height: 39px;", required: true if hosted_zone_record.type.eql?"TXT"%>
                         <div class="error"></div>
                       </div>
@@ -392,37 +429,39 @@ display: block;
 
                   <div class="grp4">
                     <div class="form-group">
-                      <label for="ttl" >TTL</label>
+                      <label for="ttl" class="form-label">TTL</label>
                       <div class>
                       <div class="dropdownSX">
                         <div class="dropdownSX1">
                           <div class="dropdownSX2">
-                            <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]],hosted_zone_record.ttl), class: "form-control", id: "edit_ttl", required: "required" %>
+                            <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]],hosted_zone_record.ttl), class: "form-select", id: "edit_ttl", required: "required" %>
                           </div>
                         </div>
                       </div>
                       </div>
                     </div>
                   </div>
+
                   <% if hosted_zone_record.type.eql?("MX")%>
                     <div id="divMX">
                       <div class="form-group input-control">
-                        <label for="priority">Priority</label>
+                        <label for="priority" class="form-label">Priority</label>
                         <%=text_field_tag :priority, params[:priority], type:"number", class:"form-control input-bx", value: hosted_zone_record.aux,  id:"edit_priority", required: true if hosted_zone_record.type.eql?"MX" %>
                         <div class="error"></div>
                       </div>
                     </div>
                     <% end %>
+
                 </div>
-                <br/>
-                  <div class="float-left">
-                  <%= link_to_delete "Delete", url: "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}"  %>
-                  </div>
-                  <div class="float-right">
+                  
+                  <div>
+
+                    <%= link_to_delete "Delete", url: "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}"  ,class:'form-control' ,method: :delete, style:"margin-top:10px"%>
+                    
                     <%=hidden_field_tag(:primary_id, hosted_zone_record.id)%>
                     <%=hidden_field_tag(:type, hosted_zone_record.type)%>
-                    <button class="btn btn-md btn-primary" type="submit" >Save</button>
-                    <button class="cancel-button btn btn-outline-secondary" id="edit-button_<%=hosted_zone_record.id.to_s%>" type="button">Cancel</button>
+                    <button class="cancel-button btn btn-outline-secondary" style="float:right" id="edit-button_<%=hosted_zone_record.id.to_s%>" type="button">Cancel</button>
+                    <button class="btn btn-md btn-primary" style="float:right;margin-right:4px" type="submit" >Save</button>
                   </div>
                 </fieldset>
               <% end %>
@@ -437,6 +476,29 @@ display: block;
 </div>
 
 <script type="text/javascript">
+$(document).ready(function() {
+  $("#filter_open").on('click', function(event) {
+    if($("#collapseEX2").hasClass("show")){
+      $("#collapseEX2").css('display','none');
+        $("#collapseEX2").removeClass("show");
+      } else {
+        $("#collapseEX2").css('display','block');
+        $("#collapseEX2").addClass("show");
+      }
+  });
+});
+
+$(document).ready(function() {
+  $("#close1").on('click', function(event) {
+      $("#collapseEX2").css('display','none');
+        $("#collapseEX2").removeClass("show");
+      
+  });
+});
+</script>
+
+<script type="text/javascript">
+
 function ClearFields() {
   document.getElementById("collapseEX2").reset();
   document.getElementById("edit-form-clear-field").reset();

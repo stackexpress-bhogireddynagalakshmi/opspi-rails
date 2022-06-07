@@ -50,6 +50,8 @@ module Spree
           set_flash
           respond_to do |format|
             format.js { render inline: "location.reload();" }
+            format.html { redirect_to  admin_dns_hosted_zones_path}
+
           end
         end
 

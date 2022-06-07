@@ -5,33 +5,49 @@
   }
 </style>
 
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:domain), admin_mail_domains_path %> /
-  <%= Spree.t(:new_mail_domain) %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:domain), admin_mail_domains_path %> /
+        New Mail Domain
+        </h1>
+        
+      </div>
+      <div class="col-auto">
 
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%= flash_messages %>
 
 <% url =  @api_resource.present? ?   admin_mail_domain_path(@api_resource.domain_id) : admin_mail_domains_path%>
+
+
 
  <%=form_for "mail_domain", url: url, html: {method: @api_resource.present? ? :put : :post} do |f|%> 
   <%resource  = @api_resource || @proxy_resource%>
 
   <%=hidden_field_tag :domain_id, resource.try("domain_id")%>
   <fieldset>
-    <div class="form-group field">
-      <label>Select Domain:</label>
-      <%= f.select(:domain, options_for_select(get_dns_domains), {:prompt => 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+    <div class="form-group">
+      <label class="form-label">Select Domain:</label>
+      <%= f.select(:domain, options_for_select(get_dns_domains), {:prompt => 'Select Web Domain'}, {class: 'form-select js-filterable'}) %>
      </div>
           
-    <div class="form-group field">
-      <label>Active</label>
-      <%=f.select 'active',options_for_select([['Yes','y'], ['No','n']], resource.try(:active)),{}, class: 'form-control'%>
+    <div class="form-group">
+      <label class="form-label">Active</label>
+      <%=f.select 'active',options_for_select([['Yes','y'], ['No','n']], resource.try(:active)),{}, class: 'form-select'%>
     </div>
-    <%=submit_tag "#{resource.present? ? 'Update' : 'Add'} Mail Domain", class: 'btn btn-primary'%>
+    <%=submit_tag "#{resource.present? ? 'Update' : 'Add'} Mail Domain", class: 'btn btn-primary lift'%>
 
   </fieldset>
 <%end%>
+
 
 <div>
  
@@ -47,4 +63,5 @@
   $(document).ready(function (argument) {
     $('#FlashAlertsContainer').removeClass('d-none');
   });
+
 </script>

@@ -169,7 +169,7 @@ en:
 
   general:
     delete: 'Are you sure you want to delete?'
-    access_denied: 'You are not allowed to access this page. Please contact the Admin'
+    access_denied: 'Hosting control not available at the moment because your payment is still pending. Please contact support for further updates.'
 
   devise:
     user_passwords:

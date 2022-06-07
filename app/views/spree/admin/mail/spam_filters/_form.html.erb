@@ -11,25 +11,24 @@
  <%=form_for "spamfilter", url: url, html: {method: @filter.present? ? :put : :post} do |f|%> 
 
   <fieldset>
-    <div class="form-group field">
-      <label>Email</label>
+    <div class="form-group">
+      <label class="form-label">Email</label>
       <%=f.email_field 'email', value: @filter.try(:email), class: 'form-control'%>
     </div>
 
-     <div class="form-group field">
-      <label>Priority</label>
-      <%=f.select 'priority',options_for_select(get_priority_dropdown, @filter.try(:priority)),{}, class: 'form-control'%>
+     <div class="form-group">
+      <label class="form-label">Priority</label>
+      <%=f.select 'priority',options_for_select(get_priority_dropdown, @filter.try(:priority)),{}, class: 'form-select'%>
     </div>
           
-    <div class="form-group field">
-      <label>Active</label>
-      <%=f.select 'active',options_for_select([['Yes','y'],['No','n']],@filter.try(:active)),{}, class: 'form-control'%>
+    <div class="form-group">
+      <label class="form-label">Active</label>
+      <%=f.select 'active',options_for_select([['Yes','y'],['No','n']],@filter.try(:active)),{}, class: 'form-select'%>
     </div>
-    <%=submit_tag "#{@filter.present? ? 'Update' : 'Add'} Spamfilter",class: 'btn btn-primary'%>
+    <%=submit_tag "#{@filter.present? ? 'Update' : 'Add'} Spamfilter",class: 'btn btn-primary lift'%>
 
   </fieldset>
 <%end%>
-
 <div>
  
   <%if @response && @response["status"]=='ERROR'%>

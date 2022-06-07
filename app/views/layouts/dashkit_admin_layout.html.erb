@@ -35,9 +35,26 @@
           <%= flash_messages %>
                 <%= yield %>
           </div>
+          
 
       </div>
       </div>
 
   </body>
 </html>
+<script type="text/javascript">
+  (function(d,t) {
+    var BASE_URL="<%= ENV['CHATWOOT_BASE_URL']%>";
+    var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    g.src=BASE_URL+"/packs/js/sdk.js";
+    g.defer = true;
+    g.async = true;
+    s.parentNode.insertBefore(g,s);
+    g.onload=function(){
+      window.chatwootSDK.run({
+        websiteToken: "<%= current_domain_chat_widget %>",
+        baseUrl: BASE_URL
+      })
+    }
+  })(document,"script");
+</script>
