@@ -32,6 +32,8 @@
   </div>
 <% end %>
 
+<%= render partial: '/spree/admin/shared/modal/modal' %>
+
 <script type="text/javascript">
   
   $(function () {
@@ -40,5 +42,49 @@
 
   $(document).ready(function (argument) {
     $('#FlashAlertsContainer').removeClass('d-none');
+
+    $(document).on('click', '.configure-db-modal-link', function(){
+      var databaseName = $(this).data('database');
+      var userName = $(this).data('username');
+      var pwdDiv = $(this).data('pwd-div-id');
+      if($('#'+pwdDiv).is(':empty')){
+        var password = $(this).data('password');
+      }
+      else{
+        var password = $('#'+pwdDiv).html();
+      }
+      var host = $(this).data('host');
+      var port = $(this).data('port');
+      $('#exampleModalLabel').html("Database Configuration Details");
+      $('#exampleModal .modal-body').html(`
+        <table>
+          <tbody>
+            <tr>
+              <td><b>Database&nbsp;Name:</b></td>
+              <td>${databaseName}</td>
+            </tr>
+            <tr>
+              <td><b>Username:</b></td>
+              <td>${userName}</td>
+            </tr>
+            <tr>
+              <td><b>Password:</b></td>
+              <td>${password}</td>
+            </tr>
+            <tr>
+              <td><b>Host:</b></td>
+              <td>${host}</td>
+            </tr>
+            <tr>
+              <td><b>Port:</b></td>
+              <td>${port}</td>
+            </tr>
+          </tbody>
+        </table>
+      `);
+      $('#modal-save-button').hide();
+      $('#exampleModal').modal('show');
+    });
   });
+
 </script>

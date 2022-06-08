@@ -7,6 +7,8 @@ module Spree
         before_action :set_ftp_user, only: %i[destroy update]
         before_action :get_websites, only: [:new]
 
+        include ResetPasswordConcern
+
         def index
           response = ftp_user_api.all || []
           @ftp_users = if response[:success]
