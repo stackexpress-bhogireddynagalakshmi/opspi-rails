@@ -65,11 +65,19 @@ Rails.application.routes.draw do
 
       namespace :sites do
         resources :websites
-        resources :ftp_users
+        resources :ftp_users do
+          collection do
+            get :reset_password
+          end
+        end
         resources :sub_domains
         resources :protected_folders
         resources :protected_folder_users
-        resources :isp_databases
+        resources :isp_databases do
+          collection do
+            get :reset_password
+          end
+        end
       end
 
       resources :wizards do 
@@ -108,5 +116,7 @@ Rails.application.routes.draw do
        get :reset_solid_cp_password
        get :pay_invoice
     end
-  end  
+  end
+
+ 
 end

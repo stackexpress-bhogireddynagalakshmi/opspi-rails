@@ -37,8 +37,16 @@ Wizard status for <%=batch_job.first[:domain]%>
 </div>
 </div>
 
-<script type="text/javascript">
-  $(document).ready(function (argument) {
-    $('#FlashAlertsContainer').removeClass('d-none');
-  });
-</script>
+      <th class="password">
+       <% if job[:actions] == true %>
+        <%=link_to 'Reset Password', reset_password_admin_wizards_path(email: get_data_for_task(job), type: job[:type], div_id: job[:sidekiq_job_id], source: 'wizard'), remote: true, class: "#{status.to_s.include?('completed') ? '' : 'd-none'}"%>
+          <div class='password-text'>
+            
+          </div>
+       <%end%>
+      </th>
+    </tr>
+    <%end%>
+    </table>
+  </div>
+</div>
