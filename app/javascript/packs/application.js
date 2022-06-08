@@ -15,3 +15,4 @@ require('jquery')
 // Theme
 import '../theme/theme'
 import '../theme/alertflash'
+import '../theme/sidebar_collapse'

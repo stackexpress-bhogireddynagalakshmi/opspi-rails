@@ -619,6 +619,7 @@ $(document).ready(function() {
   });
 });
 
+
 $(document).ready(function() {
   $("#sidebar_mail_dropdown").on('click', function(event) {
     if($("#sidebarSignIn").hasClass("show")){
@@ -630,6 +631,8 @@ $(document).ready(function() {
       }
   });
 });
+
+
 
 $(document).ready(function() {
   $("#sidebar_sites_dropdown").on('click', function(event) {
@@ -643,6 +646,7 @@ $(document).ready(function() {
   });
 });
 
+
 $(document).ready(function() {
   $("#sidebar_websites_dropdown").on('click', function(event) {
     if($("#sidebarWebsites").hasClass("show")){
@@ -655,6 +659,7 @@ $(document).ready(function() {
   });
 });
 
+
 $(document).ready(function() {
   $("#sidebar_webaccess_dropdown").on('click', function(event) {
     if($("#sidebarWebaccess").hasClass("show")){
@@ -666,6 +671,24 @@ $(document).ready(function() {
       }
   });
 });
+
+$(document).ready(function() {
+var currentLocation = window.location.pathname;
+if(currentLocation == '/admin/sites/ftp_users' || currentLocation == '/admin/sites/protected_folders' || currentLocation == '/admin/sites/protected_folder_users'){
+  if($("#sidebarWebaccess").hasClass("show")){
+    $('#sidebar_webaccess_dropdown').attr("aria-expanded","false");  
+  } else {
+    $('#sidebar_dropdown').attr("aria-expanded","true");
+    $('#sidebarDashboards').addClass("show");
+    $('#sidebar_sites_dropdown').attr("aria-expanded","true");
+    $('#sidebarSites').addClass("show");
+    $('#sidebar_webaccess_dropdown').attr("aria-expanded","true");
+    $('#sidebarWebaccess').addClass("show");
+  }
+}
+
+});
+
 
 $(document).ready(function() {
   $("#sidebar_statistics_dropdown").on('click', function(event) {
