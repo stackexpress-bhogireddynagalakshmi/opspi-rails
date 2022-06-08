@@ -142,12 +142,18 @@
             </div>
             <div data-hook="signup_below_password_fields"></div>
 
-            <div class="form-check  mb-3">
-              <%= f.check_box :terms_and_conditions,class: 'form-check-input list-checkbox' %> I agree to the <%= link_to 'Terms&Conditions.', '#', remote: true, data: {:toggle => 'modal', :target => '#myModal'}, id:"terms_modal" %>
-            </div>
+            <!--<div class="form-check  mb-3">
+              <%#= f.check_box :terms_and_conditions,class: 'form-check-input list-checkbox' %> I agree to the <%= link_to 'Terms&Conditions.', '#', remote: true, data: {:toggle => 'modal', :target => '#myModal'}, id:"terms_modal" %>
+            </div> -->
+
+            <%= f.hidden_field :terms_and_conditions, value: true%>
+            <small class="mb-3 text-muted text-center">
+            By clicking Sign Up, you agree to our Terms, Data Policy and Cookie Policy.
+              <%#= f.check_box :terms_and_conditions,class: 'form-check-input list-checkbox' %> <%#= link_to 'Terms&Conditions.', '#', remote: true, data: {:toggle => 'modal', :target => '#myModal'}, id:"terms_modal" %>
+            </small>
 
             <!-- Submit -->
-            <%= f.submit Spree.t(:sign_up), class: 'btn btn-lg w-100 btn-primary mb-3' %>
+            <%= f.submit Spree.t(:sign_up), class: 'btn btn-lg w-100 btn-primary mb-3 mt-2' %>
             
 
             <!-- Link -->

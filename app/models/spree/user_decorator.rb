@@ -30,6 +30,7 @@ module Spree
       base.has_many :isp_databases
 
       base.after_commit :update_user_tanent, on: [:create]
+      base.after_commit :add_terms_and_conditions, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]
       base.after_commit :save_subdomain_to_redis, on: [:create]
       base.accepts_nested_attributes_for :user_key, reject_if: :reject_if_key_blank
@@ -121,6 +122,10 @@ module Spree
         end
 
       ActsAsTenant.without_tenant { update_column :account_id, tenant_id }
+    end
+
+    def add_terms_and_conditions
+      terms_and_conditions = true
     end
 
     def active_for_authentication?
