@@ -5,6 +5,9 @@ module Spree
       module Sites
         class IspDatabasesController < Spree::Admin::IspConfigResourcesController
 
+          include ResetPasswordConcern
+          include ApisHelper
+          
           def create
             @response = isp_config_api.create(database_params)
             if @response[:success]
