@@ -148,7 +148,8 @@
 
             <%= f.hidden_field :terms_and_conditions, value: true%>
             <small class="mb-3 text-muted text-center">
-            By clicking Sign Up, you agree to our Terms, Data Policy and Cookie Policy.
+            By clicking Sign Up, you agree to our Terms, Data Policy and Cookie Policy. 
+            <%= link_to 'Terms&Conditions.', '#', remote: true, data: {:toggle => 'modal', :target => '#myModal'}, id:"terms_modal" %>
               <%#= f.check_box :terms_and_conditions,class: 'form-check-input list-checkbox' %> <%#= link_to 'Terms&Conditions.', '#', remote: true, data: {:toggle => 'modal', :target => '#myModal'}, id:"terms_modal" %>
             </small>
 
