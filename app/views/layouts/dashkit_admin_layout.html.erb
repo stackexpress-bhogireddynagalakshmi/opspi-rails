@@ -18,21 +18,28 @@
     <!-- Theme CSS -->
     <%= stylesheet_link_tag 'theme', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'spree/backend/all' %>
+
+    <%#= javascript_include_tag 'spree/frontend/all', defer: true, 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
   <%#= render partial: 'spree/shared/dashkit_navbar' %>
 
   <%= render partial: 'spree/shared/dashkit_sidebar_menu' %>
+
+
       <div class="main-content">
       <div id="content-wrapper" class="d-flex flex-column">
           <div class="container-fluid">
+          <%= flash_messages %>
                 <%= yield %>
           </div>
           
 
       </div>
       </div>
+
   </body>
 </html>
 <script type="text/javascript">

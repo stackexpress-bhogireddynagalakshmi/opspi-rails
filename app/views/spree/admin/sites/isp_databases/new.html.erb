@@ -1,28 +1,38 @@
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:database), admin_sites_isp_databases_path %> /
-  <%= Spree.t(:new_database) %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:database), admin_sites_isp_databases_path %> /
+        New Database
+        </h1>
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+
+  </div>
+</div>
 
  <%=form_for "database", url: admin_sites_isp_databases_path, html: {method: :post} do |f|%> 
 
   <fieldset>
-    <div class="form-group field">
-      <label>Select Website:</label>
-      <%=f.select 'web_domain_id', options_for_select(get_web_domians), {}, class: 'form-control' %>
+    <div class="form-group">
+      <label class="form-label">Select Website:</label>
+      <%=f.select 'web_domain_id', options_for_select(get_web_domians), {}, class: 'form-select' %>
     </div>
 
-    <div class="form-group field">
-      <label>Database Name:</label>
+    <div class="form-group">
+      <label class="form-label">Database Name:</label>
       <%=f.text_field 'database_name', class: 'form-control' %>
     </div>
 
-     <div class="form-group field">
-      <label>Database Password:</label>
+     <div class="form-group">
+      <label class="form-label">Database Password:</label>
       <%=f.text_field 'database_password', type: "password", class: 'form-control' %>
     </div>
 
-    <%=submit_tag "Add Database",class: 'btn btn-primary'%>
+    <%=submit_tag "Add Database",class: 'btn btn-primary lift'%>
 
   </fieldset>
 <% end %>
@@ -30,3 +40,4 @@
 <div style="color: red;" class="mt-3">
   <%=@response[:message].html_safe if @response %>
 </</div> 
+

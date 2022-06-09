@@ -24,47 +24,46 @@
       </div>
     </div>
 
-  </div>
-</div>
-
 <%= flash_messages %>
 
 <% if @hosted_zones.any? %>
-<div class="card">
-<div class="table-responsive">
-<table class="table table-sm card-table" style="table-layout: fixed; width:100%">
-  <thead>
-    <tr>
-    <th>Host Name</th>
-    <!--th>Status</th-->
-    <th data-hook="admin_orders_index_header_actions" style="text-align: end;">Action</th>
-    </tr>
-  </thead>
-  <tbody class="fs-base">
-  <% @hosted_zones.each do |hosted_zone| %>
-    <tr data-hook="admin_orders_index_rows">
-      <td><%=link_to hosted_zone.origin.chomp("."), dns_admin_dns_hosted_zone_path(hosted_zone.id, :dns_name => hosted_zone.origin.chomp(".")), class: hosted_zone %></td>
-      <!--td><%="Active"%></td-->
-      <td data-hook="admin_orders_index_row_actions">
-        <span class="d-flex justify-content-end">
-          <%#=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_dns_hosted_zone_path(hosted_zone.id),class:"btn btn-success btn-size",style:"margin-right:4px"%>
-          <%= link_to_delete "Delete", url: admin_dns_hosted_zone_path(hosted_zone.id), no_text: true ,method: :delete%>
-        </span>
-      </td>
-    </tr>
-  <% end %>
-  </tbody>
-</table>
-</div>
-</div>
+  <div class="card">
+    <div class="table-responsive">
+      <table class="table table-sm card-table" style="table-layout: fixed; width:100%">
+        <thead>
+          <tr>
+            <th>Host Name</th>
+            <!--th>Status</th-->
+            <th data-hook="admin_orders_index_header_actions" style="text-align: end;">Action</th>
+          </tr>
+        </thead>
+        <tbody class="fs-base">
+        <% @hosted_zones.each do |hosted_zone| %>
+          <tr data-hook="admin_orders_index_rows">
+            <td><%=link_to hosted_zone.origin.chomp("."), dns_admin_dns_hosted_zone_path(hosted_zone.id, :dns_name => hosted_zone.origin.chomp(".")), class: hosted_zone %></td>
+            <!--td><%="Active"%></td-->
+            <td data-hook="admin_orders_index_row_actions">
+              <span class="d-flex justify-content-end">
+                <%#=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_dns_hosted_zone_path(hosted_zone.id),class:"btn btn-success btn-size",style:"margin-right:4px"%>
+                <%= link_to_delete "Delete", url: admin_dns_hosted_zone_path(hosted_zone.id), no_text: true ,method: :delete%>
+                <%= link_to 'Configure', 'javascript:void(0);', class: 'configure-dns-modal-link', data: {origin: hosted_zone.origin.chomp("."), ns1: ENV['DNS_SERVER_NS1'], ns2: ENV['DNS_SERVER_NS2']} %>
+              </span>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 <% else %>
   <div class="alert alert-secondary no-objects-found">
     <label class="form-label" style="margin-top: 0.5rem;"> No Dns Domain Found</label>
   </div>
 <% end %>
 
+<%= render partial: '/spree/admin/shared/modal/modal' %>
+
 <script type="text/javascript">
-  
   $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 })
@@ -73,5 +72,32 @@
 <script type="text/javascript">
   $(document).ready(function (argument) {
     $('#FlashAlertsContainer').removeClass('d-none');
+
+    $(document).on('click', '.configure-dns-modal-link', function(){
+      var serverName = $(this).data('origin');
+      var ns1 = $(this).data('ns1');
+      var ns2 = $(this).data('ns2');
+      $('#exampleModalLabel').html("DNS Configuration Details");
+      $('#exampleModal .modal-body').html(`
+        <table>
+          <tbody>
+            <tr>
+              <td><b>Server:</b></td>
+              <td>${serverName}</td>
+            </tr>
+            <tr>
+              <td><b>Nameserver 1:</b></td>
+              <td>${ns1}</td>
+            </tr>
+            <tr>
+              <td><b>Nameserver 2:</b></td>
+              <td>${ns2}</td>
+            </tr>
+          </tbody>
+        </table>
+      `);
+      $('#modal-save-button').hide();
+      $('#exampleModal').modal('show');
+    });
   });
 </script>

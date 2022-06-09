@@ -1,24 +1,45 @@
-<div class="row batch_job">
-  <div class="col-md-12">
-    <h6> Wizard status for <%=batch_job.first[:domain]%></h6>
-   
-    <table class="table">
+
+<h3 class="header-title mb-2">
+Wizard status for <%=batch_job.first[:domain]%>
+</h3>
+ 
+<div class="card">
+<div class="table-responsive">
+  <table class="table table-sm card-table" style="table-layout: fixed; width:100%">
+    <thead>
       <tr>
-        <th> Type </th>
-        <th> Data</th>
-        <th> Status </th>
-        <th> Action </th>
-      </tr>
+      <th> Type </th>
+      <th> Data</th>
+      <th> Status </th>
+      <th> Action </th>
+    </tr>
+    </thead>
+    <tbody class="fs-base">
     <% batch_job.each do |job|%>
-    <tr id="<%=job[:sidekiq_job_id]%>">
-      <td> <%=job[:type]%></td>
-      <td> <%=get_data_for_task(job)%> </td>
-      <%status = get_task_status(job)%>
-      <td class="status"> <%=status%></td>
+      <tr id="<%=job[:sidekiq_job_id]%>">
+        <td> <%=job[:type]%></td>
+        <td> <%=get_data_for_task(job)%> </td>
+        <%status = get_task_status(job)%>
+        <td> <%=status%></td>
+  
+        <th class="password">
+          <% if job[:actions] == true %>
+          <%=link_to 'Reset Password', reset_password_admin_wizards_path(email: get_data_for_task(job), type: job[:type], div_id: job[:sidekiq_job_id]), remote: true,  class: "#{status.to_s.include?('completed') ? '' : 'd-none'}"%>
+            <div class='password-text'>
+              
+            </div>
+          <%end%>
+        </th>
+      </tr>
+      <%end%>
+      </tbody>
+  </table>
+</div>
+</div>
 
       <th class="password">
        <% if job[:actions] == true %>
-        <%=link_to 'Reset Password', reset_password_admin_wizards_path(email: get_data_for_task(job), type: job[:type], div_id: job[:sidekiq_job_id]), remote: true, class: "#{status.to_s.include?('completed') ? '' : 'd-none'}"%>
+        <%=link_to 'Reset Password', reset_password_admin_wizards_path(email: get_data_for_task(job), type: job[:type], div_id: job[:sidekiq_job_id], source: 'wizard'), remote: true, class: "#{status.to_s.include?('completed') ? '' : 'd-none'}"%>
           <div class='password-text'>
             
           </div>

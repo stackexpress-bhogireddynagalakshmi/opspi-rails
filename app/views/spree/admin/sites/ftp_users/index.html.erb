@@ -29,85 +29,83 @@
           </ul>
         </div>
     </div>
-    </div>
-    </div>
+  </div>
+</div>
 
-    <%= flash_messages %>
+<%= flash_messages %>
 
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-
-  <% if @ftp_users.any? %>
-  <div class="card">
-    <div class="table-responsive">
-    <table class="table table-sm card-table" style="width:100%">
-      <thead>
-        <tr>
-        <th>ID</th>
-        <th>Web Domain</th>
-        <th>Username</th>
-        <th>User identifier (UID)</th>
-        <th>Group identifier (GID)</th>
-        <th>Directory</th>
-        <th>Active</th>
-        <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody class="fs-base">
-      <%= render partial: 'spree/admin/sites/ftp_users/index', collection: @ftp_users, as: :ftp_user %>
-      </tbody>
-    </table>
-    </div>
-    </div>
-  <% else %>
-        <div class="alert alert-secondary no-objects-found">
-          <label class="form-label" style="margin-top: 0.5rem;"> No FTP Users </label>
+    <% if @ftp_users.any? %>
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table table-sm card-table" style="width:100%">
+            <thead>
+              <tr>
+              <th>ID</th>
+              <th>Web Domain</th>
+              <th>Username</th>
+              <th>User identifier (UID)</th>
+              <th>Group identifier (GID)</th>
+              <th>Directory</th>
+              <th>Active</th>
+              <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody class="fs-base">
+            <%= render partial: 'spree/admin/sites/ftp_users/index', collection: @ftp_users, as: :ftp_user %>
+            </tbody>
+          </table>
         </div>
-      <% end %>
-
+      </div>
+    <% else %>
+      <div class="alert alert-secondary no-objects-found">
+        <label class="form-label" style="margin-top: 0.5rem;"> No FTP Users </label>
+      </div>
+    <% end %>
   </div>
 
   <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-  <% if @windows_resources.any? %>
-  <div class="card">
-    <div class="table-responsive">
-    <table class="table table-sm card-table" style="width:100%">
-      <thead>
-        <tr>
-        <th>Username</th>
-        <th>Folder</th>
-       <!--  <th>Enabled</th> -->
-        <th>Can Read</th>
-        <th>Can Write</th>
-        <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody class="fs-base">
-      <% @windows_resources.each do |ftp_account|%>
-        <tr>
-          <td><%= ftp_account.name %></td>
-          <td><%= ftp_account.folder %></td>
-          <!-- <td><%#= ftp_account.enabled %></td> -->
-          <td><%= ftp_account.can_read%></td>
-          <td><%= ftp_account.can_write%></td>
-          <td>
-          <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'), method: :delete, data: {confirm: t('windows.ftp_account.delete_alert')},class:"btn btn-danger btn-size"%>
-        </tr>
-      <%end%>
-      </tbody>
-    </table>
-    </div>
-    </div>
-<% else %>
-    <div class="alert alert-secondary no-objects-found">
-      <label class="form-label" style="margin-top: 0.5rem;"> No FTP Users </label>
-    </div>
-  <% end %>
+    <% if @windows_resources.any? %>
+      <div class="card">
+        <div class="table-responsive">
+          <table class="table table-sm card-table" style="width:100%">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Folder</th>
+               <!--  <th>Enabled</th> -->
+                <th>Can Read</th>
+                <th>Can Write</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody class="fs-base">
+              <% @windows_resources.each do |ftp_account|%>
+                <tr>
+                  <td><%= ftp_account.name %></td>
+                  <td><%= ftp_account.folder %></td>
+                  <!-- <td><%#= ftp_account.enabled %></td> -->
+                  <td><%= ftp_account.can_read%></td>
+                  <td><%= ftp_account.can_write%></td>
+                  <td>
+                    <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'), method: :delete, data: {confirm: t('windows.ftp_account.delete_alert')},class:"btn btn-danger btn-size"%>
+                  </td>
+                </tr>
+              <%end%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <div class="alert alert-secondary no-objects-found">
+        <label class="form-label" style="margin-top: 0.5rem;"> No FTP Users </label>
+      </div>
+    <% end %>
   </div>
+</div>
 
-
-
-
+<%= render partial: '/spree/admin/shared/modal/modal' %>
 
 
 <script type="text/javascript">
@@ -118,6 +116,44 @@
 
   $(document).ready(function (argument) {
     $('#FlashAlertsContainer').removeClass('d-none');
+  });
+
+  $(document).on('click', '.configure-modal-link', function(){
+    var userName = $(this).data('username');
+    var pwdDiv = $(this).data('pwd-div-id');
+    if($('#'+pwdDiv).is(':empty')){
+      var password = $(this).data('password');
+    }
+    else{
+      var password = $('#'+pwdDiv).html();
+    }
+    var host = $(this).data('host');
+    var port = $(this).data('port');
+    $('#exampleModalLabel').html("FTP Configuration Details");
+    $('#exampleModal .modal-body').html(`
+      <table>
+        <tbody>
+          <tr>
+            <td><b>Username:</b></td>
+            <td>${userName}</td>
+          </tr>
+          <tr>
+            <td><b>Password:</b></td>
+            <td>${password}</td>
+          </tr>
+          <tr>
+            <td><b>Host:</b></td>
+            <td>${host}</td>
+          </tr>
+          <tr>
+            <td><b>Port:</b></td>
+            <td>${port}</td>
+          </tr>
+        </tbody>
+      </table>
+    `);
+    $('#modal-save-button').hide();
+    $('#exampleModal').modal('show');
   });
 
   var updateFtpUser = function(element){
