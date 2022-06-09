@@ -1,7 +1,7 @@
 <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>" id="db_<%= database.database_id %>">
   <td><%=link_to database.database_name, admin_sites_isp_database_path(database.database_id, :db_user_name => database.database_user) %></td>
   <td><%=database.database_user%></td>
-  <td>
+  <td class="d-flex justify-content-end">
      <%= link_to  admin_sites_isp_database_path(database.database_id, :db_user_id => database.database_user_id),type: 'button', class: 'btn btn-outline-danger', method: :delete do %>
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
