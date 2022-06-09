@@ -22,17 +22,18 @@
 
       </div>
     </div>
+    </div>
 
 <%= flash_messages %>
 
 <% if @mailboxes.any? %>
-  <div class="card">
+  <div class="card mt-4">
     <div class="table-responsive">
       <table class="table table-sm card-table" style="width:100%">
         <thead>
           <tr>
           <th>Email</th>
-          <th>Realname</th>
+          <!--<th>Realname</th>-->
           <th>AutoRespond</th>
           <th>Receiving</th>
           <th>SMTP</th>
@@ -46,13 +47,43 @@
         <%@mailboxes.each do |mailbox| %>
           <tr data-hook="admin_orders_index_rows">
             <td><%= mailbox.email%></td>
-            <td><%= mailbox.name%></td>
-            <td><%= mailbox.autoresponder %></td>
-            <td><%= mailbox.postfix %></td>
-            <td><%= mailbox.disablesmtp %></td>
-            <td><%= ['y','n'].reject{|x| x == mailbox.disablesmtp}[0]%></td>
-            <td><%= ['y','n'].reject{|x| x == mailbox.disableimap}[0]%></td>
-            <td><%= ['y','n'].reject{|x| x == mailbox.disablepop3}[0]%></td>
+            <!--<td><%= mailbox.name%></td>-->
+            <td style="text-align: center;"><% if mailbox.autoresponder == 'y' %>
+            <i class="fe fe-check-circle" style="color: green;"></i>
+            <% else %>
+            <i class="fe fe-x-circle" style="color: red;"></i>
+            <% end %>
+            </td>
+            <td style="text-align: center;"><% if mailbox.postfix == 'y' %>
+            <i class="fe fe-check-circle" style="color: green;"></i>
+            <% else %>
+            <i class="fe fe-x-circle" style="color: red;"></i>
+            <% end %>
+            </td>
+            <td style="text-align: center;"><% if mailbox.disablesmtp == 'y' %>
+            <i class="fe fe-check-circle" style="color: green;"></i>
+            <% else %>
+            <i class="fe fe-x-circle" style="color: red;"></i>
+            <% end %>
+            </td>
+            <td style="text-align: center;"> <% if ['y','n'].reject{|x| x == mailbox.disablesmtp}[0] == 'y' %>
+            <i class="fe fe-check-circle" style="color: green;"></i>
+            <% else %>
+            <i class="fe fe-x-circle" style="color: red;"></i>
+            <% end %>
+            </td>
+            <td style="text-align: center;"><% if ['y','n'].reject{|x| x == mailbox.disableimap}[0] == 'y' %>
+            <i class="fe fe-check-circle" style="color: green;"></i>
+            <% else %>
+            <i class="fe fe-x-circle" style="color: red;"></i>
+            <% end %>
+            </td>
+            <td style="text-align: center;"><% if ['y','n'].reject{|x| x == mailbox.disablepop3}[0] == 'y' %>
+            <i class="fe fe-check-circle" style="color: green;"></i>
+            <% else %>
+            <i class="fe fe-x-circle" style="color: red;"></i>
+            <% end %>
+            </td>
             <td>
             <span class="d-flex">
               <%=link_to '<i class="fe fe-mail"></i>'.html_safe, get_web_mail_client_url, target: '_blank' , class:"btn btn-primary btn-size", style:"margin-right:2%"%>  
