@@ -19,6 +19,7 @@
     <%= stylesheet_link_tag 'theme', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'spree/backend/all' %>
+    <%=render :partial=> 'spree/shared/google_analytics'%>
 
     <%#= javascript_include_tag 'spree/frontend/all', defer: true, 'data-turbolinks-track': 'reload' %>
   </head>

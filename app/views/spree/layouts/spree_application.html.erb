@@ -7,6 +7,7 @@
 <html lang="<%= I18n.locale %>"><!--<![endif]-->
   <head data-hook="inside_head">
      <%= render partial: 'spree/shared/head' %>
+     <%=render :partial=> 'spree/shared/google_analytics'%>
   </head>
 
   <body class="<%= body_class %>" id="<%= @body_id || 'default' %>" data-hook="body">
