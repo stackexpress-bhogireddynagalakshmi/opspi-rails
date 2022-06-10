@@ -64,10 +64,11 @@
       }
       var host = $(this).data('host');
       var port = $(this).data('port');
+      var id = $(this).data('id');
       $('#exampleModalLabel').html("Database Configuration Details");
       $('#exampleModal .modal-body').html(`
         <table>
-          <tbody>
+          <tbody class="db_${id}">
             <tr>
               <td><b>Database&nbsp;Name:</b></td>
               <td>${databaseName}</td>
@@ -76,9 +77,9 @@
               <td><b>Username:</b></td>
               <td>${userName}</td>
             </tr>
-            <tr>
+            <tr class="db_${id}">
               <td><b>Password:</b></td>
-              <td>${password}</td>
+              <td class="password-text">${password}</td>
             </tr>
             <tr>
               <td><b>Host:</b></td>
@@ -87,6 +88,13 @@
             <tr>
               <td><b>Port:</b></td>
               <td>${port}</td>
+            </tr>
+            <tr>
+              <td>Reset Password</td>
+              <td>
+                <a href="/admin/sites/isp_databases/reset_password?email=${userName}&type=create_database&div_class=db_${id}&source=isp_databases" data-remote="true">Reset Pasword</a>
+                <div class='password-text'></div>
+              </td>
             </tr>
           </tbody>
         </table>

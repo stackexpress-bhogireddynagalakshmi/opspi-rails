@@ -19,7 +19,6 @@
 <%= javascript_include_tag 'spree/backend/all' %>
 <%= javascript_pack_tag 'application'%>
 <%= render "spree/admin/shared/translations" %>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script>
   <%== "var AUTH_TOKEN = #{form_authenticity_token.inspect};" %>
   <%== "Spree.api_key = '#{try_spree_current_user.spree_api_key}';" if try_spree_current_user %>
