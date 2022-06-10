@@ -85,12 +85,17 @@
             <% end %>
             </td>
             <td>
+
             <span class="d-flex">
               <%=link_to '<i class="fe fe-mail"></i>'.html_safe, get_web_mail_client_url, target: '_blank' , class:"btn btn-primary btn-size", style:"margin-right:2%"%>  
               <%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_mail_box_path(id: mailbox.mailuser_id),class:"btn btn-success btn-size", style:"margin-right:2%"%> 
               <%=link_to '<i class="fe fe-trash"></i>'.html_safe,admin_mail_mail_box_path(id: mailbox.mailuser_id), method: :delete, data: {confirm: t('general.delete')},class:"btn btn-danger btn-size"%>
-              <%= link_to 'Configure', 'javascript:void(0);', class: 'configure-mailbox-modal-link', data: {email: mailbox.email, name: mailbox.name, smtp: ENV['OPSPI_SMTP_SERVER'], imap: ENV['MAIL_SERVER_IMAP_URL'], pop: ENV['MAIL_SERVER_POP_URL'], webmail_url: ENV['WEBMAIL_URL']} %>
+             
+               <%= link_to 'javascript:void(0);', data: {email: mailbox.email, name: mailbox.name, smtp: ENV['OPSPI_SMTP_SERVER'], imap: ENV['MAIL_SERVER_IMAP_URL'], pop: ENV['MAIL_SERVER_POP_URL'], webmail_url: ENV['WEBMAIL_URL'],smtp: ENV['MAIL_SERVER_SMTP_URL']}, class: 'ml-2 configure-mailbox-modal-link btn btn-outline-primary btn-size', title: 'Configuration Details' do  %>
+                  <%= render partial: '/spree/admin/shared/icons/gear' %>
+                <% end %>
             </span>
+            
             </td>  
           </tr>
         <% end %>
@@ -124,6 +129,7 @@
       var smtp = $(this).data('smtp');
       var imap = $(this).data('imap');
       var pop = $(this).data('pop');
+      var smtp = $(this).data('smtp');
       var webmailUrl = $(this).data('webmail-url');
       $('#exampleModalLabel').html("MailBox Configuration Details");
       // <tr>
@@ -143,12 +149,12 @@
             </tr>
             
             <tr>
-              <td><b>IMAP:</b></td>
-              <td>${imap}</td>
-            </tr>
-            <tr>
               <td><b>POP:</b></td>
               <td>${pop}</td>
+            </tr>
+            <tr>
+              <td><b>SMTP:</b></td>
+              <td>${smtp}</td>
             </tr>
             <tr>
               <td><b>WEBMAIL&nbsp;URL:</b></td>

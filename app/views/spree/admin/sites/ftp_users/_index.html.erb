@@ -1,4 +1,4 @@
-<tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>" id="ftp_user_<%=ftp_user.ftp_user_id%>">
+<tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %> ftp_user_<%=ftp_user.ftp_user_id%>">
   <td><%=ftp_user.ftp_user_id%></td>
   <td><%=ftp_user.parent_domain_id%></td>
   <td><%=ftp_user.username%></td>
@@ -19,11 +19,15 @@
         </svg>
       <% end %>
 
-      <%=link_to 'Reset Password', reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_id: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true%>
-      <div style="display: inline-block;" class='password-text' id="ftp_user_<%=ftp_user.ftp_user_id%>_pwd_text"></div> | 
-      <%= link_to 'Configure', 'javascript:void(0);', class: 'configure-modal-link', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text"} %>
+      <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', title: 'Reset Password' do %>
+        <%= render partial: '/spree/admin/shared/icons/reset_password' %>
+      <% end %>
+      
+      <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size', title: 'Configuration Details' do  %>
+        <%= render partial: '/spree/admin/shared/icons/gear' %>
+      <% end %>
     </span>
-    <%#=link_to 'Delete', admin_sites_ftp_user_path(ftp_user.ftp_user_id), method: :delete%>
+    <div class='mt-3 password-text' id="ftp_user_<%=ftp_user.ftp_user_id%>_pwd_text"></div>
   </td>  
 
 </tr>

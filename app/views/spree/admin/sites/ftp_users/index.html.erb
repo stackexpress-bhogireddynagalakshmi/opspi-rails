@@ -129,18 +129,17 @@
     }
     var host = $(this).data('host');
     var port = $(this).data('port');
+    var email = $(this).data('email');
+    var id = $(this).data('id');
     $('#exampleModalLabel').html("FTP Configuration Details");
     $('#exampleModal .modal-body').html(`
       <table>
-        <tbody>
+        <tbody class="ftp_user_${id}">
           <tr>
             <td><b>Username:</b></td>
             <td>${userName}</td>
           </tr>
-          <tr>
-            <td><b>Password:</b></td>
-            <td>${password}</td>
-          </tr>
+         
           <tr>
             <td><b>Host:</b></td>
             <td>${host}</td>
@@ -148,6 +147,13 @@
           <tr>
             <td><b>Port:</b></td>
             <td>${port}</td>
+          </tr>
+          <tr>
+            <td>Reset Password</td>
+            <td>
+              <a href="/admin/sites/ftp_users/reset_password?email=${email}&type=create_ftp_account&div_class=ftp_user_${id}" data-remote="true">Reset Pasword</a>
+              <div class='password-text'></div>
+            </td>
           </tr>
         </tbody>
       </table>
