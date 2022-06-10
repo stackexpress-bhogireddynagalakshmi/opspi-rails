@@ -181,6 +181,7 @@
     $('#product_server_type').on('change',function (argument) {
 
       var type = $(this).val();
+      hideSolidCPDropdown(type);
         if(type == 'windows') 
         {
           $('#solid_cp_quota_group_div').removeClass('d-none');
@@ -198,6 +199,15 @@
     });
 
   });
+
+  function hideSolidCPDropdown(val){
+    if(val != 'reseller_plan'){
+      $('#product_solid_cp_master_plan_id_field').hide();
+    }
+    else{
+      $('#product_solid_cp_master_plan_id_field').show(); 
+    }
+  }
 
 //]]>
 </script>
