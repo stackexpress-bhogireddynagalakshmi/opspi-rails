@@ -23,11 +23,12 @@
       <% end  %>
       </div>
     </div>
+    </div>
 
 <%= flash_messages %>
 
 <% if @hosted_zones.any? %>
-  <div class="card">
+  <div class="card mt-4">
     <div class="table-responsive">
       <table class="table table-sm card-table" style="table-layout: fixed; width:100%">
         <thead>
@@ -61,7 +62,7 @@
     </div>
   </div>
 <% else %>
-  <div class="alert alert-secondary no-objects-found">
+  <div class="alert alert-secondary no-objects-found mt-4">
     <label class="form-label" style="margin-top: 0.5rem;"> No Dns Domain Found</label>
   </div>
 <% end %>
