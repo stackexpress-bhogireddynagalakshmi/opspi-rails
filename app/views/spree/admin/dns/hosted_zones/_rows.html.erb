@@ -1,0 +1,19 @@
+
+<div class="card">
+    <div class="card-body">
+      <!-- Text -->
+      <div class="d-flex" style="justify-content: space-between;">
+      <p class="card-text">
+      <%=link_to hosted_zone.origin.chomp("."), dns_admin_dns_hosted_zone_path(hosted_zone.id, :dns_name => hosted_zone.origin.chomp(".")), class: hosted_zone %>
+      </p>
+
+      <span class="justify-content-end">
+      <%= link_to_delete "Delete", url: admin_dns_hosted_zone_path(hosted_zone.id), no_text: true, method: :delete%>
+               
+      <%= link_to 'javascript:void(0);', data: {origin: hosted_zone.origin.chomp("."), ns1: ENV['DNS_SERVER_NS1'], ns2: ENV['DNS_SERVER_NS2']}, class: 'ml-2 configure-dns-modal-link btn btn-outline-primary btn-size', title: 'Configuration Details' do  %>
+        <%= render partial: '/spree/admin/shared/icons/gear' %>
+      <% end %>
+        </span>
+        </div>
+    </div>
+  </div>
