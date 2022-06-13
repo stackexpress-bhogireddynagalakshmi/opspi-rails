@@ -16,14 +16,14 @@ class Subscription < ApplicationRecord
   #   yearly: 3
   # }
 
-  DEFAULT_VALIDITY_DAYS = 1  # 1 month
+  DEFAULT_VALIDITY_MONTHS = 1  # 1 month
 
   def self.subscribe!(opts)
     existing_subscription = where(status: true, user_id: opts[:user].try(:id),
                                   product_id: opts[:product].try(:id)).first
 
     if existing_subscription.present?
-      validity = opts[:product].try(:validity) || DEFAULT_VALIDITY_DAYS
+      validity = opts[:product].try(:validity) || DEFAULT_VALIDITY_MONTHS
       existing_subscription.update({ status: true, end_date: Date.today + validity.months }) 
     else
       create_fresh_subscription(opts)
@@ -33,7 +33,7 @@ class Subscription < ApplicationRecord
 
   def self.create_fresh_subscription(opts)
     TenantManager::TenantHelper.unscoped_query do
-      validity   = opts[:product].try(:validity) || DEFAULT_VALIDITY_DAYS
+      validity   = opts[:product].try(:validity) || DEFAULT_VALIDITY_MONTHS
       start_date = opts[:start_date].presence || Date.today
       end_date   = opts[:end_date].presence ||  start_date + validity.months
 

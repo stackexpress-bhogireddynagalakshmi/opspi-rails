@@ -25,13 +25,21 @@ module ApplicationHelper
     if user.superadmin?
       [['Reseller Hosting Plan', 'reseller_plan'], ['Hsphere Plan', 'hsphere'], ['Domain Reselling Plan', 'domain']]
     elsif user.store_admin?
-      [['Windows Hosting Plan', 'windows'], ['Linux Hosting Plan', 'linux']]
+      plans = [['Windows Hosting Plan', 'windows'], ['Linux Hosting Plan', 'linux']]
+      plans << ['Hsphere Plan', 'hsphere'] if get_purchased_plans.include?('hsphere')
+
+      plans
     elsif  user.end_user?
-      TenantManager::TenantHelper.unscoped_query do
-        current_spree_user.orders.collect do |o|
-          o.products.pluck(:server_type)
-        end.flatten
-      end.uniq.collect{|x| [x.titleize, x]}
+      get_purchased_plans.uniq.collect{|x| [x.titleize, x]}
+    end
+  end
+
+
+  def get_purchased_plans
+    TenantManager::TenantHelper.unscoped_query do
+      current_spree_user.orders.collect do |o|
+        o.products.pluck(:server_type)
+      end.flatten
     end
   end
 

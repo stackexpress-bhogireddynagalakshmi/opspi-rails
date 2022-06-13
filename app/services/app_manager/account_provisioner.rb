@@ -11,6 +11,7 @@ module AppManager
     end
 
     def call
+      return if @order.blank?
       Rails.logger.info { "AccountProvisioner is called " }
       
       provison_accounts if @order.panels_access('solid_cp')
