@@ -4,15 +4,11 @@ module Spree
   module CheckoutControllerDecorator
 
     def registration
-      render :layout => "dashkit_layout"
+      render layout: "dashkit_layout"
     end
 
     def update_registration
-      render :layout => "dashkit_layout"
-    end
-
-    def edit
-      render :layout => "spree/layouts/checkout"
+      render layout: "dashkit_layout"
     end
 
     # Updates the order and advances to the next state (when possible.)
@@ -99,6 +95,7 @@ module Spree
 
     def check_authorization
       # authorize!(:edit, current_order, cookies.signed[:token])
+      # render :layout => "dashkit_layout"
     end
 
     def update_payments_methods_attributes_params
