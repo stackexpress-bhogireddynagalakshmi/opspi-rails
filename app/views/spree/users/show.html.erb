@@ -176,7 +176,7 @@
                   <td class="account-page-order-date"><%=subscription.status? ? 'Active': 'In-Active'%></td>
                   <td class="account-page-order-status"><%=subscription.start_date%></td>
                    <td class="account-page-order-status"><%=subscription.end_date%></td>
-                  <td class="account-page-order-payment-state"><%=subscription.billing_interval%></td>
+                  <td class="account-page-order-payment-state">every <%=subscription.validity%> mo</td>
                   <td class="account-page-order-payment-state"><%=number_to_currency(subscription.price)%></td>
                    <td class="account-page-order-payment-state"><%=subscription.canceled_at%></td>
                   <td>
