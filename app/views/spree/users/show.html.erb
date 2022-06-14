@@ -18,17 +18,19 @@
     background-color: #00a65a !important;
 }
 
-.info-box-content {
-  padding: 5px 10px;
-  margin-left: 90px;
+.info-box-content{
+  padding: 10px 5px 10px;
+  margin-left: 10px;
 }
 
 .info-box-text {
   text-transform: uppercase;
 }
 .info-box-number {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   display: block;
-  font-weight: bold;
   font-size: 18px;
 }
 </style>
@@ -132,13 +134,29 @@
 
                 <div class="info-box-content">
                   <span class="info-box-text">Orders</span>
-                  <span class="info-box-number"><%=spree_current_user.orders.count%></span>
+                  <span class="info-box-number"><%=spree_current_user.orders&.complete&.count%></span>
                 </div>
               <%end%>
               <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
           </div>
+          <!-- /.col -->
+
+          <!-- /.col -->
+          <%if current_spree_user.end_user? && current_spree_user.hsphere_account_id.present? %>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+                  <div class="info-box-content">
+                    <span class="info-box-text">Control Panel Login</span>
+                    <span class="info-box-number"><%=link_to get_hsphere_control_panel, get_hsphere_control_panel,target: '_blank'%></span>
+                  </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+          <%end%>
           <!-- /.col -->
           <div class="clearfix visible-sm-block"></div>
 

@@ -20,7 +20,7 @@ module ImportManager
             users.each do |user|
               next if user[0] == 'first_name' || user[0].downcase == 'first name'
               if Spree::User.find_by_email(user[2].strip).present?
-                Rails.logger.info { "#{user[2].strip} already exuist" }
+                Rails.logger.info { "#{user[2].strip} already exist" }
                 next
               end
 
