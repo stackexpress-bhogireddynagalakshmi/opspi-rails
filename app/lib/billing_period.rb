@@ -25,7 +25,7 @@ class BillingPeriod
   def end
     return unless start
 
-    validity = subscription.validity || Subscription::DEFAULT_VALIDITY_DAYS
+    validity = subscription.validity || Subscription::DEFAULT_VALIDITY_MONTHS
 
     if start.month == 1 && [29,30,31].include?(start.day) 
       start + validity.months # 28th of feb

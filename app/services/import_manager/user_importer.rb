@@ -39,6 +39,7 @@ module ImportManager
                     account_id: user[4], #opspi account id
                     hsphere_user_id: user[5],
                     hsphere_account_id: user[6], #
+                    hsphere_cluster_id: user[19],
                     terms_and_conditions: true
 
                   })
@@ -81,7 +82,8 @@ module ImportManager
                     user: user_obj,
                     start_date: start_date,
                     end_date: end_date,
-                    frequency: billing_frequency
+                    frequency: billing_frequency,
+                    validity: product.validity
                   })
 
                   subscription = user_obj.subscriptions.where(product_id: product.id).first
@@ -93,7 +95,6 @@ module ImportManager
                   count+=1
 
                   Rails.logger.info { "Start Importing User #{user[2]}"}
-
                 end
               end
             end

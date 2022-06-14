@@ -187,6 +187,22 @@ module Spree
       
       errors.add(:_, "Please accept the terms and conditions") unless terms_and_conditions
     end
+
+    def have_linux_access?
+      get_purchased_plans.include?('linux')
+    end
+
+    def have_windows_access?
+       get_purchased_plans.include?('windows')
+    end
+
+    def get_purchased_plans
+      TenantManager::TenantHelper.unscoped_query do
+        orders.collect do |o|
+          o.products.pluck(:server_type)
+        end.flatten
+      end
+    end
   end
 end
 
