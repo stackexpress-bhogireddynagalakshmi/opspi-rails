@@ -18,13 +18,20 @@
     <div class="row align-items-center">
         <div class="col">
             <!-- Nav -->
+          <%win_active = 'active'%>
           <ul class="nav nav-tabs nav-overflow header-tabs">
-            <li class="nav-item">
-            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Linux</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Windows</a>
-            </li>
+            <%if current_spree_user.have_linux_access?%>
+              <%win_active = ''%>
+              <li class="nav-item">
+              <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Linux</a>
+              </li>
+            <%end%>
+
+            <%if current_spree_user.have_windows_access?%>
+              <li class="nav-item">
+              <a class="nav-link <%=win_active%>" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Windows</a>
+              </li>
+            <%end%>
         
           </ul>
         </div>
@@ -35,7 +42,7 @@
 <%= flash_messages %>
 
 <div class="tab-content" id="nav-tabContent">
-  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+  <div class="tab-pane fade <%=win_active.blank? ? 'show active' : ''%>" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
     <% if @ftp_users.any? %>
       <div class="card">
         <div class="table-responsive">
@@ -65,7 +72,7 @@
     <% end %>
   </div>
 
-  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+  <div class="tab-pane fade <%=win_active.blank? ? 'show active' : ''%>" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
     <% if @windows_resources.any? %>
       <div class="card">
         <div class="table-responsive">
