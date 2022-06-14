@@ -207,14 +207,6 @@ ActiveRecord::Schema.define(version: 2022_05_26_091504) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "isp_config_plans", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "isp_config_id"
-    t.string "isp_config_username"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "isp_databases", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "isp_config_database_id"
@@ -1430,8 +1422,6 @@ ActiveRecord::Schema.define(version: 2022_05_26_091504) do
     t.integer "reseller_club_customer_id"
     t.integer "reseller_club_contact_id"
     t.boolean "terms_and_conditions", default: false
-    t.integer "opsbot_id"
-    t.string "opsbot_public_id"
     t.integer "hsphere_user_id"
     t.integer "hsphere_account_id"
     t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
