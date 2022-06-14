@@ -39,6 +39,7 @@ module ImportManager
                     account_id: user[4], #opspi account id
                     hsphere_user_id: user[5],
                     hsphere_account_id: user[6], #
+                    hsphere_cluster_id: user[19],
                     terms_and_conditions: true
 
                   })
