@@ -221,4 +221,8 @@ module ApplicationHelper
 
     return (statuses.compact & %i[failed working queued]).size.positive? ? 'In Progress' : 'Completed'
   end
+
+  def get_hsphere_control_panel
+    HsphereClusterConfig.where(cluster_id: current_spree_user.hsphere_cluster_id).pluck(:value).first
+  end
 end
