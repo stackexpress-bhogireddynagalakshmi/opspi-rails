@@ -62,7 +62,8 @@ module ImportManager
                     state_id: Spree::State.where(abbr: user[12],country_id: country.id).first&.id,
                     country_id: country.id
                   })
-
+                  
+                  address.save(validate: false)
                   user_obj.addresses << address
 
                   user_obj.bill_address_id = address.id
