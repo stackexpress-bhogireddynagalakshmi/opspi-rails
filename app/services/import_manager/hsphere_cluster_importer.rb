@@ -1,34 +1,28 @@
 module ImportManager
-    class HsphereClusterImporter < BaseImporter
-      require 'csv'    
+    class HsphereClusterImporter 
 
-      def initialize(file,options={})
-        @file = file
-      end
-  
       def call
        
           @start = Time.now
           count = 0
           Rails.logger.debug {"Hsphere Cluster import Started at #{@start}"}
+          clusters = [{key: "login_url", value: "https://cp.myhsphere.biz", cluster_id: 1}, {key: "login_url", value: "https://cp.gohsphere.com", cluster_id: 2}]
 
-          @file.each_slice(1000).with_index do |clusters, index|
-            clusters.each do |cluster|
-              next if cluster[0] == 'key'
-              if HsphereClusterConfig.find_by_value(cluster[1]).present?
-                Rails.logger.info { "#{cluster[1]} already exist" }
-                next
-              end
-              cluster_config_obj = HsphereClusterConfig.new({
-                key: cluster[0],
-                value: cluster[1],
-                cluster_id: cluster[2]
+          clusters.each do |cluster|
 
-              })
-
-              cluster_config_obj.save!
-              count+=1
+            if HsphereClusterConfig.find_by_value(cluster[:value]).present?
+              Rails.logger.info { "#{cluster[:value]} already exist" }
+              next
             end
+            cluster_config_obj = HsphereClusterConfig.new({
+              key: cluster[:key],
+              value: cluster[:value],
+              cluster_id: cluster[:cluster_id]
+
+            })
+
+            cluster_config_obj.save!
+            count+=1
           end
           return {total_time: (Time.now - @start),count: count}
       end
