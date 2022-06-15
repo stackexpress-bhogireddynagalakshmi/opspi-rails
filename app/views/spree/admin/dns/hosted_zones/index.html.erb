@@ -4,6 +4,53 @@
   padding: 0.3rem 0.45rem;
     font-size: 0.8rem;
 }
+
+.container {
+  display: block;
+  width: 100%;
+}
+
+.card {
+  float: left;
+  margin: 3px;
+  width: 49%;
+}
+.card-body{
+  flex: 1 1 auto;
+  padding: 0.8rem 0.8rem;
+}
+
+.container .card:first-child {
+  margin-left: 0;
+}
+
+
+.container .card:last-child {
+  margin-right: 0;
+}
+
+@media(max-width: 1000px) {
+  .card {
+    float: left;
+    margin: 1px;
+    width: 100%;
+  }
+}
+@media(max-width: 750px) {
+  .card {
+    float: left;
+    margin: 1px;
+    width: 70%;
+  }
+}
+@media(max-width: 720px) {
+  .card {
+    float: left;
+    margin: 1px;
+    width: 70%;
+  }
+
+}
 </style>
 <div class="header mt-4">
   <div class="header-body">
@@ -29,39 +76,9 @@
 <%= flash_messages %>
 
 <% if @hosted_zones.any? %>
-  <div class="card mt-4">
-    <div class="table-responsive">
-      <table class="table table-sm card-table" style="table-layout: fixed; width:100%">
-        <thead>
-          <tr>
-            <th>Host Name</th>
-            <!--th>Status</th-->
-            <th data-hook="admin_orders_index_header_actions" style="text-align: end;">Action</th>
-          </tr>
-        </thead>
-        <tbody class="fs-base">
-        <% @hosted_zones.each do |hosted_zone| %>
-          <tr data-hook="admin_orders_index_rows">
-            <td><%=link_to hosted_zone.origin.chomp("."), dns_admin_dns_hosted_zone_path(hosted_zone.id, :dns_name => hosted_zone.origin.chomp(".")), class: hosted_zone %></td>
-            <!--td><%#="Active"%></td-->
-
-            <td data-hook="admin_orders_index_row_actions">
-              <span class="d-flex justify-content-end">
-   
-                <%= link_to_delete "Delete", url: admin_dns_hosted_zone_path(hosted_zone.id), no_text: true, method: :delete%>
-               
-                <%= link_to 'javascript:void(0);', data: {origin: hosted_zone.origin.chomp("."), ns1: ENV['DNS_SERVER_NS1'], ns2: ENV['DNS_SERVER_NS2']}, class: 'ml-2 configure-dns-modal-link btn btn-outline-primary btn-size', title: 'Configuration Details' do  %>
-                  <%= render partial: '/spree/admin/shared/icons/gear' %>
-                <% end %>
-
-              </span>
-            </td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
+<div class="container mt-4 mb-4">
+<%= render partial: 'rows', collection: @hosted_zones, as: :hosted_zone %>
+</div>
 <% else %>
   <div class="alert alert-secondary no-objects-found mt-4">
     <label class="form-label" style="margin-top: 0.5rem;"> No Dns Domain Found</label>
