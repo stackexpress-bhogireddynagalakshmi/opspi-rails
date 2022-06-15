@@ -59,7 +59,7 @@ module Spree
           if @response[:success]
             flash[:success] = @response[:message]
           else
-            flash[:error] = @response[:message]
+            flash.now[:error] = @response[:message]
           end
         end
 
