@@ -84,14 +84,7 @@
               </label>
 
             </div>
-            <div class="col-auto">
-
-              <!-- Help text -->
-              <% if spree.respond_to?(:reset_password_path) %>
-              <%= link_to Spree.t(:forgot_password), reset_password_path , class:"form-text small text-muted"%>
-              <%end%>
-            </div>
-          </div> <!-- / .row -->
+             <!-- / .row -->
 
           <!-- Input group -->
           <div class="input-group input-group-merge">
@@ -106,6 +99,15 @@
 
           </div>
         </div>
+
+        <div class="col-auto" style="margin-top: 3px;float: right;">
+
+              <!-- Help text -->
+              <% if spree.respond_to?(:reset_password_path) %>
+              <%= link_to Spree.t(:forgot_password), reset_password_path , class:"form-text small text-muted"%>
+              <%end%>
+            </div>
+          </div>
 
         <% if Spree::Frontend::Config[:remember_me_enabled] %>
         <div class="form-check  mb-3">
