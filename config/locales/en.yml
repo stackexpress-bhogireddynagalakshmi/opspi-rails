@@ -105,7 +105,8 @@ en:
       confirmation_instructions: 
         instructions_1: "Thanks for signing up!"
         instructions_3: "If you have any queries, feel free to reply to this email."
-
+    nav_bar:
+      admin_panel: Control Panel
       
   isp_config:
     template_updated: 'IspConfig user master template updated successfully'
