@@ -3,7 +3,7 @@
 
   <%if (current_spree_user.store_admin? && !TenantManager::TenantHelper.current_admin_tenant?) || current_spree_user.admin? %>
     <%= link_to Spree.t('nav_bar.admin_panel'), spree.admin_orders_path, class: 'dropdown-item text-uppercase'%>
-  <%elsif current_spree_user.end_user? && !current_spree_user.hsphere_account_id.present?%>
+  <%elsif current_spree_user.end_user? && (current_spree_user.isp_config_id.present? || current_spree_user.solid_cp_id.present?) %>
    <%= link_to Spree.t('nav_bar.admin_panel'), spree.admin_domain_registrations_path, class: 'dropdown-item text-uppercase'%>
   <%end%>
 
