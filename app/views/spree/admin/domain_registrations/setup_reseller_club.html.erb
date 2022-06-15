@@ -17,7 +17,7 @@
     </div>
 
 
-
+    <%= flash_messages %>
 
  <%=form_for spree_current_user, url: "/admin/domain_registrations/setup_reseller_club",html: {method: :post} do |f|%> 
   <%f.object.build_user_key if f.object.user_key.blank? %>
