@@ -1,0 +1,4 @@
+class HsphereClusterConfig < ApplicationRecord
+    
+end
+  

@@ -20,7 +20,7 @@ module ImportManager
             users.each do |user|
               next if user[0] == 'first_name' || user[0].downcase == 'first name'
               if Spree::User.find_by_email(user[2].strip).present?
-                Rails.logger.info { "#{user[2].strip} already exuist" }
+                Rails.logger.info { "#{user[2].strip} already exist" }
                 next
               end
 
@@ -57,12 +57,13 @@ module ImportManager
                     address1: user[7],
                     address2: user[8],
                     city: user[9],
-                    zipcode: user[10],
-                    phone: user[11],
+                    zipcode: user[10].to_i,
+                    phone: user[11].to_i,
                     state_id: Spree::State.where(abbr: user[12],country_id: country.id).first&.id,
                     country_id: country.id
                   })
-
+                  
+                  address.save(validate: false)
                   user_obj.addresses << address
 
                   user_obj.bill_address_id = address.id
