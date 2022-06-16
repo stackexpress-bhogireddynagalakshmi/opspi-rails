@@ -57,17 +57,17 @@
     <div class="row align-items-center">
       <div class="col">
         <h1 class="header-title">
-        DNS Domains
+         DNS Zones
         </h1>
         
       </div>
       <div class="col-auto">
       <% if current_spree_user.isp_config_id.present? %>
-        <%= button_link_to Spree.t(:add_domain),
+        <%= button_link_to Spree.t(:add_dns_zone),
         new_admin_dns_hosted_zone_url,
         class: "btn btn-primary lift",
           icon: 'add.svg',
-          id: 'admin_new_order' %>
+          id: 'admin_new_dns_zone' %>
       <% end  %>
       </div>
     </div>
