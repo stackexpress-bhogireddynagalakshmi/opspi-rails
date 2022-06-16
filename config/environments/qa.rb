@@ -141,12 +141,12 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { :host => ENV['ADMIN_DOMAIN'] }
 
 
-  Rails.application.config.middleware.use ExceptionNotification::Rack,
-  email: {
-    deliver_with: :deliver, # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
-    email_prefix: "[#{ENV['ADMIN_DOMAIN']} Exception Notification] ",
-    sender_address: "Notifier <#{ENV['MAIL_FROM']}>",
-    exception_recipients: [ENV['ERROR_RECEPIENT1'],ENV['ERROR_RECEPIENT2'],ENV['ERROR_RECEPIENT3']].compact
-  }
+  # Rails.application.config.middleware.use ExceptionNotification::Rack,
+  # email: {
+  #   deliver_with: :deliver, # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
+  #   email_prefix: "[#{ENV['ADMIN_DOMAIN']} Exception Notification] ",
+  #   sender_address: "Notifier <#{ENV['MAIL_FROM']}>",
+  #   exception_recipients: [ENV['ERROR_RECEPIENT1'],ENV['ERROR_RECEPIENT2'],ENV['ERROR_RECEPIENT3']].compact
+  # }
 
 end
