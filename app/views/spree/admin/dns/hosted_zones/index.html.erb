@@ -101,6 +101,8 @@
       var serverName = $(this).data('origin');
       var ns1 = $(this).data('ns1');
       var ns2 = $(this).data('ns2');
+      var webId = $(this).data('webid');
+      var check_val = webId === undefined ? "" : "checked"
       $('#exampleModalLabel').html("DNS Configuration Details");
       $('#exampleModal .modal-body').html(`
         <table>
@@ -117,6 +119,14 @@
               <td><b>Nameserver 2:</b></td>
               <td>${ns2}</td>
             </tr>
+            <tr>
+              <td><b>Enable Web Service:</b></td>
+              <td>
+              <div class="form-check form-switch">
+              <input class="form-check-input" name="web_service" type="checkbox" value =${webId}  id="flexSwitchCheckDefault_${webId}" data_web_domain_name=${serverName} onclick= 'webService(this);' ${check_val}>
+              </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       `);
@@ -124,4 +134,48 @@
       $('#exampleModal').modal('show');
     });
   });
+
+  var webService = function(element){
+    var webDomainId = element.value;
+    var webDomainName = element.attributes.data_web_domain_name.value;
+    if (webDomainId == "undefined") {
+      var dataConfirm = "Are you sure to Activate this Domain?";
+      var origin = webDomainName;
+
+      result = confirm(dataConfirm);
+      if (result) {
+        setTimeout(function(){
+          $.ajax({
+            type: "POST",
+            url: "/admin/dns/hosted_zones/enable_web_service",
+            data: { 
+              website: {
+                web: origin
+              }
+            }
+          });
+        } ,5);
+      }
+    }
+    else {
+      var dataConfirm = "Are you sure to Deactivate this Domain?, This will affect your other services";
+      var web_id = webDomainId;
+
+      result = confirm(dataConfirm);
+      if (result) {
+        setTimeout(function(){
+          $.ajax({
+            type: "POST",
+            url: "/admin/dns/hosted_zones/enable_web_service",
+            data: { 
+              website: {
+                web: web_id
+              }
+            }
+          });
+        } ,5);
+      }
+    }
+
+  } 
 </script>

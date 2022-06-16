@@ -26,6 +26,25 @@ module Spree
           end
         end
 
+        def enable_web_service
+          @domain = params["website"]["web"]
+
+          if VALID_DOMAIN_REGEX.match?(@domain)
+            @tasks = []
+            
+            build_tasks(params)
+            
+            TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
+            
+            flash[:success] = "Wizard Jobs Started. Your services will be activated in few miniutes"
+
+            redirect_to admin_wizard_path(id: @batch_jobs.keys.last)
+          else
+            @error = 'Invalid domain name'
+            render 'new'
+          end
+        end
+
         def new; end
 
         def edit
@@ -63,6 +82,38 @@ module Spree
         end
 
         private
+
+        def build_tasks(web_params)
+          if web_params["website"]["web"] != 'undefined'
+            prepare_web_domain_task
+            prepare_a_record_task
+          end
+  
+          @tasks = @tasks.flatten
+        end
+
+        def prepare_web_domain_task
+          @tasks <<
+            {
+              id: 2,
+              type: "create_web_domain",
+              domain: @domain,
+              data: {
+                server_type: 'linux',
+                ip_address: '',
+                ipv6_address: '',
+                domain: @domain,
+                hd_quota: '-1',
+                traffic_quota: '-1',
+                subdomain: 'www',
+                php: 'fast-cgi',
+                active: 'y'
+              },
+              depends_on: nil,
+              sidekiq_job_id: nil
+            }
+        end
+  
 
         def set_flash
           if @response[:success]

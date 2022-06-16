@@ -89,7 +89,8 @@ Rails.application.routes.draw do
       namespace :windows do
         resources :domains
       end
-      
+
+      post 'dns/hosted_zones/enable_web_service', :controller=> 'dns/hosted_zones',:action=>"enable_web_service", as: 'enable_web_service'
       get 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"index", as: 'site_builder'
       post 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"create", as: 'site_builder_create'
 
