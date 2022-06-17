@@ -48,9 +48,10 @@ module TaskManager
       end
 
       def windows_resource_params
-        { domain_name:  @data["domain"], create_webSite: "1", enable_dns: "0", allow_subdomains: "1" }
+        { domain_name:  @data[:domain], create_webSite: "1", enable_dns: "0", allow_subdomains: "1" }
       end
 
     end
   end
 end
+
