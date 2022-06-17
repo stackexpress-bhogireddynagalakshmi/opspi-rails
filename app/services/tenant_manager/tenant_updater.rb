@@ -48,7 +48,7 @@ module TenantManager
       #ISP config Access to tenant & Master Plan id set for a spree store
       def setup_isp_config_access
 
-        Rails.logger.info { "setup_panels_access method is called. ISPConfig Access: #{panels_access('isp_config')} " }
+        Rails.logger.info { "setup_panels_access method is called. ISPConfig Access: #{@order.panels_access('isp_config')} " }
 
         account.update_column :isp_config_access, true 
           account.spree_store.update_column :isp_config_access, true 
