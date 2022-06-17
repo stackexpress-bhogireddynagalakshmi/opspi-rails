@@ -1,0 +1,200 @@
+
+ <%=form_for 'wizard', url: admin_wizards_path, html: {method: :post} do |f|%> 
+
+  <fieldset>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <label class="form-label">Enter Domain Name</label>
+          <%#= collection_select(:wizard, :domain, @hosted_zones, :origin, :origin, {prompt: 'Select Web Domain'}, {class: 'select2-clear js-filterable'}) %>
+          <%= f.text_field :domain, value: @domain, class: 'form-control',placeholder: 'example.com', required: true%>
+          <%if @error.present?%>
+            <span style="color: red"> <%=@error%></span>
+          <%end%>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <%= f.label :select_hosting_type %><br />
+          <%linux_checked =  current_spree_user.have_linux_access?%>
+
+          <%if current_spree_user.have_windows_access?%>
+            <span style="margin-right: 15px;">
+              <%= f.radio_button :server_type, true ,  class: 'form-check-input list-checkbox', required: true, checked: linux_checked ? false : true  %>
+               <%linux_checked = false%>
+              <%= f.label :server_type, "Windows", :value => "windows" %>
+            </span>
+          <%end%>
+         
+          <%if current_spree_user.have_linux_access?%>
+            <%= f.radio_button :server_type, false, :checked => true ,  class: 'form-check-input list-checkbox', required: true, checked: linux_checked %>
+            <%= f.label :server_type, "Linux", :value => "linux"%>
+          <%end%>   
+
+        </div>
+      </div>
+    </div>
+     <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <div class="form-check">
+            <%= check_box_tag('wizard[enable_dns_service]', 'n', ('checked'), class: "form-check-input list-checkbox", id: "enable_dns_service", disabled: true ) %>
+            <label class="form-check-label" >Enable Web Service</label>
+            <div class="text-muted"><%=t('wizards.enable_dns_service_help')%></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <div class="form-check">
+            <%= check_box_tag('wizard[enable_web_service]', 'n', ('checked' if false), class: "form-check-input list-checkbox", id: "wizard_web_service", onclick: "checkServiceStatus(this)" ) %>
+            <label class="form-check-label" for="wizard_web_service">Enable Web Services</label>
+            <div class="text-muted"><%=t('wizards.enable_web_service_help')%></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <div class="form-check">
+            <%= check_box_tag('wizard[enable_db_service]', 'n', ('checked' if false), class: "form-check-input list-checkbox", id: "wizard_db_service", onclick: "checkServiceStatus(this)" ) %>
+            <label class="form-check-label" for="wizard_db_service">Create Database</label>
+            <div class="text-muted"><%=t('wizards.enable_db_service_help')%></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <div class="form-check">
+            <%= check_box_tag('wizard[enable_mail_service]', 'n', ('checked' if false), class: "form-check-input list-checkbox", id: "wizard_mail_service", onclick: "checkServiceStatus(this)" ) %>
+            <label class="form-check-label" for="wizard_mail_service">Enable Mail Service</label>
+            <div class="text-muted"><%=t('wizards.enable_mail_service_help')%></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="wizard_mail">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group field">
+            <label class="form-label">Email</label>
+            <div class="input-group">
+              <%= text_field_tag 'wizard[emails][]', '', class: 'form-control', placeholder: "Enter Email", "data-input-count" => 0 %>
+              <div class="input-group-text">
+                <span id="selected_domain_button">@</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="newMoreEmailAddress"></div>
+          <button id="addRowEmail" type="button" class="btn btn-secondary lift mb-4" , data-field-count= '1' >Add Email</button>
+        </div>
+      </div>
+    </div>
+
+    <%=submit_tag "Submit",class: 'btn btn-primary  btn-lg lift'%>
+
+  </fieldset>
+<% end %>
+
+<div style="color: red;" class="mt-3">
+  <%=@response[:message].html_safe if @response %>
+</div> 
+
+
+
+<style type="text/css">
+</style>
+
+<script type="text/javascript">
+
+  $(document).ready(function (argument) {
+    var mailService = document.getElementById("wizard_mail_service");
+    var div = document.getElementById("wizard_mail"); 
+    if (mailService.value == 'n') {
+      div.style.display = "none"; 
+    } else{
+      div.style.display = "block"; 
+    }
+
+    var domain = $('#wizard_domain').val();
+    var domain = domain.replace("www.", "");
+
+    if (domain != "") {
+      $("#selected_domain_button").html('@'+ domain);
+    }
+
+  });
+
+  $('#wizard_domain').change(function () {
+     var domain = $('#wizard_domain').val();
+     var domain = domain.replace("www.", "");
+    $("#selected_domain_button").html('@'+ domain);
+  });
+
+  var checkServiceStatus = function(element){
+    var serviceStatus = element.value;
+    var id = element.id;
+    var div = document.getElementById("wizard_mail"); 
+    
+    if (serviceStatus == 'n') {
+      element.value = 'y';
+      if (id == 'wizard_mail_service') {
+        div.style.display = "block"; 
+      }
+    } else {
+      element.value = 'n';
+      div.style.display = "none"; 
+    }
+  }
+
+  $("#addRowEmail").click(function () {
+    var fieldCount = parseInt($(this).data('field-count'));
+    var inputCount = (fieldCount +1);
+     var domain = $('#wizard_domain').val();
+     var domain = domain.replace("www.", "");
+    var html = '';
+    html += '<div id="inputUsernameField">';
+    html += '<div class="input-group mb-3">';
+    html += '<input type="text" name="wizard[emails][]" class="form-control m-input" placeholder="Enter Email" autocomplete="off" "data-input-count" = '+inputCount+'>';
+    
+    html += '<div class="input-group-text">';
+    html += '<span id="selected_domain_button">@'+domain+'</span>';
+    html += '</div>';
+    html += '<button id="removeRowEmail" type="button" class="btn btn-danger">Remove</button>';
+    
+    html += '</div>';
+    $('#newMoreEmailAddress').append(html);
+    $(this).data("field-count", fieldCount+1);
+    if (fieldCount >= 9) {
+      $("#addRowEmail").hide();
+    }
+  });
+
+  $(document).on('click', '#removeRowEmail', function () {
+    var fieldCount = $('#addRowEmail').data('field-count'); //get myvalue
+    $('#addRowEmail').data('field-count',(fieldCount-1));
+    $(this).closest('#inputUsernameField').remove();
+    if (fieldCount >= 10) {
+      $("#addRowEmail").show();
+    }
+  });
+
+</script>
+<script type="text/javascript">
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+  });
+</script>

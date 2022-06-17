@@ -37,16 +37,11 @@ module TaskManager
 
 
       def resource_params
-
         response  = user.isp_config.website.all
-
         if response[:success]
           websites = response[:response].response
           website  = websites.detect {|x| x.domain == task[:domain]}
-
           @data[:web_domain_id] = website.domain_id
-         
-
           return @data
         else
           raise "Something went wrong: #{response[:error]}"

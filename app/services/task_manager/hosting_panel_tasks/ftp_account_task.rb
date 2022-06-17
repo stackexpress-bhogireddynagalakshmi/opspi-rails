@@ -33,30 +33,36 @@ module TaskManager
         @user.solid_cp.ftp_account
       end
 
-
       def resource_params
-
-        response  = user.isp_config.website.all
-
-        if response[:success]
-          websites = response[:response].response
-          website  = websites.detect {|x| x.domain == task[:domain]}
-
-          @data[:parent_domain_id] = website.domain_id
-          @data[:uid] = website.system_user
-          @data[:gid]  =website.system_group
-          @data[:dir] = website.document_root
-
-          return @data
+        if windows?
+          windows_params
         else
-          raise "Something went wrong: #{response[:error]}"
+          response  = user.isp_config.website.all
+          if response[:success]
+            websites = response[:response].response
+            website  = websites.detect {|x| x.domain == task[:domain]}
+
+            @data[:parent_domain_id] = website.domain_id
+            @data[:uid] = website.system_user
+            @data[:gid]  =website.system_group
+            @data[:dir] = website.document_root
+
+            return @data
+          else
+            raise "Something went wrong: #{response[:error]}"
+          end
         end
       end
 
-      def get_folder_path
-        { can_read: true, can_write: true, folder: "\\#{@data[:domain]}\\wwwroot" }
+      def windows_params
+        { 
+          username: @data[:username],
+          password: @data[:password],
+          can_read: true,
+          can_write: true,
+          folder: "\\#{@data[:domain]}\\wwwroot"
+        }
       end
-
     end
   end
 end

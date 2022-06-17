@@ -13,7 +13,8 @@ module Spree
       def new; end
 
       def create
-        @domain = wizard_params[:domain]
+        @domain      = wizard_params[:domain]
+        @server_type = wizard_params[:server_type]
 
         if VALID_DOMAIN_REGEX.match?(@domain)
           @tasks = []
@@ -47,7 +48,7 @@ module Spree
           prepare_ftp_account_task
         end
 
-        if wizard_params[:enable_db_service] == 'y'
+        if wizard_params[:enable_db_service] == 'y' && @server_type != 'windows'
           prepare_database_task
         end
 
@@ -159,7 +160,7 @@ module Spree
             type: "create_web_domain",
             domain: @domain,
             data: {
-              server_type: 'linux',
+              server_type: @server_type,
               ip_address: '',
               ipv6_address: '',
               domain: @domain,
@@ -248,7 +249,7 @@ module Spree
             domain: @domain,
             actions: true,
             data: {
-              server_type: 'linux',
+              server_type: @server_type,
               parent_domain_id: '', # needed
               username: set_ftp_username(@domain),
               password: SecureRandom.hex,
@@ -289,7 +290,7 @@ module Spree
       end
 
       def wizard_params
-        params.require("wizard").permit(:domain, :enable_web_service, :enable_mail_service, :enable_db_service, emails: [])
+        params.require("wizard").permit(:domain, :server_type, :enable_web_service, :enable_mail_service, :enable_db_service, emails: [])
       end
 
       def set_batch_jobs
