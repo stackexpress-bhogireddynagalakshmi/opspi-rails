@@ -87,7 +87,7 @@ gem "aws-sdk-s3", require: false
 gem 'aasm'
 gem 'after_commit_everywhere', '~> 1.0'
 gem 'whenever', require: false
-gem 'exception_notification'
+# gem 'exception_notification'
 gem 'typhoeus', '~> 1.4'
 gem 'iso_country_codes'
 gem 'activerecord-nulldb-adapter'
