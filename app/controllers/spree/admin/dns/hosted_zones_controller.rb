@@ -27,7 +27,7 @@ module Spree
         end
 
         def enable_web_service
-          @domain = params["website"]["web"]
+          @domain = params["website"]["origin"]
 
           @tasks = []
           
@@ -42,7 +42,7 @@ module Spree
         end
 
         def disable_web_service
-          @response = isp_website_api.destroy(params["website"]["web"])
+          @response = isp_website_api.destroy(params["website"]["origin"])
           set_flash
           respond_to do |format|
             format.js { render inline: "location.reload();" }
@@ -85,6 +85,16 @@ module Spree
           @hosted_zone = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:id])
           @hosted_zone_records_reponse = host_zone_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
           @hosted_zone_records = @hosted_zone_records_reponse[:response][:response]
+        end
+
+        def get_config_details
+          web_domains = isp_website_api.all
+          web_domain_id = web_domains[:response].response.collect { |x| x.domain_id if x.domain.eql?(params[:website][:origin]) }
+          web_domain = web_domain_id.compact.first
+
+          respond_to do |format|
+            format.js { render json: {web: web_domain }}
+          end
         end
 
         private

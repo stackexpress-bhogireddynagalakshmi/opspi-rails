@@ -141,15 +141,6 @@ module ApplicationHelper
     end
   end
 
-  def get_web_domian(domain)
-    domains = current_spree_user.isp_config.website.all
-    domain_id = domains[:response].response.collect { |x| x.domain_id if x.domain.eql?(domain) }
-    domain_id.compact.first
-  rescue Exception => e
-    Rails.logger.info { e.message }
-    []
-  end
-
   def current_domain_chat_widget
     return ENV['CHATWOOT_ADMIN_WEBSITE_TOKEN'] if current_domain.eql?(ENV['BASE_DOMAIN'])
     store_account_id = Spree::Store.where(url: current_domain).pluck(:account_id).first

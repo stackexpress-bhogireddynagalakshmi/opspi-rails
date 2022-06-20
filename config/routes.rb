@@ -92,6 +92,7 @@ Rails.application.routes.draw do
 
       post 'dns/hosted_zones/enable_web_service', :controller=> 'dns/hosted_zones',:action=>"enable_web_service", as: 'enable_web_service'
       post 'dns/hosted_zones/disable_web_service', :controller=> 'dns/hosted_zones',:action=>"disable_web_service", as: 'disable_web_service'
+      post 'dns/hosted_zones/get_config_details', :controller=> 'dns/hosted_zones',:action=>"get_config_details", as: 'get_config_details'
       get 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"index", as: 'site_builder'
       post 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"create", as: 'site_builder_create'
 
