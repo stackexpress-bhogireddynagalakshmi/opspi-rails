@@ -44,6 +44,9 @@ Rails.application.routes.draw do
           member do
             get :dns
           end
+          collection do
+            get :zone_overview
+          end
           resources :hosted_zone_records          
         end
       end
@@ -89,7 +92,7 @@ Rails.application.routes.draw do
       namespace :windows do
         resources :domains
       end
-      
+
       get 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"index", as: 'site_builder'
       post 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"create", as: 'site_builder_create'
 

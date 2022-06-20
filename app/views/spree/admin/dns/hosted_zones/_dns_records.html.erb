@@ -1,0 +1,587 @@
+<style type="text/css">
+table.table td .add {
+  display: none;
+ }
+
+fieldset {
+  margin: 2px;
+}
+
+.has-search .form-control {
+    padding-left: 2.375rem;
+}
+
+.has-search .form-control-feedback {
+    position: absolute;
+    z-index: 2;
+    display: block;
+    width: 2.375rem;
+    height: 2.375rem;
+    line-height: 2.375rem;
+    text-align: center;
+    pointer-events: none;
+    color: #aaa;
+}
+
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.grid-small_1 {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-gap: 10px;
+}
+
+.grid-container-edit{
+    display: grid;
+    grid-template-columns: 0.30fr 0.50fr 0.35fr 0.35fr 0.35fr;
+    /* 0.22fr 0.35fr 0.37fr 0.37fr 0.40fr; */
+    grid-gap: 10px
+}
+
+.box{
+  border-color: #e0e0e0;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+}
+.first-row{
+  padding: 16px;
+}
+
+.form_1{
+  padding: 16px;
+}
+
+.label-st{
+font-weight: initial;
+margin-bottom: 4px;
+font-size: 16px;
+white-space: nowrap;
+display: block;
+} 
+.input-bx{
+  margin-right: 16px;
+  margin-bottom: 16px;
+  align-self: start;
+  grid-row: auto;
+  grid-column: auto;
+}
+
+.show-content{
+  height: 36px;
+  font-weight: bold;
+  align-items: center;
+    -webkit-box-align: center;
+    display: flex;
+}
+
+[data-toggle="collapse"] .fa:before {  
+  font-family: FontAwesome;
+  content: "\f0d7";
+}
+
+[data-toggle="collapse"].collapsed .fa:before {
+  content: "\f0da";
+} 
+
+.input-control.success input {
+    border-color: #09c372;
+}
+.input-control.error input {
+    border-color: #ff3860;
+}
+
+.input-control .error {
+    color: #ff3860;
+    font-size: 12px;
+    height: 13px;
+}
+
+.mx-data{
+  align-items: center;
+    -webkit-box-align: center;
+    justify-content: space-between;
+    -webkit-box-pack: justify;
+    display: flex;
+}
+
+.mx-data-1{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.priority-button{
+  pointer-events: bounding-box;
+  border: none;
+  color: rgb(49, 49, 49);
+  display: flex;
+}
+.button-style{
+  border-color: rgb(115, 102, 228);
+  padding-right: 7px;
+  padding-left: 7px;
+  padding-bottom: 2px;
+  padding-top: 2px;
+  color: rgb(34, 23, 133);
+  background-color: rgb(241, 240, 252);
+  font-weight: bold;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+/* .dropdownSX{
+  max-width: 100px;
+  width: 100%;
+}
+.dropdownSX1{
+  height: 35px;
+  margin-bottom: 0px;
+}
+.dropdownSX2{
+  text-align: left;
+  font-size: 14px;
+  margin-right: 8px;
+  position: relative;
+} */
+</style>
+
+<%= flash_messages %>
+
+<div class="card" id="dealsList">
+  <div class="card-header">
+    <div class="row align-items-center">
+      <div class="col">
+
+        <!-- Form -->
+        <form>
+          <div class="input-group input-group-flush input-group-merge input-group-reverse">
+            <input class="form-control list-search" type="search" id="searchBox" data-table="records-list" placeholder="Search">
+            <span class="input-group-text">
+              <i class="fa fa-search"></i>
+            </span>
+          </div>
+        </form>
+
+      </div>
+      <div class="col-auto me-n3">
+
+        <!-- Select -->
+        <form>
+
+        </form>
+
+      </div>
+      <div class="col-auto">
+
+
+
+        <!-- Dropdown -->
+        <div class="dropdown">
+
+          <!-- Toggle -->
+          <button class="btn btn-sm btn-white" type="button" data-bs-toggle="collapse" data-target="#collapseEX2" aria-expanded="false" aria-controls="collapseEX2"  id="filter_open">
+             Add Record <span class="badge bg-primary ms-1 d-none">0</span>
+          </button>
+
+        
+
+        </div>
+
+      </div>
+    </div> <!-- / .row -->
+  </div>
+
+  <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @hosted_zone } %>
+
+  <%=form_tag zone_overview_admin_dns_hosted_zones_path(@hosted_zone), class:"collapse form_1", id: "collapseEX2", method: "post" do %>
+    <fieldset>
+    <div class="grid-container">
+
+       <div class="grid-small_1">
+          <div class="form-group">
+            <label for="type" class="form-label">Type</label>
+            <%= select_tag :type, options_for_select(["A", "AAAA","CNAME","MX", "NS","TXT"]), class: "form-select", id:"txttype", required:"required"%>
+          </div>
+          <div class="form-group field">
+            <label for="name" class="form-label">Name</label>
+
+            <div class="input-group">
+              <%=text_field_tag :name,params[:name], class:"form-control", id:"txtname", required:"required" %>
+              <div class="input-group-text">
+                <span>.<%= params[:zone_name]%></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-child 2">
+          <div id="divA" class="grid-small">
+            <div class="form-group input-control" >
+              <label for="ipv4" class="form-label">IPv4 address</label>
+              <%=text_field_tag :ipv4, params[:ipv4], class:"form-control", id:"txtipv4" %>
+              <div class="error"></div>
+            </div>
+          </div>
+
+          <div id="divAAAA" class="grid-small">
+            <div class="form-group input-control">
+              <label for="ipv6" class="form-label">IPv6 address</label>
+              <%=text_area_tag :ipv6, params[:ipv6], class:"form-control", id:"txtipv6",style:"margin-top: 0px; margin-bottom: 16px; height: 39px;"%>
+              <div class="error"></div>
+            </div>
+          </div>
+
+          <div id="divCNAME"class="grid-small" >
+            <div class="form-group input-control">
+              <label for="target" class="form-label">Target</label>
+              <%=text_field_tag :target,params[:target], class:"form-control input-bx", id:"txttarget" %>
+               <div class="error"></div>
+            </div>
+          </div>
+
+          <div id="divMX" class="grid-small">
+            <div class="form-group input-control">
+              <label for="mailserver" class="form-label">Mail Server</label>
+              <%=text_field_tag :mailserver, params[:mailserver], class:"form-control input-bx", id:"txtmailserver" %>
+              <div class="error"></div>
+            </div>
+          </div>
+
+          <div id="divNS" class="grid-small">
+            <div class="form-group input-control">
+              <label for="nameserver" class="form-label">Nameserver</label>
+              <%=text_field_tag :nameserver, params[:nameserver], class:"form-control input-bx", id:"txtnameserver" %>
+              <div class="error"></div>
+            </div>
+          </div>
+
+          <div id="divTXT" class="grid-small">
+            <div class="form-group">
+              <label for="content" class="form-label">Content</label>
+              <%=text_area_tag :content, params[:content], type:"text", class:"form-control input-bx", id:"txtcontent", style:"margin-top: 0px; margin-bottom: 16px; height: 39px;"%>
+            </div>
+          </div>
+
+        </div>
+        <div class="grid_3">
+          <div class="form-group">
+            <label for="ttl" class="form-label">TTL</label>
+            <div class>
+            <div class="dropdownSX">
+              <div class="dropdownSX1">
+                <div class="dropdownSX2">
+                  <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]]), class: "form-select", id: "txtttl", required: "required" %>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div> 
+        <div id="divPRI" class="grid_4">
+          <div class="form-group">
+            <label for="priority" class="label-st">Priority</label>
+            <%=text_field_tag :priority, params[:priority], type:"number", class:"form-control input-bx", id:"txtpriority" %>
+          </div>
+        </div>      
+    </div>
+      <%=hidden_field_tag(:hosted_zone_name, params[:zone_name])%>
+      <div class="float-right">
+        <button class="btn btn-outline-secondary"  type="button" style="float:right;" id="close1">Cancel</button>
+        <button class="btn btn-md btn-primary" type="submit" style="float:right;margin-right:4px">Save</button>
+      </div> 
+    </fieldset>
+  <% end %>
+
+
+  <% if @hosted_zone_records.any? %>
+  <div class="card">
+  <div class="table-responsive">
+  <table class="table table-sm card-table" style="table-layout: fixed; width:100%" id="myTable">
+    <thead>
+      <tr>
+      <th class="col-md-2">Type</th>
+      <th class="col-md-3">Name</th>
+      <th class="col-md-3">Content</th>
+      <th class="col-md-2">TTL</th>
+      </tr>
+    </thead>
+          <tbody>
+          <% @hosted_zone_records.each do |hosted_zone_record| %>
+            <tr id="<% hosted_zone_record.id %>">
+              <td class="col-md-2"><%= hosted_zone_record.type%></td>
+              <td class="col-md-3"><%= hosted_zone_record.name.eql?(params[:zone_name]+".") ? hosted_zone_record.name.chomp(".") : hosted_zone_record.name.chomp("."+params[:zone_name]+".")%></td>    
+              <% if !hosted_zone_record.type.eql?("MX")%>
+              <td class="col-md-3"><%= hosted_zone_record.data.chomp(".")%></td>
+              <%else%>
+              <td class="col-md-3">
+                <div class="mx-data">
+                  <div class="mx-data-1"><%= hosted_zone_record.data.chomp(".")%></div>
+                  <% unless hosted_zone_record.aux.eql?("0")%>
+                  <button data-tip="true" type="button" class="priority-button" currentitem="false" title="Priority" style="cursor: pointer; background-color: transparent; padding: 0px;">
+                    <span class="button-style"><%= hosted_zone_record.aux unless hosted_zone_record.aux.eql?"0"%></span>
+                  </button>
+                  <%end%>
+                </div>
+              </td>
+              <%end%>
+              <td class="col-md-2"><%= hosted_zone_record.ttl %></td>
+              <td><a class="btn btn-link collapsed" data-toggle= "collapse" data-target= "#edit-form_<%=hosted_zone_record.id.to_s%>" 
+                            aria-expanded="false" aria-controls="edit-form_<%=hosted_zone_record.id.to_s%>", type="button",
+                            onclick="ClearFields();">Edit&nbsp;<i class="fa" aria-hidden="true">&nbsp;</i></a></td>
+            </tr>
+            <tr class="collapse" id="edit-form_<%=hosted_zone_record.id.to_s%>">
+            <td colspan="5"> 
+            <%=form_tag zone_overview_admin_dns_hosted_zones_path(@hosted_zone),  class:"form_2", id: "edit-form-clear-field", value: hosted_zone_record.id, method: "put" do %>
+             <%=hidden_field_tag(:hosted_zone_name, params[:zone_name])%>
+              <fieldset>
+                <div class="grid-container-edit">
+                  <div class="grp1">
+                    <div class="form-group">
+                      <label for="type" class="form-label">Type</label>
+                      <div class>
+                        <div class="show-content"><%= hosted_zone_record.type%></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="grp2">
+                    <div class="form-group">
+                      <label for="name" class="form-label">Name</label>
+                      <%=text_field_tag :name,params[:name], class:"form-control input-bx", value: hosted_zone_record.name.eql?(params[:zone_name]+".") ? hosted_zone_record.name.chomp(".") : hosted_zone_record.name.chomp("."+params[:zone_name]+"."), id:"edit_name", required: "required" %>
+                    </div>
+                  </div>
+
+                  <div class="grp3">
+                  <%if hosted_zone_record.type.eql?("A")%>
+                    <div id="divIPV4">
+                      <div class="form-group input-control">
+                        <label for="ipv4" class="form-label">IPv4 address</label>
+                        <%=text_field_tag :ipv4, params[:ipv4], class:"form-control input-bx",value: hosted_zone_record.data, id:"edit_ipv4", required: true if hosted_zone_record.type.eql?"A" %>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <%elsif hosted_zone_record.type.eql?("AAAA")%>
+                    <div id="divIPV6">
+                      <div class="form-group input-control">
+                        <label for="ipv6" class="form-label">IPv6 address</label>
+                        <%=text_field_tag :ipv6, params[:ipv6], class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_ipv6", required: true if hosted_zone_record.type.eql?"AAAA" %>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% elsif hosted_zone_record.type.eql?("CNAME")%>
+                    <div id="divTARGET">
+                      <div class="form-group input-control">
+                        <label for="target" class="form-label">Target</label>
+                        <%=text_field_tag :target,params[:target], class:"form-control input-bx", value: hosted_zone_record.data.chomp("."), id:"edit_target", required: true if hosted_zone_record.type.eql?"CNAME" %>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% elsif hosted_zone_record.type.eql?("MX")%>
+                    <div id="divMX">
+                      <div class="form-group input-control">
+                        <label for="mailserver" class="form-label">Mail Server</label>
+                        <%=text_field_tag :mailserver, params[:mailserver], class:"form-control input-bx", value: hosted_zone_record.data.chomp("."), id:"edit_mailserver", required: true if hosted_zone_record.type.eql?"MX" %>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% elsif hosted_zone_record.type.eql?("NS")%>
+                    <div id="divNS">
+                      <div class="form-group input-control">
+                        <label for="nameserver" class="form-label">Nameserver</label>
+                        <%=text_field_tag :nameserver, params[:nameserver], class:"form-control input-bx", value: hosted_zone_record.data.chomp("."), id:"edit_nameserver", required: true if hosted_zone_record.type.eql?"NS"%>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% else %>
+                    <div id="divCONTENT">
+                      <div class="form-group input-control">
+                        <label for="content" class="form-label">Content</label>
+                        <%=text_field_tag :content, params[:content], type:"text", class:"form-control input-bx", value: hosted_zone_record.data, id:"edit_content", style:"margin-top: 0px; margin-bottom: 16px; height: 39px;", required: true if hosted_zone_record.type.eql?"TXT"%>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% end %>
+                  </div>
+
+                  <div class="grp4">
+                    <div class="form-group">
+                      <label for="ttl" class="form-label">TTL</label>
+                      <div class>
+                      <div class="dropdownSX">
+                        <div class="dropdownSX1">
+                          <div class="dropdownSX2">
+                            <%= select_tag :ttl, options_for_select([['1 min',60],['2 min',120],['5 min',300],['10 min',600],['15 min',900],['30 min',1800],['1 hr',3600],['2 hr',7200],['5 hr',18000],['12 hr',43200],['1 day',86400]],hosted_zone_record.ttl), class: "form-select", id: "edit_ttl", required: "required" %>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <% if hosted_zone_record.type.eql?("MX")%>
+                    <div id="divMX">
+                      <div class="form-group input-control">
+                        <label for="priority" class="form-label">Priority</label>
+                        <%=text_field_tag :priority, params[:priority], type:"number", class:"form-control input-bx", value: hosted_zone_record.aux,  id:"edit_priority", required: true if hosted_zone_record.type.eql?"MX" %>
+                        <div class="error"></div>
+                      </div>
+                    </div>
+                    <% end %>
+
+                </div>
+                  
+                  <div>
+
+                    <%= link_to_delete "Delete", url: "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}"  ,class:'form-control' ,method: :delete, style:"margin-top:10px"%>
+                    
+                    <%=hidden_field_tag(:primary_id, hosted_zone_record.id)%>
+                    <%=hidden_field_tag(:type, hosted_zone_record.type)%>
+                    <button class="cancel-button btn btn-outline-secondary" style="float:right" id="edit-button_<%=hosted_zone_record.id.to_s%>" type="button">Cancel</button>
+                    <button class="btn btn-md btn-primary" style="float:right;margin-right:4px" type="submit" >Save</button>
+                  </div>
+                </fieldset>
+              <% end %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <%end%>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $("#filter_open").on('click', function(event) {
+    if($("#collapseEX2").hasClass("show")){
+      $("#collapseEX2").css('display','none');
+        $("#collapseEX2").removeClass("show");
+      } else {
+        $("#collapseEX2").css('display','block');
+        $("#collapseEX2").addClass("show");
+      }
+  });
+});
+
+$(document).ready(function() {
+  $("#close1").on('click', function(event) {
+      $("#collapseEX2").css('display','none');
+        $("#collapseEX2").removeClass("show");
+      
+  });
+});
+</script>
+
+<script type="text/javascript">
+
+function ClearFields() {
+  document.getElementById("collapseEX2").reset();
+  document.getElementById("edit-form-clear-field").reset();
+}
+
+  $(document).on("click", ".cancel-button", function() {
+  var collapse = $(this).closest(".collapse");
+  $(collapse).collapse('toggle');
+});
+
+/////// show/hide 
+
+$(document).ready(function(){
+  showDiv('#divA')
+  $("#divPRI").hide()
+  $("#divPRI").find('input').removeAttr('required')
+    $('#txttype').on('change', function() {
+      if ( this.value == 'A')
+      {
+        showDiv("#divA")
+        $("#divPRI").hide()
+        $("#divPRI").find('input').removeAttr('required')
+      }else if (this.value == 'AAAA')
+      {
+        showDiv("#divAAAA")
+        $("#divPRI").hide()
+        $("#divPRI").find('input').removeAttr('required')
+      }else if (this.value == 'CNAME')
+      {
+         showDiv("#divCNAME")
+         $("#divPRI").hide()
+        $("#divPRI").find('input').removeAttr('required')
+      }else if (this.value == 'MX')
+      {
+
+         showDiv("#divMX")
+         $("#divPRI").show()
+         $("#divPRI").find('input').attr('required','required')
+
+      }else if (this.value == 'NS')
+      {
+         showDiv("#divNS")
+         $("#divPRI").hide()
+         $("#divPRI").find('input').removeAttr('required')
+      }else if (this.value == 'TXT')
+      {
+        showDiv("#divTXT")
+        $("#divPRI").hide()
+        $("#divPRI").find('input').removeAttr('required')
+      }else{
+
+      }
+    });
+});
+ 
+function showDiv(divId){
+    var divs = ["#divA","#divAAAA","#divCNAME","#divMX",'#divNS','#divTXT'];
+ 
+    var result = divs.filter(function(elem){
+      return elem != divId; 
+    });
+
+    for (var div of result) {
+    $(div).hide()
+    $(div).find('input:text').val('');
+    $(div).find('textarea:text').val('');
+    $(div).find('input').removeAttr('required')
+    $(div).find('textarea').removeAttr('required')
+    $(div).find('select').removeAttr('required')
+    }
+    $(divId).show();
+    $(divId).find('input').attr('required','required')
+    $(divId).find('textarea').attr('required','required')
+    $(divId).find('select').attr('required','required')
+}
+
+
+/// search 
+
+var searchBox = document.getElementById('searchBox');
+var table = document.getElementById("myTable");
+var trs = table.tBodies[0].getElementsByTagName("tr");
+
+
+function performSearch() {
+  var filter = searchBox.value.toUpperCase();
+  for (var rowI = 0; rowI < trs.length; rowI++) {
+    var tds = trs[rowI].getElementsByTagName("td");
+    trs[rowI].style.display = "none";
+    for (var cellI = 0; cellI < tds.length; cellI++) {
+      if (tds[cellI].innerHTML.toUpperCase().indexOf(filter) > -1) {
+        trs[rowI].style.display = "";
+        continue;
+      }
+    }
+  }
+}
+
+searchBox.addEventListener('keyup', performSearch);
+
+//////////////////////////////////////////////////////////
+</script>
+<%#= javascript_pack_tag 'hosted_zone' %>

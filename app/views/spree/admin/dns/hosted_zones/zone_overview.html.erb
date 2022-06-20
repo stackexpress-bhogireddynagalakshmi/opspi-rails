@@ -1,0 +1,124 @@
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= @zone_name %>
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col">
+            <!-- Nav -->
+          <ul class="nav nav-tabs nav-overflow header-tabs">
+           
+              <li class="nav-item">
+              <a class="nav-link active" id="overview-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview </a>
+              </li>
+
+              <li class="nav-item">
+              <a class="nav-link" id="dns-tab" data-toggle="tab" href="#dns" role="tab" aria-controls="dns" aria-selected="false">DNS</a>
+              </li>              
+
+              <li class="nav-item">
+              <a class="nav-link" id="mail-tab" data-toggle="tab" href="#mail" role="tab" aria-controls="mail" aria-selected="false">Mail</a>
+              </li>
+
+              <li class="nav-item">
+              <a class="nav-link" id="website-tab" data-toggle="tab" href="#website" role="tab" aria-controls="website" aria-selected="false">Website</a>
+              </li>
+
+            
+          </ul>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <div class="tab-content" id="myTabContent">
+
+    <div class="tab-pane fade active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+          <div class="alert alert-secondary no-objects-found">
+            <label class="form-label" style="margin-top: 0.5rem;"> Overview </label>
+          </div>
+    
+    </div>
+
+    <div class="tab-pane fade" id="dns" role="tabpanel" aria-labelledby="dns-tab">
+   
+
+          <%= render partial: 'spree/admin/dns/hosted_zones/dns_records' %>
+    </div>
+
+    <div class="tab-pane fade" id="mail" role="tabpanel" aria-labelledby="mail-tab">
+    <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
+    </div>
+
+    <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">
+
+            <div class="card">
+            <div class="card-body">
+                <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
+
+                <div class="form-group">
+                    <label class="form-label">Select Domain</label>
+                
+                    <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains), class: 'form-select js-filterable', prompt: 'Select Web Domain'%>
+                </div> 
+                
+                <div class="input-group">
+                    <div>
+                        <%=submit_tag 'Get Started',class: 'btn btn-primary lift'%>
+                    </div>
+                </div>
+                <div class="redirect" onmouseover = "myFunction()">
+                </div>
+                <% end %>
+                </div>
+            </div>
+
+            <div class="card mt-2">
+            <div class="table-responsive">
+            <table class="table table-sm card-table" style="width:100%">
+            <thead>
+                <tr>
+                <th>Database Name</th>
+                <th>Database User</th>
+                <th style="text-align:end">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="fs-base">
+            <%= render partial: 'spree/admin/dns/hosted_zones/database_index', collection: @resources, as: :database %>
+            </tbody>
+            </table>
+            </div>
+            </div>
+
+            <div class="card">
+            <div class="table-responsive">
+            <table class="table table-sm card-table" style="width:100%">
+                <thead>
+                <tr>
+                <th>ID</th>
+                <th>Web Domain</th>
+                <th>Username</th>
+                <th>User identifier (UID)</th>
+                <th>Group identifier (GID)</th>
+                <th>Directory</th>
+                <th>Active</th>
+                <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody class="fs-base">
+                <%= render partial: 'spree/admin/sites/ftp_users/index', collection: @ftp_user, as: :ftp_user %>
+                </tbody>
+            </table>
+            </div>
+            </div>
+    </div>
+
+
+  </div>
