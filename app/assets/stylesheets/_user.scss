@@ -2,3 +2,26 @@
 // user.scss
 // Use this to write your custom SCSS
 //
+
+.nav-sm {
+
+    .nav-link {
+      font-size: 1.1rem;
+    }
+}
+
+.nav-link {
+    font-size: 1.1rem;
+}
+
+.table-sm {
+    font-size: 1rem;
+}
+
+.fs-base {
+    font-size: 1rem !important;
+}
+
+.btn{
+    font-size: 1rem !important; 
+}
