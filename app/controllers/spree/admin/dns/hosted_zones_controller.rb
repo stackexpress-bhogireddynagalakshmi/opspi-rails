@@ -4,7 +4,7 @@ module Spree
   module Admin
     module Dns
       class HostedZonesController < Spree::Admin::BaseController
-        # require 'isp_config/hosted_zone'
+        include ApisHelper
         before_action :ensure_hosting_panel_access
         before_action :set_zone_list, only: %i[edit update destroy dns]
         def index
@@ -26,14 +26,20 @@ module Spree
           end
         end
 
-        def enable_web_service
+        def enable_dns_services
           @domain = params["website"]["origin"]
+          @type = params["website"]["type"]
 
           @tasks = []
           
           build_tasks
+          if @type == 'web'
+            flash[:success] = "A records will be updated"
+          end
 
-          flash[:success] = "A records will be updated"
+          if @type == 'mail'
+            flash[:success] = "MX records will be updated"
+          end
           
           TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
 
@@ -41,8 +47,13 @@ module Spree
 
         end
 
-        def disable_web_service
-          @response = isp_website_api.destroy(params["website"]["origin"])
+        def disable_dns_services
+          if params["website"]["type"] == 'web'
+            @response = isp_website_api.destroy(params["website"]["origin"])
+          end
+          if params["website"]["type"] == 'mail'
+            @response = mail_domain_api.destroy(params["website"]["origin"])
+          end
           set_flash
           respond_to do |format|
             format.js { render inline: "location.reload();" }
@@ -88,20 +99,27 @@ module Spree
         end
 
         def get_config_details
-          web_domains = isp_website_api.all
-          web_domain_id = web_domains[:response].response.collect { |x| x.domain_id if x.domain.eql?(params[:website][:origin]) }
-          web_domain = web_domain_id.compact.first
+          web_domain = get_web_domain_id(params[:website][:origin])
+
+          mail_domain = get_mail_domain_id(params[:website][:origin])
 
           respond_to do |format|
-            format.js { render json: {web: web_domain }}
+            format.js { render json: {web: web_domain,mail: mail_domain}}
           end
         end
 
         private
 
         def build_tasks
-          prepare_web_domain_task
-          prepare_a_record_task
+          if @type == 'web'
+            prepare_web_domain_task
+            prepare_a_record_task
+          end
+
+          if @type == 'mail'
+            prepare_mail_domain_task
+            prepare_mx_record_task
+          end
   
           @tasks = @tasks.flatten
         end
@@ -133,43 +151,86 @@ module Spree
           dns_domain = dns_response[:response].response.map{|k| k.id if k[:origin] == "#{@domain}."}
           dns_record_response = host_zone_api.get_all_hosted_zone_records(dns_domain.compact.first)
           dns_a_recs = dns_record_response[:response].response.map{|k| k.id if k[:type] == "A"}
-          
+          task_data = {
+            id: 2,
+            type: "create_dns_record",
+            domain: @domain,
+            data: {
+              type: "A",
+              name: @domain,
+              ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
+              ttl: "3600",
+              hosted_zone_id: dns_domain.compact.first
+            },
+            depends_on: nil,
+            sidekiq_job_id: nil
+          }
           unless dns_a_recs.compact.first.blank?
             dns_a_recs.compact.each do |a_record| 
               host_zone_record_api.destroy({type: "A",id: a_record})
             end
-            @tasks <<
-              {
-                id: 2,
-                type: "create_dns_record",
-                domain: @domain,
-                data: {
-                  type: "A",
-                  name: @domain,
-                  ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
-                  ttl: "3600",
-                  hosted_zone_id: dns_domain.compact.first
-                },
-                depends_on: nil,
-                sidekiq_job_id: nil
-              }
+            @tasks << task_data
+              
           else
-            @tasks <<
-              {
-                id: 2,
-                type: "create_dns_record",
-                domain: @domain,
-                data: {
-                  type: "A",
-                  name: @domain,
-                  ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
-                  ttl: "3600",
-                  hosted_zone_id: dns_domain.compact.first
-                },
-                depends_on: nil,
-                sidekiq_job_id: nil
-              }
+            @tasks << task_data
           end
+        end
+
+        def prepare_mail_domain_task
+          @tasks <<
+            {
+              id: 1,
+              type: "create_mail_domain",
+              domain: @domain,
+              data: {
+                domain: @domain,
+                active: 'y'
+              },
+              depends_on: nil,
+              sidekiq_job_id: nil
+            }
+        end
+
+        def prepare_mx_record_task
+          dns_response = host_zone_api.all_zones
+          dns_domain = dns_response[:response].response.map{|k| k.id if k[:origin] == "#{@domain}."}
+          dns_record_response = host_zone_api.get_all_hosted_zone_records(dns_domain.compact.first)
+          dns_mx_recs = dns_record_response[:response].response.map{|k| k.id if k[:type] == "MX"}
+          task_data = {
+            id: 2,
+            type: "create_dns_record",
+            domain: @domain,
+            data: {
+              type: "MX",
+              name: @domain,
+              mailserver: ENV['ISPCONFIG_MAIL_SERVER_01'],
+              ttl: 60,
+              priority: 10,
+              hosted_zone_id: dns_domain.compact.first
+            },
+            depends_on: nil,
+            sidekiq_job_id: nil
+          }
+          unless dns_mx_recs.compact.first.blank?
+            dns_mx_recs.compact.each do |mx_record| 
+              host_zone_record_api.destroy({type: "MX",id: mx_record})
+            end
+            @tasks << task_data             
+          else
+            @tasks << task_data     
+          end
+        end
+
+        def get_web_domain_id(origin)
+          web_domains = isp_website_api.all
+          web_domain_id = web_domains[:response].response.collect { |x| x.domain_id if x.domain.eql?(origin) }
+          web_domain_id.compact.first
+        end
+
+        def get_mail_domain_id(origin)
+          mail_domains = mail_domain_api.all
+          mail_domain_id = mail_domains[:response].response.collect { |x| x.domain_id if x.domain.eql?(origin) }
+          mail_domain_id.compact.first
         end
 
         def set_flash
@@ -178,18 +239,6 @@ module Spree
           else
             flash.now[:error] = @response[:message]
           end
-        end
-
-        def host_zone_api
-          current_spree_user.isp_config.hosted_zone
-        end
-
-        def host_zone_record_api
-          current_spree_user.isp_config.hosted_zone_record
-        end
-
-        def isp_website_api
-          current_spree_user.isp_config.website
         end
 
         def set_zone_list
