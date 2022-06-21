@@ -75,3 +75,64 @@
       </table>
     </div>
   </div>
+
+
+  <%= render partial: '/spree/admin/shared/modal/modal' %>
+
+
+<script type="text/javascript">
+  
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+})
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+
+    $(document).on('click', '.configure-mailbox-modal-link', function(){
+      var email = $(this).data('email');
+      var name = $(this).data('name');
+      var smtp = $(this).data('smtp');
+      var imap = $(this).data('imap');
+      var pop = $(this).data('pop');
+      var smtp = $(this).data('smtp');
+      var webmailUrl = $(this).data('webmail-url');
+      $('#exampleModalLabel').html("MailBox Configuration Details");
+      // <tr>
+      //         <td><b>SMTP:</b></td>
+      //         <td>${smtp}</td>
+      //       </tr>
+      $('#exampleModal .modal-body').html(`
+        <table>
+          <tbody>
+            <tr>
+              <td><b>Email:</b></td>
+              <td>${email}</td>
+            </tr>
+            <tr>
+              <td><b>Name:</b></td>
+              <td>${name}</td>
+            </tr>
+            
+            <tr>
+              <td><b>POP:</b></td>
+              <td>${pop}</td>
+            </tr>
+            <tr>
+              <td><b>SMTP:</b></td>
+              <td>${smtp}</td>
+            </tr>
+            <tr>
+              <td><b>WEBMAIL&nbsp;URL:</b></td>
+              <td>${webmailUrl}</td>
+            </tr>
+          </tbody>
+        </table>
+      `);
+      $('#modal-save-button').hide();
+      $('#exampleModal').modal('show');
+    });
+  });
+</script>
