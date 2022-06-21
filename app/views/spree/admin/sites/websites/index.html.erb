@@ -56,7 +56,7 @@
         <th style="text-align:end;">Actions</th>
         </tr>
       </thead>
-      <tbody class="fs-base">
+      <tbody class="fsbase">
       <%= render partial: 'spree/admin/sites/websites/index', collection: @resources, as: :website %>
       </tbody>
     </table>
@@ -82,7 +82,7 @@
         <th>Action</th>
         </tr>
       </thead>
-      <tbody class="fs-base">
+      <tbody class="fsbase">
       <%@windows_resources.reverse.each do |domain| %>
         <tr data-hook="admin_orders_index_rows">
           <td><%=domain.domain_name%></td>
