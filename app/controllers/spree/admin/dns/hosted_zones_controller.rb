@@ -34,7 +34,7 @@ module Spree
           
           build_tasks
           
-          flash[:success] = "Wizard Jobs Started. Your services will be activated in few miniutes"
+          flash[:success] = I18n.t('wizard.wizard_started')
 
           TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
 

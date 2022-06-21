@@ -170,6 +170,7 @@ en:
     enable_mail_service_help: Mailboxes would be created. You would get to choose password on next screen
     enable_mail_service_alert: Confirming this will create Mail domain and all the unmatched MX records will be deleted.
     disable_mail_service_alert: Confirming this will disable mail service.
+    wizard_started: Wizard Jobs Started. Your services will be activated in few miniutes
   
 
   my_store:
