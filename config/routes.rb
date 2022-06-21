@@ -93,6 +93,9 @@ Rails.application.routes.draw do
         resources :domains
       end
 
+      post 'dns/hosted_zones/enable_dns_services', :controller=> 'dns/hosted_zones',:action=>"enable_dns_services", as: 'enable_dns_services'
+      post 'dns/hosted_zones/disable_dns_services', :controller=> 'dns/hosted_zones',:action=>"disable_dns_services", as: 'disable_dns_services'
+      post 'dns/hosted_zones/get_config_details', :controller=> 'dns/hosted_zones',:action=>"get_config_details", as: 'get_config_details'
       get 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"index", as: 'site_builder'
       post 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"create", as: 'site_builder_create'
 
