@@ -8,7 +8,7 @@ class HostingController < Spree::StoreController
   helper Spree::Core::Engine.helpers
 
   def servers
-    @products = current_store.try(:account).try(:spree_products).where(subscribable: true)
+    @products = current_store.try(:account).try(:spree_products).where(subscribable: true, visible: true)
     case params[:slug]
     when 'vps'
     when 'linux-servers'
