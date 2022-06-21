@@ -98,6 +98,37 @@ module Spree
           @hosted_zone_records = @hosted_zone_records_reponse[:response][:response]
         end
 
+        def zone_overview
+          @zone_name = params[:zone_name]
+          @dns_id = params[:dns_id]
+
+          @hosted_zone_record = HostedZoneRecord.new
+          @hosted_zone = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:dns_id])
+          @zone_list = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:dns_id])
+          @hosted_zone_records_reponse = host_zone_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
+          @hosted_zone_records = @hosted_zone_records_reponse[:response][:response]
+
+          @user = current_spree_user.isp_config.mail_user.all
+          @respon = @user[:response].response
+          
+          for element in  @respon
+            if element.login.split('@')[1] == @zone_name
+             @mailboxes = mail_user_api.find(element.mailuser_id)[:response].response      
+            end
+          end
+
+          @web_domain = current_spree_user.isp_config.website.all[:response].response
+          for el in @web_domain
+            if el.domain == @zone_name
+              @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response 
+              
+              @ftp_user = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
+            end
+          end
+
+
+        end 
+
         def get_config_details
           web_domain = get_web_domain_id(params[:website][:origin])
 

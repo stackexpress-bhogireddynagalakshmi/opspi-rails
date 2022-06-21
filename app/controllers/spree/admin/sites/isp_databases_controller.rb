@@ -22,7 +22,8 @@ module Spree
         def destroy
           @response = isp_config_api.destroy(params)
           set_flash
-          redirect_to admin_sites_isp_databases_path
+          # redirect_to admin_sites_isp_databases_path
+          redirect_to request.referrer
         end
 
         def show

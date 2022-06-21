@@ -1,0 +1,107 @@
+<div class="card">
+            <div class="table-responsive">
+            <table class="table table-sm card-table" style="width:100%">
+                <thead>
+                <tr>
+                <th>ID</th>
+                <th>Web Domain</th>
+                <th>Username</th>
+                <th>User identifier (UID)</th>
+                <th>Group identifier (GID)</th>
+                <th>Directory</th>
+                <th>Active</th>
+                <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody class="fs-base">
+                <%= render partial: 'spree/admin/sites/ftp_users/index', collection: @ftp_user, as: :ftp_user %>
+                </tbody>
+            </table>
+    </div>
+    </div>
+
+<%= render partial: '/spree/admin/shared/modal/modal' %>
+
+
+<script type="text/javascript">
+    
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+    })
+
+    $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+    });
+
+    $(document).on('click', '.configure-modal-link', function(){
+    var userName = $(this).data('username');
+    var pwdDiv = $(this).data('pwd-div-id');
+    if($('#'+pwdDiv).is(':empty')){
+        var password = $(this).data('password');
+    }
+    else{
+        var password = $('#'+pwdDiv).html();
+    }
+    var host = $(this).data('host');
+    var port = $(this).data('port');
+    var email = $(this).data('email');
+    var id = $(this).data('id');
+    $('#exampleModalLabel').html("FTP Configuration Details");
+    $('#exampleModal .modal-body').html(`
+        <table>
+        <tbody class="ftp_user_${id}">
+            <tr>
+            <td><b>Username:</b></td>
+            <td>${userName}</td>
+            </tr>
+            
+            <tr>
+            <td><b>Host:</b></td>
+            <td>${host}</td>
+            </tr>
+            <tr>
+            <td><b>Port:</b></td>
+            <td>${port}</td>
+            </tr>
+            <tr>
+            <td>Reset Password</td>
+            <td>
+                <a href="/admin/sites/ftp_users/reset_password?email=${email}&type=create_ftp_account&div_class=ftp_user_${id}" data-remote="true">Reset Pasword</a>
+                <div class='password-text'></div>
+            </td>
+            </tr>
+        </tbody>
+        </table>
+    `);
+    $('#modal-save-button').hide();
+    $('#exampleModal').modal('show');
+    });
+
+    var updateFtpUser = function(element){
+    var ftpUserId = element.attributes.data_ftp_user_id.value;
+    var domainStatus = element.value;
+    if (domainStatus == 'y') {
+        var dataConfirm = "Are you sure to Deactivate this Domain?, This will affect your other services";
+        var active = 'n';
+    }
+    else {
+        var dataConfirm = "Are you sure to Activate this Domain?";
+        var active = 'y';
+    }
+
+    result = confirm(dataConfirm);
+    if (result) {
+        setTimeout(function(){
+        $.ajax({
+            type: "PATCH",
+            url: "/admin/sites/ftp_users/"+ftpUserId,
+            data: { 
+            ftp_user: {
+                active: active
+            }
+            }
+        });
+        } ,5);
+    }
+    }
+</script>
