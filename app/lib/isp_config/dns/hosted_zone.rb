@@ -39,8 +39,8 @@ module IspConfig
         if response.code == "ok"
           user.hosted_zones.create({ isp_config_host_zone_id: response["response"] })
           create_ns_records(response["response"] , create_params)
-          create_a_records(response["response"] , create_params)
-          create_mx_record(response["response"], create_params)
+          # create_a_records(response["response"] , create_params)
+          # create_mx_record(response["response"], create_params)
 
           { success: true, message: I18n.t('isp_config.host_zone.create'), response: response }
         else
@@ -62,30 +62,30 @@ module IspConfig
         end   
       end
 
-       def create_a_records(host_zone_id,create_params)
-        ns_record_params = {
-                          type: "A",
-                          name: create_params[:name],
-                          ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
-                          ttl: "60",
-                          hosted_zone_id: host_zone_id
-                        }
+      #  def create_a_records(host_zone_id,create_params)
+      #   ns_record_params = {
+      #                     type: "A",
+      #                     name: create_params[:name],
+      #                     ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
+      #                     ttl: "60",
+      #                     hosted_zone_id: host_zone_id
+      #                   }
        
-         user.isp_config.hosted_zone_record.create(ns_record_params)
-      end
+      #    user.isp_config.hosted_zone_record.create(ns_record_params)
+      # end
 
-       def create_mx_record(hosted_zone_id, params)
-         ns_record_params = {
-                          type: "MX",
-                          name: params[:name],
-                          mailserver: "mail.#{get_sanitized_domain(params[:name])}",
-                          ttl: 60,
-                          priority: 60,
-                          hosted_zone_id: hosted_zone_id
-                        }
+      #  def create_mx_record(hosted_zone_id, params)
+      #    ns_record_params = {
+      #                     type: "MX",
+      #                     name: params[:name],
+      #                     mailserver: "mail.#{get_sanitized_domain(params[:name])}",
+      #                     ttl: 60,
+      #                     priority: 60,
+      #                     hosted_zone_id: hosted_zone_id
+      #                   }
 
-         response = user.isp_config.hosted_zone_record.create(ns_record_params)
-      end
+      #    response = user.isp_config.hosted_zone_record.create(ns_record_params)
+      # end
 
       def get_zone(id)
         response = query({

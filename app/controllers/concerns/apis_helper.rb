@@ -12,4 +12,20 @@ module ApisHelper
   def db_user_api
     current_spree_user.isp_config.database
   end
+
+  def mail_domain_api
+    current_spree_user.isp_config.mail_domain
+  end
+
+  def host_zone_api
+    current_spree_user.isp_config.hosted_zone
+  end
+
+  def host_zone_record_api
+    current_spree_user.isp_config.hosted_zone_record
+  end
+
+  def isp_website_api
+    current_spree_user.isp_config.website
+  end
 end
