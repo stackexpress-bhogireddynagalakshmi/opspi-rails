@@ -14,7 +14,7 @@ Wizard status for <%=batch_job.first[:domain]%>
         <th> Action </th>
       </tr>
       </thead>
-      <tbody class="fs-base">
+      <tbody class="fsbase">
         <% batch_job.each do |job|%>
           <tr class="<%=job[:sidekiq_job_id]%>">
             <td> <%=job[:type]%></td>
