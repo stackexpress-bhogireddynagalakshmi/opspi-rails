@@ -21,6 +21,9 @@ module Spree
 
       base.scope :reseller_products, -> { where(reseller_product: true) }
 
+
+      base.validates :server_type, presence: { message: "can't be blank"}
+
       base.enum server_type: {
         windows: 0,
         linux: 1,
