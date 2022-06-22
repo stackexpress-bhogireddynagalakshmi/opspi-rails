@@ -60,7 +60,16 @@
   <%end%>
 
 
-  <%if current_spree_user.end_user? %>
+
+  <%if current_spree_user.end_user? && current_spree_user.account.reseller_club_configured?%>
+    <ul class="nav nav-sidebar border-bottom" id="sidebarDomainReg">
+      <%= tab 'Registered Domains', url: spree.admin_domain_registrations_path,  icon: 'report.svg'%>
+    </ul>
+  <%end%>
+
+
+  <%if current_spree_user.end_user?%>
+
     <ul class="nav nav-sidebar border-bottom" id="sidebarHostingControl">
       <%= main_menu_tree Spree.t(:hosting_controls), icon: "report.svg", sub_menu: "hosting_control", url: "#sidebar-hosting_controls" %>
     </ul>
