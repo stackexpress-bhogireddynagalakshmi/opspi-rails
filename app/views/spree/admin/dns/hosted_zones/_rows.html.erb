@@ -8,7 +8,7 @@ p{
     <div class="card-body">
       <!-- Text -->
       <div class="d-flex" style="justify-content: space-between;">
-      <p class="card-text" style="word-break: break-all;font-size: 1rem">
+      <p class="card-text fsbase" style="word-break: break-all;">
       <%=link_to hosted_zone.origin.chomp("."), dns_admin_dns_hosted_zone_path(hosted_zone.id, :dns_name => hosted_zone.origin.chomp(".")), class: hosted_zone %>
       </p>
       <span class="ml-2 justify-content-end">
