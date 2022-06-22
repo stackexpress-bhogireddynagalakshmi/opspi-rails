@@ -7,6 +7,7 @@ module Spree
       include Spree::Admin::DomainRegistrationsHelper
 
       before_action :set_tld_pricing, only: [:new]
+      before_action :ensure_reseller_club_configured, except: [:setup_reseller_club]
 
       def index
         
@@ -137,6 +138,15 @@ module Spree
 
       def validate_pricing_for_domain(options)
         options  # TODO: calculate the pricing again and update the hash before saving into database
+      end
+
+      def ensure_reseller_club_configured
+        return nil if current_spree_user.end_user?
+
+        if current_spree_user.user_key.blank? || current_spree_user.user_key.reseller_club_account_id.blank?
+           flash[:error] = 'Please configure ResellerClub credentials before using Domain Resgistration service'
+          redirect_to  setup_reseller_club_admin_domain_registrations_url  
+        end
       end
     end
   end
