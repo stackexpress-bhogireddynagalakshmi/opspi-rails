@@ -55,7 +55,7 @@ module Spree
         dns_resolver = DnsManager::CnameResolver.new(custom_domain).call
         unless dns_resolver.cname_configured?
           return { success: false,
-                   msg: I18n.t('my_store.cname_not_added', cname: ENV['CNAME_POINTER_DOMAIN'], custom_domain: custom_domain), current_cname: dns_resolver.cname }
+                   msg: I18n.t('my_store.cname_not_added', cname: ENV['CNAME_POINTER_DOMAIN'], custom_domain: custom_domain).html_safe, current_cname: dns_resolver.cname }
         end
 
         { success: true, msg: I18n.t('my_store.domain_validated') }
