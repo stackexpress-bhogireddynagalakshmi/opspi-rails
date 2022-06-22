@@ -174,7 +174,7 @@
     var origin_type = "web"
 
     if (webDomainId == 'null') {
-      var dataConfirm = "Are you sure to Activate Web services for this Domain?";
+      var dataConfirm = '<%= I18n.t('wizards.enable_web_service_alert') %>';
 
       result = confirm(dataConfirm);
       if (result) {
@@ -193,7 +193,7 @@
       }
     }
     else {
-      var dataConfirm = "Are you sure to Deactivate Web service for this Domain?, This will affect your other services";
+      var dataConfirm = '<%= I18n.t('wizards.disable_web_service_alert') %>';
       result = confirm(dataConfirm);
       if (result) {
         setTimeout(function(){
@@ -219,7 +219,7 @@
     var origin_type = "mail"
 
     if (mailDomainId == 'null') {
-      var dataConfirm = "Are you sure to Activate Mail Service for this Domain?";
+      var dataConfirm = '<%= I18n.t('wizards.enable_mail_service_alert') %>';
 
       result = confirm(dataConfirm);
       if (result) {
@@ -238,7 +238,7 @@
       }
     }
     else {
-      var dataConfirm = "Are you sure to Deactivate Mail service for this Domain?, This will affect your other services";
+      var dataConfirm = '<%= I18n.t('wizards.disable_mail_service_alert') %>';
       result = confirm(dataConfirm);
       if (result) {
         setTimeout(function(){

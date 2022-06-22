@@ -33,14 +33,9 @@ module Spree
           @tasks = []
           
           build_tasks
-          if @type == 'web'
-            flash[:success] = "A records will be updated"
-          end
-
-          if @type == 'mail'
-            flash[:success] = "MX records will be updated"
-          end
           
+          flash[:success] = I18n.t('wizard.wizard_started')
+
           TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
 
           redirect_to admin_dns_hosted_zones_path
