@@ -32,7 +32,7 @@ module ApplicationHelper
   end
 
   def reseller_plans(user)
-    if user.have_linux_access? && have_windows_access?
+    if user.have_linux_access? && user.have_windows_access?
       plans = [['Windows Hosting Plan', 'windows'], ['Linux Hosting Plan', 'linux']]
     end
 
