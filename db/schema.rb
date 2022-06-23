@@ -283,6 +283,7 @@ ActiveRecord::Schema.define(version: 2022_06_21_105936) do
     t.boolean "enabled"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "quota_type_id"
   end
 
   create_table "protected_folder_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

@@ -15,6 +15,8 @@ class HostingController < Spree::StoreController
       @products = @products.linux
     when 'windows-servers'
       @products = @products.windows
+    when 'reseller-plans'
+      @products = @products.reseller_plan
     end
 
     render 'servers'
