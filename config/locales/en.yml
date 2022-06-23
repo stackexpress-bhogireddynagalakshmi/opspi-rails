@@ -175,7 +175,9 @@ en:
   
 
   my_store:
-    cname_not_added: "Please add %{cname} as CNAME record in your DNS setting of %{custom_domain}."
+    cname_not_added: "- Please setup the following CNAME type record for your domain in order to use it as custom domain:<br/> &nbsp; &nbsp;&nbsp;%{custom_domain} =>  %{cname} <br/>
+      - This may take some time based on DNS provider settings"
+    # cname_not_added: "Please add %{cname} as CNAME record in your DNS setting of %{custom_domain}."
     domain_cannot_be_blank: "Custom domain can't be blank."
     domain_validated: "Custom domain successfully validated. Please check after few minutes."
 
