@@ -193,7 +193,15 @@ module Spree
     end
 
     def have_windows_access?
-       get_purchased_plans.include?('windows')
+      get_purchased_plans.include?('windows')
+    end
+
+    def have_hsphere_access?
+      get_purchased_plans.include?('hsphere')
+    end
+
+    def have_reseller_plan?
+      get_purchased_plans.include?('reseller_plan')
     end
 
     def get_purchased_plans
