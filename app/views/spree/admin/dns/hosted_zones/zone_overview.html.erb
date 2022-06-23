@@ -62,14 +62,14 @@
                 <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
 
                 <div class="form-group">
-                    <label class="form-label">Select Domain</label>
+                    <label class="form-label"></label>
                 
-                    <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains), class: 'form-select js-filterable', prompt: 'Select Web Domain'%>
+                    <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
                 </div> 
                 
                 <div class="input-group">
                     <div>
-                        <%=submit_tag 'Get Started',class: 'btn btn-primary lift'%>
+                        <%=submit_tag 'Start Website',class: 'btn btn-primary lift'%>
                     </div>
                 </div>
                 <div class="redirect" onmouseover = "myFunction()">
