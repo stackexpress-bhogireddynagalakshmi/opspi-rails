@@ -1,0 +1,144 @@
+<style type="text/css">
+  .modal-body{
+    overflow-x: auto;
+  }
+
+  .modal-dialog{
+    max-width: 700px;
+  }
+
+  .modal-body table td{
+    padding: 5px 10px;
+  }
+</style>
+
+<% if @ftp_user.present? %>
+<div class="card">
+            <div class="table-responsive">
+            <table class="table table-sm card-table" style="width:100%">
+                <thead>
+                <tr>
+                <th>ID</th>
+                <th>Web Domain</th>
+                <th>Username</th>
+                <th>User identifier (UID)</th>
+                <th>Group identifier (GID)</th>
+                <th>Directory</th>
+                <th>Active</th>
+                <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody class="fs-base">
+                <%= render partial: 'spree/admin/sites/ftp_users/index', collection: @ftp_user, as: :ftp_user %>
+                </tbody>
+            </table>
+    </div>
+    </div>
+<% else %>
+<div class="alert alert-secondary no-objects-found">
+<label class="form-label" style="margin-top: 0.5rem;"> No FTP Users Found </label>
+</div>
+<% end %>
+
+    <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel1">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" id='modal-close-button'>Close</button>
+          <button type="button" class="btn btn-primary" id='modal-save-button'>Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script type="text/javascript">
+    
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+    })
+
+    $(document).ready(function (argument) {
+    $('#FlashAlertsContainer').removeClass('d-none');
+    });
+
+    $(document).on('click', '.configure-modal-link', function(){
+    var userName = $(this).data('username');
+    var pwdDiv = $(this).data('pwd-div-id');
+    if($('#'+pwdDiv).is(':empty')){
+        var password = $(this).data('password');
+    }
+    else{
+        var password = $('#'+pwdDiv).html();
+    }
+    var host = $(this).data('host');
+    var port = $(this).data('port');
+    var email = $(this).data('email');
+    var id = $(this).data('id');
+    $('#exampleModalLabel1').html("FTP Configuration Details");
+    $('#exampleModal1 .modal-body').html(`
+        <table>
+        <tbody class="ftp_user_${id}">
+            <tr>
+            <td><b>Username:</b></td>
+            <td>${userName}</td>
+            </tr>
+            
+            <tr>
+            <td><b>Host:</b></td>
+            <td>${host}</td>
+            </tr>
+            <tr>
+            <td><b>Port:</b></td>
+            <td>${port}</td>
+            </tr>
+            <tr>
+            <td>Reset Password</td>
+            <td>
+                <a href="/admin/sites/ftp_users/reset_password?email=${email}&type=create_ftp_account&div_class=ftp_user_${id}" data-remote="true">Reset Pasword</a>
+                <div class='password-text'></div>
+            </td>
+            </tr>
+        </tbody>
+        </table>
+    `);
+    $('#modal-save-button').hide();
+    $('#exampleModal1').modal('show');
+    });
+
+    var updateFtpUser = function(element){
+    var ftpUserId = element.attributes.data_ftp_user_id.value;
+    var domainStatus = element.value;
+    if (domainStatus == 'y') {
+        var dataConfirm = "Are you sure to Deactivate this Domain?, This will affect your other services";
+        var active = 'n';
+    }
+    else {
+        var dataConfirm = "Are you sure to Activate this Domain?";
+        var active = 'y';
+    }
+
+    result = confirm(dataConfirm);
+    if (result) {
+        setTimeout(function(){
+        $.ajax({
+            type: "PATCH",
+            url: "/admin/sites/ftp_users/"+ftpUserId,
+            data: { 
+            ftp_user: {
+                active: active
+            }
+            }
+        });
+        } ,5);
+    }
+    }
+</script>

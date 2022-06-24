@@ -153,22 +153,6 @@ display: block;
 } */
 </style>
 
-<div class="header mt-4">
-  <div class="header-body">
-    <div class="row align-items-center">
-      <div class="col">
-        <h1 class="header-title">
-        <%= link_to Spree.t(:dns_management), admin_dns_hosted_zones_path %>/
-        <%= params[:dns_name] %>
-        </h1>
-        
-      </div>
-      <div class="col-auto">
-      </div>
-    </div>
-
-  </div>
-</div>
 
 <%= flash_messages %>
 
@@ -233,7 +217,7 @@ display: block;
             <div class="input-group">
               <%=text_field_tag :name,params[:name], class:"form-control", id:"txtname", required:"required" %>
               <div class="input-group-text">
-                <span>.<%= params[:dns_name]%></span>
+                <span>.<%= params[:zone_name]%></span>
               </div>
             </div>
           </div>
@@ -309,7 +293,7 @@ display: block;
           </div>
         </div>      
     </div>
-      <%=hidden_field_tag(:hosted_zone_name, params[:dns_name])%>
+      <%=hidden_field_tag(:hosted_zone_name, params[:zone_name])%>
       <div class="float-right">
         <button class="btn btn-outline-secondary"  type="button" style="float:right;" id="close1">Cancel</button>
         <button class="btn btn-md btn-primary" type="submit" style="float:right;margin-right:4px">Save</button>
@@ -334,7 +318,7 @@ display: block;
           <% @hosted_zone_records.each do |hosted_zone_record| %>
             <tr id="<% hosted_zone_record.id %>">
               <td class="col-md-2"><%= hosted_zone_record.type%></td>
-              <td class="col-md-3"><%= hosted_zone_record.name.eql?(params[:dns_name]+".") ? hosted_zone_record.name.chomp(".") : hosted_zone_record.name.chomp("."+params[:dns_name]+".")%></td>    
+              <td class="col-md-3"><%= hosted_zone_record.name.eql?(params[:zone_name]+".") ? hosted_zone_record.name.chomp(".") : hosted_zone_record.name.chomp("."+params[:zone_name]+".")%></td>    
               <% if !hosted_zone_record.type.eql?("MX")%>
               <td class="col-md-3"><%= hosted_zone_record.data.chomp(".")%></td>
               <%else%>
@@ -356,8 +340,8 @@ display: block;
             </tr>
             <tr class="collapse" id="edit-form_<%=hosted_zone_record.id.to_s%>">
             <td colspan="5"> 
-            <%=form_tag admin_dns_hosted_zone_hosted_zone_record_path(@hosted_zone),  class:"form_2", id: "edit-form-clear-field", value: hosted_zone_record.id, method: "put" do %>
-             <%=hidden_field_tag(:hosted_zone_name, params[:dns_name])%>
+            <%=form_tag   "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}",  class:"form_2", id: "edit-form-clear-field", value: hosted_zone_record.id, method: "put" do %>
+             <%=hidden_field_tag(:hosted_zone_name, params[:zone_name])%>
               <fieldset>
                 <div class="grid-container-edit">
                   <div class="grp1">
@@ -371,7 +355,7 @@ display: block;
                   <div class="grp2">
                     <div class="form-group">
                       <label for="name" class="form-label">Name</label>
-                      <%=text_field_tag :name,params[:name], class:"form-control input-bx", value: hosted_zone_record.name.eql?(params[:dns_name]+".") ? hosted_zone_record.name.chomp(".") : hosted_zone_record.name.chomp("."+params[:dns_name]+"."), id:"edit_name", required: "required" %>
+                      <%=text_field_tag :name,params[:name], class:"form-control input-bx", value: hosted_zone_record.name.eql?(params[:zone_name]+".") ? hosted_zone_record.name.chomp(".") : hosted_zone_record.name.chomp("."+params[:zone_name]+"."), id:"edit_name", required: "required" %>
                     </div>
                   </div>
 

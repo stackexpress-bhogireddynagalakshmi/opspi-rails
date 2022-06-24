@@ -44,6 +44,9 @@ Rails.application.routes.draw do
           member do
             get :dns
           end
+          collection do
+            get :zone_overview
+          end
           resources :hosted_zone_records          
         end
       end

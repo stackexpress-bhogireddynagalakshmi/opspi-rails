@@ -42,7 +42,8 @@ module Spree
         def destroy
           @response = ftp_user_api.destroy(ftp_user_id)
           set_flash
-          redirect_to admin_sites_ftp_users_path
+          # redirect_to admin_sites_ftp_users_path
+          redirect_to request.referrer
         end
 
         def update

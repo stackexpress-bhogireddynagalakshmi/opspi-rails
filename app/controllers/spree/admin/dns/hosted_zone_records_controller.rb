@@ -10,13 +10,16 @@ module Spree
         def create
           @response = host_zone_record_api.create(host_zone_record_params)
           set_flash
-          redirect_to dns_admin_dns_hosted_zone_url(@hosted_zone.isp_config_host_zone_id)+"?dns_name=#{host_zone_record_params[:hosted_zone_name]}"
+          # redirect_to dns_admin_dns_hosted_zone_url(@hosted_zone.isp_config_host_zone_id)+"?dns_name=#{host_zone_record_params[:hosted_zone_name]}"
+          redirect_to "/admin/dns/hosted_zones/zone_overview?zone_name=#{host_zone_record_params[:hosted_zone_name]}&dns_id=#{@hosted_zone.isp_config_host_zone_id}"
         end
 
         def update
           @response = host_zone_record_api.update(host_zone_record_params)
           set_flash
-          redirect_to dns_admin_dns_hosted_zone_url(@hosted_zone.isp_config_host_zone_id)+"?dns_name=#{host_zone_record_params[:hosted_zone_name]}"
+          # redirect_to dns_admin_dns_hosted_zone_url(@hosted_zone.isp_config_host_zone_id)+"?dns_name=#{host_zone_record_params[:hosted_zone_name]}"
+          #redirect_to "/admin/dns/hosted_zones/zone_overview?zone_name=#{host_zone_record_params[:hosted_zone_name]}&dns_id=#{@hosted_zone.isp_config_host_zone_id}"
+          redirect_to request.referrer
         end
 
         def destroy
