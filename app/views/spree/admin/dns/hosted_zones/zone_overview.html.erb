@@ -61,7 +61,7 @@
             <div class="card-body">
                 <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
 
-                <div class="form-group">
+                <div class="form-group d-none">
                     <label class="form-label"></label>
                 
                     <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
@@ -69,7 +69,7 @@
                 
                 <div class="input-group">
                     <div>
-                        <%=submit_tag 'Start Website',class: 'btn btn-primary lift'%>
+                        <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift'%>
                     </div>
                 </div>
                 <div class="redirect" onmouseover = "myFunction()">
