@@ -12,6 +12,7 @@
   }
 </style>
 
+<% if @ftp_user.present? %>
 <div class="card">
             <div class="table-responsive">
             <table class="table table-sm card-table" style="width:100%">
@@ -33,6 +34,11 @@
             </table>
     </div>
     </div>
+<% else %>
+<div class="alert alert-secondary no-objects-found">
+<label class="form-label" style="margin-top: 0.5rem;"> No FTP Users Found </label>
+</div>
+<% end %>
 
     <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog" role="document">

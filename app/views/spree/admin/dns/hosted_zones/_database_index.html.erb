@@ -12,6 +12,7 @@
   }
 </style>
 
+<% if @resources.present? %>
 <div class="card mt-2">
 <div class="table-responsive">
 <table class="table table-sm card-table" style="width:100%">
@@ -29,6 +30,11 @@
 </table>
 </div>
 </div>
+<% else %>
+  <div class="alert alert-secondary no-objects-found">
+    <label class="form-label" style="margin-top: 0.5rem;"> No Databases Found </label>
+  </div>
+<% end %>
 
 <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">

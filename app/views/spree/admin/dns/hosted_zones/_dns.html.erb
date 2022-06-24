@@ -340,7 +340,7 @@ display: block;
             </tr>
             <tr class="collapse" id="edit-form_<%=hosted_zone_record.id.to_s%>">
             <td colspan="5"> 
-            <%=form_tag admin_dns_hosted_zone_hosted_zone_records_path(@hosted_zone),  class:"form_2", id: "edit-form-clear-field", value: hosted_zone_record.id, method: "put" do %>
+            <%=form_tag   "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}",  class:"form_2", id: "edit-form-clear-field", value: hosted_zone_record.id, method: "put" do %>
              <%=hidden_field_tag(:hosted_zone_name, params[:zone_name])%>
               <fieldset>
                 <div class="grid-container-edit">
