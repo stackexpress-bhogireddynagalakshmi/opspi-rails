@@ -20,6 +20,18 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
+   
+
+      $('.quota-enable-checkbox').on('change',function(){
+        var quotaValueInput = $(this).closest('.quota-row').find('.quota-value');
+        if (this.checked){
+          quotaValueInput.val("1");
+        }
+        else{
+           quotaValueInput.val("0");
+        }
+      });
+
       $('.quota-checkbox').on('change',function(){
         var quotaValueInput = $(this).closest('.quota-row').find('.quota-value');
         if (this.checked){

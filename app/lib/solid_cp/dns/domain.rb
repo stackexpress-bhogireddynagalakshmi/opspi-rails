@@ -179,7 +179,7 @@ module SolidCp
 
         hash_params = {
           "packageId" => user.packages.first.try(:solid_cp_package_id),
-          "domainName" => params[:domain_name],
+          "domainName" => sanitze_domain(params[:domain_name]),
           "domainType" => 'Domain',
           "createWebSite" => true,
           "createDnsZone" => false,
@@ -206,6 +206,12 @@ module SolidCp
         else
           disable_domain_dns(domain_id)
         end
+      end
+
+      def sanitze_domain(domain)
+        domain = domain[0..-2] if domain[-1] == '.'
+
+        domain
       end
 
     end

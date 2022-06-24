@@ -27,6 +27,9 @@ default:
           :url: /servers/linux-servers
         - :title: Windows Dedicated Servers
           :url: /servers/windows-servers
+      super_admin_items:
+        - :title: Reseller Plans
+          :url: /servers/reseller-plans
       promo_banners:
         # - subtitle: New collection
         #   title: Summer 2021

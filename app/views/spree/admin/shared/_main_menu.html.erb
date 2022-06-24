@@ -52,25 +52,32 @@
     </ul>
   <% end %>
 
-    <ul class="nav nav-sidebar border-bottom" id="sidebarDomain">
-      <%= tab 'Domain Registrations', url: spree.admin_domain_registrations_path,  icon: 'report.svg'%>
-    </ul>
 
-    <%if current_spree_user.store_admin? || current_spree_user.admin?%>
-     <ul class="nav nav-sidebar border-bottom" id="sidebarDomain">
-      <%= tab 'Reseller Club', url: spree.setup_reseller_club_admin_domain_registrations_path,  icon: 'report.svg'%>
-    </ul>
-    <%end%>
-
-    <%if current_spree_user.end_user? %>
-      <ul class="nav nav-sidebar border-bottom" id="sidebarHostingControl">
-        <%= main_menu_tree Spree.t(:hosting_controls), icon: "report.svg", sub_menu: "hosting_control", url: "#sidebar-hosting_controls" %>
+  <%if current_spree_user.store_admin? || current_spree_user.admin? %>
+      <ul class="nav nav-sidebar border-bottom" id="sidebarDomainReg">
+        <%= main_menu_tree Spree.t(:domain_registration), icon: "report.svg", sub_menu: "domain_registration", url: "#sidebar-domain_registration" %>
       </ul>
-    <%end%>
+  <%end%>
 
-    <%if ENV['OPSBOT_ENABLED'] == "true" %>
-      <ul class="nav nav-sidebar border-bottom" id="sidebarOpsBot">
-        <%= main_menu_tree Spree.t(:opsbot), icon: "report.svg", sub_menu: "opsbot", url: "#sidebar-opsbot" %>
-      </ul>
-    <%end%>
+
+
+  <%if current_spree_user.end_user? && current_spree_user.account.reseller_club_configured?%>
+    <ul class="nav nav-sidebar border-bottom" id="sidebarDomainReg">
+      <%= tab 'Registered Domains', url: spree.admin_domain_registrations_path,  icon: 'report.svg'%>
+    </ul>
+  <%end%>
+
+
+  <%if current_spree_user.end_user?%>
+
+    <ul class="nav nav-sidebar border-bottom" id="sidebarHostingControl">
+      <%= main_menu_tree Spree.t(:hosting_controls), icon: "report.svg", sub_menu: "hosting_control", url: "#sidebar-hosting_controls" %>
+    </ul>
+  <%end%>
+
+  <%if ENV['OPSBOT_ENABLED'] == "true" %>
+    <ul class="nav nav-sidebar border-bottom" id="sidebarOpsBot">
+      <%= main_menu_tree Spree.t(:opsbot), icon: "report.svg", sub_menu: "opsbot", url: "#sidebar-opsbot" %>
+    </ul>
+  <%end%>
 </nav>

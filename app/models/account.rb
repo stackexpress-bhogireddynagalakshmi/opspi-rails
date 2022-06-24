@@ -18,4 +18,8 @@ class Account < ApplicationRecord
   def admin_tenant?
     TenantManager::TenantHelper.admin_tenant.id == id
   end
+
+  def reseller_club_configured?
+    store_admin.user_key.present? && store_admin.user_key.reseller_club_account_id.present? && store_admin.user_key.reseller_club_account_key_enc.present?
+  end
 end

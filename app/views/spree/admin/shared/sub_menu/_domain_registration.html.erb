@@ -1,0 +1,7 @@
+<ul id="sidebar-domain_registration" class="border-top bg-white collapse nav nav-pills nav-stacked" data-hook="admin_domain_registration_sub_tabs">
+    <%= tab 'Registered Domains', url: spree.admin_domain_registrations_path,  icon: 'report.svg'%>
+   
+    <%if !current_spree_user.end_user?%>
+      <%= tab 'Reseller Club', url: spree.setup_reseller_club_admin_domain_registrations_path,  icon: 'report.svg'%>
+    <%end%>
+</ul>

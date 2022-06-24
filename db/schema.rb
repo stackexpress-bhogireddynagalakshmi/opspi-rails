@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_14_081055) do
+ActiveRecord::Schema.define(version: 2022_06_21_105936) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -283,6 +283,7 @@ ActiveRecord::Schema.define(version: 2022_06_14_081055) do
     t.boolean "enabled"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "quota_type_id"
   end
 
   create_table "protected_folder_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -829,6 +830,7 @@ ActiveRecord::Schema.define(version: 2022_06_14_081055) do
     t.integer "validity"
     t.integer "frequency"
     t.boolean "main_panel_access_only", default: false
+    t.boolean "visible", default: true, null: false
     t.index ["available_on"], name: "index_spree_products_on_available_on"
     t.index ["deleted_at"], name: "index_spree_products_on_deleted_at"
     t.index ["discontinue_on"], name: "index_spree_products_on_discontinue_on"

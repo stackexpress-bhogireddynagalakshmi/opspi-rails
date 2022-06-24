@@ -23,17 +23,30 @@ module ApplicationHelper
 
   def plan_type_values(user)
     if user.superadmin?
-      [['Reseller Hosting Plan', 'reseller_plan'], ['Hsphere Plan', 'hsphere'], ['Domain Reselling Plan', 'domain']]
+      superadmin_plans(user)
     elsif user.store_admin?
-      plans = [['Windows Hosting Plan', 'windows'], ['Linux Hosting Plan', 'linux']]
-      plans << ['Hsphere Plan', 'hsphere'] if get_purchased_plans.include?('hsphere')
-
-      plans
+      reseller_plans(user)
     elsif  user.end_user?
-      get_purchased_plans.uniq.collect{|x| [x.titleize, x]}
+      get_purchased_plans.uniq.collect { |x| [x.titleize, x] }
     end
   end
 
+  def reseller_plans(user)
+    if user.have_reseller_plan? && user.isp_config_id.present? && user.solid_cp_id.present?
+      plans = [['Windows Hosting Plan', 'windows'], ['Linux Hosting Plan', 'linux']]
+    end
+
+    plans << ['Hsphere Plan', 'hsphere'] if get_purchased_plans.include?('hsphere')
+    plans || []
+  end
+
+  def superadmin_plans(_user)
+    [
+      ['Reseller Hosting Plan', 'reseller_plan'],
+      ['Hsphere Plan', 'hsphere'],
+      ['Domain Reselling Plan', 'domain']
+    ]
+  end
 
   def get_purchased_plans
     TenantManager::TenantHelper.unscoped_query do
@@ -131,21 +144,21 @@ module ApplicationHelper
     []
   end
 
-  def  get_dns_domains
-    begin
-      domains = current_spree_user.isp_config.hosted_zone.all_zones
-      domains[:response].response.collect{|x| x.origin.chomp(".")}
-    rescue Exception => e
-      Rails.logger.info{ e.message}
-      []
-    end
+  def get_dns_domains
+    domains = current_spree_user.isp_config.hosted_zone.all_zones
+    domains[:response].response.collect { |x| x.origin.chomp(".") }
+  rescue Exception => e
+    Rails.logger.info { e.message }
+    []
   end
 
   def current_domain_chat_widget
     return ENV['CHATWOOT_ADMIN_WEBSITE_TOKEN'] if current_domain.eql?(ENV['BASE_DOMAIN'])
+
     store_account_id = Spree::Store.where(url: current_domain).pluck(:account_id).first
     chatwoot_user = ChatwootUser.where(store_account_id: store_account_id).first
     return nil if chatwoot_user.nil?
+
     chatwoot_user.website_token
     # return nil if current_spree_user.nil?
     # chatwoot_user = ChatwootUser.where(store_account_id: current_spree_user.account.id).first
@@ -219,7 +232,7 @@ module ApplicationHelper
     end
     return 'Failed' if statuses.compact.size.zero?
 
-    return (statuses.compact & %i[failed working queued]).size.positive? ? 'In Progress' : 'Completed'
+    (statuses.compact & %i[failed working queued]).size.positive? ? 'In Progress' : 'Completed'
   end
 
   def get_hsphere_control_panel
