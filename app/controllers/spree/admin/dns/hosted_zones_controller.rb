@@ -105,22 +105,38 @@ module Spree
 
           @user = current_spree_user.isp_config.mail_user.all
           @respon = @user[:response].response
+          @mail_user = mail_user_api.all[:response].response
           
-          for element in  @respon
+          list_arr = []
+          @mail_user.each do |element|
             if element.login.split('@')[1] == @zone_name
-             @mailboxes = mail_user_api.find(element.mailuser_id)[:response].response      
+              list_arr << element
+             @mailboxes = list_arr  
             end
           end
 
           @web_domain = current_spree_user.isp_config.website.all[:response].response
           for el in @web_domain
             if el.domain == @zone_name
-              @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response 
+            @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
               
               @ftp_user = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
             end
           end
 
+          @resources1 = current_spree_user.isp_config.spam_filter_blacklist.all[:response].response
+          @resources2 = current_spree_user.isp_config.spam_filter_whitelist.all[:response].response
+          
+          @mail_forward = current_spree_user.isp_config.mail_forward.all[:response].response
+          list_arr1 = []
+          @mail_forward.each do |elem|
+            if elem.source.split('@')[1] == @zone_name
+              list_arr1 << elem
+             @resources3 = list_arr1  
+            end
+          end
+
+          @mailing_lists = mailing_list_api.all[:response].response
 
         end 
 
@@ -281,6 +297,10 @@ module Spree
 
         def mail_user_api
           current_spree_user.isp_config.mail_user
+        end
+
+        def mailing_list_api
+          current_spree_user.isp_config.mailing_list
         end
 
         def host_zone_params

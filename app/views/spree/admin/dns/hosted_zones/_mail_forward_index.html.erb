@@ -1,0 +1,32 @@
+<% if @resources3.present? %>
+<div class="card">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="width:100%">
+  <thead>
+    <tr>
+    <th>Source</th>
+    <th>Destination</th>
+    <th>Active</th>
+    <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody class="fsbase">
+  <%@resources3.each do |forward| %>
+    <tr data-hook="admin_orders_index_rows" >
+      <td><%=forward.source%></td>
+      <td><%=forward.destination%></td>
+      <td><%=forward.active%></td>
+      <td><%#=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_forward_path(id: forward.forwarding_id),class:"btn btn-success btn-size"%> 
+        <%#=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_mail_forward_path(id: forward.forwarding_id), method: :delete, data: {confirm: t('general.delete')},class:"btn btn-danger btn-size"%>
+      </td>  
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+</div>
+<% else %>
+  <div class="alert alert-secondary no-objects-found">
+  <label class="form-label" style="margin-top: 0.5rem;"> No Forwards found.</label>
+  </div>
+<% end %>

@@ -1,0 +1,32 @@
+<% if @resources1.any? %>
+<div class="card">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="table-layout: fixed; width:100%">
+  <thead>
+    <tr>
+    <th>Email</th>
+    <th>Active</th>
+    <th>Priority</th>
+    <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody class="fsbase">
+  <%@resources1.each do |resource| %>
+    <tr data-hook="admin_orders_index_rows">
+      <td><%=resource.email%></td>
+      <td><%=resource.active%></td>
+      <td><%=resource.priority%></td>
+      <td><%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_spam_filter_blacklist_path(id: resource.wblist_id),class:"btn btn-success btn-size"%> 
+        <%=link_to '<i class="fe fe-trash"></i>'.html_safe,admin_mail_spam_filter_blacklist_path(id: resource.wblist_id), method: :delete, data: {confirm: t('general.delete')},class:"btn btn-danger btn-size"%>
+      </td>  
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+</div>
+<% else %>
+  <div class="alert alert-secondary no-objects-found">
+  <label class="form-label" style="margin-top: 0.5rem;"> No Spamfilter Blacklist found.</label>
+  </div>
+<% end %>

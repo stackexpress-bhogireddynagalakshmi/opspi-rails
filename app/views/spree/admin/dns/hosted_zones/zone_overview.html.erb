@@ -52,7 +52,16 @@
     </div>
 
     <div class="tab-pane fade" id="mail" role="tabpanel" aria-labelledby="mail-tab">
+    <p>Mailbox</p>
     <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
+    <p>Mailing Lists</p>
+    <%= render partial: 'spree/admin/dns/hosted_zones/mailing_list_index' %>
+    <p class="mt-2">Spamfilter Blacklist</p>
+    <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_blacklist_index' %>
+    <p>Spamfilter Whitelist</p>
+    <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_whitelist_index' %>
+    <p>Mail Forward</p>
+    <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
     </div>
 
     <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">

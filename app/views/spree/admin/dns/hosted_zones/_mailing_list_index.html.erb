@@ -1,0 +1,30 @@
+<% if @mailing_lists.any? %>
+<div class="card">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="table-layout: fixed; width:100%">
+  <thead>
+    <tr>
+    <th>Listname</th>
+    <th>Domain</th>
+    <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody class="fsbase">
+  <%@mailing_lists.each do |mailing_list| %>
+    <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
+      <td><%= mailing_list.listname%></td>
+      <td><%= mailing_list.domain%></td>
+         <td><%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_mailing_list_path(id: mailing_list.mailinglist_id) ,class:"btn btn-success btn-size"%> |
+        <%=link_to '<i class="fe fe-trash"></i>'.html_safe,admin_mail_mailing_list_path(id: mailing_list.mailinglist_id), method: :delete, data: {confirm: t('general.delete')} ,class:"btn btn-danger btn-size"%>
+      </td>  
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+</div>
+<% else %>
+  <div class="alert alert-secondary no-objects-found">
+  <label class="form-label" style="margin-top: 0.5rem;"> No Mailing Lists found</label>
+  </div>
+<% end %>
