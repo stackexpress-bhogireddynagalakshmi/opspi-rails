@@ -50,7 +50,8 @@ module Spree
         def destroy
           @response = mail_user_api.destroy(@user.isp_config_mailuser_id)
           set_flash
-          redirect_to admin_mail_mail_boxes_path
+          # redirect_to admin_mail_mail_boxes_path
+          redirect_to request.referrer
         end
 
         private

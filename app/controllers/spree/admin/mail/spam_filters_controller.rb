@@ -47,7 +47,8 @@ module Spree
         def destroy
           @response = isp_config_api.destroy(@spam_filter.isp_config_spam_filter_id)
           set_flash
-          resource_index_path
+          # resource_index_path
+          redirect_to request.referrer
         end
 
         private

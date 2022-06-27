@@ -1,23 +1,25 @@
-<% if @resources2.any? %>
+
+<% if @spam_filter_white.present? %>
 <div class="card">
 <div class="table-responsive">
-<table class="table table-sm card-table" style="table-layout: fixed; width:100%">
+<table class="table table-sm card-table" style="width:100%">
   <thead>
     <tr>
     <th>Email</th>
     <th>Active</th>
     <th>Priority</th>
-    <th>Actions</th>
+    <th style="text-align:end">Actions</th>
     </tr>
   </thead>
   <tbody class="fsbase">
-  <%@resources2.each do |resource| %>
+  <%@spam_filter_white.each do |resource| %>
     <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
       <td><%=resource.email%></td>
       <td><%=resource.active%></td>
       <td><%=resource.priority%></td>
-      <td><%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_spam_filter_whitelist_path(id: resource.wblist_id),class:"btn btn-success btn-size"%> 
+      <td><span class="d-flex justify-content-end"><%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_spam_filter_whitelist_path(id: resource.wblist_id),class:"btn btn-success btn-size", style:"margin-right:5px"%> 
         <%=link_to '<i class="fe fe-trash"></i>'.html_safe,admin_mail_spam_filter_whitelist_path(id: resource.wblist_id), method: :delete, data: {confirm: t('general.delete')},class:"btn btn-danger btn-size"%>
+        </span>
       </td>  
     </tr>
   <% end %>

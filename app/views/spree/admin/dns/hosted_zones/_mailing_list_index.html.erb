@@ -1,4 +1,4 @@
-<% if @mailing_lists.any? %>
+<% if @mailing_lists.present? %>
 <div class="card">
 <div class="table-responsive">
 <table class="table table-sm card-table" style="table-layout: fixed; width:100%">
@@ -6,7 +6,7 @@
     <tr>
     <th>Listname</th>
     <th>Domain</th>
-    <th>Actions</th>
+    <th style="text-align: end">Actions</th>
     </tr>
   </thead>
   <tbody class="fsbase">
@@ -14,8 +14,10 @@
     <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
       <td><%= mailing_list.listname%></td>
       <td><%= mailing_list.domain%></td>
-         <td><%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_mailing_list_path(id: mailing_list.mailinglist_id) ,class:"btn btn-success btn-size"%> |
+         <td><span class="d-flex justify-content-end">
+         <%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_mailing_list_path(id: mailing_list.mailinglist_id) ,class:"btn btn-success btn-size", style:"margin-right: 5px"%> 
         <%=link_to '<i class="fe fe-trash"></i>'.html_safe,admin_mail_mailing_list_path(id: mailing_list.mailinglist_id), method: :delete, data: {confirm: t('general.delete')} ,class:"btn btn-danger btn-size"%>
+        </span>
       </td>  
     </tr>
   <% end %>

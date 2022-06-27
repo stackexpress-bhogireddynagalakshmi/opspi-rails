@@ -7,7 +7,7 @@
     <th>Source</th>
     <th>Destination</th>
     <th>Active</th>
-    <th>Actions</th>
+    <th style="text-align:end">Actions</th>
     </tr>
   </thead>
   <tbody class="fsbase">
@@ -16,9 +16,12 @@
       <td><%=forward.source%></td>
       <td><%=forward.destination%></td>
       <td><%=forward.active%></td>
-      <td><%#=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_forward_path(id: forward.forwarding_id),class:"btn btn-success btn-size"%> 
-        <%#=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_mail_forward_path(id: forward.forwarding_id), method: :delete, data: {confirm: t('general.delete')},class:"btn btn-danger btn-size"%>
-      </td>  
+      <td>
+      <span class="d-flex justify-content-end">
+        <%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_forward_path(id: forward.forwarding_id),class:"btn btn-success btn-size", style: "margin-right:5px"%> 
+        <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_mail_forward_path(id: forward.forwarding_id), method: :delete, data: {confirm: t('general.delete')},class:"btn btn-danger btn-size"%>
+      </span>
+        </td>  
     </tr>
   <% end %>
   </tbody>
