@@ -51,9 +51,9 @@
             <td><%= order_time(@show_only_completed ? order.completed_at : order.created_at) %>  </td> 
             <td class="no-wrap">
                <%if order.domain_successfully_registered? %>
-                <span class="badge badge-complete text-uppercase">Completed </span>
+                <span class="badge bg-success text-uppercase">Completed </span>
               <%else%>
-                 <span class="badge badge-pend text-uppercase">In Complete </span>
+                 <span class="badge bg-warning text-uppercase">In Complete </span>
                <%end%>
             </td>
             <td class="no-wrap">
@@ -63,7 +63,8 @@
             </td>
             <td><%= order.display_total.to_html %></td>
             <td>
-              <span data-toggle="tooltip" data-placement="top" title="<%=order.api_response%>">
+              <!-- data-toggle="tooltip" data-placement="top"  -->
+              <span  title="<%=order.api_response%>">
                 <%=order.domain_successfully_registered? ? 'Response' : ''%>
               </span>
              

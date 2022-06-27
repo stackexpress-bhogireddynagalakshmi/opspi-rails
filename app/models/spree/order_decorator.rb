@@ -80,7 +80,7 @@ module Spree
       line_items.each do |line_item|
         next unless line_item.product.domain?
 
-        DomainRegistrationJob.perform_later(line_item)
+        DomainRegistrationJob.set(wait: 3.second).perform_later(line_item)
       end
     end
 
