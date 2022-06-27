@@ -1,0 +1,3 @@
+class IspConfigClusterConfig < ApplicationRecord
+    
+end
