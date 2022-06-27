@@ -32,6 +32,8 @@ module ApplicationHelper
   end
 
   def reseller_plans(user)
+    plans = []
+    
     if user.have_reseller_plan? && user.isp_config_id.present? && user.solid_cp_id.present?
       plans = [['Windows Hosting Plan', 'windows'], ['Linux Hosting Plan', 'linux']]
     end
