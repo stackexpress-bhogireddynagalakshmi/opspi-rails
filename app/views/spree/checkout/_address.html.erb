@@ -16,9 +16,9 @@
     address_name = "#{address_type[0...4]}_address" %>
     <div class="col-12 <%= address_type == 'shipping' ? 'd-none' : '' %>" data-hook="<%= address_type %>_fieldset_wrapper">
       <div id="<%= address_type %>" data-hook>
-        <h5 class="text-uppercase checkout-content-header <%= address_type == 'shipping' ? 'd-none' : '' %>">
+        <h3 class="text-uppercase checkout-content-header <%= address_type == 'shipping' ? 'd-none' : '' %>">
           <%= Spree.t(address_type + '_address') if address_type != 'shipping'%>
-        </h5>
+        </h3>
         <% if address_type == 'shipping' %>
           <div class="spree-checkbox-container checkout-content-billing-checkbox" data-hook="use_billing">
             <div class="spree-checkbox">
@@ -31,28 +31,41 @@
         <% end %>
 
         <% if @addresses.present? %>
-          <div class="select_address mb-5">
-            <div class="form-group col">
-              <% @addresses.each_with_index do |address, idx| %>
-              <div class="row mb-3" id="<%= [address_type, dom_id(address)].join('_') %>">
-                <label class="form-check-label spree-radio-label col-8">
-                  <%= form.radio_button "#{address_name}_id", address.id, checked: (address.id == try_spree_current_user["#{address_name}_id"] || idx == 0) %>
-                  <span class="spree-radio-label-custom-input"></span>
-                    <%= render "spree/users/address", address: address %>
-                </label>
-                <%= render "spree/users/address_controls", address: address %>
-              </div>
-              <% end %>
-              <div class="row mb-3">
-                <label class="form-check-label spree-radio-label col">
-                  <%= form.radio_button "#{address_name}_id", 0, class: 'form-check-input' %> <h4><%= Spree.t('address_book.other_address') %></h4>
-                  <span class="spree-radio-label-custom-input"></span>
-                </label>
-              </div>
+        <div class="select_address mb-5">
+          <div class="form-group col">
+            <% @addresses.each_with_index do |address, idx| %>
+            <div class="row mb-3" id="<%= [address_type, dom_id(address)].join('_') %>">
+              <label class="form-check col-8">
+                <%= form.radio_button "#{address_name}_id", address.id,class: 'form-check-input',id:'id_radio1', checked: (address.id == try_spree_current_user["#{address_name}_id"] || idx == 0) %>
+                <span class="form-check-label"></span>
+                  <%= render "spree/users/address", address: address %>
+                  <%= render "spree/users/address_controls", address: address %>
+              </label>
+            </div>
+            <% end %>
+            <div class="row mb-3">
+              <label class="form-check col">
+                <%= form.radio_button "#{address_name}_id", 0, class: 'form-check-input' , id:'id_radio2'%> <h4><%= Spree.t('address_book.other_address') %></h4>
+                <span class="form-check-label"></span>
+              </label>
             </div>
           </div>
-        <% end %>
+        </div>
+      <% end %>
        
+      <% if @addresses.present? %>
+        <%= form.fields_for address_name do |address_form| %>
+          <div class="inner checkout-content-inner d-none" data-hook='<%= "#{address_type}_inner" %>' id="radio_form" >
+            <%= render partial: 'spree/addresses/form', locals: {
+              address_name: address_name,
+              address_form: address_form,
+              address_type: address_type,
+              address: Spree::Address.default,
+              form: form
+            } %>
+          </div>
+        <% end %>
+        <% else %>
         <%= form.fields_for address_name do |address_form| %>
           <div class="inner checkout-content-inner" data-hook='<%= "#{address_type}_inner" %>'>
             <%= render partial: 'spree/addresses/form', locals: {
@@ -64,6 +77,7 @@
             } %>
           </div>
         <% end %>
+        <%end%>
       </div>
     </div>
   <% end %>
@@ -74,3 +88,65 @@
 <div id="delete-address-popup" class="delete-address-popup-dropdown hide-on-esc">
   <%= render 'spree/shared/delete_address_popup' %>
 </div>
+
+
+<script type="text/javascript">
+
+$('#order_bill_address_attributes_firstname').prop("disabled", false);
+$('#order_bill_address_attributes_lastname').prop("disabled", false);
+$('#order_bill_address_attributes_country_id').prop("disabled", false);
+$('#order_bill_address_attributes_phone').prop("disabled", false);
+$('#order_bill_address_attributes_address1').prop("disabled", false);
+$('#order_bill_address_attributes_address2').prop("disabled", false);
+$('#order_bill_address_attributes_state_id').prop("disabled", false);
+$('#order_bill_address_attributes_city').prop("disabled", false);
+$('#order_bill_address_attributes_zipcode').prop("disabled", false);
+
+
+
+
+$('input[name="order[bill_address_id]"]').on('click change', function(e) {
+    console.log(e.currentTarget.id);
+    if(e.currentTarget.id == 'id_radio2'){
+
+      $(".checkout-content-inner").removeClass('d-none');
+      
+      
+      $('#order_bill_address_attributes_firstname').prop("disabled", false);
+      $('#order_bill_address_attributes_lastname').prop("disabled", false);
+      $('#order_bill_address_attributes_country_id').prop("disabled", false);
+      $('#order_bill_address_attributes_phone').prop("disabled", false);
+      $('#order_bill_address_attributes_address1').prop("disabled", false);
+      $('#order_bill_address_attributes_address2').prop("disabled", false);
+      $('#order_bill_address_attributes_state_id').prop("disabled", false);
+      $('#order_bill_address_attributes_city').prop("disabled", false);
+      $('#order_bill_address_attributes_zipcode').prop("disabled", false);
+
+      $('#order_bill_address_attributes_firstname').val("");
+      $('#order_bill_address_attributes_lastname').val("");
+      $('#order_bill_address_attributes_country_id').val("");
+      $('#order_bill_address_attributes_phone').val("");
+      $('#order_bill_address_attributes_address1').val("");
+      $('#order_bill_address_attributes_address2').val("");
+      $('#order_bill_address_attributes_state_id').val("");
+      $('#order_bill_address_attributes_city').val("");
+      $('#order_bill_address_attributes_zipcode').val("");
+    } else{
+      $(".checkout-content-inner").addClass('d-none');
+      
+      $('#order_bill_address_attributes_firstname').prop("disabled", true);
+      $('#order_bill_address_attributes_lastname').prop("disabled", true);
+      $('#order_bill_address_attributes_country_id').prop("disabled", true);
+      $('#order_bill_address_attributes_phone').prop("disabled", true);
+      $('#order_bill_address_attributes_address1').prop("disabled", true);
+      $('#order_bill_address_attributes_address2').prop("disabled", true);
+      $('#order_bill_address_attributes_state_id').prop("disabled", true);
+      $('#order_bill_address_attributes_city').prop("disabled", true);
+      $('#order_bill_address_attributes_zipcode').prop("disabled", true);
+    }
+});
+
+
+
+
+</script>

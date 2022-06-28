@@ -11,8 +11,10 @@ import "channels"
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
-require('jquery')
+
+
 // Theme
 import '../theme/theme'
+import '../theme/address_valid'
 import '../theme/alertflash'
-import '../theme/sidebar_collapse'
+import '../theme/delete_address_popup'

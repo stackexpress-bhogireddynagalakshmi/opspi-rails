@@ -1,3 +1,62 @@
+<style>
+.checkout-progress-steps {
+    font-size: 1.12rem;
+    line-height: 59.8px;
+    letter-spacing: 0.3px;
+}
+
+.checkout-progress-steps-image--full {
+    background-image: url(data:image/svg+xml,%3Csvg%20height%3D%2223.583%22%20viewBox%3D%220%200%2023.583%2023.583%22%20width%3D%2223.583%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22%23ffffff%22%3E%3Cpath%20d%3D%22m11.792%2023.084a11.218%2011.218%200%200%201%20-7.985-3.308%2011.218%2011.218%200%200%201%20-3.307-7.984c0-3.016%201.175-5.852%203.307-7.985a11.218%2011.218%200%200%201%207.985-3.307c3.016%200%205.852%201.175%207.984%203.307a11.218%2011.218%200%200%201%203.308%207.985c0%203.016-1.175%205.852-3.308%207.984a11.218%2011.218%200%200%201%20-7.984%203.308z%22%2F%3E%3Cpath%20d%3D%22m11.792%201a10.721%2010.721%200%200%200%20-7.632%203.16%2010.721%2010.721%200%200%200%20-3.16%207.633c0%202.882%201.123%205.592%203.16%207.63a10.721%2010.721%200%200%200%207.632%203.162c2.882%200%205.592-1.123%207.63-3.161a10.721%2010.721%200%200%200%203.162-7.631c0-2.883-1.123-5.593-3.161-7.631a10.721%2010.721%200%200%200%20-7.631-3.162m0-1c6.512%200%2011.792%205.28%2011.792%2011.792s-5.28%2011.792-11.792%2011.792c-6.513%200-11.792-5.28-11.792-11.792%200-6.513%205.28-11.792%2011.792-11.792z%22%20fill%3D%22%234c4c4c%22%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%2211.792%22%20cy%3D%2211.792%22%20fill%3D%22%234c4c4c%22%20r%3D%226.398%22%2F%3E%3C%2Fsvg%3E);
+    background-size: contain;
+}
+
+.checkout-progress-steps-image {
+    z-index: 1;
+    width: 23px;
+    height: 23px;
+    margin-bottom: -10px;
+    color: #000;
+}
+.checkout-progress {
+    margin-top: 0;
+    margin-bottom: 80px;
+    position: relative;
+    width: 100%;
+}
+.checkout-content #checkout-summary {
+    height: 100%;
+    padding: 0;
+    max-width: 380px;
+    margin-right: 0;
+    margin-left: auto;
+}
+.navbar-img{
+  max-width: 100%;
+  max-height: 3.5rem;
+  margin-left:5px;
+}
+.checkout-progress-steps-line {
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 60px;
+}
+.checkout-progress-steps-line hr {
+    margin: 0;
+    flex: 1;
+    border: 1px solid #999999;
+}
+
+.checkout-progress-steps .nav-item a {
+    color: inherit;
+}
+.text-right {
+    text-align: right !important;
+}
+</style>
+
+
 <% @body_id = 'checkout-page' %>
 
 <%
@@ -21,14 +80,55 @@ end
 %>
 
 <div id="checkout" class="container checkout" data-hook>
-  <%= render partial: 'spree/shared/error_messages', locals: { target: @order } %>
+
+<a  href="<%= spree.root_path %>" style="position:absolute;left:0;top:0;margin-top: 4px;">
+<%= image_tag 'OpsPi-logo.jpg', class: "navbar-img" %>
+</a>
+
+
 
   <div class="row align-items-center flex-column checkout-header" data-hook="checkout_header">
-    <div class="text-uppercase checkout-header-title">
-      <h1 data-hook="checkout_title"><%= Spree.t('checkout_page.header') %></h1>
+
+  <div class="header mt-6">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= Spree.t('checkout_page.header') %>
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+      </div>
+
     </div>
+  </div>
+
+  <%= flash_messages %>
+
     <div class="checkout-progress" data-hook="checkout_progress" role="navigation" aria-label="<%= Spree.t('checkout_page.checkout_navigation') %>">
-      <%= checkout_progress %>
+    <ul class="nav justify-content-between checkout-progress-steps">
+   <li class="text-uppercase nav-item active first">
+      <a class="d-flex flex-column align-items-center active">
+      <span class="checkout-progress-steps-image checkout-progress-steps-image--full" style="margin-left: 31px;">
+      </span>
+      Address
+      </a>
+    </li>
+    <li class="text-uppercase nav-item next last">
+      <a class="d-flex flex-column align-items-center ">
+      <span class="checkout-progress-steps-image checkout-progress-steps-image--full" style="margin-left: 34px;margin-right: 31px;">
+      </span>
+      Payment
+      </a>
+    </li> 
+      <%#= checkout_progress %>
+    </ul>
+    <div class="checkout-progress-steps-line" style="margin-top: -60px;">
+    <hr>
+    </div>
+      <%#= checkout_progress %>
     </div>
   </div>
 
@@ -66,9 +166,13 @@ end
   </div>
 </div>
 
-<script>
+<script type="text/javascript">
   window.addEventListener('DOMContentLoaded', function() {
-    Spree.current_order_id = "<%= @order.number %>"
-    Spree.current_order_token = "<%= @order.token %>"
+    current_order_id = "<%= @order.number %>"
+    current_order_token = "<%= @order.token %>"
   })
+
+$('div.alert .close').on('click', function() {
+   $(this).parent().alert('close'); 
+});
 </script>

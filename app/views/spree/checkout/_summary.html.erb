@@ -1,3 +1,41 @@
+<style>
+.checkout-content-summary {
+    padding: 25px 46px;
+    margin-bottom: 30px;
+    background: #f2f2f2;
+    color: black;
+}
+.checkout-content-summary-header {
+    font-size: 1.625rem;
+    line-height: 0.65;
+    letter-spacing: 0.65px;
+    margin-bottom: 35px;
+}
+
+.checkout-content-summary-table {
+    display: grid;
+    grid-template-columns: 1fr fit-content(0.5fr);
+    grid-gap: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.35px;
+    color: #4c4c4c;
+}
+.checkout-content-summary-table-order-total {
+    grid-column: span 2;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    color: black;
+    border-top: 1px solid black;
+}
+
+</style>
+
 <div class="checkout-content-summary">
   <h3 class="text-uppercase text-center checkout-content-summary-header"><%= Spree.t(:order_summary) %></h3>
   <div class="w-100 text-uppercase checkout-content-summary-table" data-hook="order_summary">

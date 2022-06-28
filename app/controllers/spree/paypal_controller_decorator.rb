@@ -7,6 +7,7 @@ module Spree
     end
 
     def line_item(item)
+      item.reload
       TenantManager::TenantHelper.unscoped_query { super }
     end
   end
