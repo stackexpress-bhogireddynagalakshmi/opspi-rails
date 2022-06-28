@@ -122,6 +122,15 @@
         <% end %>
       </div>
 
+       <div class="col-12 col-md-4">
+        <%= f.field_container :description, class: ['form-group'] do %>
+          <%= f.label :description, Spree.t(:description) %>
+          <%= f.error_message_on :available_on %>
+
+          <%= f.text_area :description, class: 'form-control' %>
+        <% end %>
+      </div>
+
 
       <%=f.hidden_field :shipping_category_id ,:value=>Spree::ShippingCategory.find_or_create_by({:name=>'Default'}).id%>
 

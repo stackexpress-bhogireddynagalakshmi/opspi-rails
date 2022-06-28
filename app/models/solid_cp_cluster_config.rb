@@ -1,0 +1,3 @@
+class SolidCpClusterConfig < ApplicationRecord
+    
+end

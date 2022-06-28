@@ -1,6 +1,6 @@
 <div class="checkout-confirm" id="order_details" data-hook>
-  <p class="checkout-content-header">
+  <h1 class="checkout-content-header">
     <%= Spree.t(:summary).upcase %>
-  </p>
+  </h1>
   <%= render partial: 'spree/shared/order_details', locals: { order: @order } %>
 </div>

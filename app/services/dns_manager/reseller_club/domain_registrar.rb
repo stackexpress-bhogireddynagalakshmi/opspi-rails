@@ -14,11 +14,12 @@ module DnsManager
       def call
         result = ::ResellerClub::Domain.register(domain_registration_params)
         if result[:success] == true
-            line_item.domain_successfully_registered = true
-            line_item.domain_registered_at = Time.zone.now
-            line_item.api_response = result[:response]
-            line_item.save
+          line_item.domain_successfully_registered = true
+          line_item.domain_registered_at = Time.zone.now
         end
+        line_item.api_response = result[:response]
+        line_item.save
+        
         result
       end
 

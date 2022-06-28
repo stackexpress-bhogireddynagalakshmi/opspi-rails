@@ -1,4 +1,4 @@
-<div class="">
-  <label>Enter Check/Cheque Number</label>
+<div class="card" id="method_check" style="padding: 20px;">
+  <label class="form-label">Enter Check/Cheque Number</label>
   <%=text_field_tag "order[payments_attributes][][check_number]" ,'',type: "text", pattern: "[0-9.]+", title: "Enter Valid Check/Cheque Number", class: 'form-control check-payment-input',placeholder: 'Enter Check/Cheque Number',id: "check_number_input_id_#{payment_method.id}"%>
 </div>

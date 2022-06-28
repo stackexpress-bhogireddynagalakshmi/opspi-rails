@@ -1,18 +1,30 @@
-<div class="mx-auto delete-address-popup">
-  <div class="d-flex delete-address-popup-icon js-delete-address-popup-close-button">
-    <%= inline_svg_tag "close.svg", class: "w-100 h-100" %>
-  </div>
 
-  <p class="delete-address-popup-header">
+<div id="overlay">
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-card card">
+    <div class="card-header" style="border-bottom:0">
+
+      <!-- Title -->
+      <h4 class="card-header-title" id="exampleModalCenterTitle">
+        
+      </h4>
+
+      <!-- Close -->
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="opacity:1" ></button>
+
+    </div>
+    <p class="delete-address-popup-header" style="text-align: center;font-weight: 600;font-size: 1.5rem;margin-bottom: 27px;">
     <%= Spree.t("address_action_popup.delete_title") %>
   </p>
 
-  <p class='delete-address-popup-text'>
+  <p class='delete-address-popup-text' style="width: 591px; text-align: center;font-weight: 500;margin: auto;">
     <%= Spree.t("address_action_popup.delete_text").html_safe %>
   </p>
 
-  <div class="d-flex delete-address-popup-buttons">
-    <div class="btn bg-light-background text-primary border-2 border-primary text-uppercase font-weight-bold delete-address-popup-button js-delete-address-popup-close-button"><%= Spree.t(:cancel) %></div>
+  <div class="delete-address-popup-buttons" style="text-align: center;margin-bottom: 30px;margin-top: 48px;justify-content: space-evenly;">
+    <div class="btn bg-light-background text-primary border-2 border-primary text-uppercase font-weight-bold delete-address-popup-button js-delete-address-popup-close-button btn-close1"><%= Spree.t(:cancel) %></div>
     <a
       id="delete-address-popup-confirm"
       class="btn btn-primary text-uppercase font-weight-bold delete-address-popup-button"
@@ -22,4 +34,26 @@
       <%= Spree.t("address_action_popup.delete_button") %>
     </a>
   </div>
+    </div>
+  </div>
 </div>
+</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $(".btn-close").on('click', function(event) {
+    $('#myModal1').attr('aria-hidden','true');
+    $("#myModal1").css('display','none');
+    $("#myModal1").removeClass("show");
+  });
+});
+
+$(document).ready(function() {
+  $(".btn-close1").on('click', function(event) {
+    $('#myModal1').attr('aria-hidden','true');
+    $("#myModal1").css('display','none');
+    $("#myModal1").removeClass("show");
+  });
+});
+</script>
