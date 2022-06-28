@@ -103,13 +103,26 @@ module Spree
           @hosted_zone_records_reponse = host_zone_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
           @hosted_zone_records = @hosted_zone_records_reponse[:response][:response]
 
-          @user = current_spree_user.isp_config.mail_user.all
-          @respon = @user[:response].response
+          if @hosted_zone_records.present?
+            @hosted_zone_records_count = @hosted_zone_records.size
+          else
+            @hosted_zone_records_count = 0
+          end
+
+          @mail_user = mail_user_api.all[:response].response
           
-          for element in  @respon
+          list_arr = []
+          @mail_user.each do |element|
             if element.login.split('@')[1] == @zone_name
-             @mailboxes = mail_user_api.find(element.mailuser_id)[:response].response      
+              list_arr << element
+             @mailboxes = list_arr  
             end
+          end
+
+          if @mailboxes.present?
+            @mailbox_count = @mailboxes.size
+          else
+            @mailbox_count = 0
           end
 
           @web_domain = current_spree_user.isp_config.website.all[:response].response
@@ -121,8 +134,85 @@ module Spree
             end
           end
 
+          if @resources.present?
+            @database_count = @resources.size
+          else
+            @database_count = 0
+          end
+
+          if @ftp_user.present?
+            @ftp_count = @ftp_user.size
+          else
+            @ftp_count = 0
+          end
+
+          get_spam_filter
+
+          @spam_filter_black = spamfilter_api.spam_filter_blacklist.all[:response].response
+          
+          if @spam_filter_black.present?
+            @spam_filter_black_count = @spam_filter_black.size
+          else
+            @spam_filter_black_count = 0
+          end
+          
+          @mail_forward = current_spree_user.isp_config.mail_forward.all[:response].response
+          list_arr1 = []
+          @mail_forward.each do |elem|
+            if elem.source.split('@')[1] == @zone_name
+              list_arr1 << elem
+             @resources3 = list_arr1  
+            end
+          end
+
+          if @resources3.present?
+            @mail_forward_count = @resources3.size
+          else
+            @mail_forward_count = 0
+          end
+
+          @mailing_list_response = mailing_list_api.all[:response].response
+          list_arr2 = []
+          @mailing_list_response.each do |ele|
+            if ele.domain == @zone_name
+              list_arr2 << ele
+             @mailing_lists = list_arr2  
+            end
+          end
+
+          if @mailing_lists.present?
+            @mailing_list_count = @mailing_lists.size
+          else
+            @mailing_list_count = 0
+          end
+
+          @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
+          list_arr3 = []
+          @mail_domain_response.each do |ele|
+            if ele.domain == @zone_name
+              list_arr3 << ele
+             @mail_domain = list_arr3  
+            end
+          end
+
+          if @mail_domain.present?
+          @mail_domain_count = @mail_domain.size
+          else
+            @mail_domain_count = 0
+          end
 
         end 
+
+        def get_spam_filter
+          spam = IspConfig::Mail::SpamFilterWhitelist.new(current_spree_user)
+          @spam_filter_white = spam.all[:response].response
+          
+          if @spam_filter_white.present?
+            @spam_filter_white_count = @spam_filter_white.size
+          else
+            @spam_filter_white_count = 0
+          end
+        end
 
         def get_config_details
           web_domain = get_web_domain_id(params[:website][:origin])
@@ -273,6 +363,14 @@ module Spree
 
         def isp_config_api
           current_spree_user.isp_config.database
+        end
+
+        def spamfilter_api
+          current_spree_user.isp_config
+        end
+
+        def mailing_list_api
+          current_spree_user.isp_config.mailing_list
         end
 
         def ftp_user_api
