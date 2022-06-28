@@ -1,7 +1,7 @@
 module DnsManager  
   module ResellerClub
     class CustomerCreator < ApplicationService
-      attr_reader :user
+      attr_reader :user, :password
 
       def initialize(user,opts={})
         @user   = user
@@ -49,11 +49,11 @@ module DnsManager
       end
 
       def set_password
-        AppManager::RedisWrapper.set(reseller_club_password_key,generate_password)
+        @password ||= AppManager::RedisWrapper.set(reseller_club_password_key,generate_password)
       end
 
       def get_password
-        AppManager::RedisWrapper.get(reseller_club_password_key)
+        @password || AppManager::RedisWrapper.get(reseller_club_password_key)
       end
 
       def reseller_club_password_key
@@ -98,9 +98,6 @@ module DnsManager
         end while password.length < 15
         password
       end
-
-
-
     end
   end
 end
