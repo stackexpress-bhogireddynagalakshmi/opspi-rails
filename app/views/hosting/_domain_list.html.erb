@@ -1,4 +1,24 @@
-<table class="table">
+<style text="text/css">
+.dropdown {
+    padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+    -moz-padding-start: calc(0.75rem - 3px);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #12263F;
+    background-color: #FFFFFF;
+    background-image: url(data:image/svg+xml,%3csvg viewBox='0 0 9 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M1 1L4.25 4.25L7.5 1' stroke='%2395AAC9' stroke-width='1.08333' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e);
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 0.75em 0.75em;
+    border: 1px solid #D2DDEC;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -webkit-appearance: listbox !important
+}
+</style>
+
+<table class="table table-sm card-table table-hover">
   <%domains.each do |key, value|%>
     <%disabled = order.line_items.pluck(:domain).include?(key) rescue false%>
     <tr id="<%=generate_id_from_key(key)%>">
@@ -8,16 +28,16 @@
           <%= form_for :order,url: '/admin/domain_registrations', html: {
                 id: 'add-to-cart-form',class: 'add-to-cart-form' }, remote: true do |f| %>
               <span class="mr-4">
-                  <%=select_tag 'options[validity]',options_for_select([['1 Year',1],['2 Year',2],['3 Year',3]]),class: 'domain-validity-dropdown' %>
+                  <%=select_tag 'options[validity]',options_for_select([['1 Year',1],['2 Year',2],['3 Year',3]]),class: 'domain-validity-dropdown dropdown' %>
                 </span>
-              <span class="mr-4"><%=number_to_currency(get_tld_pricing(key,@tld_pricing))%>/Yr</span>
+              <span style="margin-left: 10px;margin-right: 10px;"><%=number_to_currency(get_tld_pricing(key,@tld_pricing))%>/Yr</span>
               <%= hidden_field_tag "order_id", @order.try(:id),class: 'order_id' %>
               <%= hidden_field_tag "variant_id", @product.try(:id) %>
               <%= hidden_field_tag :tlds, params[:tlds]%>
               <%=hidden_field_tag 'options[domain]',key%>
               
               <%=hidden_field_tag 'options[price]',get_tld_pricing(key,@tld_pricing),class: 'domain-price'%>
-              <%= button_tag class: 'btn btn-primary text-uppercase font-weight-bold add-to-cart-button', id: 'add-to-cart-button', type: :submit,disabled: disabled do %>
+              <%= button_tag class: 'btn btn-sm btn-primary text-uppercase font-weight-bold add-to-cart-button lift', id: 'add-to-cart-button', type: :submit,disabled: disabled do %>
                   <%= Spree.t(:add_to_cart) %>
               <% end %>
             <% end %>
@@ -28,3 +48,4 @@
     </tr>
   <%end%> 
 </table>
+
