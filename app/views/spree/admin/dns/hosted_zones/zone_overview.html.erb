@@ -16,19 +16,19 @@
           <ul class="nav nav-tabs nav-overflow header-tabs">
            
               <li class="nav-item">
-              <a class="nav-link active" id="overview-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview </a>
+              <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview </a>
               </li>
 
               <li class="nav-item">
-              <a class="nav-link" id="dns-tab" data-toggle="tab" href="#dns" role="tab" aria-controls="dns" aria-selected="false">DNS</a>
+              <a class="nav-link" id="dns-tab" data-bs-toggle="tab" href="#dns" role="tab" aria-controls="dns" aria-selected="false">DNS</a>
               </li>              
 
               <li class="nav-item">
-              <a class="nav-link" id="mail-tab" data-toggle="tab" href="#mail" role="tab" aria-controls="mail" aria-selected="false">Mail</a>
+              <a class="nav-link" id="mail-tab" data-bs-toggle="tab" href="#mail" role="tab" aria-controls="mail" aria-selected="false">Mail</a>
               </li>
 
               <li class="nav-item">
-              <a class="nav-link" id="website-tab" data-toggle="tab" href="#website" role="tab" aria-controls="website" aria-selected="false">Website</a>
+              <a class="nav-link" id="website-tab" data-bs-toggle="tab" href="#website" role="tab" aria-controls="website" aria-selected="false">Website</a>
               </li>
 
             
@@ -41,8 +41,8 @@
     <div class="tab-content" id="myTabContent">
 
     <div class="tab-pane fade active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-          
     
+    <%= render partial: 'spree/admin/dns/hosted_zones/overview_page' %>
     </div>
 
     <div class="tab-pane fade" id="dns" role="tabpanel" aria-labelledby="dns-tab">
@@ -52,18 +52,16 @@
     </div>
 
     <div class="tab-pane fade" id="mail" role="tabpanel" aria-labelledby="mail-tab">
-    <p>Mailbox</p>
-    <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
-    <p>Mail Domain</p>
-    <%= render partial: 'spree/admin/dns/hosted_zones/mail_domain_index' %>
-    <p>Mailing Lists</p>
-    <%= render partial: 'spree/admin/dns/hosted_zones/mailing_list_index' %>
-    <p class="mt-2">Spamfilter Blacklist</p>
-    <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_blacklist_index' %>
-    <p>Spamfilter Whitelist</p>
-    <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_whitelist_index' %>
-    <p>Mail Forward</p>
-    <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
+        <p>Mailbox</p>
+        <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
+        <p>Mailing Lists</p>
+        <%= render partial: 'spree/admin/dns/hosted_zones/mailing_list_index' %>
+        <p class="mt-2">Spamfilter Blacklist</p>
+        <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_blacklist_index' %>
+        <p>Spamfilter Whitelist</p>
+        <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_whitelist_index' %>
+        <p>Mail Forward</p>
+        <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
     </div>
 
     <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">
