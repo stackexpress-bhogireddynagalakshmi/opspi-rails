@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_21_105936) do
+ActiveRecord::Schema.define(version: 2022_06_27_091144) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -152,6 +152,14 @@ ActiveRecord::Schema.define(version: 2022_06_21_105936) do
     t.datetime "last_reminder_sent_at"
     t.date "deletion_date"
     t.date "suspension_date"
+  end
+
+  create_table "isp_config_cluster_configs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "key"
+    t.string "value"
+    t.integer "cluster_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "isp_config_limits", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -296,6 +304,14 @@ ActiveRecord::Schema.define(version: 2022_06_21_105936) do
   create_table "protected_folders", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "isp_config_protected_folder_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "solid_cp_cluster_configs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "key"
+    t.string "value"
+    t.integer "cluster_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

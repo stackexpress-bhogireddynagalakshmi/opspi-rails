@@ -1,0 +1,6 @@
+key,value,cluster_id
+SOLID_CP_USERNAME,Syed_Dev_test,1
+SOLID_CP_PASSWORD,Admin@123,1
+SOLID_CP_REMOTE_URL,http://jodocppanel.infiops.com:9002/,1
+SOLID_CP_USER_URL,http://jodocppanel.infiops.com:9001/,1
+SOLID_CP_ENABLED,TRUE,1
