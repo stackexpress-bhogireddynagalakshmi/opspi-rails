@@ -13,6 +13,14 @@ module ImportManager
           Rails.logger.debug {"Plan import Started at #{@start}"}
   
           count = 0
+          csv_file_path = "#{Rails.root}/deployments/mapped_plans.csv"
+          new_file_path = "#{Rails.root}/deployments/mapped_plans_updated.csv"
+          final_file_path = "#{Rails.root}/deployments/mapped_plans_finals.csv"
+
+          headers = ["opspi_plan", "hsphere_plan"]
+          CSV.open(csv_file_path, "a+") do |csv|
+            csv << headers
+          end
           
           @file.each_slice(1000).with_index do |plans, index|
 
@@ -39,6 +47,14 @@ module ImportManager
                     product_obj.save!
                     
                     product_id = product_obj.id
+                    og_csv_file = CSV.read(csv_file_path)
+
+                    CSV.open(new_file_path, "a+") do |csv|
+                      og_csv_file.each do |row|
+                        csv << [product_id,plan[8].to_i]
+                      end
+                    end
+                    
                     option_type_id = Spree::OptionType.where(name: "plan-validity").first.id
                     
                     product_option_type_obj = Spree::ProductOptionType.new({
@@ -98,6 +114,17 @@ module ImportManager
                 end
               end
             end
+
+            CSV.open(final_file_path, 'w', write_headers: true, headers: headers) do |dest|
+              CSV.open(new_file_path) do |source|
+                source.each do |row|
+                  dest << row
+                end
+              end
+            end
+            File.delete(new_file_path) if File.exist?(new_file_path)
+            File.delete(csv_file_path) if File.exist?(csv_file_path)
+
         return {total_time: (Time.now - @start),count: count}
       end
   
