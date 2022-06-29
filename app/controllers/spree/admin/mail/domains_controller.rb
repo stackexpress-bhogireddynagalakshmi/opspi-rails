@@ -11,7 +11,7 @@ module Spree
           @response = current_spree_user.isp_config.mail_domain.create(resource_params)
           set_flash
           if @response[:success]
-            resource_index_path
+            redirect_to admin_mail_domains_path
           else
             render :new
           end
@@ -50,11 +50,12 @@ module Spree
             if @response[:response].code == "ok"
 
               domain = params[:mail_domian]
-
+              
               result = current_spree_user.isp_config.mail_user.all
               result[:response].response.each do |mail_user|
                 if mail_user.email.include?(domain)
                   current_spree_user.isp_config.mail_user.destroy(mail_user.mailuser_id)
+                  
                 end
               end
 
@@ -85,7 +86,7 @@ module Spree
         end
 
         def resource_index_path
-          redirect_to admin_mail_domains_path
+          redirect_to request.referrer
         end
 
         def isp_config_api

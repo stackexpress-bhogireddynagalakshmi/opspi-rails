@@ -128,7 +128,7 @@ module Spree
           @web_domain = current_spree_user.isp_config.website.all[:response].response
           for el in @web_domain
             if el.domain == @zone_name
-              @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response 
+            @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
               
               @ftp_user = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
             end
@@ -379,6 +379,10 @@ module Spree
 
         def mail_user_api
           current_spree_user.isp_config.mail_user
+        end
+
+        def mailing_list_api
+          current_spree_user.isp_config.mailing_list
         end
 
         def host_zone_params
