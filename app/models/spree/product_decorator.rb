@@ -89,9 +89,9 @@ module Spree
     end
 
     def update_stock_availibility
-      stock_item = stock_items.last
-
-      stock_item.stock_movements.create({ quantity: 1000 }) if stock_item.present?
+      stock_items.each do |stock_item|
+        stock_item.stock_movements.create({ quantity: 1000 })
+      end
     end
   end
 end
