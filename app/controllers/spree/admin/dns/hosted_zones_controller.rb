@@ -144,15 +144,6 @@ module Spree
             end
           end
 
-          @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
-          list_arr3 = []
-          @mail_domain_response.each do |ele|
-            if ele.domain == @zone_name
-              list_arr3 << ele
-             @mail_domain = list_arr3  
-            end
-          end
-
         end 
 
         def get_spam_filter
