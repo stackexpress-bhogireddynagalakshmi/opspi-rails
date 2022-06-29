@@ -26,6 +26,7 @@ module Spree
         Subscription.subscribe!(
           user: user,
           product: line_item.product,
+          variant: line_item.variant,
           order: self
         )
       end

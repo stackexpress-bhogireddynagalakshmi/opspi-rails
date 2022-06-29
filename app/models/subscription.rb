@@ -19,11 +19,15 @@ class Subscription < ApplicationRecord
   DEFAULT_VALIDITY_MONTHS = 1  # 1 month
 
   def self.subscribe!(opts)
+    variant = opts[:variant]
+   
+    validity = get_validity(variant) 
+
     existing_subscription = where(status: true, user_id: opts[:user].try(:id),
                                   product_id: opts[:product].try(:id)).first
 
-    if existing_subscription.present?
-      validity = opts[:product].try(:validity) || DEFAULT_VALIDITY_MONTHS
+    if existing_subscription.present? 
+      #TODO: Need to re evaluate folloing scenario with existing subscription
       existing_subscription.update({ status: true, end_date: Date.today + validity.months }) 
     else
       create_fresh_subscription(opts)
@@ -33,26 +37,28 @@ class Subscription < ApplicationRecord
 
   def self.create_fresh_subscription(opts)
     TenantManager::TenantHelper.unscoped_query do
-      validity   = opts[:product].try(:validity) || DEFAULT_VALIDITY_MONTHS
-      start_date = opts[:start_date].presence || Date.today
-      end_date   = opts[:end_date].presence ||  start_date + validity.months
+      variant      = opts[:variant]
+      validity     = get_validity(variant)
+      start_date   = opts[:start_date].presence || Date.today
+      end_date     = opts[:end_date].presence ||  start_date + validity.months
 
       subscription = create({
                               product_id:   opts[:product].try(:id),
+                              variant_id:   opts[:variant].try(:id),
                               user_id:      opts[:user].try(:id),
                               start_date:   start_date,
                               end_date:     end_date,
-                              price:        opts[:product].price,
+                              price:        variant.price,
                               status:       true,
-                              frequency:    opts[:frequency].presence || 'monthly',
+                              frequency:    get_option_type(variant).try(:name) || 'monthly',
                               validity:     validity
                             })
 
-      payment_captured = if opts[:order].present?
-                           opts[:order].payment_state == 'paid'
-                        else
-                          false
-                        end
+      payment_captured =  if opts[:order].present?
+                            opts[:order].payment_state == 'paid'
+                          else
+                            false
+                          end
 
       InvoiceManager::InvoiceCreator.new(subscription, { payment_captured: payment_captured, order: opts[:order] }).call
     end
@@ -86,5 +92,29 @@ class Subscription < ApplicationRecord
     return unless invoice.active?
 
     invoice
+  end
+
+  def self.get_validity(variant)
+    validity = variant.try(:product).try(:validity) || DEFAULT_VALIDITY_MONTHS
+
+    plan_validity_option = get_option_type(variant)
+
+    return validity unless plan_validity_option.present?
+
+    case plan_validity_option.name
+    when 'monthly'
+      validity = 1
+    when 'semi-annual'
+      validity = 6
+    when 'annual-plan'
+      validity = 12
+    end
+
+    return validity
+  end
+
+
+  def self.get_option_type(variant)
+    variant.option_values.select{ |x| x.option_type.name == 'plan-validity'}.first
   end
 end
