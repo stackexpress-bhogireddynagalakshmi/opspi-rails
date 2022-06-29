@@ -43,7 +43,7 @@ module DnsManager
       end
 
       def name_server
-        ['ns1.domain.com','ns2.domain.com'] # TODO: need to change this
+       [ENV['DNS_SERVER_NS1'], ENV['DNS_SERVER_NS2']]
       end
 
     end
