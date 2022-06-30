@@ -102,11 +102,11 @@ class Subscription < ApplicationRecord
     return validity unless plan_validity_option.present?
 
     case plan_validity_option.name
-    when 'monthly'
+    when Spree::Product::MONTHLY_VALIDITY
       validity = 1
-    when 'semi-annual'
+    when Spree::Product::SEMI_ANNUAL_VALIDITY
       validity = 6
-    when 'annual-plan'
+    when Spree::Product::ANNUAL_VALIDITY
       validity = 12
     end
 

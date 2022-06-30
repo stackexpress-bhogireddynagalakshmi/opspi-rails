@@ -2,6 +2,11 @@
 
 module Spree
   module ProductDecorator
+
+    MONTHLY_VALIDITY     = "plan-validity-monthly"
+    SEMI_ANNUAL_VALIDITY = "plan-validity-semi-annual"
+    ANNUAL_VALIDITY      = "plan-validity-annual"
+
     def self.prepended(base)
       base.validate :ensure_server_type_do_not_change, on: [:update]
       base.after_initialize :set_available_date
@@ -35,6 +40,7 @@ module Spree
       base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on account_id]
     end
 
+    
     def ensure_plan_id_or_template_id
       if windows?  #TODO we may remove windows and linux option as seprate plan later
         update(isp_config_master_template_id: nil)
