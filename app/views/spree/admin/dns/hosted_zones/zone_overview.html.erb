@@ -52,16 +52,87 @@
     </div>
 
     <div class="tab-pane fade" id="mail" role="tabpanel" aria-labelledby="mail-tab">
-        <p>Mailbox</p>
-        <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
-        <p>Mailing Lists</p>
-        <%= render partial: 'spree/admin/dns/hosted_zones/mailing_list_index' %>
-        <p class="mt-2">Spamfilter Blacklist</p>
-        <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_blacklist_index' %>
-        <p>Spamfilter Whitelist</p>
-        <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_whitelist_index' %>
-        <p>Mail Forward</p>
-        <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
+
+    <div class="row align-items-center mb-2">
+      <div class="col">
+        <h1 class="header-title">
+        Mail Boxes
+        </h1>
+      </div>
+      <div class="col-auto">
+      <%= button_link_to "Add New",
+      new_admin_mail_mail_box_path,
+      class: "btn btn-primary lift",
+        icon: 'add.svg',
+        id: 'admin_new_domain' %>
+
+    </div>
+    </div>
+    <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
+    
+    <div class="row align-items-center mb-2">
+      <div class="col">
+        <h1 class="header-title">
+        Mailing Lists
+        </h1>
+      </div>
+      <div class="col-auto">
+      <%= button_link_to "Add New",
+      new_admin_mail_mailing_list_path,
+      class: "btn btn-primary lift",
+      icon: 'add.svg' %>
+      </div>
+    </div>
+    <%= render partial: 'spree/admin/dns/hosted_zones/mailing_list_index' %>
+
+    <div class="row align-items-center mb-2">
+    <div class="col">
+      <h1 class="header-title">
+      Spamfilter Blacklist
+      </h1>
+    </div>
+    <div class="col-auto">
+    <%= button_link_to "Add New",
+    new_admin_mail_spam_filter_blacklist_path,
+    class: "btn btn-primary lift",
+      icon: 'add.svg' %>
+  </div>
+  </div>
+  <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_blacklist_index' %>
+
+    <div class="row align-items-center mb-2">
+    <div class="col">
+      <h1 class="header-title">
+      <%=t('isp_config.spamfilter.whitelist')%>
+      </h1>
+      
+    </div>
+    <div class="col-auto">
+    <%= button_link_to "Add New",
+    new_admin_mail_spam_filter_whitelist_path,
+    class: "btn btn-primary lift",
+      icon: 'add.svg' %>
+    </div>
+  </div>
+  <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_whitelist_index' %>
+
+    <div class="row align-items-center mb-2">
+    <div class="col">
+      <h1 class="header-title">
+      Forwards
+      </h1>
+      
+    </div>
+    <div class="col-auto">
+    <%= button_link_to "Add New",
+    new_admin_mail_forward_path,
+    class: "btn btn-primary lift",
+      icon: 'add.svg',
+      id: 'admin_new_forward' %>
+    </div>
+  </div>
+  <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
+
     </div>
 
     <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">
@@ -86,10 +157,37 @@
                 <% end %>
                 </div>
             </div>
-            <p>Database</p>
+
+            <div class="row align-items-center">
+              <div class="col">
+                <h1>
+                Databases
+                </h1>
+              </div>
+              <div class="col-auto">
+              <%= button_link_to "Add New",
+              new_admin_sites_isp_database_path,
+              class: "btn btn-primary lift",
+                icon: 'add.svg',
+                id: 'new_admin_database' %>
+              </div>
+            </div>
             <%= render partial: 'spree/admin/dns/hosted_zones/database_index' %>
 
-            <p>FTP Users</p>
+            <div class="row align-items-center">
+            <div class="col">
+              <h1>
+              FTP Users
+              </h1>
+            </div>
+            <div class="col-auto">
+            <%= button_link_to "Add New",
+            new_admin_sites_ftp_user_path,
+            class: "btn btn-primary lift",
+              icon: 'add.svg',
+              id: 'admin_new_ftp_user' %>
+            </div>
+          </div>
             <%= render partial: 'spree/admin/dns/hosted_zones/ftp_index' %>
             
     </div>
