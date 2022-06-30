@@ -81,10 +81,13 @@ module ImportManager
 
                  if billing_frequency == '1m'
                   variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::MONTHLY_VALIDITY)}
+                  freq = Spree::Product::MONTHLY_VALIDITY
                  elsif billing_frequency == '6m'
                   variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::SEMI_ANNUAL_VALIDITY)}
+                  freq = Spree::Product::SEMI_ANNUAL_VALIDITY
                  elsif billing_frequency == '12m'
                    variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::ANNUAL_VALIDITY)}
+                  freq = Spree::Product::ANNUAL_VALIDITY
                  end
                     
                   Subscription.subscribe!({
@@ -93,8 +96,8 @@ module ImportManager
                     user: user_obj,
                     start_date: start_date,
                     end_date: end_date,
-                    frequency: billing_frequency.to_i,
-                    validity: product.validity
+                    frequency: freq,
+                    validity: billing_frequency.to_i
                   })
 
                   subscription = user_obj.subscriptions.where(product_id: product.id).first
