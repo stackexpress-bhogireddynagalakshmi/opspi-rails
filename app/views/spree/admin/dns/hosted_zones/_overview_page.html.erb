@@ -1,0 +1,176 @@
+<style>
+.h2{
+    font-size: 2.25rem;
+}
+a, a:hover, a:focus, a:active {
+      text-decoration: none;
+      color: inherit;
+ }
+</style>
+<div class="row">
+<div class="row col-lg-12">
+    <div class="col-lg-4">
+    <div class="card" style="height: 120px;cursor: pointer" id="dns_card">
+        <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col">
+            <h6 class="text-uppercase text-muted mb-2">
+                DNS Records
+            </h6>
+            <span class="h2 mb-0">
+                <%= @hosted_zone_records_count %>
+            </span>
+            </div>
+            <div class="col-auto">
+             <span class="h2 fe fe-clipboard text-muted mb-0"></span>
+            </div>
+        </div> 
+        </div>
+    </div>
+    </div>
+
+    <div class="col-lg-4">
+    <div class="card" style="height: 120px;cursor: pointer" id="mailboxes_card">
+        <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col">
+            <h6 class="text-uppercase text-muted mb-2">
+                Mailboxes
+            </h6>
+            <span class="h2 mb-0">
+                <%= @mailbox_count %>
+            </span>
+            </div>
+            <div class="col-auto">
+            <span class="h2 fe fe-archive text-muted mb-0"></span>
+           </div>
+        </div> 
+        </div>
+    </div>
+    </div>
+
+    <div class="col-lg-4">
+    <div class="card" style="height: 120px;cursor: pointer" id="mailing_list_card">
+        <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col">
+            <h6 class="text-uppercase text-muted mb-2">
+               Mailing Lists
+            </h6>
+            <span class="h2 mb-0">
+                <%= @mailing_list_count %>
+            </span>
+            </div>
+            <div class="col-auto">
+            <span class="h2 fe fe-list text-muted mb-0"></span>
+           </div>
+        </div> 
+        </div>
+    </div>
+    </div>
+
+    <div class="col-lg-4">
+    <div class="card" style="height: 120px;cursor: pointer" id="forwards_card">
+        <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col">
+            <h6 class="text-uppercase text-muted mb-2">
+                Mail Forwards
+            </h6>
+            <span class="h2 mb-0">
+                <%= @mail_forward_count %>
+            </span>
+            </div>
+            <div class="col-auto">
+            <span class="h2 fe fe-mail text-muted mb-0"></span>
+           </div>
+        </div> 
+        </div>
+    </div>
+    </div>
+
+    <div class="col-lg-4">
+    <div class="card" style="height: 120px;cursor: pointer" id="ftp_card">
+        <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col">
+            <h6 class="text-uppercase text-muted mb-2">
+                FTP Users
+            </h6>
+            <span class="h2 mb-0">
+                <%= @ftp_count %>
+            </span>
+            </div>
+            <div class="col-auto">
+            <span class="h2 fe fe-users text-muted mb-0"></span>
+           </div>
+        </div> 
+        </div>
+    </div>
+    </div>
+
+    <div class="col-lg-4">
+    <div class="card" style="height: 120px;cursor: pointer" id="database_card">
+        <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col">
+            <h6 class="text-uppercase text-muted mb-2">
+                Databases
+            </h6>
+            <span class="h2 mb-0">
+                <%= @database_count %>
+            </span>
+            </div>
+            <div class="col-auto">
+            <span class="h2 fe fe-database text-muted mb-0"></span>
+           </div>
+        </div> 
+        </div>
+    </div>
+    </div>
+    <!-- end -->
+</div>
+
+
+</div>
+
+<script type="text/javascript">
+
+  
+$(document).ready(function() {
+    $("#mailboxes_card").on('click',function() {
+        $('#mail-tab').tab('show');     
+    });
+});
+
+$(document).ready(function() {
+    $("#dns_card").on('click',function() {
+        $('#dns-tab').tab('show');     
+    });
+});
+
+$(document).ready(function() {
+    $("#mailing_list_card").on('click',function() {
+        $('#mail-tab').tab('show');     
+    });
+});
+
+$(document).ready(function() {
+    $("#forwards_card").on('click',function() {
+        $('#mail-tab').tab('show');     
+    });
+});
+
+$(document).ready(function() {
+    $("#ftp_card").on('click',function() {
+        $('#website-tab').tab('show');     
+    });
+});
+
+$(document).ready(function() {
+    $("#database_card").on('click',function() {
+        $('#website-tab').tab('show');     
+    });
+});
+
+</script>
