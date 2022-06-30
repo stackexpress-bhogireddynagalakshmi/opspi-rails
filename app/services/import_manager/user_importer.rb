@@ -80,11 +80,11 @@ module ImportManager
 
 
                  if billing_frequency == '1m'
-                  variant = variants.select {|v| v.option_values.pluck(:name).include?("monthly")}
+                  variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::MONTHLY_VALIDITY)}
                  elsif billing_frequency == '6m'
-                  variant = variants.select {|v| v.option_values.pluck(:name).include?("semi-annual")}
+                  variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::SEMI_ANNUAL_VALIDITY)}
                  elsif billing_frequency == '12m'
-                   variant = variants.select {|v| v.option_values.pluck(:name).include?("annual-plan")}
+                   variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::ANNUAL_VALIDITY)}
                  end
                     
                   Subscription.subscribe!({
