@@ -92,7 +92,7 @@ module ImportManager
                     
                   Subscription.subscribe!({
                     product: product,
-                    variant_id: variant.try(:id),
+                    variant: variant.first,
                     user: user_obj,
                     start_date: start_date,
                     end_date: end_date,
