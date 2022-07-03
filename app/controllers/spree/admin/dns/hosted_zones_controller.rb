@@ -201,6 +201,30 @@ module Spree
             @mail_domain_count = 0
           end
 
+          @websites_response = current_spree_user.isp_config.website.all[:response].response
+          list_arr4 = []
+          @websites_response.each do |el|
+            if el.domain == @zone_name
+              list_arr4 << el
+            #  @websites = list_arr4
+             @websites = list_arr4.collect { |x| [x.domain, x.domain_id] }
+             @web_id = el.domain_id
+             break
+            else
+              @websites = @websites_response.collect { |x| [x.domain, x.domain_id] }
+            end
+          end
+
+          get_active
+          @windows_sites = begin
+          @windows_sites = current_spree_user.solid_cp.web_domain.all || []
+          convert_to_mash(@windows_sites.body[:get_domains_response][:get_domains_result][:domain_info])
+        rescue StandardError
+          []
+        end
+
+        @user_mail_domains = current_spree_user.isp_config.mail_domain.all[:response].response
+
         end 
 
         def get_spam_filter
@@ -383,6 +407,10 @@ module Spree
 
         def mailing_list_api
           current_spree_user.isp_config.mailing_list
+        end
+
+        def get_active
+          @active_data = Website.actives
         end
 
         def host_zone_params

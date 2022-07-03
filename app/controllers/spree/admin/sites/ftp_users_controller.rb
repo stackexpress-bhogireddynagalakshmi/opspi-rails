@@ -32,7 +32,7 @@ module Spree
           @response = ftp_user_api.create(resource_params)
           if @response[:success]
             set_flash
-            redirect_to admin_sites_ftp_users_path
+            redirect_to request.referrer
           else
             get_websites
             render :new

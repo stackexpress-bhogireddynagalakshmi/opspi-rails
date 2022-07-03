@@ -33,3 +33,86 @@
   <label class="form-label" style="margin-top: 0.5rem;"> No Forwards found.</label>
   </div>
 <% end %>
+
+<div class="modal fade" id="mailForwardModal" tabindex="-1" role="dialog" aria-labelledby="mailForwardModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Mail Forward</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-right: -8px;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <%=form_for "mail_forward", url: admin_mail_forwards_path, html: {method: :post} do |f|%> 
+
+        <%=hidden_field_tag :forwarding_id, @resources3.try("forwarding_id")%>
+        <%=f.hidden_field :type, value: 'forward'%>
+        <fieldset>
+          <div class="form-group">
+            <label class="form-label">Source</label>
+            <div class="input-group mb-3">
+              <%=f.text_field 'source', value: @resources3.try(:source).try(:split, '@').try(:first), class: 'form-control',style:"width: 50%;"%>
+              <span class="input-group-text" id='at-sign'>@</span>
+              <%=select_tag 'source_domain',options_for_select(@user_mail_domains.map(&:domain), params[:zone_name]), class: 'form-select'%>
+            </div>
+          </div>
+      
+          <div class="form-group">
+            <label class="form-label">Destination</label>
+            <%=f.text_area 'destination', value: @resources3.try(:destination), class: 'form-control', rows: 10, cols: 40%>
+          </div>
+                
+          <div class="form-group">
+            <label class="form-label">Active</label>
+            <%=select_tag :active,options_for_select([['Yes','y'], ['No','n']]), class: 'form-select'%>
+          </div>
+      
+          <div class="form-check">
+            <div class="row">
+              <div class="col-2">
+                <label class="form-check-label">Send as</label>
+              </div>
+              <div class="col-10">
+                <%= f.check_box :allow_send_as, {checked: @resources3.try(:allow_send_as) == 'y', class:"form-check-input list-checkbox"}, 'y', 'n' %>
+                <small>Allow target to send mail using this address as origin (if target is internal)</small>
+              </div>
+            </div>
+          </div>
+      
+          <div class="form-check mb-4">
+            <div class="row">
+              <div class="col-2">
+                <label class="form-check-label">Enable greylisting</label>
+              </div>
+              <div class="col-10">
+                <%= f.check_box :greylisting, {checked: @resources3.try(:greylisting) == 'y' , class:"form-check-input list-checkbox"}, 'y', 'n' %>
+              </div>
+            </div>
+          </div>
+      
+          <%=submit_tag "Add Mail Forward", class: 'btn btn-primary lift mb-4'%>
+      
+        </fieldset>
+      <%end%>
+      
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id='modal-close-button'>Close</button>
+        <button type="button" class="btn btn-primary" id='modal-save-button'>Save changes</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+$(document).on('click', '.admin_mail_forward1', function(event){
+      event.preventDefault();
+      $('#mailForwardModal').modal('show');
+    });
+
+$(document).on('click', '.btn-close', function(event){
+  $('#mailForwardModal').modal('hide');
+});
+</script>

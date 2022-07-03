@@ -98,6 +98,94 @@
     </div>
   </div>
 
+  <div class="modal fade" id="ftpModal" tabindex="-1" role="dialog" aria-labelledby="ftpModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Add FTP User</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-right: -8px;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <%#= render partial: 'spree/admin/sites/ftp_users/set_remaining_fields_value', collection: @websites, as: :website %>
+      <%=form_for "ftp_user", url: admin_sites_ftp_users_path, html: {method: :post} do |f|%> 
+
+        <fieldset>
+          <div class="form-group">
+            <label class="form-label">Select Hosting Type:</label>
+            <%= select_tag :server_type, options_for_select(plan_type_values(current_spree_user)),include_blank: true, class: 'form-select', id: 'hosting_type', required: true  %>
+          </div>
+      
+        
+          <div class="form-group">
+            <label class="form-label">Username:</label>
+            <%=f.text_field 'username', value: @ftp_user.try(:username), class: 'form-control', placeholder: "Please enter UserName" %>
+          </div>
+      
+          <div class="form-group">
+            <label class="form-label">Password:</label>
+            <%=f.password_field 'password', value: @ftp_user.try(:password), class: 'form-control', placeholder: "Please enter Password"%>
+          </div>
+      
+          <div id="windows-fields" style="display: none;">
+            <div class="form-group">
+            <label class="form-label">Select Domain:</label>
+            <%#= f.select(:domain, @windows_sites.pluck(:domain_name).uniq.reject{|x| x.include?("www")}, {:prompt => 'Select Web Domain'}, class: 'form-select js-filterable',id: "domain_name_dropdown" )%>
+            </div>   
+      
+             <div class="form-group">
+              <label class="form-label">Folder:</label>
+              <%=f.text_field 'folder', value: "", class: 'form-control', disabled: true, id: "folder_path" %>
+            </div>   
+          </div>
+      
+           <div id="linux-fields" >
+             <div class="form-group">
+              <label class="form-label">Select Domain:</label>
+              <%#= collection_select(:ftp_user, :parent_domain_id, @websites, :domain_id, :domain, {:prompt => 'Select Web Domain'}, {class: 'form-select js-filterable'}) %>
+              <%=select_tag :parent_domain_id,options_for_select(@websites), class: 'form-select'%>
+            </div>
+      
+      
+            <div class="form-group">
+              <label class="form-label">Harddisk-Quota(MB):</label>
+              <%=f.text_field 'quota_size', value: (@ftp_user.try(:quota_size) ? @ftp_user.try(:quota_size) : -1) , class: 'form-control', type: 'number', placeholder: "Please enter Harddisk-Quota In MB (example: 1000)"%>
+            </div>
+      
+            <div class="form-group">
+              <label class="form-label">Active</label>
+              <%=select_tag :active,options_for_select(@active_data.collect{ |k, v| [v, k]}), class: 'form-select'%>
+            </div>
+      
+            <div class="form-group">
+              <label class="form-label">User identifier (UID):</label>
+              <%=f.text_field 'uid', value: @ftp_user.try(:uid), class: 'form-control', readonly: true%>
+            </div>
+      
+            <div class="form-group">
+              <label class="form-label">Group identifier (GID):</label>
+              <%=f.text_field 'gid', value: @ftp_user.try(:gid), class: 'form-control', readonly: true%>
+            </div>
+      
+            <div class="form-group">
+              <label class="form-label">Directory:</label>
+              <%=f.text_field 'dir', value: '/var/www/clients/client312/web29', class: 'form-control', readonly: true %>
+            </div>
+          </div>
+      
+          <%=submit_tag "Add FTP User",class: 'btn btn-primary lift mb-4'%>
+      
+        </fieldset>
+      <% end %>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id='modal-close-button'>Close</button>
+        <button type="button" class="btn btn-primary" id='modal-save-button'>Save changes</button>
+      </div> -->
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
     
@@ -180,4 +268,13 @@
         } ,5);
     }
     }
+
+    $(document).on('click', '.admin_new_ftp_user1', function(event){
+      event.preventDefault();
+      $('#ftpModal').modal('show');
+    });
+
+$(document).on('click', '.btn-close', function(event){
+  $('#ftpModal').modal('hide');
+});
 </script>

@@ -30,3 +30,62 @@
   <label class="form-label" style="margin-top: 0.5rem;"> No Mailing Lists found</label>
   </div>
 <% end %>
+
+<div class="modal fade" id="mailingListModal" tabindex="-1" role="dialog" aria-labelledby="mailingListModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Mailing List</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-right: -8px;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <%=form_for "mailinglist", url: admin_mail_mailing_lists_path, html: {method: :post} do |f|%> 
+
+        <%=hidden_field_tag :domain_id, @mail_domain.try("domain_id")%>
+        <form>
+          <div class="form-group">
+            <label class="form-label">Domain</label>
+            <%=f.text_field 'domain', value: @mailinglist.try(:domain), class: 'form-control',required: true%>
+          </div>
+      
+          <div class="form-group">
+            <label class="form-label">Listname</label>
+            <%=f.text_field 'listname', value: @mailinglist.try(:listname), class: 'form-control',required: true%>
+          </div>
+      
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <%=f.email_field 'email', value: @mailinglist.try(:email), class: 'form-control'%>
+          </div>
+      
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <%=f.password_field 'password', class: 'form-control'%>
+          </div>
+      
+          <%=submit_tag "Add Mailing List",class: 'btn btn-primary lift'%>
+      
+      </form>
+      <%end%>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id='modal-close-button'>Close</button>
+        <button type="button" class="btn btn-primary" id='modal-save-button'>Save changes</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+
+$(document).on('click', '.admin_mailling_list1', function(event){
+      event.preventDefault();
+      $('#mailingListModal').modal('show');
+    });
+
+$(document).on('click', '.btn-close', function(event){
+  $('#mailingListModal').modal('hide');
+});
+</script>
