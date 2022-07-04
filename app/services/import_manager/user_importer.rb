@@ -89,7 +89,6 @@ module ImportManager
                    variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::ANNUAL_VALIDITY)}
                   freq = Spree::Product::ANNUAL_VALIDITY
                  end
-                    
                   Subscription.subscribe!({
                     product: product,
                     variant: variant.first,
@@ -97,6 +96,7 @@ module ImportManager
                     start_date: start_date,
                     end_date: end_date,
                     frequency: freq,
+                    status: Date.today > end_date ? 0 : 1,
                     validity: billing_frequency.to_i
                   })
 

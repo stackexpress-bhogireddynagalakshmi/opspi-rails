@@ -41,6 +41,7 @@ class Subscription < ApplicationRecord
       validity     = get_validity(variant)
       start_date   = opts[:start_date].presence || Date.today
       end_date     = opts[:end_date].presence ||  start_date + validity.months
+      status       = opts[:status].presence || true
 
       subscription = create({
                               product_id:   opts[:product].try(:id),
@@ -49,7 +50,7 @@ class Subscription < ApplicationRecord
                               start_date:   start_date,
                               end_date:     end_date,
                               price:        variant.price,
-                              status:       true,
+                              status:       status,
                               frequency:    get_option_type(variant).try(:name) || 'monthly',
                               validity:     validity
                             })
