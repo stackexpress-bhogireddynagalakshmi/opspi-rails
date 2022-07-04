@@ -36,12 +36,11 @@ module ImportManager
                     product_obj = Spree::Product.new({
                       name: plan[0],
                       account_id: plan[7], #opspi account id
-                      subscribable: plan[5],
+                      subscribable: plan[4],
                       server_type: "hsphere",
-                      validity: plan[4],
                       price: plan[1],
                       shipping_category_id: 1,
-                      visible: plan[6]
+                      visible: plan[5]
                     })
   
                     product_obj.save!
