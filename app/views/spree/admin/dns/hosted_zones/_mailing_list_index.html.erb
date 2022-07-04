@@ -15,8 +15,8 @@
       <td><%= mailing_list.listname%></td>
       <td><%= mailing_list.domain%></td>
          <td><span class="d-flex justify-content-end">
-         <%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_mailing_list_path(id: mailing_list.mailinglist_id) ,class:"btn btn-success btn-size", style:"margin-right: 5px"%> 
-        <%=link_to '<i class="fe fe-trash"></i>'.html_safe,admin_mail_mailing_list_path(id: mailing_list.mailinglist_id), method: :delete, data: {confirm: t('general.delete')} ,class:"btn btn-danger btn-size"%>
+         <%=link_to '<i class="fe fe-trash"></i>'.html_safe,admin_mail_mailing_list_path(id: mailing_list.mailinglist_id), method: :delete, data: {confirm: t('general.delete')} ,class:"btn btn-danger btn-size", style:"margin-right: 5px"%>
+         <%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_mailing_list_path(id: mailing_list.mailinglist_id) ,class:"btn btn-success btn-size"%> 
         </span>
       </td>  
     </tr>
