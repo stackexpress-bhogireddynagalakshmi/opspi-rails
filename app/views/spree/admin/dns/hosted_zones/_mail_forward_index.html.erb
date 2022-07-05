@@ -15,11 +15,17 @@
     <tr data-hook="admin_orders_index_rows" >
       <td><%=forward.source%></td>
       <td><%=forward.destination%></td>
-      <td><%=forward.active%></td>
+      <td >
+      <% if forward.active == 'y' %>
+      <i class="fe fe-check-circle" style="color: green;"></i>
+      <% else %>
+      <i class="fe fe-x-circle" style="color: red;"></i>
+      <% end %>
+      </td>
       <td>
       <span class="d-flex justify-content-end">
-        <%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_forward_path(id: forward.forwarding_id),class:"btn btn-success btn-size", style: "margin-right:5px"%> 
-        <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_mail_forward_path(id: forward.forwarding_id), method: :delete, data: {confirm: t('general.delete')},class:"btn btn-danger btn-size"%>
+      <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_mail_forward_path(id: forward.forwarding_id), method: :delete, data: {confirm: t('general.delete')},class:"btn btn-danger btn-size", style: "margin-right:5px"%>
+        <%=link_to '<i class="fe fe-edit"></i>'.html_safe,edit_admin_mail_forward_path(id: forward.forwarding_id),class:"btn btn-success btn-size"%> 
       </span>
         </td>  
     </tr>

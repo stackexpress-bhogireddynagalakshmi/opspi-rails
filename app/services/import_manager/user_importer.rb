@@ -68,23 +68,36 @@ module ImportManager
 
                   user_obj.bill_address_id = address.id
                   user_obj.ship_address_id = address.id
-                  
                   user_obj.save!
-
                   user_obj.confirm
-
-                  product           = Spree::Product.find(user[14])
                   start_date        = user[15].to_date
                   end_date          = user[16]&.to_date
                   billing_frequency = user[18]
 
+                 product           = Spree::Product.find(user[14])
+
+                 variants         = product.variants.each {|v| v.option_values.select{ |x| x.option_type.name == 'plan-validity'}.first }
+
+
+                 if billing_frequency == '1m'
+                  variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::MONTHLY_VALIDITY)}
+                  freq = Spree::Product::MONTHLY_VALIDITY
+                 elsif billing_frequency == '6m'
+                  variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::SEMI_ANNUAL_VALIDITY)}
+                  freq = Spree::Product::SEMI_ANNUAL_VALIDITY
+                 elsif billing_frequency == '12m'
+                   variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::ANNUAL_VALIDITY)}
+                  freq = Spree::Product::ANNUAL_VALIDITY
+                 end
                   Subscription.subscribe!({
                     product: product,
+                    variant: variant.first,
                     user: user_obj,
                     start_date: start_date,
                     end_date: end_date,
-                    frequency: billing_frequency,
-                    validity: product.validity
+                    frequency: freq,
+                    status: Date.today > end_date ? 0 : 1,
+                    validity: billing_frequency.to_i
                   })
 
                   subscription = user_obj.subscriptions.where(product_id: product.id).first
