@@ -298,7 +298,8 @@
       <h3 class="text-uppercase spree-mb-medium spree-mt-medium spree-header"><%= Spree.t(:account_info) %></h3>
       <div class="row">
         <div class="col-xs-12 col-lg-4">
-
+          <span>Account ID: <b><%= current_store.account_id %></b> <br/></span>
+          
           <span><%=@user.full_name%></span>
 
           <dd class="account-page-user-info-item-definition"><%= @user.email%></dd>
