@@ -31,7 +31,7 @@ module OpsPi
       Spree::Admin::Sites::ProtectedFoldersController.layout "dashkit_admin_layout"
       Spree::Admin::Sites::ProtectedFolderUsersController.layout "dashkit_admin_layout"
       Spree::Admin::WizardsController.layout "dashkit_admin_layout"
-      # Spree::Admin::Windows::DomainsController.layout "dashkit_admin_layout"
+      Spree::Admin::Windows::DomainsController.layout "dashkit_admin_layout"
       Spree::Admin::WebsiteBuilder::SiteBuildersController.layout "dashkit_admin_layout"
       Spree::Admin::Sites::IspDatabasesController.layout "dashkit_admin_layout"
       # Spree::Admin::UserSessionsController.layout "dashkit_admin_layout"
