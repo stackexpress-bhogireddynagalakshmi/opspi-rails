@@ -137,7 +137,7 @@
       
              <div class="form-group">
               <label class="form-label">Folder:</label>
-              <%=f.text_field 'folder', value: "", class: 'form-control', disabled: true, id: "folder_path" %>
+              <%=f.text_field 'folder', value: "/var/www/clients/client312/web29", class: 'form-control', disabled: true, id: "folder_path" %>
             </div>   
           </div>
       
@@ -272,7 +272,6 @@
 
 $(document).on('click', '.admin_new_ftp_user1', function(event){
   event.preventDefault();
-  alert('hi')
   $('#ftpModal').modal('show');
 });
 
