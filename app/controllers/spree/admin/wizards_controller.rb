@@ -23,7 +23,7 @@ module Spree
           
           TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
           
-          flash[:success] = "Wizard Jobs Started. Your services will be activated in few miniutes"
+          flash[:success] =  I18n.t("wizards.wizard_started")
           
           set_batch_jobs
 
@@ -337,7 +337,7 @@ module Spree
         end
 
         unless valid
-          @error = "This domain is not allowed."
+          @error = I18n.t("wizards.domain_not_allowed") 
         end
 
         return valid
