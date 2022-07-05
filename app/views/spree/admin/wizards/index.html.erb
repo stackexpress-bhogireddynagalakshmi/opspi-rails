@@ -32,8 +32,8 @@
         </tr>
       </thead>
       <tbody class="fsbase">
-      <%@batch_jobs.each do |key, batch_job|%>
-              
+      <%@batch_jobs.reverse_each do |key, batch_job|%>
+  
         <tr>
           <td> <%= link_to batch_job.first[:domain] , admin_wizard_path(key)%> </td>
           <td> <%= get_wizard_status(batch_job)%></td>
