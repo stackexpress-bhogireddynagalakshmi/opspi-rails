@@ -16,20 +16,20 @@ module Spree
         @domain      = wizard_params[:domain]
         @server_type = wizard_params[:server_type]
 
-        if VALID_DOMAIN_REGEX.match?(@domain)
+        if valid_domain?(@domain)
           @tasks = []
           
           build_tasks
           
           TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
           
-          flash[:success] = "Wizard Jobs Started. Your services will be activated in few miniutes"
+          flash[:success] =  I18n.t("wizards.wizard_started")
           
           set_batch_jobs
 
           redirect_to admin_wizard_path(id: @batch_jobs.keys.last)
         else
-          @error = 'Invalid domain name'
+          @error = @error ||= 'Invalid domain name'
           render 'new'
         end
       end
@@ -319,6 +319,30 @@ module Spree
       def get_sanitized_domain(domain)
         domain.gsub("www.", '')
       end
+
+      def valid_domain?(domain)
+         flag = VALID_DOMAIN_REGEX.match?(@domain)
+
+         flag && reserved_domain_check(domain)
+      end
+
+      def reserved_domain_check(domain)
+        valid = true
+
+        valid = false if OpspiHelper.reserved_domains.include?(domain)
+        
+        # matching the subdomain of reserved domain
+        OpspiHelper.reserved_domains.each do |reserved_domain|
+          valid = false if Regexp.new("\\/*.#{reserved_domain}").match?(domain)
+        end
+
+        unless valid
+          @error = I18n.t("wizards.domain_not_allowed") 
+        end
+
+        return valid
+      end
+
     end
   end
 end
