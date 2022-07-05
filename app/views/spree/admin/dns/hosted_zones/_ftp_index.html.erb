@@ -132,6 +132,7 @@
             <div class="form-group">
             <label class="form-label">Select Domain:</label>
             <%#= f.select(:domain, @windows_sites.pluck(:domain_name).uniq.reject{|x| x.include?("www")}, {:prompt => 'Select Web Domain'}, class: 'form-select js-filterable',id: "domain_name_dropdown" )%>
+            <%=select_tag :parent_domain_id,options_for_select(@websites), class: 'form-select'%>
             </div>   
       
              <div class="form-group">
@@ -269,12 +270,28 @@
     }
     }
 
-    $(document).on('click', '.admin_new_ftp_user1', function(event){
-      event.preventDefault();
-      $('#ftpModal').modal('show');
-    });
+$(document).on('click', '.admin_new_ftp_user1', function(event){
+  event.preventDefault();
+  alert('hi')
+  $('#ftpModal').modal('show');
+});
 
 $(document).on('click', '.btn-close', function(event){
   $('#ftpModal').modal('hide');
+});
+
+$(document).ready(function (argument) {
+    $("#hosting_type").on('change',function (argument) {
+      var val = $(this).val();
+      if (val=='linux') {
+        $('#linux-fields').show();
+        $('#windows-fields').hide();
+      } 
+      else
+      {
+        $('#linux-fields').hide();
+        $('#windows-fields').show();
+      }
+    });
 });
 </script>
