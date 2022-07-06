@@ -23,14 +23,14 @@
 
           <%if current_spree_user.have_windows_access?%>
             <span style="margin-right: 15px;">
-              <%= f.radio_button :server_type, true ,  class: 'form-check-input list-checkbox', required: true, checked: linux_checked ? false : true  %>
+              <%= f.radio_button :server_type, "windows" ,  class: 'form-check-input list-checkbox', required: true, checked: linux_checked ? false : true  %>
                <%linux_checked = false%>
               <%= f.label :server_type, "Windows", :value => "windows" %>
             </span>
           <%end%>
          
           <%if current_spree_user.have_linux_access?%>
-            <%= f.radio_button :server_type, false, :checked => true ,  class: 'form-check-input list-checkbox', required: true, checked: linux_checked %>
+            <%= f.radio_button :server_type, "linux", :checked => true ,  class: 'form-check-input list-checkbox', required: true, checked: linux_checked %>
             <%= f.label :server_type, "Linux", :value => "linux"%>
           <%end%>   
 
