@@ -13,13 +13,12 @@ module AppManager
       return unless invoice.present?
       return unless invoice.subscription.present?
 
-
       if invoice.subscription.plan.windows?
         response  = user.solid_cp.change_user_status('Suspended')
         if response && response[:success] == true
           Rails.logger.info { "SolidCP account suspended for #{invoice.user.email}" }
-
           invoice.subscription.update_column(:panel_disabled_at,Time.zone.now)
+          invoice.subscription.update({status: false})
           send_panel_access_disabled_notification('SolidCP')
         else
           Rails.logger.info { "Unable to suspend SolidCP account" }
@@ -31,6 +30,7 @@ module AppManager
           Rails.logger.info { "ISPConfig account suspended for #{invoice.user.email}" }
 
           invoice.subscription.update_column(:panel_disabled_at,Time.zone.now)
+          invoice.subscription.update({status: false})
           send_panel_access_disabled_notification('ISPConfig')
         else
           Rails.logger.info { "Unable to suspend ISPConfig account for #{invoice.user.email}" }
@@ -38,10 +38,8 @@ module AppManager
 
       elsif invoice.subscription.plan.hsphere?
 
-        # TODO: Yet to implement
-
       else
-        raise StandardError.new 'Subscription Pannel not supported #{invoice.subscription.plan.try(:server_type)}'
+        raise StandardError.new 'Subscription Panel not supported #{invoice.subscription.plan.try(:server_type)}'
       end  
     end
 
