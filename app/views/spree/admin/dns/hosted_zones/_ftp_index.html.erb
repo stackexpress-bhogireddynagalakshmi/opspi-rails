@@ -132,12 +132,12 @@
             <div class="form-group">
             <label class="form-label">Select Domain:</label>
             <%#= f.select(:domain, @windows_sites.pluck(:domain_name).uniq.reject{|x| x.include?("www")}, {:prompt => 'Select Web Domain'}, class: 'form-select js-filterable',id: "domain_name_dropdown" )%>
-            <%=select_tag :parent_domain_id,options_for_select(@websites), class: 'form-select'%>
+            <%=select_tag :parent_domain_id,options_for_select(@websites),include_blank: true, class: 'form-select' ,id: "domain_name_dropdown"%>
             </div>   
       
              <div class="form-group">
               <label class="form-label">Folder:</label>
-              <%=f.text_field 'folder', value: "/var/www/clients/client312/web29", class: 'form-control', disabled: true, id: "folder_path" %>
+              <%=f.text_field 'folder', value: "", class: 'form-control', disabled: true, id: "folder_path" %>
             </div>   
           </div>
       
@@ -293,4 +293,11 @@ $(document).ready(function (argument) {
       }
     });
 });
+
+$('#domain_name_dropdown').on('change', function(){
+      var val = $(this).val();
+      var folder = "\\"+val+"\\wwwroot"
+      $('#folder_path').val(folder)
+    });
+  
 </script>
