@@ -23,6 +23,8 @@ every '0 4 * * *' do
   opspi_cron 'invoices:enable_control_panel'
 end
 
-
+every '0 1 * * *' do
+  opspi_cron "quota_usages:update_quota_usage"
+end
 
 
