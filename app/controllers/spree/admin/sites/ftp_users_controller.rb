@@ -29,13 +29,26 @@ module Spree
         def new; end
 
         def create
-          @response = ftp_user_api.create(resource_params)
-          if @response[:success]
-            set_flash
-            redirect_to request.referrer
+          if params[:server_type] == "windows"
+            @response = windows_api.create(resource_params)
+            if @response[:success]
+              set_flash
+              redirect_to request.referrer
+            else
+              get_websites
+              #render :new
+              redirect_to request.referrer
+            end
           else
-            get_websites
-            render :new
+            @response = current_spree_user.isp_config.ftp_user.create(resource_params)
+            if @response[:success]
+              set_flash
+              redirect_to request.referrer
+            else
+              get_websites
+              #render :new
+              redirect_to request.referrer
+            end
           end
         end
 
@@ -71,19 +84,26 @@ module Spree
         end
 
         def resource_params
-          if windows?
-            params.require("ftp_user").permit(:username, :password).merge(get_folder_path)
-          else
-            params.require("ftp_user").permit(:parent_domain_id, :username, :password, :quota_size, :active, :uid, :gid,
-                                              :dir)
+          if params[:server_type] == "windows"
+            windows_resource_params
+          elsif params[:server_type] == "linux"
+            linux_resource_params
           end
+          
         end
 
         def get_folder_path
-          { can_read: true, can_write: true, folder: "\\#{params[:ftp_user][:domain]}\\wwwroot" }
+          { can_read: true, can_write: true, folder: "\\#{params[:domain]}\\wwwroot" }
         end
 
-        def windows_resource_params; end
+        def linux_resource_params 
+          params.require("ftp_user").permit(:parent_domain_id, :username, :password, :quota_size, :active, :uid, :gid,
+          :dir)
+        end
+
+        def windows_resource_params 
+          params.require("ftp_user").permit(:username, :password).merge(get_folder_path)
+        end
 
         def ftp_user_api
           if windows?

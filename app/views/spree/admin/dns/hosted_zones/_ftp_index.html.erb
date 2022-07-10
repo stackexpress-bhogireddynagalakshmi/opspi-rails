@@ -17,6 +17,7 @@
   }
 </style>
 
+<%if current_spree_user.have_linux_access?%>
 <% if @ftp_user.present? %>
 <div class="card mt-3">
             <div class="table-responsive">
@@ -78,6 +79,56 @@
 <label class="form-label" style="margin-top: 0.5rem;"> No FTP Users Found </label>
 </div>
 <% end %>
+<% else %>
+<% if @win_user.any? %>
+      <div class="card mt-3">
+        <div class="table-responsive">
+          <table class="table table-sm card-table" style="width:100%">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Folder</th>
+               <!--  <th>Enabled</th> -->
+                <th>Can Read</th>
+                <th>Can Write</th>
+                <th style="text-align:end">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="fsbase">
+              <% @win_user.each do |ftp_account|%>
+                <tr>
+                  <td><%= ftp_account.name %></td>
+                  <td><%= ftp_account.folder %></td>
+                  <!-- <td><%#= ftp_account.enabled %></td> -->
+                  <td style="text-align: center;"><% if ftp_account.can_read%>
+                  <i class="fe fe-check-circle" style="color: green;"></i>
+                  <% else %>
+                  <i class="fe fe-x-circle" style="color: red;"></i>
+                  <% end %>
+                  </td>
+                  <td style="text-align: center;"><% if ftp_account.can_write%>
+                  <i class="fe fe-check-circle" style="color: green;"></i>
+                  <% else %>
+                  <i class="fe fe-x-circle" style="color: red;"></i>
+                  <% end %>
+                  </td>
+                  <td>
+                  <span class="d-flex justify-content-end">
+                    <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'), method: :delete, data: {confirm: t('windows.ftp_account.delete_alert')},class:"btn btn-danger btn-size"%>
+                  </span>
+                  </td>
+                </tr>
+              <%end%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <div class="alert alert-secondary no-objects-found">
+        <label class="form-label" style="margin-top: 0.5rem;"> No FTP Users </label>
+      </div>
+    <% end %>
+<% end %>
 
     <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -109,7 +160,7 @@
       </div>
       <div class="modal-body">
       <%#= render partial: 'spree/admin/sites/ftp_users/set_remaining_fields_value', collection: @websites, as: :website %>
-      <%=form_for "ftp_user", url: admin_sites_ftp_users_path, html: {method: :post} do |f|%> 
+      <%=form_for "ftp_user", url: admin_sites_ftp_users_path, html: {method: :post}, remote: true do |f|%> 
 
         <fieldset>
           <div class="form-group">
@@ -132,7 +183,8 @@
             <div class="form-group">
             <label class="form-label">Select Domain:</label>
             <%#= f.select(:domain, @windows_sites.pluck(:domain_name).uniq.reject{|x| x.include?("www")}, {:prompt => 'Select Web Domain'}, class: 'form-select js-filterable',id: "domain_name_dropdown" )%>
-            <%=select_tag :parent_domain_id,options_for_select(@websites),include_blank: true, class: 'form-select' ,id: "domain_name_dropdown"%>
+            <%#=select_tag :parent_domain_id,options_for_select(@websites),include_blank: true, class: 'form-select' ,id: "domain_name_dropdown"%>
+            <%=select_tag 'domain',options_for_select(@user_mail_domains.map(&:domain)),include_blank: true , class: 'form-select',id: "domain_name_dropdown"%>
             </div>   
       
              <div class="form-group">
@@ -295,7 +347,7 @@ $(document).ready(function (argument) {
 });
 
 $('#domain_name_dropdown').on('change', function(){
-      var val = $(this).val();
+      var val = $(this).text();
       var folder = "\\"+val+"\\wwwroot"
       $('#folder_path').val(folder)
     });

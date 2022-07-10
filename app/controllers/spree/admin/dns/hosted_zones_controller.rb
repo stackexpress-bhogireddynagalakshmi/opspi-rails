@@ -130,7 +130,15 @@ module Spree
             if el.domain == @zone_name
             @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
               
-              @ftp_user = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
+            @ftp_user = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
+              
+          @win_user = begin
+              @res = current_spree_user.solid_cp.ftp_account.all
+              convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
+          rescue StandardError
+            []
+          end
+          @win_user = [@win_user].to_a.flatten
             end
           end
 
@@ -144,6 +152,12 @@ module Spree
             @ftp_count = @ftp_user.size
           else
             @ftp_count = 0
+          end
+
+          if @win_user.present?
+            @win_count = @win_user.size
+          else
+            @win_count = 0
           end
 
           get_spam_filter
@@ -216,12 +230,7 @@ module Spree
           end
 
           get_active
-          @windows_sites = begin
-          @windows_sites = current_spree_user.solid_cp.web_domain.all || []
-          convert_to_mash(@windows_sites.body[:get_domains_response][:get_domains_result][:domain_info])
-        rescue StandardError
-          []
-        end
+          
 
         @user_mail_domains = current_spree_user.isp_config.mail_domain.all[:response].response
 
@@ -417,6 +426,18 @@ module Spree
           params.require(:hosted_zones).permit(:name, :ns, :mbox, :refresh, :retry, :expire, :minimum, :ttl, :xfer,
                                                :also_notify, :update_acl, :isp_config_host_zone_id, :status).merge!({ isp_config_id: current_spree_user.isp_config_id })
         end
+
+        def convert_to_mash(data)
+          case data
+          when Hash
+            Hashie::Mash.new(data)
+          when Array
+            data.map { |d| Hashie::Mash.new(d) }
+          else
+            data
+          end
+        end
+
       end
     end
   end
