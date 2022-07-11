@@ -16,32 +16,48 @@ module IspQuotaManager
         ActiveRecord::Base.transaction do
           product = Spree::Product.where(id:product_id).first
           # if product.linux?
-          if user.isp_config_id.present?
-            domain_response   = get_domain_quota
-            mail_response     = get_mail_quota
-            database_response = get_database_quota
+          if user.isp_config_id.present? 
+            @domain_response   = get_domain_quota
+            @mail_response     = get_mail_quota
+            @database_response = get_database_quota
+          end
 
-            if domain_response[:success] && mail_response[:success] && database_response[:success]
+          if user.solid_cp_id.present?
+            return if user.packages.first.try(:solid_cp_package_id).nil?
 
-              domain    = get_quota_info(domain_response[:response])
-              mail      = get_quota_info(mail_response[:response])
-              database  = get_quota_info(database_response[:response])
+             # response.body[:get_package_diskspace_response][:get_package_diskspace_result][:diffgram][:new_data_set][:table][:diskspace_bytes]
+            solid_cp_quota = get_solid_cp_used_quotas
+            quota_array = solid_cp_quota.body[:get_package_context_response][:get_package_context_result][:quotas_array][:quota_value_info]
+            @disk_space = quota_array.collect{ |x| x[:quota_used_value] if x[:quota_name] == 'OS.Diskspace'}
+            @bandwidth = quota_array.collect{ |x| x[:quota_used_value] if x[:quota_name] == 'OS.Bandwidth'}
+          end
 
-              quota = convert_to_json({domain: domain,mail: mail,database: database})
+          if user.isp_config_id.present? || user.solid_cp_id.present?
+            if @domain_response[:success] && @mail_response[:success] && @database_response[:success]
+
+              @domain    = get_quota_info(@domain_response[:response])
+              @mail      = get_quota_info(@mail_response[:response])
+              @database  = get_quota_info(@database_response[:response])
+
+              @quota = convert_to_json({domain: @domain,mail: @mail,database: @database, solid_disk: @disk_space, solid_band: @bandwidth})
               quota_usage_obj = QuotaUsage.new({
                                   user_id: user.id,
                                   product_id: product_id,
-                                  quota_used: quota
+                                  quota_used: @quota
                                 })
 
               if existing_quota.blank?
                 quota_usage_obj.save!
               else
-                existing_quota.update(quota_used: quota)
+                existing_quota.update(quota_used: @quota)
               end
             end
           end
         end
+      end
+      
+      def get_solid_cp_used_quotas
+        SolidCp::Package.new(user).get_package_context
       end
 
       def existing_quota
@@ -50,11 +66,22 @@ module IspQuotaManager
 
       def convert_to_json(resource ={})
         quota_hash = {
-          domains: resource[:domain][:count],
-          mailbox: resource[:mail][:count],
-          database: resource[:database][:count],
-          disk_space: number_to_human_size([resource[:domain][:space],resource[:mail][:space],resource[:database][:space]].reduce([], :concat).inject(0, :+))
+          # domains: resource[:domain][:count].presence || 0,
+          # mailbox: resource[:mail][:count].presence || 0,
+          # database: resource[:database][:count].presence || 0,
+          ispconfig: {
+            disk_space: number_to_human_size([resource[:domain][:space],resource[:mail][:space],resource[:database][:space]].reduce([], :concat).inject(0, :+)),
+            bandwidth: 0
+          },
+          solidcp: {
+            disk_space: "#{solid_cp_quota_value(resource[:solid_disk])} MB",
+            bandwidth: solid_cp_quota_value(resource[:solid_band])
+          }
         }
+      end
+
+      def solid_cp_quota_value(value)
+        value.nil? ? 0 : value.compact.first
       end
   
       def get_quota_info(quota_data)
