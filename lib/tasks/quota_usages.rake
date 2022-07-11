@@ -5,8 +5,8 @@ namespace :quota_usages do
       next if account.admin_tenant?
       account.users.each do |user|
         next unless user.subscriptions.any?
-        user.subscriptions.each do |subscription|
-          InvoiceManager::InvoiceCreator.new(subscription).call if subscription.canceled_at.blank?
+        user.subscriptions.active.each do |subscription|
+          IspQuotaManager::IspQuotaCalculator.new(subscription).call 
         end
       end
     end
