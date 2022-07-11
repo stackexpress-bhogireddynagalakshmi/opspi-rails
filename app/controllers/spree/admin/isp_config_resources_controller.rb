@@ -14,6 +14,7 @@ module Spree
                      else
                        []
                      end
+        get_phpadmin_client_url
       end
 
       def new; end
@@ -88,6 +89,11 @@ module Spree
 
       def resource_id
         @resource.send(resource_id_field)
+      end
+
+      def get_phpadmin_client_url
+        ul= IspConfig::Config.user_url
+        @IspUrl= "#{ul}phpmyadmin/"
       end
 
       def convert_to_mash(data)
