@@ -34,7 +34,7 @@ module Spree
           
           build_tasks
           
-          flash[:success] = I18n.t('wizard.wizard_started')
+          flash[:success] = I18n.t('wizards.wizard_started')
 
           TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
 

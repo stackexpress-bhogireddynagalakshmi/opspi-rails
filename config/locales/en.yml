@@ -55,6 +55,7 @@ en:
     website_builder: Website Builder
     database: Database
     domain_registration: Domain Registrations
+    pending_invoices: "You have pending invoices. You can make a payment by using the “Pay Now” button on the “My Billing” tab."
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout

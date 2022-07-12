@@ -5,25 +5,42 @@
   }
 </style>
 
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:website), admin_windows_domains_path %> /
-  <%= Spree.t(:edit_website) %>
-<% end %>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:website), admin_windows_domains_path %> /
+        <%= Spree.t(:edit_website) %>
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+    <div class="row align-items-center">
+        <div class="col">
+            <!-- Nav -->
+          <ul class="nav nav-tabs nav-overflow header-tabs">
+              <li class="nav-item">
+              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home Folder</a>
+              </li>
 
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item">
-    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home Folder</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Extensions</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Web Publishing</a>
-  </li>
+
+              <li class="nav-item">
+              <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Extensions</a>
+              </li>
+        
+              <li class="nav-item">
+              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Web Publishing</a>
+              </li>
+          </ul>
+        </div>
+    </div>
+    </div>
+    </div>
 
 
-</ul>
 
 <div class="tab-content" id="myTabContent" style="padding: 15px;">
   <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -34,52 +51,52 @@
      <%=form_for "web_domain", url: url, html: { method: @api_resource.present? ? :put : :post } do |f|%> 
       <%resource  = @api_resource || @proxy_resource%>
       <%=hidden_field_tag :domain_id, resource.try("domain_id")%>
-      <fieldset class="mt-3">
-        <div class="form-group field">
-          <label>Web Domain Name</label>
-          <%=f.text_field 'domain_name', value: resource.try(:domain_name), disabled: true%>
+     
+        <div class="form-group">
+          <label class="form-label" >Web Domain Name</label>
+          <%=f.text_field 'domain_name', value: resource.try(:domain_name) , class: 'form-control' , disabled: true%>
           <span id="domain-validation-msg" style="color: red;"> <%=@validation.try(:[],1)%></span>
         </div>
 
-        <h6 class="mt-4">Folder in your Hosting Space</h6>
+        <h4 class="mt-1">Folder in your Hosting Space</h4>
 
 
         <div class="pl-3">
-           <div class="form-group field">
-              <label>Path</label>
 
-              <input type="text" name="" disabled="disabled" value='<%=resource.try(:domain_name)%>/wwwroot'>
+        <div class="form-group">
+          <label class="form-label">Path</label>
+          
+
+          <input type="text" name="" disabled="disabled" value='<%=resource.try(:domain_name)%>/wwwroot' class="form-control">
+        
+        </div>
+
+            <h4>Security Settings:</h4>
+
+             <div class="form-group form-check">
+              <label class="form-check-label"><%=f.check_box :point_to_existing_website, class: 'form-check-input list-checkbox mr-2'%> Enable Directory Browsing</label>
+            </div>
+            
+            <div class="form-group form-check">
+              <label class="form-check-label"><%=f.check_box :enable_dns, class: 'form-check-input list-checkbox mr-2'%> Enable Parent Paths</label>
+            </div>
+            
+
+            <h4>Compression:</h4>
+
+            <div class="form-group form-check">
+              <label class="form-check-label"><%=f.check_box :allow_subdomains, class: 'form-check-input list-checkbox mr-2'%>  Enable Dynamic Compression</label>
             </div>
 
-            <h6>Security Settings:</h6>
-
-             <div class="form-group field">
-              <label><%=f.check_box :point_to_existing_website, class: 'mr-2'%> Enable Directory Browsing</label>
-            </div>
-
-                  
-            <div class="form-group field">
-              <label><%=f.check_box :enable_dns, class: 'mr-2'%> Enable Parent Paths</label>
-            </div>
-
-            <h6>Compression:</h6>
-
-
-
-
-            <div class="form-group field">
-              <label><%=f.check_box :allow_subdomains, class: 'mr-2'%>  Enable Dynamic Compression</label>
-            </div>
-
-            <div class="form-group field">
-              <label><%=f.check_box :allow_subdomains, class: 'mr-2'%>  Enable Static Compression</label>
+            <div class="form-group form-check">
+              <label class="form-check-label"><%=f.check_box :allow_subdomains, class: 'form-check-input list-checkbox mr-2'%>  Enable Static Compression</label>
             </div>
         </div>
 
       
-        <%=submit_tag "#{resource.present? ? 'Update' : 'Add'} Website", class: 'btn btn-primary'%>
+        <%=submit_tag "#{resource.present? ? 'Update' : 'Add'} Website", class: 'btn btn-primary lift'%>
 
-      </fieldset>
+
     <%end%>
 
       

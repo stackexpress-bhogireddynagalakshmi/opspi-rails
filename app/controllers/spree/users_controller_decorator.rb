@@ -12,6 +12,10 @@ module Spree
       super
       @orders = TenantManager::TenantHelper.unscoped_query { @user.orders.order('created_at desc') }
       @invoices = TenantManager::TenantHelper.unscoped_query { @user.invoices.order(created_at: :desc) }
+
+      if current_spree_user.invoices.active.count > 0
+        flash[:warning] =  Spree.t('pending_invoices')
+      end
     end
   end
 end

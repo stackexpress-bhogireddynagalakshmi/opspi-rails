@@ -286,7 +286,7 @@
                     <%if invoice.closed?  || invoice.processing?%>
                   
                     <%else%>
-                     <%=link_to 'Pay',spree.checkout_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary','data-turbolinks': false%>
+                     <%=link_to 'Pay Now',spree.checkout_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary','data-turbolinks': false%>
                     <%end%>
                   </td>
                 </tr>
