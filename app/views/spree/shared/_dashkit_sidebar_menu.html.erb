@@ -59,6 +59,12 @@ width:230px
           <!-- Navigation -->
           <ul class="navbar-nav mb-md-3">
 
+          <li class="nav-item">
+            <a class="nav-link" id="sidebarOrder" href="<%= admin_dashboard_index_path %>">
+              <i class="fe fe-home" style="margin-right:10px"></i> Dashboard
+            </a>
+          </li>
+
           <% if can? :admin, Spree::Order %>
           <li class="nav-item">
             <a class="nav-link" id="sidebarOrder" href="/admin/orders">
@@ -319,7 +325,7 @@ width:230px
           
         <li class="nav-item">
         <a class="nav-link" id="sidebarDomain" href="<%= spree.admin_domain_registrations_path %>">
-          <i class="fa fa-file-text-o" style="margin-right:10px"></i>  Domain Registrations
+          <i class="fe fe-file-text" style="margin-right:10px"></i>  Domain Registrations
         </a>
         </li>
 
@@ -334,7 +340,7 @@ width:230px
         <%if ENV['OPSBOT_ENABLED'] == "true" %>
         <li class="nav-item">
         <a class="nav-link" href="#sidebar-opsbot" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-opsbot" id="sidebar_opsbot_dropdown">
-        <i class="fa fa-file-text-o" style="margin-right:10px"></i>  OpsBot
+        <i class="fe fe-file-text" style="margin-right:10px"></i>  OpsBot
           </a>
           <div class="collapse" id="sidebarOpsbot">
           <ul class="nav nav-sm flex-column">
@@ -351,7 +357,7 @@ width:230px
     <%if current_spree_user.end_user? %>
         <li class="nav-item">
         <a class="nav-link" href="#sidebar-hosting_controls" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-hosting_controls" id="sidebar_dropdown">
-        <i class="fa fa-file-text-o" style="margin-right:10px"></i> Hosting Controls
+        <i class="fe fe-file-text" style="margin-right:10px"></i> Hosting Controls
         </a>
           <div class="collapse" id="sidebarDashboards">
           <ul class="nav nav-sm flex-column">

@@ -32,6 +32,10 @@ Rails.application.routes.draw do
           get :solidcp
         end
       end
+
+      resources :dashboard do 
+        
+      end
       
       resources :domain_registrations do 
         collection do
