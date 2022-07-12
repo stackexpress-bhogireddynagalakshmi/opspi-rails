@@ -33,6 +33,9 @@ Rails.application.routes.draw do
         end
       end
       
+      resources :my_account_profiles do 
+      end
+      
       resources :domain_registrations do 
         collection do
           get :setup_reseller_club
