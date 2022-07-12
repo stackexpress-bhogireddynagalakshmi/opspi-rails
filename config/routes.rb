@@ -32,6 +32,9 @@ Rails.application.routes.draw do
           get :solidcp
         end
       end
+
+      resources :my_account_orders do 
+      end
       
       resources :domain_registrations do 
         collection do
