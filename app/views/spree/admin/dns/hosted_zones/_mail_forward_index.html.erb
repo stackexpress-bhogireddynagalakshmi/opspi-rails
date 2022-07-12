@@ -60,7 +60,7 @@
             <div class="input-group mb-3">
               <%=f.text_field 'source', value: @resources3.try(:source).try(:split, '@').try(:first), class: 'form-control',style:"width: 50%;"%>
               <span class="input-group-text" id='at-sign'>@</span>
-              <%=select_tag 'source_domain',options_for_select(@user_mail_domains.map(&:domain), params[:zone_name]), class: 'form-select'%>
+              <%=select_tag 'source_domain',options_for_select(@domains, params[:zone_name]), class: 'form-select'%>
             </div>
           </div>
       

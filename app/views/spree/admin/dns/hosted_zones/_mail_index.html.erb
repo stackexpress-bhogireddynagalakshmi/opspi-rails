@@ -110,7 +110,7 @@
             <div class="input-group">
                <%=f.text_field 'email', value: @mail_user.try(:email).try(:split,'@').try(:first), class: 'form-control', required: true, style:"width: 50%;"%>
                 <span class="input-group-text">@</span>
-                <%=select_tag 'mail_domain', options_for_select(get_mail_domians,params[:zone_name]), class: 'form-select'%>
+                <%=select_tag 'mail_domain', options_for_select(@domains,params[:zone_name]), class: 'form-select'%>
             </div>
           </div>
       

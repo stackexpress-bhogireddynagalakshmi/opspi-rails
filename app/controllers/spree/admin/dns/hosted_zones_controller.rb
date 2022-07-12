@@ -221,11 +221,25 @@ module Spree
             if el.domain == @zone_name
               list_arr4 << el
             #  @websites = list_arr4
+             @domains
              @websites = list_arr4.collect { |x| [x.domain, x.domain_id] }
              @web_id = el.domain_id
              break
             else
               @websites = @websites_response.collect { |x| [x.domain, x.domain_id] }
+            end
+          end
+
+          domains = current_spree_user.isp_config.mail_domain.all[:response].response
+          list_arr5 = []
+          domains.each do |elm|
+            if elm.domain == @zone_name
+              list_arr5 << elm
+            #  @websites = list_arr4
+              @domains = list_arr5.collect { |x| [x.domain, x.domain] }
+             break
+            else
+              @domains = domains.collect { |x| [x.domain, x.domain] }
             end
           end
 

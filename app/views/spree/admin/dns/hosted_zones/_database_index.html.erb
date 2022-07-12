@@ -16,7 +16,6 @@
   }
 </style>
 
-
 <% if @resources.present? %>
 <div class="card mt-3">
 <div class="table-responsive">
@@ -97,7 +96,7 @@
           <fieldset>
             <div class="form-group">
               <label class="form-label">Select Website:</label>
-              <%=f.select 'web_domain_id', options_for_select(get_web_domians,@web_id), {}, class: 'form-select', html: {selected: true} %>
+              <%=f.select 'web_domain_id', options_for_select(@websites,@web_id), {}, class: 'form-select', html: {selected: true} %>
             </div>
         
             <div class="form-group">
