@@ -10,6 +10,11 @@
     </button>
   </div>
 
+  <ul class="nav nav-sidebar border-bottom" >
+    
+    <%= tab 'Dashboard', url: admin_dashboard_index_path,  icon: 'report.svg'%>
+  </ul>
+
   <% if can? :admin, Spree::Order %>
     <ul class="nav nav-sidebar border-bottom" id="sidebarOrder">
       <%= tab *Spree::BackendConfiguration::ORDER_TABS, icon: 'list.svg' %>
