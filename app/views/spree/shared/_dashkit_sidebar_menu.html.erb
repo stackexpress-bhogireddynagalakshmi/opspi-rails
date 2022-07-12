@@ -59,6 +59,37 @@ width:230px
           <!-- Navigation -->
           <ul class="navbar-nav mb-md-3">
 
+          <li class="nav-item">
+            <a class="nav-link" href="#sidebar-account" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-account" id="sidebar_account_dropdown">
+            <i class="fe fe-home" style="margin-right:10px"></i> My Account
+          </a>
+            <div class="collapse" id="sidebarAccount">
+                    <ul class="nav nav-sm flex-column">
+                      <li class="nav-item">
+                        <a href="#" class="nav-link">
+                          Orders
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="#" class="nav-link">
+                        Subscriptions
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<%= admin_my_account_invoices_path %>" class="nav-link">
+                        Invoices
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="#" class="nav-link">
+                        Profiles
+                        </a>
+                      </li>
+                      
+                    </ul>
+                  </div>
+          </li>
+
           <% if can? :admin, Spree::Order %>
           <li class="nav-item">
             <a class="nav-link" id="sidebarOrder" href="/admin/orders">
@@ -748,6 +779,19 @@ $(document).ready(function() {
       }
   });
 });
+
+$(document).ready(function() {
+  $("#sidebar_account_dropdown").on('click', function(event) {
+    if($("#sidebarAccount").hasClass("show")){
+        $('#sidebar_account_dropdown').attr('aria-expanded','false');
+        $("#sidebarAccount").removeClass("show");
+      } else {
+        $('#sidebar_account_dropdown').attr('aria-expanded','true');
+        $("#sidebarAccount").addClass("show");
+      }
+  });
+});
+
 
 $(document).ready(function() {
   $("#sidebar_promotion_dropdown").on('click', function(event) {
