@@ -93,7 +93,7 @@ module Spree
 
       def get_phpadmin_client_url
         ul= IspConfig::Config.user_url
-        @IspUrl= "#{ul}phpmyadmin/"
+        @phpmyAdminUrl= "#{ul}phpmyadmin/"
       end
 
       def convert_to_mash(data)

@@ -220,7 +220,7 @@ module Spree
 
         def get_phpadmin_client_url
           ul= IspConfig::Config.user_url
-          @IspUrl= "#{ul}phpmyadmin/"
+          @phpmyAdminUrl= "#{ul}phpmyadmin/"
         end
 
         def get_spam_filter
