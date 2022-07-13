@@ -33,9 +33,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :dashboard do 
-        
-      end
+      get 'dashboard', :controller=> 'dashboard',:action=>"index"
       
       resources :domain_registrations do 
         collection do
