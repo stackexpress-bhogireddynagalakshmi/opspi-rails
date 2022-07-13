@@ -40,8 +40,14 @@
         <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
       </svg>
     <% end %>
-    <%=link_to reset_password_admin_sites_isp_databases_path(email: database.database_user, type: 'create_database', div_class: "db_#{database.database_id}", source: 'isp_databases'), remote: true, class: 'btn btn-outline-primary btn-size', style:"margin-right:5px", title: 'Reset Password' do %>
+    <%=link_to reset_password_admin_sites_isp_databases_path(email: database.database_name, type: 'create_database', div_class: "db_#{database.database_id}", source: 'isp_databases'), remote: true, class: 'btn btn-outline-primary btn-size', style:"margin-right:5px", title: 'Reset Password' do %>
       <%= render partial: '/spree/admin/shared/icons/reset_password' %>
+    <% end %>
+
+    <%=link_to @phpmyAdminUrl, target: '_blank' , class: 'btn btn-outline-primary btn-size', style:"margin-right:5px" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
+      <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294l4-13zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0zm6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/>
+    </svg>
     <% end %>
     
     <%= link_to 'javascript:void(0);', data: {database: database.database_name, username: database.database_user, password: database.database_password, host: ENV['MYSQL_SERVER_HOSTNAME'], port: ENV['MYSQL_SERVER_PORT'], pwd_div_id: "db_#{database.database_id}_pwd_text", id: database.database_id}, class: 'configure-db-modal-link btn btn-outline-primary btn-size', style:"margin-right:5px", title: 'Configuration Details' do %>
