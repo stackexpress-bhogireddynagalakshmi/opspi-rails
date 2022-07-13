@@ -244,13 +244,6 @@ module Spree
 
           get_active
           
-
-        @user_mail_domains = current_spree_user.isp_config.mail_domain.all[:response].response
-
-              @websites_remain = @websites_response
-              @websites = @websites_response.collect { |x| [x.domain, x.domain_id] }
-            end
-          end
           get_phpadmin_client_url
         end 
 
