@@ -45,6 +45,32 @@ module IspConfig
         formatted_response(response, 'database_quota')
       end
   
+      def web_traffic
+        response = query({
+                           endpoint: '/json.php?trafficquota_get_by_user',
+                           method: :GET,
+                           body: {
+                             client_id: user.isp_config_id
+                           }
+                         })
+
+        formatted_response(response, 'web_traffic')
+
+      end
+
+      def ftp_traffic
+        response = query({
+                           endpoint: '/json.php?ftptrafficquota_data',
+                           method: :GET,
+                           body: {
+                             client_id: user.isp_config_id
+                           }
+                         })
+
+        formatted_response(response, 'ftp_traffic')
+
+      end
+  
       private
   
       def formatted_response(response, action)
