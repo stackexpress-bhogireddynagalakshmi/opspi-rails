@@ -33,8 +33,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :my_account_orders do 
-      end
+
+
+      get 'my_account_orders', :controller=> 'my_account_orders',:action=>"index"
       
       resources :domain_registrations do 
         collection do
