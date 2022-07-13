@@ -37,9 +37,8 @@ Rails.application.routes.draw do
         end
       end
       
-      resources :my_account_subscriptions do 
-      end
 
+      get 'my_account_subscriptions', :controller=> 'my_account_subscriptions',:action=>"index"
       
 
       resources :domain_registrations do 
