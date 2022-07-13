@@ -33,8 +33,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :my_account_invoices do 
-      end
+      get 'my_account_invoices', :controller=> 'my_account_invoices',:action=>"index"
       
       resources :domain_registrations do 
         collection do
