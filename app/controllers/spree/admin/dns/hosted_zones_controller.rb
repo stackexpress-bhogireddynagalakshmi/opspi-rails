@@ -220,8 +220,7 @@ module Spree
           @websites_response.each do |el|
             if el.domain == @zone_name
               list_arr4 << el
-            #  @websites = list_arr4
-             @domains
+            @websites_remain = list_arr4
              @websites = list_arr4.collect { |x| [x.domain, x.domain_id] }
              @web_id = el.domain_id
              break
@@ -248,7 +247,17 @@ module Spree
 
         @user_mail_domains = current_spree_user.isp_config.mail_domain.all[:response].response
 
+              @websites_remain = @websites_response
+              @websites = @websites_response.collect { |x| [x.domain, x.domain_id] }
+            end
+          end
+          get_phpadmin_client_url
         end 
+
+        def get_phpadmin_client_url
+          ul= IspConfig::Config.user_url
+          @phpmyAdminUrl= "#{ul}phpmyadmin/"
+        end
 
         def get_spam_filter
           spam = IspConfig::Mail::SpamFilterWhitelist.new(current_spree_user)

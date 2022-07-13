@@ -37,7 +37,7 @@ module IspConfig
 
        
         if response.code == "ok"
-          user.hosted_zones.create({ isp_config_host_zone_id: response["response"] })
+          user.hosted_zones.create({ isp_config_host_zone_id: response["response"], name:  create_params[:name]})
           create_ns_records(response["response"] , create_params)
           # create_a_records(response["response"] , create_params)
           # create_mx_record(response["response"], create_params)
