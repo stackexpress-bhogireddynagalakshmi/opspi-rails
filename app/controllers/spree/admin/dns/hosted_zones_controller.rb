@@ -201,7 +201,27 @@ module Spree
             @mail_domain_count = 0
           end
 
+          @websites_response = current_spree_user.isp_config.website.all[:response].response
+          list_arr4 = []
+          @websites_response.each do |el|
+            if el.domain == @zone_name
+              list_arr4 << el
+            @websites_remain = list_arr4
+             @websites = list_arr4.collect { |x| [x.domain, x.domain_id] }
+             @web_id = el.domain_id
+             break
+            else
+              @websites_remain = @websites_response
+              @websites = @websites_response.collect { |x| [x.domain, x.domain_id] }
+            end
+          end
+          get_phpadmin_client_url
         end 
+
+        def get_phpadmin_client_url
+          ul= IspConfig::Config.user_url
+          @phpmyAdminUrl= "#{ul}phpmyadmin/"
+        end
 
         def get_spam_filter
           spam = IspConfig::Mail::SpamFilterWhitelist.new(current_spree_user)
