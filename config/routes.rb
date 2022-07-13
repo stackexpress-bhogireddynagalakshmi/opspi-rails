@@ -33,8 +33,7 @@ Rails.application.routes.draw do
         end
       end
       
-      resources :my_account_profiles do 
-      end
+      get 'my_account_profiles', :controller=> 'my_account_profiles',:action=>"index"
       
       resources :domain_registrations do 
         collection do
