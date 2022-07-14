@@ -7,9 +7,11 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 require_relative './isp_config_cluster_seeding'
 require_relative './solid_cp_cluster_seeding'
+require_relative './panel_seeder'
 
 Spree::Core::Engine.load_seed if defined?(Spree::Core)
 Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
 
 seed_isp_config_cluster
 seed_solid_cp_cluster
+PanelSeeder.seed

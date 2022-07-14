@@ -23,7 +23,7 @@ module Spree
         end
 
         def resource_index_path
-          redirect_to admin_mail_forwards_path
+          redirect_to request.referrer
         end
 
         def isp_config_api
