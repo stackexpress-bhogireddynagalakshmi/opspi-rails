@@ -1,0 +1,3 @@
+class QuotaUsage < ApplicationRecord
+    
+end
