@@ -12,7 +12,9 @@
       </div>
     </div>
     </div>
+</div>
 
+<% if @invoices.present? %>
 <div class="card mt-4">
 <div class="table-responsive">
 <table class="table table-sm card-table" style="width:100%">
@@ -59,4 +61,7 @@
 </table>
 </div>
 </div>
+<% else %>
+  <p class="alert alert-secondary text-center">You Have No Invoices Yet</p>
+<% end %>
 
