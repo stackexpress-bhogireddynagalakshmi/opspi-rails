@@ -37,6 +37,8 @@ Rails.application.routes.draw do
         end
       end
 
+
+      get 'my_account_profiles', :controller=> 'my_account_profiles',:action=>"index"
       get 'my_account_invoices', :controller=> 'my_account_invoices',:action=>"index"
       get 'my_account_orders', :controller=> 'my_account_orders',:action=>"index"
       get 'dashboard', :controller=> 'dashboard',:action=>"index"
