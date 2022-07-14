@@ -72,7 +72,7 @@ width:230px
             <div class="collapse" id="sidebarAccount">
                     <ul class="nav nav-sm flex-column">
                       <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="<%= admin_my_account_orders_path %>" class="nav-link">
                           Orders
                         </a>
                       </li>
@@ -94,7 +94,7 @@ width:230px
                       
                     </ul>
                   </div>
-          
+          </li>
 
           <% if can? :admin, Spree::Order %>
           <li class="nav-item">
