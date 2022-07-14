@@ -21,6 +21,10 @@ Rails.application.routes.draw do
   end
   
   Spree::Core::Engine.routes.draw do
+  namespace :spree do
+    namespace :admin do
+    end
+  end
     namespace :admin do
       resources :my_store do
         collection do 
@@ -35,6 +39,10 @@ Rails.application.routes.draw do
 
       get 'dashboard', :controller=> 'dashboard',:action=>"index"
       
+
+      get 'my_account_subscriptions', :controller=> 'my_account_subscriptions',:action=>"index"
+      
+
       resources :domain_registrations do 
         collection do
           get :setup_reseller_club
