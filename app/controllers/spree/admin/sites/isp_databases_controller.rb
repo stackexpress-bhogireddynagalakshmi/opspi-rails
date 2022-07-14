@@ -12,7 +12,7 @@ module Spree
             @response = isp_config_api.create(database_params)
             if @response[:success]
               set_flash
-              redirect_to admin_sites_isp_databases_path
+              redirect_to request.referrer
             else
               render :new
             end

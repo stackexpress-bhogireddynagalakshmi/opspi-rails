@@ -49,5 +49,12 @@ module SolidCp
         { success: true, message: 'SolidCP Package already exists' }
       end
     end
+
+    def get_package_context
+      response = super(message: {
+        package_id: user.packages.first.try(:solid_cp_package_id)
+      })
+    end
+    
   end
 end

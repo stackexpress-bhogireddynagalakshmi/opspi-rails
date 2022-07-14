@@ -28,7 +28,7 @@ module Spree
           @response = isp_config_api.create(spam_filter_params)
           set_flash
           if @response[:success]
-            resource_index_path
+            redirect_to request.referrer
           else
             render :new
           end

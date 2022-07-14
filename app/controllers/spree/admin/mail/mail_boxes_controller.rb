@@ -30,7 +30,7 @@ module Spree
           @response = mail_user_api.create(mail_user_param)
           set_flash
           if @response[:success]
-            redirect_to admin_mail_mail_boxes_path
+            redirect_to request.referrer
           else
             render :new
           end

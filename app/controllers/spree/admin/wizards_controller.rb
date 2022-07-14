@@ -27,6 +27,8 @@ module Spree
           
           set_batch_jobs
 
+          create_user_domain
+
           redirect_to admin_wizard_path(id: @batch_jobs.keys.last)
         else
           @error = @error ||= 'Invalid domain name'
@@ -300,6 +302,10 @@ module Spree
         @batch_jobs = @batch_jobs.with_indifferent_access if @batch_jobs.present?
 
         @batch_jobs
+      end
+
+      def create_user_domain
+        current_spree_user.user_domains.create({domain: @domain, web_hosting_type: @server_type})
       end
 
       def get_database_name(domain)
