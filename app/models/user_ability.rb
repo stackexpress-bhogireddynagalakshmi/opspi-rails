@@ -25,5 +25,7 @@ class UserAbility
     can :manage, :site_builders
     can :manage, :isp_databases
     can :manage, :my_account_profiles
+    can :manage, :my_account_subscriptions
+    can :manage, :dashboard
   end
 end

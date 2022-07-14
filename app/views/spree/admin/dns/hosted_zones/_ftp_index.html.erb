@@ -17,6 +17,7 @@
   }
 </style>
 
+<%if current_spree_user.have_linux_access?%>
 <% if @ftp_user.present? %>
 <div class="card mt-3">
             <div class="table-responsive">
@@ -78,6 +79,56 @@
 <label class="form-label" style="margin-top: 0.5rem;"> No FTP Users Found </label>
 </div>
 <% end %>
+<% else %>
+<% if @win_user.any? %>
+      <div class="card mt-3">
+        <div class="table-responsive">
+          <table class="table table-sm card-table" style="width:100%">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Folder</th>
+               <!--  <th>Enabled</th> -->
+                <th>Can Read</th>
+                <th>Can Write</th>
+                <th style="text-align:end">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="fsbase">
+              <% @win_user.each do |ftp_account|%>
+                <tr>
+                  <td><%= ftp_account.name %></td>
+                  <td><%= ftp_account.folder %></td>
+                  <!-- <td><%#= ftp_account.enabled %></td> -->
+                  <td style="text-align: center;"><% if ftp_account.can_read%>
+                  <i class="fe fe-check-circle" style="color: green;"></i>
+                  <% else %>
+                  <i class="fe fe-x-circle" style="color: red;"></i>
+                  <% end %>
+                  </td>
+                  <td style="text-align: center;"><% if ftp_account.can_write%>
+                  <i class="fe fe-check-circle" style="color: green;"></i>
+                  <% else %>
+                  <i class="fe fe-x-circle" style="color: red;"></i>
+                  <% end %>
+                  </td>
+                  <td>
+                  <span class="d-flex justify-content-end">
+                    <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'), method: :delete, data: {confirm: t('windows.ftp_account.delete_alert')},class:"btn btn-danger btn-size"%>
+                  </span>
+                  </td>
+                </tr>
+              <%end%>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <div class="alert alert-secondary no-objects-found">
+        <label class="form-label" style="margin-top: 0.5rem;"> No FTP Users </label>
+      </div>
+    <% end %>
+<% end %>
 
     <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -98,6 +149,25 @@
     </div>
   </div>
 
+  <div class="modal fade" id="ftpModal" tabindex="-1" role="dialog" aria-labelledby="ftpModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Add FTP User</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-right: -8px;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id='modal-close-button'>Close</button>
+        <button type="button" class="btn btn-primary" id='modal-save-button'>Save changes</button>
+      </div> -->
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
     
@@ -180,4 +250,35 @@
         } ,5);
     }
     }
+
+$(document).on('click', '.admin_new_ftp_user1', function(event){
+  event.preventDefault();
+  $('#ftpModal').modal('show');
+});
+
+$(document).on('click', '.btn-close', function(event){
+  $('#ftpModal').modal('hide');
+});
+
+$(document).ready(function (argument) {
+    $("#hosting_type").on('change',function (argument) {
+      var val = $(this).val();
+      if (val=='linux') {
+        $('#linux-fields').show();
+        $('#windows-fields').hide();
+      } 
+      else
+      {
+        $('#linux-fields').hide();
+        $('#windows-fields').show();
+      }
+    });
+});
+
+$('#domain_name_dropdown').on('change', function(){
+      var val = $(this).text();
+      var folder = "\\"+val+"\\wwwroot"
+      $('#folder_path').val(folder)
+    });
+  
 </script>
