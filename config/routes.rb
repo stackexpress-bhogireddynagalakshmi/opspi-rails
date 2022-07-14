@@ -32,6 +32,8 @@ Rails.application.routes.draw do
           get :solidcp
         end
       end
+
+      get 'dashboard', :controller=> 'dashboard',:action=>"index"
       
       resources :domain_registrations do 
         collection do

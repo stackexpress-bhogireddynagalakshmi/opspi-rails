@@ -17,6 +17,7 @@ module OpsPi
       Spree::UserConfirmationsController.layout "dashkit_layout"
       Spree::UserPasswordsController.layout "dashkit_layout"
       Spree::CheckoutController.layout "dashkit_layout"
+      Spree::Admin::DashboardController.layout "dashkit_admin_layout"
       Spree::Admin::DomainRegistrationsController.layout "dashkit_admin_layout"
       Spree::Admin::Dns::HostedZonesController.layout "dashkit_admin_layout"
       Spree::Admin::Mail::DomainsController.layout "dashkit_admin_layout"
