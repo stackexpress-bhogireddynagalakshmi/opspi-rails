@@ -130,7 +130,15 @@ module Spree
             if el.domain == @zone_name
             @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
               
-              @ftp_user = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
+            @ftp_user = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
+              
+          @win_user = begin
+              @res = current_spree_user.solid_cp.ftp_account.all
+              convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
+          rescue StandardError
+            []
+          end
+          @win_user = [@win_user].to_a.flatten
             end
           end
 
@@ -144,6 +152,12 @@ module Spree
             @ftp_count = @ftp_user.size
           else
             @ftp_count = 0
+          end
+
+          if @win_user.present?
+            @win_count = @win_user.size
+          else
+            @win_count = 0
           end
 
           get_spam_filter
@@ -211,10 +225,25 @@ module Spree
              @web_id = el.domain_id
              break
             else
-              @websites_remain = @websites_response
               @websites = @websites_response.collect { |x| [x.domain, x.domain_id] }
             end
           end
+
+          domains = current_spree_user.isp_config.mail_domain.all[:response].response
+          list_arr5 = []
+          domains.each do |elm|
+            if elm.domain == @zone_name
+              list_arr5 << elm
+            #  @websites = list_arr4
+              @domains = list_arr5.collect { |x| [x.domain, x.domain] }
+             break
+            else
+              @domains = domains.collect { |x| [x.domain, x.domain] }
+            end
+          end
+
+          get_active
+          
           get_phpadmin_client_url
         end 
 
@@ -405,10 +434,26 @@ module Spree
           current_spree_user.isp_config.mailing_list
         end
 
+        def get_active
+          @active_data = Website.actives
+        end
+
         def host_zone_params
           params.require(:hosted_zones).permit(:name, :ns, :mbox, :refresh, :retry, :expire, :minimum, :ttl, :xfer,
                                                :also_notify, :update_acl, :isp_config_host_zone_id, :status).merge!({ isp_config_id: current_spree_user.isp_config_id })
         end
+
+        def convert_to_mash(data)
+          case data
+          when Hash
+            Hashie::Mash.new(data)
+          when Array
+            data.map { |d| Hashie::Mash.new(d) }
+          else
+            data
+          end
+        end
+
       end
     end
   end

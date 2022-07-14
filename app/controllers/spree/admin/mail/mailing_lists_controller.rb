@@ -28,7 +28,7 @@ module Spree
           @response = mailing_list_api.create(mail_domain_params)
           set_flash
           if @response[:success]
-            redirect_to admin_mail_mailing_lists_path
+            redirect_to request.referrer
           else
             render :new
           end
