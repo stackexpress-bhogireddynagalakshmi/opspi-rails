@@ -36,6 +36,8 @@ Rails.application.routes.draw do
           get :solidcp
         end
       end
+
+      get 'dashboard', :controller=> 'dashboard',:action=>"index"
       
 
       get 'my_account_subscriptions', :controller=> 'my_account_subscriptions',:action=>"index"

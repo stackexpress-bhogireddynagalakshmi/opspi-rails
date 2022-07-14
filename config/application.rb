@@ -21,6 +21,7 @@ module OpsPi
       # Spree::Admin::MyAccountOrdersController.layout "dashkit_admin_layout"
       # Spree::Admin::MyAccountInvoicesController.layout "dashkit_admin_layout"
       # Spree::Admin::MyAccountProfilesController.layout "dashkit_admin_layout"
+      Spree::Admin::DashboardController.layout "dashkit_admin_layout"
       Spree::Admin::DomainRegistrationsController.layout "dashkit_admin_layout"
       Spree::Admin::Dns::HostedZonesController.layout "dashkit_admin_layout"
       Spree::Admin::Mail::DomainsController.layout "dashkit_admin_layout"

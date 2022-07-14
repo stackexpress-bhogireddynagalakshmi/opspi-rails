@@ -59,11 +59,11 @@ width:230px
           <!-- Navigation -->
           <ul class="navbar-nav mb-md-3">
 
-          <!-- <li class="nav-item">
-            <a class="nav-link" id="sidebarOrder" href="#">
+          <li class="nav-item">
+            <a class="nav-link" id="sidebarOrder" href="<%= admin_dashboard_path %>">
               <i class="fe fe-home" style="margin-right:10px"></i> Dashboard
             </a>
-          </li> -->
+          </li>
 
           <li class="nav-item">
             <a class="nav-link" href="#sidebar-account" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-account" id="sidebar_account_dropdown">
@@ -94,12 +94,12 @@ width:230px
                       
                     </ul>
                   </div>
-          </li>
+          
 
           <% if can? :admin, Spree::Order %>
           <li class="nav-item">
             <a class="nav-link" id="sidebarOrder" href="/admin/orders">
-              <i class="fa fa-list" style="margin-right:10px"></i> Orders
+              <i class="fe fe-list" style="margin-right:10px"></i> Orders
             </a>
           </li>
           <% end %>
@@ -107,7 +107,7 @@ width:230px
           <% if can?(:admin, Spree::ReturnAuthorization) || can?(:admin, Spree::CustomerReturn) %>
           <li class="nav-item">
             <a class="nav-link" href="#sidebar-returns" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-returns" id="sidebar_return_dropdown">
-            <%= svg_icon name: "returns.svg", width: '18', height: '18'%>&nbsp Returns
+            <i class="fe fe-repeat" style="margin-right:10px"></i> Returns
             </a>
             <div class="collapse" id="sidebarReturns">
                 <ul class="nav nav-sm flex-column">
@@ -135,7 +135,7 @@ width:230px
           <% if can? :admin, Spree::Product %>
           <li class="nav-item">
           <a class="nav-link" href="#sidebar-product" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-product" id="sidebar_product_dropdown">
-            <i class="fa fa-th" style="margin-right:10px"></i>  Services
+            <i class="fe fe-grid" style="margin-right:10px"></i>  Services
           </a>
             <div class="collapse" id="sidebarProduct">
                     <ul class="nav nav-sm flex-column">
@@ -178,7 +178,7 @@ width:230px
           <li class="nav-item">
             <!-- <a class="nav-link" id="sidebarReport" href="/admin/reports"> -->
             <a class="nav-link" id="sidebarReport" href="#">
-              <i class="fa fa-file-text-o" style="margin-right:10px"></i> Reports
+              <i class="fe fe-file-text" style="margin-right:10px"></i> Reports
             </a>
           </li>
           <% end %>
@@ -186,7 +186,7 @@ width:230px
           <% if can? :admin, Spree::Promotion %>
           <li class="nav-item">
           <a class="nav-link" href="#sidebar-promotions" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-promotions" id="sidebar_promotion_dropdown">
-            <i class="fa fa-tag" style="margin-right:10px"></i>  Promotions
+            <i class="fe fe-tag" style="margin-right:10px"></i>  Promotions
           </a>
             <div class="collapse" id="sidebarPromotion">
               <ul class="nav nav-sm flex-column">
@@ -208,7 +208,7 @@ width:230px
         <% if Spree.user_class && can?(:admin, Spree.user_class) %>
         <li class="nav-item">
           <a class="nav-link" id="sidebarUser" href="<%= spree.admin_users_path %>">
-           <i class="fa fa-users" style="margin-right:10px"></i> Users
+           <i class="fe fe-users" style="margin-right:10px"></i> Users
           </a>
         </li>
         <% end %>
@@ -216,7 +216,7 @@ width:230px
         <% if can? :admin, current_store %>
         <li class="nav-item">
           <a class="nav-link" href="#sidebar-configuration" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-configuration" id="sidebar_configuration_dropdown">
-          <i class="fa fa-file-text-o" style="margin-right:10px"></i> Configuration
+          <i class="fe fe-file-text" style="margin-right:10px"></i> Configuration
           </a>
 
           <div class="collapse" id="sidebarConfiguration">
@@ -356,14 +356,14 @@ width:230px
           
         <li class="nav-item">
         <a class="nav-link" id="sidebarDomain" href="<%= spree.admin_domain_registrations_path %>">
-          <i class="fa fa-file-text-o" style="margin-right:10px"></i>  Domain Registrations
+          <i class="fe fe-file-text" style="margin-right:10px"></i>  Domain Registrations
         </a>
         </li>
 
         <%if current_spree_user.store_admin? || current_spree_user.admin?%>
         <li class="nav-item">
           <a class="nav-link" id="sidebarReseller" href="<%= spree.setup_reseller_club_admin_domain_registrations_path %>">
-          <i class="fa fa-file-text-o" style="margin-right:10px"></i>  Reseller Club
+          <i class="fe fe-file-text" style="margin-right:10px"></i>  Reseller Club
           </a>
         </li>
         <%end%>
@@ -371,7 +371,7 @@ width:230px
         <%if ENV['OPSBOT_ENABLED'] == "true" %>
         <li class="nav-item">
         <a class="nav-link" href="#sidebar-opsbot" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-opsbot" id="sidebar_opsbot_dropdown">
-        <i class="fa fa-file-text-o" style="margin-right:10px"></i>  OpsBot
+        <i class="fe fe-file-text" style="margin-right:10px"></i>  OpsBot
           </a>
           <div class="collapse" id="sidebarOpsbot">
           <ul class="nav nav-sm flex-column">
@@ -388,7 +388,7 @@ width:230px
     <%if current_spree_user.end_user? %>
         <li class="nav-item">
         <a class="nav-link" href="#sidebar-hosting_controls" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-hosting_controls" id="sidebar_dropdown">
-        <i class="fa fa-file-text-o" style="margin-right:10px"></i> Hosting Controls
+        <i class="fe fe-file-text" style="margin-right:10px"></i> Hosting Controls
         </a>
           <div class="collapse" id="sidebarDashboards">
           <ul class="nav nav-sm flex-column">
