@@ -1,0 +1,12 @@
+<tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %> db_<%= sql_database.id %>">
+<td><%=link_to sql_database.name, admin_sites_isp_database_path(id: sql_database.id, server_type: 'windows', :db_user_name => sql_database.database_user)%></td>
+<td><%= sql_database.id %></td>
+<td><%= sql_database.type_id %></td>
+<td><%= sql_database.package_id %></td>
+<td><%= sql_database.group_name%></td>
+  
+<td class="d-flex justify-content-end">
+  <%=link_to '<i class="fe fe-trash"></i>'.html_safe, admin_sites_isp_database_path(id: sql_database.id, server_type: 'windows'), method: :delete, data: {confirm: t('windows.ftp_account.delete_alert')},class:"btn btn-danger btn-size"%>
+</td>
+
+</tr>
