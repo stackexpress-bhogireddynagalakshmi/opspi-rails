@@ -162,6 +162,10 @@ en:
   windows:
     ftp_account:
     delete_alert: "Are you sure you want to delete this ftp user?"
+    database: 
+      create: 'Database created successfully'
+      delete: 'Database deleted successfully'
+      update: 'Database updated successfully'
 
   wizards:
     enable_dns_service_help: DNS will be hosted and DNS records will be created.
@@ -175,6 +179,7 @@ en:
     wizard_started: Wizard Jobs Started. Your services will be activated in few miniutes.
     domain_not_allowed: This domain is not allowed.
   
+  panel_error: "Something went wrong. Please try again. %{msg}"
 
   my_store:
     cname_not_added: "- Please setup the following CNAME type record for your domain in order to use it as custom domain:<br/> &nbsp; &nbsp;&nbsp;%{custom_domain} =>  %{cname} <br/>
@@ -184,6 +189,7 @@ en:
     domain_validated: "Custom domain successfully validated. Please check after few minutes."
 
   general:
+
     delete: 'Are you sure you want to delete?'
     access_denied: 'Hosting control not available at the moment because your payment is still pending. Please contact support for further updates.'
 

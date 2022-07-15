@@ -13,23 +13,53 @@
 
   </div>
 </div>
+<%= flash_messages %>
 
  <%=form_for "database", url: admin_sites_isp_databases_path, html: {method: :post} do |f|%> 
 
   <fieldset>
     <div class="form-group">
-      <label class="form-label">Select Website:</label>
-      <%=f.select 'web_domain_id', options_for_select(get_web_domians), {}, class: 'form-select' %>
+      <label class="form-label">Select Hosting Type:</label>
+      <%= select_tag :server_type, options_for_select(plan_type_values(current_spree_user)),include_blank: true, class: 'form-select', id: 'hosting_type', required: true  %>
+    </div>
+    <div id="linux-fields" >
+      <div class="form-group">
+        <label class="form-label">Select Website:</label>
+        <%=f.select 'web_domain_id', options_for_select(get_web_domians), {}, class: 'form-select' %>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Database Name:</label>
+        <%=f.text_field 'database_name', class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Database Password:</label>
+        <%=f.text_field 'database_password', type: "password", class: 'form-control' %>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label class="form-label">Database Name:</label>
-      <%=f.text_field 'database_name', class: 'form-control' %>
-    </div>
+    <div id="windows-fields" style="display: none;">
+      <div class="form-group">
+        <label class="form-label">Select Group:</label>
+        <%=f.select 'group_name', options_for_select(["MsSQL2019","MySQL8"]), {}, class: 'form-select' %>
+      </div>
 
-     <div class="form-group">
-      <label class="form-label">Database Password:</label>
-      <%=f.text_field 'database_password', type: "password", class: 'form-control' %>
+      <div class="form-group">
+        <label class="form-label">Database Name:</label>
+        <%=f.text_field 'database_name', class: 'form-control' %>
+      </div>
+
+       <div class="form-group">
+        <label class="form-label">Database Username:</label>
+        <%=f.text_field 'database_username', type: "text", class: 'form-control' %>
+      </div>
+
+
+      <div class="form-group">
+        <label class="form-label">Database Password:</label>
+        <%=f.text_field 'database_password', type: "password", class: 'form-control' %>
+      </div>
     </div>
 
     <%=submit_tag "Add Database",class: 'btn btn-primary lift'%>
@@ -41,3 +71,21 @@
   <%=@response[:message].html_safe if @response %>
 </</div> 
 
+
+<script type="text/javascript">
+  
+  $(document).ready(function (argument) {
+    $("#hosting_type").on('change',function (argument) {
+      var val = $(this).val();
+      if (val=='linux') {
+        $('#linux-fields').show();
+        $('#windows-fields').hide();
+      } 
+      else
+      {
+        $('#linux-fields').hide();
+        $('#windows-fields').show();
+      }
+    });
+  });
+</script>

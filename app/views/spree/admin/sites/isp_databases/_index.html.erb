@@ -1,5 +1,5 @@
 <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %> db_<%= database.database_id %>">
-  <td><%=link_to database.database_name, admin_sites_isp_database_path(database.database_id, :db_user_name => database.database_user) %></td>
+  <td><%=link_to database.database_name, admin_sites_isp_database_path(database.database_id, server_type: 'linux', :db_user_name => database.database_user) %></td>
   <td><%=database.database_user%></td>
   <td class="d-flex justify-content-end">
      <%= link_to  admin_sites_isp_database_path(database.database_id, :db_user_id => database.database_user_id),type: 'button', class: 'btn btn-outline-danger', method: :delete do %>

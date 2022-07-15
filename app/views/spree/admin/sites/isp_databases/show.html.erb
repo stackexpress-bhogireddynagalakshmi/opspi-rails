@@ -4,7 +4,7 @@
       <div class="col">
         <h1 class="header-title">
         <%= link_to Spree.t(:database), admin_sites_isp_databases_path %> /
-        <%= @database.database_name %>
+        <%= params[:server_type] != 'windows'  ? @database.database_name : @database[:name]%>
         </h1>
       </div>
       <div class="col-auto">
@@ -14,8 +14,8 @@
   </div>
 </div>
 
-
   <fieldset>
+  <% if params[:server_type] != 'windows' %>
     <div class="form-group field">
       <label class="form-label">Select Website:</label>
       <%=select_tag 'web_domain_id', options_for_select(get_web_domians,@database.parent_domain_id), class: 'form-select', disabled: true%>
@@ -35,6 +35,70 @@
       <label class="form-check-label">Active</label>
       <%=check_box_tag 'active', @database.active.eql?("y") ? "true" : "false", @database.active.eql?("y") ? true : false, disabled: "disabled" ,class:"form-check-input list-checkbox"%>
     </div>
+  <%else%>
+    <!--div class="form-group">
+      <label class="form-label">Select Hosting Type:</label>
+      <%#= select_tag :server_type, options_for_select(plan_type_values(current_spree_user),params[:server_type]),include_blank: true, class: 'form-select', id: 'hosting_type', required: true  %>
+    </div-->
 
+    <div id="windows-fields">
+      <div class="form-group">
+        <label class="form-label">Select Group:</label>
+        <%=select_tag 'group_name', options_for_select(["MsSQL2019","MySQL8"],@database[:group_name]), class: 'form-select', disabled: true%>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Database Name:</label>
+        <%=text_field_tag 'database_name', @database[:name], class: 'form-control', disabled: true %>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Data Size:</label>
+        <%=text_field_tag 'database_data_size', @database[:data_size], class: 'form-control', disabled: true %>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Log Size:</label>
+        <%=text_field_tag 'database_log_size', @database[:log_size], class: 'form-control', disabled: true %>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Database User:</label>
+        <%=text_field_tag 'database_user', (@database[:users].present?) ? @database[:users][:string] : "", class: 'form-control', disabled: true %>
+      </div>
+
+      <%if @database[:group_name] != 'MySQL8'%>
+        <div class="form-group">
+          <label class="form-label">Data Name:</label>
+          <%=text_field_tag 'database_data_name', @database[:data_name], class: 'form-control', disabled: true %>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Data Path:</label>
+          <%=text_field_tag 'database_data_path', @database[:data_path], class: 'form-control', disabled: true %>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Log Name:</label>
+          <%=text_field_tag 'database_log_name', @database[:log_name], class: 'form-control', disabled: true %>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Log Path:</label>
+          <%=text_field_tag 'database_log_path', @database[:log_path], class: 'form-control', disabled: true %>
+        </div>
+        <%else %>
+        <div class="form-group">
+          <label class="form-label">Internal Server Name:</label>
+          <%=text_field_tag 'database_internal_server', @database[:internal_server_name], class: 'form-control', disabled: true %>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">External Server Name:</label>
+          <%=text_field_tag 'database_external_server', @database[:external_server_name], class: 'form-control', disabled: true %>
+        </div>
+      <%end%>
+    </div>
+  <%end%>
   </fieldset>
 

@@ -147,6 +147,11 @@ module SolidCp
       @ftp_account ||= SolidCp::FtpAccount.new(user)
     end
 
+    # Sql Server API interface for the  user/Reseller
+    def sql_server
+      @sql_server ||= SolidCp::SqlServer.new(user)
+    end
+
     # Helper  method to render full_name
     def full_name
       "#{user.first_name} #{user.last_name}"
