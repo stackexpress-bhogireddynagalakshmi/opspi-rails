@@ -125,22 +125,39 @@ module Spree
             @mailbox_count = 0
           end
 
+
+          #### website solidcp
+          if current_spree_user.solid_cp_id.present?
+            @windows_resource = current_spree_user.solid_cp.web_domain.all || [] 
+            @windows_resources = @windows_resource.body[:get_domains_response][:get_domains_result][:domain_info] rescue []
+            # byebug
+            @windows_websites = @windows_resources.collect{|x| x if x[:domain_name].include?(@zone_name)}
+          end
+          ######
+
+          #### website ispconfig
           @web_domain = current_spree_user.isp_config.website.all[:response].response
+          @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}
           for el in @web_domain
             if el.domain == @zone_name
             @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
               
             @ftp_user = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
-              
+            end 
+          end
+          #### 
+
+          #### window ftp
           @win_user = begin
-              @res = current_spree_user.solid_cp.ftp_account.all
-              convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
-          rescue StandardError
-            []
-          end
-          @win_user = [@win_user].to_a.flatten
+            @res = current_spree_user.solid_cp.ftp_account.all
+            convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
+            rescue StandardError
+              []
             end
-          end
+
+            @win_user = [@win_user].to_a.flatten
+            @win_users = @win_user.collect{|x| x if x.folder.include?(@zone_name)}
+          ##########
 
           if @resources.present?
             @database_count = @resources.size
@@ -215,17 +232,17 @@ module Spree
             @mail_domain_count = 0
           end
 
-          @websites_response = current_spree_user.isp_config.website.all[:response].response
+          # @websites_response = current_spree_user.isp_config.website.all[:response].response
           list_arr4 = []
-          @websites_response.each do |el|
+          @web_domain.each do |el|
             if el.domain == @zone_name
               list_arr4 << el
-            @websites_remain = list_arr4
+            # @websites_remain = list_arr4
              @websites = list_arr4.collect { |x| [x.domain, x.domain_id] }
              @web_id = el.domain_id
              break
             else
-              @websites = @websites_response.collect { |x| [x.domain, x.domain_id] }
+              @websites = @web_domain.collect { |x| [x.domain, x.domain_id] }
             end
           end
 

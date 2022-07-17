@@ -136,9 +136,32 @@
     </div>
 
     <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">
+        <div class="card">
+          <div class="card-body">
+            <div class="input-group">
+              <%if @isp_websites.any? %>
+                <%=button_tag (@isp_websites.first.active == 'y') ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @isp_websites.first.domain_id, data_web_domain_status: @isp_websites.first.active, data_web_site: params[:zone_name], class: 'btn btn-primary lift', onclick: "updateWebDomain(this)" %>
+              <%elsif current_spree_user.have_windows_access?%>
+                <% @web_domain_id = "0" %>
+                <% @web_site_id = "0" %>
+                <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
+                  <%@windows_websites.compact.reverse.each do |domain| %>
+                    <% if domain[:web_site_id].to_i > 0 %>
+                      <% @web_site_id = domain[:web_site_id]%>
+                    <%end%>
+                    <% if domain[:web_site_id].to_i == 0 %>
+                      <% @web_domain_id = domain[:domain_id]%>
+                    <% end %>
+                  <%end%>
+                <%end%>
+                <%=button_tag (@web_site_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @web_domain_id, data_web_site_id: @web_site_id, data_web_site: params[:zone_name], id: "data_web_domain_#{@web_site_id}", onclick: "updateWinWebDomain(this);", class: 'btn btn-primary lift' %>
+              <%end%>
+            </div>
+          </div>
+        </div>
 
             <div class="card">
-            <div class="card-body">
+              <div class="card-body">
                 <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
 
                 <div class="form-group d-none">
@@ -155,7 +178,7 @@
                 <div class="redirect" onmouseover = "myFunction()">
                 </div>
                 <% end %>
-                </div>
+              </div>
             </div>
 
             <div class="row align-items-center">
@@ -194,3 +217,83 @@
 
 
   </div>
+
+
+<script type="text/javascript">
+var updateWebDomain = function(element){
+    var webDomainId = element.attributes.data_web_domain_id.value;
+    var domainStatus = element.attributes.data_web_domain_status.value;
+    var website = element.attributes.data_web_site.value;
+
+    if (domainStatus == 'y') {
+      var dataConfirm = '<%= I18n.t('windows.deactivate_domain') %>';
+      var active = 'n';
+    }
+    else {
+      var dataConfirm = '<%= I18n.t('windows.activate_domain') %>';
+      var active = 'y';
+    }
+
+    result = confirm(dataConfirm);
+    if (result) {
+      setTimeout(function(){
+        $.ajax({
+          type: "POST",
+          url: "/admin/sites/websites/enable_disable_web_domain?web_site_id="+webDomainId,
+          data: { 
+            website: {
+              active: active,
+              domain: website
+            }
+          }
+        });
+      } ,5);
+    }
+  }
+
+  var updateWinWebDomain = function(element){
+    var webDomainId = element.attributes.data_web_domain_id.value;
+    var webSiteId = element.attributes.data_web_site_id.value;
+    var website = element.attributes.data_web_site.value;
+
+    if (parseInt(webDomainId) > 0) {
+      var dataConfirm = '<%= I18n.t('windows.deactivate_domain') %>';
+      var web_site_id = parseInt(webSiteId);
+      var web_domain_id = parseInt(webDomainId);
+
+      result = confirm(dataConfirm);
+      if (result) {
+      setTimeout(function(){
+        $.ajax({
+          type: "DELETE",
+          url: "/admin/windows/domains/"+web_domain_id,
+          data: { 
+              web_site_id: web_site_id,
+              web_domain_id: web_domain_id
+          }
+        });
+      } ,5);
+      }
+    }
+    else {
+      var dataConfirm = '<%= I18n.t('windows.activate_domain') %>';
+      var web_site_name = website;
+      var server_type  = "windows";
+
+      result = confirm(dataConfirm);
+      if (result) {
+      setTimeout(function(){
+        $.ajax({
+          type: "POST",
+          url: "/admin/sites/websites?server_type="+server_type,
+          data: { 
+            website: {
+              domain: web_site_name
+            }
+          }
+        });
+      } ,5);
+      }
+    }
+  }
+</script>

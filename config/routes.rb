@@ -105,6 +105,7 @@ Rails.application.routes.draw do
         resources :domains
       end
 
+      post 'sites/websites/enable_disable_web_domain', :controller=> 'sites/websites', :action=> "enable_disable_web_domain", as: 'enable_disable_web_domain'
       post 'dns/hosted_zones/enable_dns_services', :controller=> 'dns/hosted_zones',:action=>"enable_dns_services", as: 'enable_dns_services'
       post 'dns/hosted_zones/disable_dns_services', :controller=> 'dns/hosted_zones',:action=>"disable_dns_services", as: 'disable_dns_services'
       post 'dns/hosted_zones/get_config_details', :controller=> 'dns/hosted_zones',:action=>"get_config_details", as: 'get_config_details'

@@ -142,6 +142,11 @@ module SolidCp
       @virtual_directory ||= SolidCp::Dns::VirtualDirectory.new(user)
     end
 
+    # Website API interface for the  user/Reseller
+    def website
+      @website ||= SolidCp::Dns::Website.new(user)
+    end
+
     # FTP Account API interface for the  user/Reseller
     def ftp_account
       @ftp_account ||= SolidCp::FtpAccount.new(user)

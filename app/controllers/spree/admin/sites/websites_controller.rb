@@ -8,7 +8,7 @@ module Spree
 
 
        def index
-          response = isp_config_api.all || []
+          response = website_api.all || []
           @resources = if response[:success]
                          response[:response].response
                        else
@@ -19,6 +19,12 @@ module Spree
           @response = windows_api.all || [] rescue []
 
           @windows_resources = convert_to_mash(@response.body[:get_domains_response][:get_domains_result][:domain_info]) rescue []
+        end
+
+        def enable_disable_web_domain
+          @response = website_api.update(params[:web_site_id],{active: params[:website][:active],domain: params[:website][:domain]})
+          set_flash
+          redirect_to request.referrer
         end
         private
 
@@ -46,7 +52,7 @@ module Spree
           redirect_to admin_sites_websites_path
         end
 
-        def isp_config_api
+        def website_api
           if params[:server_type].present? && params[:server_type] == 'windows'
             windows_api
           else

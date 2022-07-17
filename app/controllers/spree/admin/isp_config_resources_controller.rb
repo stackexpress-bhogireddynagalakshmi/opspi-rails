@@ -32,7 +32,7 @@ module Spree
 
         set_flash
         if @response[:success]
-          resource_index_path
+          redirect_to request.referrer
         else
           render :new
         end
