@@ -42,6 +42,12 @@ module Spree
           redirect_to request.referrer
         end
 
+        def get_ssl
+          @response = current_spree_user.solid_cp.website.install_certificate(params)
+          set_flash
+          redirect_to request.referrer
+        end
+
         private
 
         def resource_id

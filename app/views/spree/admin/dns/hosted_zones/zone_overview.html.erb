@@ -136,6 +136,30 @@
                </div>
             </div>
          </div>
+         <%if current_spree_user.have_windows_access?%>
+          <% @web_domain_id = "0" %>
+          <% @web_site_id = "0" %>
+          <% @web_domain_name = nil %>
+          <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
+            <%@windows_websites.compact.reverse.each do |domain| %>
+              <% if domain[:web_site_id].to_i > 0 %>
+                <% @web_site_id = domain[:web_site_id]%>
+              <%end%>
+              <% if domain[:web_site_id].to_i == 0 %>
+                <% @web_domain_id = domain[:domain_id]%>
+                <% @web_domain_name = domain[:domain_name]%>
+              <% end %>
+            <%end%>
+          <%end%>
+          <div class="card">
+              <div class="card-body">
+                <div class="form-check form-switch">
+                    <label class="form-check-label">SSL</label>
+                    <%= check_box_tag 'ssl', @web_site_id, false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, onclick: "getSSL(this);", class: "form-check-input" %>
+                  </div>
+              </div>
+          </div>
+         <%end%>
          <div class="card">
             <div class="card-body">
                <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
@@ -273,4 +297,25 @@ var updateWebDomain = function(element){
       }
     }
   }
+
+ var getSSL = function(element){
+    var websiteId = element.attributes.data_web_site_id.value;
+    var web_domain = element.attributes.data_web_domain.value;
+    var dataConfirm = '<%= I18n.t('windows.activate_domain') %>';
+  
+    result = confirm(dataConfirm);
+    if (result) {
+      setTimeout(function(){
+        $.ajax({
+          type: "POST",
+          url: "/admin/windows/domains/get_ssl?web_site_id="+websiteId,
+          data: { 
+            website: {
+              domain: web_domain
+            }
+          }
+        });
+      } ,5);
+    }
+  } 
 </script>
