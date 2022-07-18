@@ -29,11 +29,13 @@ module Spree
       base.has_many :protected_folder_users
       base.has_many :isp_databases
       base.has_many :user_domains
+      base.has_many :user_websites
 
       base.after_commit :update_user_tanent, on: [:create]
       base.after_commit :add_terms_and_conditions, on: [:create]
       base.after_commit :ensure_tanent_exists, on: [:create]
       base.after_commit :save_subdomain_to_redis, on: [:create]
+      base.after_commit :ensure_panel_config_set, on: [:create]
       base.accepts_nested_attributes_for :user_key, reject_if: :reject_if_key_blank
     end
 
@@ -211,6 +213,13 @@ module Spree
           o.products.pluck(:server_type)
         end.flatten
       end
+    end
+
+    def ensure_panel_config_set
+      return nil unless panel_confg.blank?
+
+      self.panel_confg = ActivePanel.panel_configs_json
+      self.save
     end
   end
 end

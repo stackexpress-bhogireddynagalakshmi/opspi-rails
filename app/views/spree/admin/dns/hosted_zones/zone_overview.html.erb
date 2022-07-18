@@ -1,196 +1,276 @@
-<div class="header mt-4">
-  <div class="header-body">
-    <div class="row align-items-center">
-      <div class="col">
-        <h1 class="header-title">
-        <%= @zone_name %>
-        </h1>
-        
-      </div>
-      <div class="col-auto">
-      </div>
-    </div>
-    <div class="row align-items-center">
-        <div class="col">
-            <!-- Nav -->
-          <ul class="nav nav-tabs nav-overflow header-tabs">
-           
-              <li class="nav-item">
-              <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview </a>
-              </li>
-
-              <li class="nav-item">
-              <a class="nav-link" id="dns-tab" data-bs-toggle="tab" href="#dns" role="tab" aria-controls="dns" aria-selected="false">DNS</a>
-              </li>              
-
-              <li class="nav-item">
-              <a class="nav-link" id="mail-tab" data-bs-toggle="tab" href="#mail" role="tab" aria-controls="mail" aria-selected="false">Mail</a>
-              </li>
-
-              <li class="nav-item">
-              <a class="nav-link" id="website-tab" data-bs-toggle="tab" href="#website" role="tab" aria-controls="website" aria-selected="false">Website</a>
-              </li>
-
-            
-          </ul>
-        </div>
-    </div>
-    </div>
-    </div>
-
-    <div class="tab-content" id="myTabContent">
-
-    <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
-          
-    <%= render partial: 'spree/admin/dns/hosted_zones/overview_page' %>
-    </div>
-
-    <div class="tab-pane fade" id="dns" role="tabpanel" aria-labelledby="dns-tab">
-   
-
-          <%= render partial: 'spree/admin/dns/hosted_zones/dns' %>
-    </div>
-
-    <div class="tab-pane fade" id="mail" role="tabpanel" aria-labelledby="mail-tab">
-
-    <div class="row align-items-center mb-2">
-      <div class="col">
-        <h1 class="header-title">
-        Mail Boxes
-        </h1>
-      </div>
-      <div class="col-auto">
-      <%= button_link_to "Add New",
-      "#",
-      class: "btn btn-primary lift admin_new_domain1",
-        icon: 'add.svg',
-        id: 'admin_new_domain' %>
-
-    </div>
-    </div>
-    <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
-    
-    <div class="row align-items-center mb-2">
-      <div class="col">
-        <h1 class="header-title">
-        Mailing Lists
-        </h1>
-      </div>
-      <div class="col-auto">
-      <%= button_link_to "Add New",
-      "#",
-      class: "btn btn-primary lift admin_mailling_list1",
-      icon: 'add.svg'  %>
-      </div>
-    </div>
-    <%= render partial: 'spree/admin/dns/hosted_zones/mailing_list_index' %>
-
-    <div class="row align-items-center mb-2">
-    <div class="col">
-      <h1 class="header-title">
-      Spamfilter Blacklist
-      </h1>
-    </div>
-    <div class="col-auto">
-    <%= button_link_to "Add New",
-    new_admin_mail_spam_filter_blacklist_path,
-    class: "btn btn-primary lift admin_spam_black1",
-      icon: 'add.svg' %>
-  </div>
-  </div>
-  <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_blacklist_index' %>
-
-    <div class="row align-items-center mb-2">
-    <div class="col">
-      <h1 class="header-title">
-      <%=t('isp_config.spamfilter.whitelist')%>
-      </h1>
-      
-    </div>
-    <div class="col-auto">
-    <%= button_link_to "Add New",
-    "#",
-    class: "btn btn-primary lift admin_spam_white1",
-      icon: 'add.svg' %>
-    </div>
-  </div>
-  <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_whitelist_index' %>
-
-    <div class="row align-items-center mb-2">
-    <div class="col">
-      <h1 class="header-title">
-      Forwards
-      </h1>
-      
-    </div>
-    <div class="col-auto">
-    <%= button_link_to "Add New",
-    "#",
-    class: "btn btn-primary lift admin_mail_forward1",
-      icon: 'add.svg',
-      id: 'admin_new_forward' %>
-    </div>
-  </div>
-  <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
-
-    </div>
-
-    <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">
-
-            <div class="card">
-            <div class="card-body">
-                <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
-
-                <div class="form-group d-none">
-                    <label class="form-label"></label>
-                
-                    <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
-                </div> 
-                
-                <div class="input-group">
-                    <div>
-                        <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
-                    </div>
-                </div>
-                <div class="redirect" onmouseover = "myFunction()">
-                </div>
-                <% end %>
-                </div>
-            </div>
-
-            <div class="row align-items-center">
-              <div class="col">
-                <h1>
-                Databases
-                </h1>
-              </div>
-              <div class="col-auto">
-              <%= button_link_to "Add New",
-              "#",
-              class: "btn btn-primary lift new_admin_database1",
-                icon: 'add.svg',
-                id: 'new_admin_database' %>
-              </div>
-            </div>
-            <%= render partial: 'spree/admin/dns/hosted_zones/database_index' %>
-
-            <div class="row align-items-center">
+<div class="my_page">
+   <div class="header mt-4">
+      <div class="header-body">
+         <div class="row align-items-center">
             <div class="col">
-              <h1>
-              FTP Users
-              </h1>
+               <h1 class="header-title">
+                  <%= @zone_name %>
+               </h1>
             </div>
             <div class="col-auto">
-            <%= button_link_to "Add New",
-            "#",
-            class: "btn btn-primary lift admin_new_ftp_user1",
-              icon: 'add.svg',
-              id: 'admin_new_ftp_user' %>
             </div>
-          </div>
-            <%= render partial: 'spree/admin/dns/hosted_zones/ftp_index' %>
-            
-    </div>
+         </div>
+         <div class="row align-items-center">
+            <div class="col">
+               <!-- Nav -->
+               <ul class="nav nav-tabs nav-overflow header-tabs">
+                  <li class="nav-item">
+                     <a class="nav-link active" id="overview-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview </a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" id="dns-tab" data-bs-toggle="tab" href="#dns" role="tab" aria-controls="dns" aria-selected="false">DNS</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" id="mail-tab" data-bs-toggle="tab" href="#mail" role="tab" aria-controls="mail" aria-selected="false">Mail</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" id="website-tab" data-bs-toggle="tab" href="#website" role="tab" aria-controls="website" aria-selected="false">Website</a>
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+         <%= render partial: 'spree/admin/dns/hosted_zones/overview_page' %>
+      </div>
+      <div class="tab-pane fade" id="dns" role="tabpanel" aria-labelledby="dns-tab">
+         <%= render partial: 'spree/admin/dns/hosted_zones/dns' %>
+      </div>
+      <div class="tab-pane fade" id="mail" role="tabpanel" aria-labelledby="mail-tab">
+         <div class="row align-items-center mb-2">
+            <div class="col">
+               <h1 class="header-title">
+                  Mail Boxes
+               </h1>
+            </div>
+            <div class="col-auto">
+               <%= button_link_to "Add New",
+                  "#",
+                  class: "btn btn-primary lift admin_new_domain1",
+                    icon: 'add.svg',
+                    id: 'admin_new_domain' %>
+            </div>
+         </div>
+         <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
+         <div class="row align-items-center mb-2">
+            <div class="col">
+               <h1 class="header-title">
+                  Mailing Lists
+               </h1>
+            </div>
+            <div class="col-auto">
+               <%= button_link_to "Add New",
+                  "#",
+                  class: "btn btn-primary lift admin_mailling_list1",
+                  icon: 'add.svg'  %>
+            </div>
+         </div>
+         <%= render partial: 'spree/admin/dns/hosted_zones/mailing_list_index' %>
+         <div class="row align-items-center mb-2">
+            <div class="col">
+               <h1 class="header-title">
+                  Spamfilter Blacklist
+               </h1>
+            </div>
+            <div class="col-auto">
+               <%= button_link_to "Add New",
+                  new_admin_mail_spam_filter_blacklist_path,
+                  class: "btn btn-primary lift admin_spam_black1",
+                    icon: 'add.svg' %>
+            </div>
+         </div>
+         <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_blacklist_index' %>
+         <div class="row align-items-center mb-2">
+            <div class="col">
+               <h1 class="header-title">
+                  <%=t('isp_config.spamfilter.whitelist')%>
+               </h1>
+            </div>
+            <div class="col-auto">
+               <%= button_link_to "Add New",
+                  "#",
+                  class: "btn btn-primary lift admin_spam_white1",
+                    icon: 'add.svg' %>
+            </div>
+         </div>
+         <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_whitelist_index' %>
+         <div class="row align-items-center mb-2">
+            <div class="col">
+               <h1 class="header-title">
+                  Forwards
+               </h1>
+            </div>
+            <div class="col-auto">
+               <%= button_link_to "Add New",
+                  "#",
+                  class: "btn btn-primary lift admin_mail_forward1",
+                    icon: 'add.svg',
+                    id: 'admin_new_forward' %>
+            </div>
+         </div>
+         <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
+      </div>
+      <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">
+         <div class="card">
+            <div class="card-body">
+               <div class="input-group">
+                  <%if @isp_websites.any? %>
+                  <%=button_tag (@isp_websites.first.active == 'y') ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @isp_websites.first.domain_id, data_web_domain_status: @isp_websites.first.active, data_web_site: params[:zone_name], class: 'btn btn-primary lift', onclick: "updateWebDomain(this)" %>
+                  <%elsif current_spree_user.have_windows_access?%>
+                  <% @web_domain_id = "0" %>
+                  <% @web_site_id = "0" %>
+                  <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
+                  <%@windows_websites.compact.reverse.each do |domain| %>
+                  <% if domain[:web_site_id].to_i > 0 %>
+                  <% @web_site_id = domain[:web_site_id]%>
+                  <%end%>
+                  <% if domain[:web_site_id].to_i == 0 %>
+                  <% @web_domain_id = domain[:domain_id]%>
+                  <% end %>
+                  <%end%>
+                  <%end%>
+                  <%=button_tag (@web_site_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @web_domain_id, data_web_site_id: @web_site_id, data_web_site: params[:zone_name], id: "data_web_domain_#{@web_site_id}", onclick: "updateWinWebDomain(this);", class: 'btn btn-primary lift' %>
+                  <%end%>
+               </div>
+            </div>
+         </div>
+         <div class="card">
+            <div class="card-body">
+               <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
+               <div class="form-group d-none">
+                  <label class="form-label"></label>
+                  <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
+               </div>
+               <div class="input-group">
+                  <div>
+                     <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
+                  </div>
+               </div>
+               <div class="redirect" onmouseover = "myFunction()">
+               </div>
+               <% end %>
+            </div>
+         </div>
+         <div class="row align-items-center">
+            <div class="col">
+               <h1>
+                  Databases
+               </h1>
+            </div>
+            <div class="col-auto">
+               <%= button_link_to "Add New",
+                  "#",
+                  class: "btn btn-primary lift new_admin_database1",
+                    icon: 'add.svg',
+                    id: 'new_admin_database' %>
+            </div>
+         </div>
+         <%= render partial: 'spree/admin/dns/hosted_zones/database_index' %>
+         <div class="row align-items-center">
+            <div class="col">
+               <h1>
+                  FTP Users
+               </h1>
+            </div>
+            <div class="col-auto">
+               <%= button_link_to "Add New",
+                  "#",
+                  class: "btn btn-primary lift admin_new_ftp_user1",
+                    icon: 'add.svg',
+                    id: 'admin_new_ftp_user' %>
+            </div>
+         </div>
+         <%= render partial: 'spree/admin/dns/hosted_zones/ftp_index' %>
+      </div>
+   </div>
+</div>
 
+<%= render partial: '/spree/admin/shared/spinner/spinner' %>
+<script type="text/javascript">
+var body = document.body;
 
-  </div>
+var updateWebDomain = function(element){
+    $('.spinner').css('display','block');
+    body.style.opacity = "0.5";
+    body.style.pointerEvents = "none";
+    var webDomainId = element.attributes.data_web_domain_id.value;
+    var domainStatus = element.attributes.data_web_domain_status.value;
+    var website = element.attributes.data_web_site.value;
+
+    if (domainStatus == 'y') {
+      var dataConfirm = '<%= I18n.t('windows.deactivate_domain') %>';
+      var active = 'n';
+    }
+    else {
+      var dataConfirm = '<%= I18n.t('windows.activate_domain') %>';
+      var active = 'y';
+    }
+
+    result = confirm(dataConfirm);
+    if (result) {
+      setTimeout(function(){
+        $.ajax({
+          type: "POST",
+          url: "/admin/sites/websites/enable_disable_web_domain?web_site_id="+webDomainId,
+          data: { 
+            website: {
+              active: active,
+              domain: website
+            }
+          }
+        });
+      } ,5);
+    }
+  }
+
+  var updateWinWebDomain = function(element){
+    $('.spinner').css('display','block');
+    body.style.opacity = "0.5";
+    body.style.pointerEvents = "none";
+    var webDomainId = element.attributes.data_web_domain_id.value;
+    var webSiteId = element.attributes.data_web_site_id.value;
+    var website = element.attributes.data_web_site.value;
+
+    if (parseInt(webDomainId) > 0) {
+      var dataConfirm = '<%= I18n.t('windows.deactivate_domain') %>';
+      var web_site_id = parseInt(webSiteId);
+      var web_domain_id = parseInt(webDomainId);
+
+      result = confirm(dataConfirm);
+      if (result) {
+      setTimeout(function(){
+        $.ajax({
+          type: "DELETE",
+          url: "/admin/windows/domains/"+web_domain_id,
+          data: { 
+              web_site_id: web_site_id,
+              web_domain_id: web_domain_id
+          }
+        });
+      } ,5);
+      }
+    }
+    else {
+      var dataConfirm = '<%= I18n.t('windows.activate_domain') %>';
+      var web_site_name = website;
+      var server_type  = "windows";
+
+      result = confirm(dataConfirm);
+      if (result) {
+      setTimeout(function(){
+        $.ajax({
+          type: "POST",
+          url: "/admin/sites/websites?server_type="+server_type,
+          data: { 
+            website: {
+              domain: web_site_name
+            }
+          }
+        });
+      } ,5);
+      }
+    }
+  }
+</script>

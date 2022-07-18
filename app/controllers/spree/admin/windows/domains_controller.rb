@@ -36,6 +36,12 @@ module Spree
                                        .update(params[:website_id], resource_params.merge({ site_id: params[:website_id] }))
         end
 
+        def destroy
+          @response = current_spree_user.solid_cp.website.destroy(params)
+          set_flash
+          redirect_to request.referrer
+        end
+
         private
 
         def resource_id

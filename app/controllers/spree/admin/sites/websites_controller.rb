@@ -20,6 +20,12 @@ module Spree
 
           @windows_resources = convert_to_mash(@response.body[:get_domains_response][:get_domains_result][:domain_info]) rescue []
         end
+
+        def enable_disable_web_domain
+          @response = isp_config_api.update(params[:web_site_id],{active: params[:website][:active],domain: params[:website][:domain]})
+          set_flash
+          redirect_to request.referrer
+        end
         private
 
         def resource_id_field

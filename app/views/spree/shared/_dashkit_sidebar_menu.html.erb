@@ -31,7 +31,13 @@ bottom: 0;
 list-style-type: none;
 padding-bottom:5.5em;
 }
-
+img {
+  max-width: 9rem;
+  max-height: 5.8rem;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: 15px;
+}
 .testtext {
 white-space:break-spaces;
 overflow-wrap: anywhere;
@@ -49,9 +55,7 @@ width:230px
         </button>
 
         <!-- Brand -->
-        <a class="navbar-brand" href="<%= spree.root_path %>">
-          <%= image_tag 'OpsPi-logo.jpg', class: 'navbar-brand-img mx-auto' %>
-        </a>
+        <%= logo(nil, {method: :get}) %>
 
         <!-- Collapse -->
         <div class="collapse navbar-collapse" id="navbarVertical">
