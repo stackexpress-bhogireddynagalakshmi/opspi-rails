@@ -171,8 +171,8 @@ module Spree
             @ftp_count = 0
           end
 
-          if @win_user.present?
-            @win_count = @win_user.size
+          if @win_users.present?
+            @win_count = @win_users.compact.size
           else
             @win_count = 0
           end
