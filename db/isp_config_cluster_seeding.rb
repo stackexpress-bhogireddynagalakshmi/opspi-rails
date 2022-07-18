@@ -14,7 +14,7 @@ def seed_isp_config_cluster
     puts "IspConfig Cluster import Started at #{@start}"
 
     csv.each do |row|
-      if IspConfigClusterConfig.find_by_value(row[0]).present?
+      if IspConfigClusterConfig.find_by_key(row[0]).present?
         puts "#{row[0]} already exist"
         next
       end
