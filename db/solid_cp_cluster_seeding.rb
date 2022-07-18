@@ -14,7 +14,7 @@ def seed_solid_cp_cluster
     puts "SolidCp Cluster import Started at #{@start}"
 
     csv.each do |row|
-      if SolidCpClusterConfig.find_by_value(row[0]).present?
+      if SolidCpClusterConfig.find_by_key(row[0]).present?
         puts "#{row[0]} already exist"
         next
       end
