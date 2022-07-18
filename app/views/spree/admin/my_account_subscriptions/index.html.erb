@@ -12,3 +12,48 @@
       </div>
     </div>
     </div>
+    </div>
+
+<%if spree_current_user.subscriptions.present?%>
+<div class="card mt-4">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="width:100%">
+  <thead>
+    <tr>
+    <th><%=Spree.t(:subscription)%></th>
+    <th><%= Spree.t(:status) %></th>
+    <th><%= Spree.t(:sub_date) %></th>
+    <th><%= Spree.t(:Interval) %></th>
+    <th><%= Spree.t(:amount) %></th>
+    <th><%= Spree.t(:canceled_at) %></th>
+    <th><%= Spree.t(:action) %></th>
+    </tr>
+  </thead>
+  <tbody class="fsbase">
+  <%spree_current_user.subscriptions.order('created_at desc').each do |subscription|%>
+    <tr>
+      <td class="account-page-order-number"><%=TenantManager::TenantHelper.unscoped_query{subscription.plan.name}%> 
+        <br/>
+        <span class="font-12 grey"><%=TenantManager::TenantHelper.unscoped_query{subscription.plan.server_type.titleize}%></span>
+      </td>
+      <td class="account-page-order-date"><%=subscription.status? ? 'Active': 'In-Active'%></td>
+      <td class="account-page-order-status"><%=subscription.start_date%></td>
+      <td class="account-page-order-payment-state"><%=subscription.billing_interval%></td>
+      <td class="account-page-order-payment-state"><%=number_to_currency(subscription.price)%></td>
+       <td class="account-page-order-payment-state"><%=subscription.canceled_at%></td>
+      <td>
+        <%if subscription.active?%>
+          <%=link_to 'Cancel', admin_account_subscription_cancel_path(subscription_id: subscription.id),data: {confirm: 'Are you sure?'} %> </td>
+        <%end%>
+    </tr>
+<%end%>
+  </tbody>
+</table>
+</div>
+</div>
+<%else%>
+<div class="alert alert-secondary"><%= Spree.t(:you_have_no_subscription_plans_yet) %></div>
+<%end%>
+
+
+

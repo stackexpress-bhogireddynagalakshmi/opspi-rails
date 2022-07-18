@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       get 'my_account_orders', :controller=> 'my_account_orders',:action=>"index"
       get 'dashboard', :controller=> 'dashboard',:action=>"index"
       get 'my_account_subscriptions', :controller=> 'my_account_subscriptions',:action=>"index"
+      get '/account/subscription_cancel', :controller=> 'account#subscription_cancel'
       
 
       resources :domain_registrations do 
