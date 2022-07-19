@@ -57,7 +57,7 @@ module SolidCp
         #  <siteItemId>int</siteItemId>
         #  <email>string</email>
          def le_install_certificate(params)
-          response = super(message: { site_item_id: params[:web_site_id] })
+          response = super(message: { site_item_id: params[:web_site_id], email: user.email })
          end
 
       #   <certificate>
