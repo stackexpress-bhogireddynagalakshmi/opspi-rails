@@ -92,7 +92,7 @@
                 </tr>
             </thead>
             <tbody class="fsbase">
-                <% @win_users.compact.each do |ftp_account|%>
+                <% @win_users.each do |ftp_account|%>
                 <tr>
                   <td><%= ftp_account.name %></td>
                   <td><%= ftp_account.folder %></td>
