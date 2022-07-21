@@ -31,7 +31,10 @@
 
 en:
   hello: "Hello world"
- 
+  windows_hosting_plan: 'Windows Shared Hosting'
+  linux_hosting_plan: 'Linux Hosting Plan'
+  reseller_plan: 'Reseller Plan' 
+  domain_plan: 'Domain Reselling Plan'
 
   spree:
     products: 'Services'

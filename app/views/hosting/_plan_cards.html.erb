@@ -18,7 +18,7 @@
              
               <h1 class="card-title pricing-card-title"><%=display_price(product)%> <!--small class="text-muted">/ <%#= product.validity if product.validity > 1 %> mo</small--></h1>
               <ul class="list-unstyled mt-3 mb-4">
-                <li><b><%=product.windows? ? 'Windows Shared Hosting' : 'Linux Shared Hosting'%></b></li>
+                <li><b><%=plan_type_label(product)%></b></li>
                 <li>SSL Support included</li>
                 <%if product.windows?%>
                   <%quota_list(product).each do |quota_text|%>
