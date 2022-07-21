@@ -58,5 +58,6 @@ class StoreAdminAbility
     can :read, ::Spree::Taxonomy
     can :read, ::Spree::Variant
     can :read, ::Spree::Zone
+    can :manage, :dashboard
   end
 end
