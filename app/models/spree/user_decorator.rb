@@ -216,9 +216,9 @@ module Spree
     end
 
     def ensure_panel_config_set
-      return nil unless panel_confg.blank?
+      return nil unless panel_config.blank?
 
-      self.panel_confg = ActivePanel.panel_configs_json
+      self.panel_config = ActivePanel.panel_configs_json
       self.save
     end
   end
