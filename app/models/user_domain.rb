@@ -1,5 +1,7 @@
 class UserDomain < ApplicationRecord
   belongs_to :user, class_name: 'Spree::User',foreign_key: 'user_id'
+  has_one :hosted_zone
+
   validates :domain, presence: true
   after_create_commit :ensure_panel_id_is_set
 

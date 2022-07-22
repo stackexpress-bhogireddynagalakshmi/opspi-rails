@@ -7,13 +7,9 @@ module Spree
         include ApisHelper
         before_action :ensure_hosting_panel_access
         before_action :set_zone_list, only: %i[edit update destroy dns zone_overview]
+        
         def index
-          @response = host_zone_api.all_zones || []
-          @hosted_zones = if @response[:success]
-                            @response[:response].response
-                          else
-                            []
-                          end
+          @user_domains = current_spree_user.user_domains
         end
 
         def create
@@ -39,7 +35,6 @@ module Spree
           TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
 
           redirect_to admin_dns_hosted_zones_path
-
         end
 
         def disable_dns_services
@@ -53,7 +48,6 @@ module Spree
           respond_to do |format|
             format.js { render inline: "location.reload();" }
             format.html { redirect_to  admin_dns_hosted_zones_path}
-
           end
         end
 
@@ -82,7 +76,6 @@ module Spree
           respond_to do |format|
             format.js { render inline: "location.reload();" }
             format.html { redirect_to  admin_dns_hosted_zones_path}
-
           end
         end
 

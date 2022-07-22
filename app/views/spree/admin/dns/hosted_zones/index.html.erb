@@ -57,13 +57,13 @@
     <div class="row align-items-center">
       <div class="col">
         <h1 class="header-title">
-         DNS Zones
+         Domains
         </h1>
         
       </div>
       <div class="col-auto">
       <% if current_spree_user.isp_config_id.present? %>
-        <%= button_link_to Spree.t(:add_dns_zone),
+        <%= button_link_to Spree.t(:add_domain),
         new_admin_dns_hosted_zone_url,
         class: "btn btn-primary lift",
           icon: 'add.svg',
@@ -74,9 +74,9 @@
     </div>
 
 <%= flash_messages %>
-<% if @hosted_zones.any? %>
+<% if @user_domains.any? %>
 <div class="container mt-4 mb-4">
-<%= render partial: 'rows', collection: @hosted_zones, as: :hosted_zone %>
+<%= render partial: 'rows', locals: {user_domains: @user_domains} %>
 </div>
 <% else %>
   <div class="alert alert-secondary no-objects-found mt-4">
