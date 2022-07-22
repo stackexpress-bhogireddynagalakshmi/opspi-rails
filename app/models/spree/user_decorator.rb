@@ -31,11 +31,7 @@ module Spree
       base.has_many :user_domains
       base.has_many :user_websites
 
-      base.after_commit :update_user_tanent, on: [:create]
-      base.after_commit :add_terms_and_conditions, on: [:create]
-      base.after_commit :ensure_tanent_exists, on: [:create]
-      base.after_commit :save_subdomain_to_redis, on: [:create]
-      base.after_commit :ensure_panel_config_set, on: [:create]
+      base.after_commit :after_create_callbacks, on: [:create]
       base.accepts_nested_attributes_for :user_key, reject_if: :reject_if_key_blank
     end
 
@@ -69,15 +65,6 @@ module Spree
 
     def chat_woot
       @chat_woot ||= ChatWoot::ChatWootInbox.new(self)
-    end
-
-    def ensure_tanent_exists
-      update_user_tanent
-      if reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
-        StoreManager::StoreCreator.new(self).call
-      elsif spree_roles.blank?
-        StoreManager::StoreAdminRoleAssignor.new(self, { role: "user" }).call
-      end
     end
 
     def company_name
@@ -116,21 +103,6 @@ module Spree
       errors.merge!(store.errors)
     end
 
-    def update_user_tanent
-      tenant_id =
-        if TenantManager::TenantHelper.current_admin_tenant? || TenantManager::TenantHelper.current_tenant.blank?
-          TenantManager::TenantHelper.admin_tenant_id
-        else
-          TenantManager::TenantHelper.current_tenant_id
-        end
-
-      ActsAsTenant.without_tenant { update_column :account_id, tenant_id }
-    end
-
-    def add_terms_and_conditions
-      terms_and_conditions = true
-    end
-
     def active_for_authentication?
       if superadmin?
         super && TenantManager::TenantHelper.current_admin_tenant? || TenantManager::TenantHelper.current_tenant.blank?
@@ -151,14 +123,6 @@ module Spree
       else
         account.spree_store.url
       end
-    end
-
-    def save_subdomain_to_redis
-      return unless reseller_signup?
-
-      url = "#{subdomain}.#{ENV['BASE_DOMAIN']}"
-
-      AppManager::RedisWrapper.set(reseller_subdomain_redis_key, url)
     end
 
     def get_subdomain_from_redis
@@ -215,12 +179,55 @@ module Spree
       end
     end
 
+    def after_create_callbacks
+      ensure_user_tenant_updated
+      add_terms_and_conditions
+      ensure_reseller_store_created
+      save_subdomain_to_redis
+      ensure_panel_config_set
+    end
+
+    #  after create Callbacks methods
+    def ensure_user_tenant_updated
+      tenant_id =
+        if TenantManager::TenantHelper.current_admin_tenant? || TenantManager::TenantHelper.current_tenant.blank?
+          TenantManager::TenantHelper.admin_tenant_id
+        else
+          TenantManager::TenantHelper.current_tenant_id
+        end
+
+      ActsAsTenant.without_tenant { update_column :account_id, tenant_id }
+    end
+
+    def add_terms_and_conditions
+      terms_and_conditions = true
+    end
+
+     def ensure_reseller_store_created
+      if reseller_signup? && TenantManager::TenantHelper.current_admin_tenant?
+        StoreManager::StoreCreator.new(self).call
+      elsif spree_roles.blank?
+        StoreManager::StoreAdminRoleAssignor.new(self, { role: "user" }).call
+      end
+    end
+
+    def save_subdomain_to_redis
+      return unless reseller_signup?
+
+      url = "#{subdomain}.#{ENV['BASE_DOMAIN']}"
+
+      AppManager::RedisWrapper.set(reseller_subdomain_redis_key, url)
+    end
+
     def ensure_panel_config_set
       return nil unless panel_config.blank?
 
       self.panel_config = ActivePanel.panel_configs_json
       self.save
     end
+
+    # end  after create callbacks
+
   end
 end
 
