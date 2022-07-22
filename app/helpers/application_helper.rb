@@ -240,4 +240,16 @@ module ApplicationHelper
   def get_hsphere_control_panel
     HsphereClusterConfig.where(cluster_id: current_spree_user.hsphere_cluster_id).pluck(:value).first
   end
+
+  def plan_type_label(product)
+    if product.windows?
+       I18n.t(:windows_hosting_plan)
+    elsif product.linux?
+      I18n.t(:linux_hosting_plan)
+    elsif product.reseller_plan?
+      I18n.t(:reseller_plan)
+    elsif product.domain?
+      I18n.t(:domain_plan)
+    end
+  end
 end
