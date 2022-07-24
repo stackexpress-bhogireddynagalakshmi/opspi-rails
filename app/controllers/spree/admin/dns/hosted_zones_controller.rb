@@ -124,6 +124,11 @@ module Spree
             @windows_resource = current_spree_user.solid_cp.web_domain.all || [] 
             @windows_resources = @windows_resource.body[:get_domains_response][:get_domains_result][:domain_info] rescue []
             @windows_websites = @windows_resources.collect{|x| x if x[:domain_name].include?(@zone_name)}.compact
+            website_array = @windows_websites.collect{|c| c[:web_site_id] if c[:web_site_id].to_i > 0}.compact
+            if website_array.any?
+            website_id = current_spree_user.solid_cp.website.get_certificates_for_site({web_site_id: website_array.first})
+            @website_id = website_id.body[:get_certificates_for_site_response][:get_certificates_for_site_result][:ssl_certificate] rescue []
+            end
           end
           ######
 

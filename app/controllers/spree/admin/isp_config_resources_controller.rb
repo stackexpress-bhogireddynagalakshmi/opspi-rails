@@ -34,7 +34,7 @@ module Spree
         if @response[:success]
           redirect_to request.referrer
         else
-          render :new
+          redirect_to request.referrer
         end
       end
 
