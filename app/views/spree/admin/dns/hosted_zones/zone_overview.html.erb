@@ -142,7 +142,7 @@
           <% @web_site_id = "0" %>
           <% @web_domain_name = nil %>
           <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
-            <%@windows_websites.compact.reverse.each do |domain| %>
+            <%@windows_websites.reverse.each do |domain| %>
               <% if domain[:web_site_id].to_i > 0 %>
                 <% @web_site_id = domain[:web_site_id]%>
               <%end%>
