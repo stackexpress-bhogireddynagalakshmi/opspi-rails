@@ -7,13 +7,9 @@ module Spree
         include ApisHelper
         before_action :ensure_hosting_panel_access
         before_action :set_zone_list, only: %i[edit update destroy dns zone_overview]
+        
         def index
-          @response = host_zone_api.all_zones || []
-          @hosted_zones = if @response[:success]
-                            @response[:response].response
-                          else
-                            []
-                          end
+          @user_domains = current_spree_user.user_domains
         end
 
         def create
@@ -39,7 +35,6 @@ module Spree
           TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
 
           redirect_to admin_dns_hosted_zones_path
-
         end
 
         def disable_dns_services
@@ -53,7 +48,6 @@ module Spree
           respond_to do |format|
             format.js { render inline: "location.reload();" }
             format.html { redirect_to  admin_dns_hosted_zones_path}
-
           end
         end
 
@@ -82,7 +76,6 @@ module Spree
           respond_to do |format|
             format.js { render inline: "location.reload();" }
             format.html { redirect_to  admin_dns_hosted_zones_path}
-
           end
         end
 
@@ -127,17 +120,16 @@ module Spree
 
 
           #### website solidcp
-          if current_spree_user.solid_cp_id.present?
+          if current_spree_user.have_windows_access?
             @windows_resource = current_spree_user.solid_cp.web_domain.all || [] 
             @windows_resources = @windows_resource.body[:get_domains_response][:get_domains_result][:domain_info] rescue []
-            # byebug
-            @windows_websites = @windows_resources.collect{|x| x if x[:domain_name].include?(@zone_name)}
+            @windows_websites = @windows_resources.collect{|x| x if x[:domain_name].include?(@zone_name)}.compact
           end
           ######
 
           #### website ispconfig
           @web_domain = current_spree_user.isp_config.website.all[:response].response
-          @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}
+          @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}.compact
           for el in @web_domain
             if el.domain == @zone_name
             @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
@@ -156,7 +148,7 @@ module Spree
             end
 
             @win_user = [@win_user].to_a.flatten
-            @win_users = @win_user.collect{|x| x if x.folder.include?(@zone_name)}
+            @win_users = @win_user.collect{|x| x if x.folder.include?(@zone_name)}.compact
           ##########
 
           if @resources.present?
@@ -172,7 +164,7 @@ module Spree
           end
 
           if @win_users.present?
-            @win_count = @win_users.compact.size
+            @win_count = @win_users.size
           else
             @win_count = 0
           end
@@ -246,16 +238,16 @@ module Spree
             end
           end
 
-          domains = current_spree_user.isp_config.mail_domain.all[:response].response
+          # domains = current_spree_user.isp_config.mail_domain.all[:response].response
           list_arr5 = []
-          domains.each do |elm|
+          @mail_domain_response.each do |elm|
             if elm.domain == @zone_name
               list_arr5 << elm
             #  @websites = list_arr4
               @domains = list_arr5.collect { |x| [x.domain, x.domain] }
              break
             else
-              @domains = domains.collect { |x| [x.domain, x.domain] }
+              @domains = @mail_domain_response.collect { |x| [x.domain, x.domain] }
             end
           end
 

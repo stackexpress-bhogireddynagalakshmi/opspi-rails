@@ -93,7 +93,7 @@ module Spree
         end
 
         def get_folder_path
-          { can_read: true, can_write: true, folder: "\\#{params[:domain]}\\wwwroot" }
+          { can_read: true, can_write: true, folder: "\\#{params[:ftp_user][:domain]}\\wwwroot" }
         end
 
         def linux_resource_params 

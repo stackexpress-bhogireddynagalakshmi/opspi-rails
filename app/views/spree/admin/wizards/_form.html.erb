@@ -19,9 +19,9 @@
       <div class="col-lg-6">
         <div class="form-group field">
           <%= f.label :select_hosting_type %><br />
-          <%linux_checked =  current_spree_user.have_linux_access?%>
+          <%  linux_checked =  current_spree_user.have_linux_access?%>
 
-          <%if current_spree_user.have_windows_access?%>
+          <%if current_spree_user.have_windows_access? && current_spree_user.solid_cp_id.present?%>
             <span style="margin-right: 15px;">
               <%= f.radio_button :server_type, "windows" ,  class: 'form-check-input list-checkbox', required: true, checked: linux_checked ? false : true  %>
                <%linux_checked = false%>
@@ -29,7 +29,7 @@
             </span>
           <%end%>
          
-          <%if current_spree_user.have_linux_access?%>
+          <%if current_spree_user.have_linux_access? && current_spree_user.isp_config_id.present?%>
             <%= f.radio_button :server_type, "linux", :checked => true ,  class: 'form-check-input list-checkbox', required: true, checked: linux_checked %>
             <%= f.label :server_type, "Linux", :value => "linux"%>
           <%end%>   
