@@ -89,8 +89,13 @@
               <% end %>
               </div>
             </div>
+            <div class="col" style="margin-right: 20px;">
+            <span class="d-flex justify-content-end">
+            <%= link_to '<i class="fa fa-plus"></i> Add New'.html_safe, spree.new_address_path, class: 'btn btn-primary lift', method: :get %>
+            </span>
+            </div>
             <hr>
-            
+
           </div>
         </div>
       </div>
