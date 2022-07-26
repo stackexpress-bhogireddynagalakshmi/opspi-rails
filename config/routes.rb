@@ -112,7 +112,7 @@ Rails.application.routes.draw do
       post 'dns/hosted_zones/get_config_details', :controller=> 'dns/hosted_zones',:action=>"get_config_details", as: 'get_config_details'
       get 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"index", as: 'site_builder'
       post 'website_builder/site_builders', :controller=> 'website_builder/site_builders',:action=>"create", as: 'site_builder_create'
-
+      post 'windows/domains/get_ssl', :controller=> 'windows/domains', :action=> "get_ssl", as: 'get_ssl'
     end
   end
   

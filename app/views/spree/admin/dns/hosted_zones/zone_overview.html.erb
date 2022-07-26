@@ -31,6 +31,7 @@
          </div>
       </div>
    </div>
+   <%= flash_messages %>
    <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
          <%= render partial: 'spree/admin/dns/hosted_zones/overview_page' %>
@@ -136,6 +137,32 @@
                </div>
             </div>
          </div>
+         <%if current_spree_user.have_windows_access?%>
+          <% @web_domain_id = "0" %>
+          <% @web_site_id = "0" %>
+          <% @web_domain_name = nil %>
+          <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
+            <%@windows_websites.reverse.each do |domain| %>
+              <% if domain[:web_site_id].to_i > 0 %>
+                <% @web_site_id = domain[:web_site_id]%>
+              <%end%>
+              <% if domain[:web_site_id].to_i == 0 %>
+                <% @web_domain_id = domain[:domain_id]%>
+                <% @web_domain_name = domain[:domain_name]%>
+              <% end %>
+            <%end%>
+          <%end%>
+          <%if @web_site_id.to_i > 0 %>
+            <div class="card">
+                <div class="card-body">
+                  <div class="form-check form-switch">
+                    <label class="form-check-label">SSL</label>
+                    <%= check_box_tag 'ssl', @website_id.kind_of?(Array) ? 0: @website_id[:id], @website_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
+                  </div>
+                </div>
+            </div>
+          <%end%>
+         <%end%>
          <div class="card">
             <div class="card-body">
                <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
@@ -191,10 +218,14 @@
 <script type="text/javascript">
 var body = document.body;
 
+function spinner(){
+  $('.spinner').css('display','block');
+  body.style.opacity = "0.4";
+  body.style.pointerEvents = "none";
+}
+
 var updateWebDomain = function(element){
-    $('.spinner').css('display','block');
-    body.style.opacity = "0.5";
-    body.style.pointerEvents = "none";
+    
     var webDomainId = element.attributes.data_web_domain_id.value;
     var domainStatus = element.attributes.data_web_domain_status.value;
     var website = element.attributes.data_web_site.value;
@@ -210,6 +241,7 @@ var updateWebDomain = function(element){
 
     result = confirm(dataConfirm);
     if (result) {
+      spinner();
       setTimeout(function(){
         $.ajax({
           type: "POST",
@@ -226,20 +258,19 @@ var updateWebDomain = function(element){
   }
 
   var updateWinWebDomain = function(element){
-    $('.spinner').css('display','block');
-    body.style.opacity = "0.5";
-    body.style.pointerEvents = "none";
+  
     var webDomainId = element.attributes.data_web_domain_id.value;
     var webSiteId = element.attributes.data_web_site_id.value;
     var website = element.attributes.data_web_site.value;
 
-    if (parseInt(webDomainId) > 0) {
+    if (parseInt(webSiteId) > 0) {
       var dataConfirm = '<%= I18n.t('windows.deactivate_domain') %>';
       var web_site_id = parseInt(webSiteId);
       var web_domain_id = parseInt(webDomainId);
 
       result = confirm(dataConfirm);
       if (result) {
+         spinner();
       setTimeout(function(){
         $.ajax({
           type: "DELETE",
@@ -259,6 +290,7 @@ var updateWebDomain = function(element){
 
       result = confirm(dataConfirm);
       if (result) {
+         spinner();
       setTimeout(function(){
         $.ajax({
           type: "POST",
@@ -273,4 +305,38 @@ var updateWebDomain = function(element){
       }
     }
   }
+
+ var getSSL = function(element){
+    var websiteId = element.attributes.data_web_site_id.value;
+    var web_domain = element.attributes.data_web_domain.value;
+    var web_domain_id = element.attributes.data_web_domain_id.value;
+    var dnsId = element.attributes.data_dns_id.value;
+    var sslId = element.value; 
+
+    if (parseInt(sslId) == 0){
+      var dataConfirm = '<%= I18n.t('windows.install_ssl') %>';
+    }else{
+      var dataConfirm = '<%= I18n.t('windows.delete_ssl') %>';
+    }
+    
+  
+    result = confirm(dataConfirm);
+    if (result) {
+      spinner();
+      setTimeout(function(){
+        $.ajax({
+          type: "POST",
+          url: "/admin/windows/domains/get_ssl?web_site_id="+websiteId,
+          data: { 
+            website: {
+              domain: web_domain,
+              web_domain_id: web_domain_id,
+              dns_id: dnsId,
+              id: sslId
+            }
+          }
+        });
+      } ,5);
+    }
+  } 
 </script>
