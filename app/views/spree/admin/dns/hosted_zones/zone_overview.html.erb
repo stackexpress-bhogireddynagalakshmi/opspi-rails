@@ -220,7 +220,7 @@ var body = document.body;
 
 function spinner(){
   $('.spinner').css('display','block');
-  body.style.opacity = "0.5";
+  body.style.opacity = "0.4";
   body.style.pointerEvents = "none";
 }
 
@@ -314,9 +314,9 @@ var updateWebDomain = function(element){
     var sslId = element.value; 
 
     if (parseInt(sslId) == 0){
-      var dataConfirm = 'Do you want to install ssl certificate?';
+      var dataConfirm = '<%= I18n.t('windows.install_ssl') %>';
     }else{
-      var dataConfirm = 'Delete ssl cert?';
+      var dataConfirm = '<%= I18n.t('windows.delete_ssl') %>';
     }
     
   
