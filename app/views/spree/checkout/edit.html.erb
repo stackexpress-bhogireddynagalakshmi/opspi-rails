@@ -105,7 +105,7 @@ end
     </div>
   </div>
 
-  <%= flash_messages %>
+
 
     <div class="checkout-progress" data-hook="checkout_progress" role="navigation" aria-label="<%= Spree.t('checkout_page.checkout_navigation') %>">
     <ul class="nav justify-content-between checkout-progress-steps">
@@ -132,6 +132,7 @@ end
     </div>
   </div>
 
+  <%= flash_messages %>
 
   <div class="row checkout-content" data-hook="checkout_content">
     <%= form_for @order, url: spree.update_checkout_path(@order.state), html: { id: "checkout_form_#{@order.state}", class: "w-100 d-lg-flex align-items-lg-baseline  flex-wrap position-relative" } do |form| %>
