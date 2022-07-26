@@ -37,7 +37,14 @@ module IspConfig
 
        
         if response.code == "ok"
-          user.hosted_zones.create({ isp_config_host_zone_id: response["response"], name:  create_params[:name]})
+          user_domain_id = get_user_domain_id(create_params[:name])
+
+          user.hosted_zones.create({ 
+            isp_config_host_zone_id: response["response"], 
+            name:  create_params[:name],
+            user_domain_id: user_domain_id
+          })
+
           create_ns_records(response["response"] , create_params)
           # create_a_records(response["response"] , create_params)
           # create_mx_record(response["response"], create_params)
@@ -177,10 +184,18 @@ module IspConfig
         mail_box.sub('@','.')
       end
 
-       def get_sanitized_domain(domain)
+      def get_sanitized_domain(domain)
         domain.gsub("www.", '')
       end
 
+      def get_user_domain_id(domain)
+        user_domain = user.user_domains.where(domain: domain).last
+        return nil if user_domain.blank?
+
+        user_domain.update_column(:success, true)
+
+        user_domain.id
+      end
     end
   end
 end
