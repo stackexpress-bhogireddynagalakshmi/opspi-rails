@@ -65,7 +65,7 @@ module SolidCp
            response = super(message: { site_item_id: params[:web_site_id],delete_website_directory: true })
   
            if response.success? 
-            domain_response = Domain.new(user).destroy(params[:id])
+            domain_response = Domain.new(user).destroy(params[:web_domain_id])
             
             if domain_response[:success] == true 
               { success: true, message: 'Website deleted successfully', response: response }

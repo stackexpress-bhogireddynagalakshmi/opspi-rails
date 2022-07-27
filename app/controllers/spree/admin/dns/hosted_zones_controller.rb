@@ -153,7 +153,7 @@ module Spree
             end
 
             @win_user = [@win_user].to_a.flatten
-            @win_users = @win_user.collect{|x| x if x.folder.include?(@zone_name)}.compact
+            @win_users = @win_user.collect{|x| x if x.folder.split('\\')[1] == @zone_name}.compact
           ##########
 
           if @resources.present?

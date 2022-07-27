@@ -37,9 +37,35 @@ module Spree
         end
 
         def destroy
-          @response = current_spree_user.solid_cp.website.destroy(params)
+          response = current_spree_user.solid_cp.website.destroy(params)
           set_flash
           redirect_to request.referrer
+        end
+
+        def set_ftp_username(domain)
+          domain.gsub!('.', '_')
+        end
+
+        def disable_webservice
+          response = current_spree_user.solid_cp.website.destroy(params)
+          if response[:success]
+            res = delete_ftp(params)
+            @response = (res.first.to_i > 0) ? { success: true, message: 'Webservice Disabled successfully', response: res.first } : { success: false, message: 'Something went wrong. Please try again later', response: res.first }
+          end
+          set_flash
+          redirect_to request.referrer
+        end
+
+        def delete_ftp(params)
+          response = current_spree_user.solid_cp.ftp_account.all
+          ftp_users = response.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account] rescue []
+          
+          ftp_ids = ftp_users.collect{|x| x[:id] if x[:folder].split('\\')[1] == params[:domain]}.compact
+          if ftp_ids.any?
+            ftp_ids.each do |ftp_id|
+              @response = current_spree_user.solid_cp.ftp_account.destroy(ftp_id)
+            end
+          end
         end
 
         def get_ssl
