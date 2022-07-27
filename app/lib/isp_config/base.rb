@@ -78,7 +78,7 @@ module IspConfig
     end
 
     def set_base_uri(panel_id)
-      self.class.base_url = IspConfig::Config.api_url(panel_id)
+      self.class.base_uri IspConfig::Config.api_url(panel_id)
     end
   end
 end
