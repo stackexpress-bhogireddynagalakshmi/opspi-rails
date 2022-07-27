@@ -117,6 +117,44 @@
          <div class="card">
             <div class="card-body">
               <%if current_spree_user.have_windows_access? && current_spree_user.have_linux_access?%>
+                <div class="form-group field">
+                <%=label_tag :enable_web_service %><br />
+                <%  linux_checked =  current_spree_user.have_linux_access?%>
+
+                <%if current_spree_user.have_windows_access? && current_spree_user.solid_cp_id.present?%>
+                  <span style="margin-right: 15px;">
+                    <%=radio_button_tag :server_type, "windows" ,  class: 'form-check-input list-checkbox', required: true, checked: linux_checked ? false : true  %>
+                    <%linux_checked = false%>
+                    <%=label_tag :server_type, "Windows", :value => "windows" %>
+                  </span>
+                <%end%>
+              
+                <%if current_spree_user.have_linux_access? && current_spree_user.isp_config_id.present?%>
+                  <%=radio_button_tag :server_type, "linux", :checked => true ,  class: 'form-check-input list-checkbox', required: true, checked: linux_checked %>
+                  <%=label_tag :server_type, "Linux", :value => "linux"%>
+                <%end%>   
+
+              </div>
+                <div class="input-group">
+                  <%if @isp_websites.any? %>
+                  <%=button_tag (@isp_websites.first.active == 'y') ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @isp_websites.first.domain_id, data_web_domain_status: @isp_websites.first.active, data_web_site: params[:zone_name], class: 'btn btn-primary lift', onclick: "updateWebDomain(this)" %>
+                  <%elsif current_spree_user.have_windows_access?%>
+                  <% @web_domain_id = "0" %>
+                  <% @web_site_id = "0" %>
+                  <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
+                  <%@windows_websites.reverse.each do |domain| %>
+                  <% if domain[:web_site_id].to_i > 0 %>
+                  <% @web_site_id = domain[:web_site_id]%>
+                  <%end%>
+                  <% if domain[:web_site_id].to_i == 0 %>
+                  <% @web_domain_id = domain[:domain_id]%>
+                  <% end %>
+                  <%end%>
+                  <%end%>
+                  <%=button_tag (@web_site_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @web_domain_id, data_web_site_id: @web_site_id, data_web_site: params[:zone_name], id: "data_web_domain_#{@web_site_id}", onclick: "updateWinWebDomain(this);", class: 'btn btn-primary lift' %>
+                  <%end%>
+               </div>
+
               <%else%>
                <div class="input-group">
                   <%if @isp_websites.any? %>
