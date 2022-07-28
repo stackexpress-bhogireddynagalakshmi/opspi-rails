@@ -134,7 +134,7 @@ end
 
   <%= flash_messages %>
 
-  <div class="row checkout-content" data-hook="checkout_content">
+  <div class="row checkout-content mt-3" data-hook="checkout_content">
     <%= form_for @order, url: spree.update_checkout_path(@order.state), html: { id: "checkout_form_#{@order.state}", class: "w-100 d-lg-flex align-items-lg-baseline  flex-wrap position-relative" } do |form| %>
 
       <%=hidden_field_tag :invoice_number,params[:invoice_number]%>
