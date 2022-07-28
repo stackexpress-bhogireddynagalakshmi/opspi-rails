@@ -31,6 +31,7 @@
          </div>
       </div>
    </div>
+   <%= flash_messages %>
    <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
          <%= render partial: 'spree/admin/dns/hosted_zones/overview_page' %>
@@ -115,27 +116,107 @@
       <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">
          <div class="card">
             <div class="card-body">
+              <%if current_spree_user.have_windows_access? && current_spree_user.have_linux_access?%>
+                <div>
+                  <%if @isp_websites.any? || @windows_websites.any?%>
+                    <% @isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
+                    <% @web_domain_id = "0" %>
+                    <% @web_site_id = "0" %>
+                    <% if @windows_websites.any? && @windows_websites.kind_of?(Array) %>
+                      <%@windows_websites.reverse.each do |domain| %>
+                        <% if domain[:web_site_id].to_i > 0 %>
+                          <% @web_site_id = domain[:web_site_id]%>
+                        <%end%>
+                        <% if domain[:web_site_id].to_i == 0 %>
+                          <% @web_domain_id = domain[:domain_id]%>
+                        <% end %>
+                      <%end%>
+                    <%end%>
+                  <%end%>
+
+
+                  <%if @isp_web_id.to_i == 0 && @web_site_id.to_i == 0%>
+                    <div class="mb-4">
+                        <%=label_tag :select_web_service %><br />
+
+                          <span style="margin-right: 15px;">
+                            <%=radio_button_tag :server_type, "windows" , false , class: 'form-check-input list-checkbox', required: true %>
+                            <%=label_tag :server_type, "Windows", :value => "windows" %>
+                          </span>
+                      
+                          <%=radio_button_tag :server_type, "linux", false ,  class: 'form-check-input list-checkbox', required: true %>
+                          <%=label_tag :server_type, "Linux", :value => "linux"%>
+
+                    </div>
+                    <div>
+                      <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], class: 'btn btn-primary lift', id: "server_type_id", onclick: "serverTypeWebDomain(this);" %>
+                    </div>
+                  <%end%>
+                  <%if @isp_websites.any?%>
+                    <div>
+                      <%=button_tag (@isp_web_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: (@isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site_id: (@isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site: params[:zone_name], class: 'btn btn-primary lift', id: "server_type_id", onclick: (@isp_web_id.to_i > 0) ? "updateWebDomain(this)" : "serverTypeWebDomain(this);" %>
+                    </div>
+                  <%elsif @windows_websites.any? %>
+                    <div>
+                    <%=button_tag (@web_site_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @web_domain_id, data_web_site_id: @web_site_id, data_web_site: params[:zone_name], onclick: (@web_site_id.to_i > 0) ? "updateWinWebDomain(this);" : "serverTypeWebDomain(this);", id: "server_type_id", class: 'btn btn-primary lift' %>
+                    </div>
+                  <%end%>
+                  
+                  
+               </div>
+
+              <%else%>
+              <!-- separate account-->
                <div class="input-group">
-                  <%if @isp_websites.any? %>
-                  <%=button_tag (@isp_websites.first.active == 'y') ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @isp_websites.first.domain_id, data_web_domain_status: @isp_websites.first.active, data_web_site: params[:zone_name], class: 'btn btn-primary lift', onclick: "updateWebDomain(this)" %>
+                  <%if current_spree_user.have_linux_access? %>
+                    <% isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
+                    <%=button_tag (isp_web_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: (isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site_id: (isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site: params[:zone_name], class: 'btn btn-primary lift', onclick: "updateWebDomain(this)" %>
                   <%elsif current_spree_user.have_windows_access?%>
-                  <% @web_domain_id = "0" %>
-                  <% @web_site_id = "0" %>
-                  <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
-                  <%@windows_websites.reverse.each do |domain| %>
-                  <% if domain[:web_site_id].to_i > 0 %>
-                  <% @web_site_id = domain[:web_site_id]%>
-                  <%end%>
-                  <% if domain[:web_site_id].to_i == 0 %>
-                  <% @web_domain_id = domain[:domain_id]%>
-                  <% end %>
-                  <%end%>
-                  <%end%>
-                  <%=button_tag (@web_site_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @web_domain_id, data_web_site_id: @web_site_id, data_web_site: params[:zone_name], id: "data_web_domain_#{@web_site_id}", onclick: "updateWinWebDomain(this);", class: 'btn btn-primary lift' %>
+                    <% @web_domain_id = "0" %>
+                    <% @web_site_id = "0" %>
+                    <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
+                      <%@windows_websites.reverse.each do |domain| %>
+                      <% if domain[:web_site_id].to_i > 0 %>
+                        <% @web_site_id = domain[:web_site_id]%>
+                      <%end%>
+                      <% if domain[:web_site_id].to_i == 0 %>
+                       <% @web_domain_id = domain[:domain_id]%>
+                      <% end %>
+                      <%end%>
+                    <%end%>
+                    <%=button_tag (@web_site_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @web_domain_id, data_web_site_id: @web_site_id, data_web_site: params[:zone_name], id: "data_web_domain_#{@web_site_id}", onclick: "updateWinWebDomain(this);", class: 'btn btn-primary lift' %>
                   <%end%>
                </div>
+              <%end%>
             </div>
          </div>
+         <!-- ssl -->
+         <%if current_spree_user.have_windows_access?%>
+          <% @web_domain_id = "0" %>
+          <% @web_site_id = "0" %>
+          <% @web_domain_name = nil %>
+          <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
+            <%@windows_websites.reverse.each do |domain| %>
+              <% if domain[:web_site_id].to_i > 0 %>
+                <% @web_site_id = domain[:web_site_id]%>
+              <%end%>
+              <% if domain[:web_site_id].to_i == 0 %>
+                <% @web_domain_id = domain[:domain_id]%>
+                <% @web_domain_name = domain[:domain_name]%>
+              <% end %>
+            <%end%>
+          <%end%>
+          <%if @web_site_id.to_i > 0 %>
+            <div class="card">
+                <div class="card-body">
+                  <div class="form-check form-switch">
+                    <label class="form-check-label">SSL</label>
+                    <%= check_box_tag 'ssl', @website_id.kind_of?(Array) ? 0: @website_id[:id], @website_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
+                  </div>
+                </div>
+            </div>
+          <%end%>
+         <%end%>
          <div class="card">
             <div class="card-body">
                <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
@@ -147,8 +228,6 @@
                   <div>
                      <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
                   </div>
-               </div>
-               <div class="redirect" onmouseover = "myFunction()">
                </div>
                <% end %>
             </div>
@@ -191,32 +270,47 @@
 <script type="text/javascript">
 var body = document.body;
 
+function spinner(){
+  $('.spinner').css('display','block');
+  body.style.opacity = "0.4";
+  body.style.pointerEvents = "none";
+}
+
+$("input[name='server_type']").change(function(){
+    var serverType = $(this).val();
+    document.getElementById("server_type_id").value = serverType;
+});
+
+var serverTypeWebDomain = function(element){
+  var serverType = element.value; 
+  if (serverType == "windows"){
+    updateWinWebDomain(element);
+  }
+  else{
+    updateWebDomain(element);
+  }
+}
+
 var updateWebDomain = function(element){
-    $('.spinner').css('display','block');
-    body.style.opacity = "0.5";
-    body.style.pointerEvents = "none";
     var webDomainId = element.attributes.data_web_domain_id.value;
-    var domainStatus = element.attributes.data_web_domain_status.value;
     var website = element.attributes.data_web_site.value;
 
-    if (domainStatus == 'y') {
+    if (parseInt(webDomainId) > 0) {
       var dataConfirm = '<%= I18n.t('windows.deactivate_domain') %>';
-      var active = 'n';
     }
     else {
       var dataConfirm = '<%= I18n.t('windows.activate_domain') %>';
-      var active = 'y';
     }
 
     result = confirm(dataConfirm);
     if (result) {
+      spinner();
       setTimeout(function(){
         $.ajax({
           type: "POST",
           url: "/admin/sites/websites/enable_disable_web_domain?web_site_id="+webDomainId,
           data: { 
             website: {
-              active: active,
               domain: website
             }
           }
@@ -226,27 +320,26 @@ var updateWebDomain = function(element){
   }
 
   var updateWinWebDomain = function(element){
-    $('.spinner').css('display','block');
-    body.style.opacity = "0.5";
-    body.style.pointerEvents = "none";
     var webDomainId = element.attributes.data_web_domain_id.value;
     var webSiteId = element.attributes.data_web_site_id.value;
     var website = element.attributes.data_web_site.value;
 
-    if (parseInt(webDomainId) > 0) {
+    if (parseInt(webSiteId) > 0) {
       var dataConfirm = '<%= I18n.t('windows.deactivate_domain') %>';
       var web_site_id = parseInt(webSiteId);
       var web_domain_id = parseInt(webDomainId);
 
       result = confirm(dataConfirm);
       if (result) {
+         spinner();
       setTimeout(function(){
         $.ajax({
-          type: "DELETE",
-          url: "/admin/windows/domains/"+web_domain_id,
+          type: "POST",
+          url: "/admin/windows/domains/disable_webservice",
           data: { 
               web_site_id: web_site_id,
-              web_domain_id: web_domain_id
+              web_domain_id: web_domain_id,
+              domain: website
           }
         });
       } ,5);
@@ -259,10 +352,11 @@ var updateWebDomain = function(element){
 
       result = confirm(dataConfirm);
       if (result) {
+         spinner();
       setTimeout(function(){
         $.ajax({
           type: "POST",
-          url: "/admin/sites/websites?server_type="+server_type,
+          url: "/admin/sites/websites/enable_webservice?server_type="+server_type,
           data: { 
             website: {
               domain: web_site_name
@@ -273,4 +367,38 @@ var updateWebDomain = function(element){
       }
     }
   }
+
+ var getSSL = function(element){
+    var websiteId = element.attributes.data_web_site_id.value;
+    var web_domain = element.attributes.data_web_domain.value;
+    var web_domain_id = element.attributes.data_web_domain_id.value;
+    var dnsId = element.attributes.data_dns_id.value;
+    var sslId = element.value; 
+
+    if (parseInt(sslId) == 0){
+      var dataConfirm = '<%= I18n.t('windows.install_ssl') %>';
+    }else{
+      var dataConfirm = '<%= I18n.t('windows.delete_ssl') %>';
+    }
+    
+  
+    result = confirm(dataConfirm);
+    if (result) {
+      spinner();
+      setTimeout(function(){
+        $.ajax({
+          type: "POST",
+          url: "/admin/windows/domains/get_ssl?web_site_id="+websiteId,
+          data: { 
+            website: {
+              domain: web_domain,
+              web_domain_id: web_domain_id,
+              dns_id: dnsId,
+              id: sslId
+            }
+          }
+        });
+      } ,5);
+    }
+  } 
 </script>

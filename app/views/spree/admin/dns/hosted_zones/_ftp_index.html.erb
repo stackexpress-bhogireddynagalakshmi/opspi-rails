@@ -17,7 +17,7 @@
   }
 </style>
 
-<%if current_spree_user.have_linux_access?%>
+<%if current_spree_user.have_linux_access? && @ftp_user.present?%>
   <% if @ftp_user.present? %>
     <div class="card mt-3">
       <div class="table-responsive">

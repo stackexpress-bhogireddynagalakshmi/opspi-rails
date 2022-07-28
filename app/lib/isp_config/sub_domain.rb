@@ -4,6 +4,7 @@ module IspConfig
 
     def initialize user
       @user = user
+      set_base_uri( user.panel_config["web_linux"] )
     end
 
     def find(id)

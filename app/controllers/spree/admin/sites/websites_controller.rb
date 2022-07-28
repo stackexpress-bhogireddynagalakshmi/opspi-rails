@@ -21,12 +21,68 @@ module Spree
           @windows_resources = convert_to_mash(@response.body[:get_domains_response][:get_domains_result][:domain_info]) rescue []
         end
 
+        def enable_webservice
+          response = windows_api.create(resource_params)
+          if response[:success]
+            @response = create_ftp(params)
+          end
+          set_flash
+          redirect_to request.referrer
+        end
+
+        def create_ftp(params)
+          current_spree_user.solid_cp.ftp_account.create(ftp_windows_params(params))
+        end       
+        
+        def ftp_windows_params(params)
+          { 
+            folder: "\\#{params[:website][:domain]}\\wwwroot",
+            username: set_ftp_username(params[:website][:domain]).first(20),
+            password: SecureRandom.urlsafe_base64.first(16),
+            can_read: true,
+            can_write: true
+          }
+        end
+
         def enable_disable_web_domain
-          @response = isp_config_api.update(params[:web_site_id],{active: params[:website][:active],domain: params[:website][:domain]})
+          if params[:web_site_id].to_i > 0
+            response = isp_config_api.destroy(params[:web_site_id])
+            if response[:success]
+              ftp_users = current_spree_user.isp_config.ftp_user.find(parent_domain_id: params[:web_site_id])[:response].response
+              ftp_ids = ftp_users.collect{|x| x[:ftp_user_id]}.compact
+              if ftp_ids.any?
+                ftp_ids.each do |ftp_id|
+                  @response = current_spree_user.isp_config.ftp_user.destroy(ftp_id)
+                end
+              end
+            end
+          else
+            response = isp_config_api.create({domain: params[:website][:domain]})
+            if response[:success]
+              website  = current_spree_user.isp_config.website.find(response[:response][:response])
+              if website[:success] && website[:response]
+                ftp_user_params = ftp_users_resource_params(website[:response][:response])
+                @response = current_spree_user.isp_config.ftp_user.create(ftp_user_params)
+              end
+            end
+          end
           set_flash
           redirect_to request.referrer
         end
         private
+
+        def ftp_users_resource_params(website)
+          {
+            parent_domain_id: website.domain_id,
+            username: set_ftp_username(params[:website][:domain]),
+            password: SecureRandom.hex,
+            quota_size: -1,
+            active: 'y',
+            uid: website.system_user,
+            gid: website.system_group,
+            dir: website.document_root
+          }
+        end
 
         def resource_id_field
           "isp_config_website_id"
@@ -34,6 +90,10 @@ module Spree
 
         def assoc
           "websites"
+        end
+
+        def set_ftp_username(domain)
+          domain.gsub!('.', '_')
         end
 
         def resource_params

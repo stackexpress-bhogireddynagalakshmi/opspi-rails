@@ -67,14 +67,18 @@ module IspConfig
         endpoint: '/json.php?login',
         method: :POST,
         body: {
-          username: IspConfig::Config.username,
-          password: IspConfig::Config.password
+          username: IspConfig::Config.api_username(user),
+          password: IspConfig::Config.api_password(user)
         }
       }
       method   = login_hash[:method].to_s.downcase
       response = self.class.send(method, login_hash[:endpoint], body: login_hash[:body].to_json)
       self.current_session_started = Time.zone.now
       self.current_session_token = response.parsed_response["response"]
+    end
+
+    def set_base_uri(panel_id)
+      self.class.base_uri IspConfig::Config.api_url(panel_id)
     end
   end
 end
