@@ -107,28 +107,29 @@ end
 
 
 
-    <div class="checkout-progress" data-hook="checkout_progress" role="navigation" aria-label="<%= Spree.t('checkout_page.checkout_navigation') %>">
+  <div class="checkout-progress" data-hook="checkout_progress" role="navigation" aria-label="<%= Spree.t('checkout_page.checkout_navigation') %>">
     <ul class="nav justify-content-between checkout-progress-steps">
-   <li class="text-uppercase nav-item active first">
-      <a class="d-flex flex-column align-items-center active">
-      <span class="checkout-progress-steps-image checkout-progress-steps-image--full" style="margin-left: 31px;">
-      </span>
-      Address
-      </a>
-    </li>
-    <li class="text-uppercase nav-item next last">
-      <a class="d-flex flex-column align-items-center ">
-      <span class="checkout-progress-steps-image checkout-progress-steps-image--full" style="margin-left: 34px;margin-right: 31px;">
-      </span>
-      Payment
-      </a>
-    </li> 
+     <li class="text-uppercase nav-item active first">
+        <a class="d-flex flex-column align-items-center active">
+        <span class="checkout-progress-steps-image checkout-progress-steps-image--full" style="margin-left: 31px;">
+        </span>
+        Address
+        </a>
+      </li>
+      <li class="text-uppercase nav-item next last">
+        <a class="d-flex flex-column align-items-center ">
+        <span class="checkout-progress-steps-image checkout-progress-steps-image--full" style="margin-left: 34px;margin-right: 31px;">
+        </span>
+        Payment
+        </a>
+      </li> 
       <%#= checkout_progress %>
     </ul>
     <div class="checkout-progress-steps-line" style="margin-top: -60px;">
     <hr>
     </div>
       <%#= checkout_progress %>
+       <%= render 'spree/shared/error_messages', target: @order %>
     </div>
   </div>
 

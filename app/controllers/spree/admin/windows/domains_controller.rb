@@ -37,11 +37,72 @@ module Spree
         end
 
         def destroy
-          @response = current_spree_user.solid_cp.website.destroy(params)
+          response = current_spree_user.solid_cp.website.destroy(params)
           set_flash
           redirect_to request.referrer
         end
 
+        def set_ftp_username(domain)
+          domain.gsub!('.', '_')
+        end
+
+        def disable_webservice
+          response = current_spree_user.solid_cp.website.destroy(params)
+          if response[:success]
+            res = delete_ftp(params)
+            @response = (res.first.to_i > 0) ? { success: true, message: 'Webservice Disabled successfully', response: res.first } : { success: false, message: 'Something went wrong. Please try again later', response: res.first }
+          end
+          set_flash
+          redirect_to request.referrer
+        end
+
+        def delete_ftp(params)
+          response = current_spree_user.solid_cp.ftp_account.all
+          ftp_users = response.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account] rescue []
+          
+          ftp_ids = ftp_users.collect{|x| x[:id] if x[:folder].split('\\')[1] == params[:domain]}.compact
+          if ftp_ids.any?
+            ftp_ids.each do |ftp_id|
+              @response = current_spree_user.solid_cp.ftp_account.destroy(ftp_id)
+            end
+          end
+        end
+
+        def get_ssl
+          if params[:website][:id].to_i == 0
+            pointer = current_spree_user.solid_cp.website.get_web_site_pointers(params)
+            current_spree_user.solid_cp.website.delete_web_site_pointer({web_site_id: pointer[:web_site_id], website:{ web_domain_id: pointer[:domain_id] }}) unless pointer.blank?
+          
+            ensure_a_record(params)
+            
+            @response = current_spree_user.solid_cp.website.le_install_certificate(params)
+          else
+            @response = current_spree_user.solid_cp.website.delete_certificate(params)
+          end
+          set_flash
+          redirect_to request.referrer
+        end
+
+        def ensure_a_record(params)
+          dns_records = current_spree_user.isp_config.hosted_zone.get_all_hosted_zone_records(params[:website][:dns_id])[:response].response
+          a_records = dns_records.select{|x| x[:id] if x[:type] == 'A' && x[:data] == ENV['SOLID_CP_WEB_SERVER_IP']}
+
+          create_a_record(params) if a_records.blank?
+        end
+
+        def create_a_record(a_rec_params)
+          
+          a_record_params={
+            type: "A",
+            name: a_rec_params[:website][:domain],
+            hosted_zone_name: nil,
+            ipv4: ENV['SOLID_CP_WEB_SERVER_IP'],
+            ttl: "3600",
+            hosted_zone_id: a_rec_params[:website][:dns_id],
+            client_id: user.isp_config_id
+          }
+          current_spree_user.isp_config.hosted_zone_record.create(a_record_params)
+        end
         private
 
         def resource_id

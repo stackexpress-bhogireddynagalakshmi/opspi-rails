@@ -254,7 +254,7 @@ module Spree
               server_type: @server_type,
               parent_domain_id: '', # needed
               domain: @domain,
-              username: set_ftp_username(@domain),
+              username: set_ftp_username(@domain).first(20),
               password: SecureRandom.urlsafe_base64,
               quota_size: '-1',
               active: 'y',
