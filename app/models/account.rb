@@ -6,6 +6,7 @@ class Account < ApplicationRecord
   has_many :spree_orders, class_name: 'Spree::Order', dependent: :destroy
   has_many :users, class_name: 'Spree::User', dependent: :destroy
   has_many :payment_methods, class_name: 'Spree::PaymentMethod'
+  has_many :prototypes,  class_name: 'Spree::Prototype'
 
   scope :by_subdomain, lambda { |url|
     where(subdomain: url)
