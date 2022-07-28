@@ -161,12 +161,16 @@ en:
       create: 'Database created successfully'
       delete: 'Database deleted successfully'
       update: 'Database updated successfully'
+    ftp_user: 
+      create: 'Ftp User created successfully'
+      delete: 'Ftp User deleted successfully'
+      update: 'Ftp User updated successfully'
 
   windows:
     ftp_account:
     delete_alert: "Are you sure you want to delete this ftp user?"
     activate_domain: "Are you sure to Activate this Domain?"
-    deactivate_domain: "Are you sure to Deactivate this Domain?, This will affect your other services"
+    deactivate_domain: "Are you sure to Deactivate this Domain?, This will affect your other services and delete your ftp accounts"
     install_ssl: 'Are you sure to Install ssl certificate?'
     delete_ssl: 'Are you sure to Delete ssl certificate?'
     database: 
