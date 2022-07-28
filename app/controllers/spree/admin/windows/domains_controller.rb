@@ -99,7 +99,7 @@ module Spree
             ipv4: ENV['SOLID_CP_WEB_SERVER_IP'],
             ttl: "3600",
             hosted_zone_id: a_rec_params[:website][:dns_id],
-            client_id: user.isp_config_id
+            client_id: current_spree_user.isp_config_id
           }
           current_spree_user.isp_config.hosted_zone_record.create(a_record_params)
         end
