@@ -128,7 +128,7 @@ module IspConfig
         ruby: 'n',
         # redirect_type: '',
         # redirect_path: '',
-        ssl: 'n',
+        ssl: 'y',
         # ssl_state: '',
         # ssl_locality: '',
         # ssl_organisation: '',

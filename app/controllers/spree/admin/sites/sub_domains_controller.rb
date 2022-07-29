@@ -57,7 +57,7 @@ module Spree
             subdomain: "1",
             php: "y",
             ruby: "n",
-            ssl: "n",
+            ssl: "y",
             stats_type: "webalizer",
             allow_override: "All",
             apache_directives: "",
