@@ -6,7 +6,7 @@ module AccountHelper
 	  end
 
     if solid_cp_plan_id.present?
-      response = SolidCp::Plan.get_hosting_plan_quotas(solid_cp_plan_id)
+      response = SolidCp::Plan.get_hosting_plan_quotas(solid_cp_plan_id,user)
       groups  = response.body[:get_hosting_plan_quotas_response][:get_hosting_plan_quotas_result][:diffgram][:new_data_set][:table]  
       groups = groups.select{|x| x[:enabled]}
       quotas  = response.body[:get_hosting_plan_quotas_response][:get_hosting_plan_quotas_result][:diffgram][:new_data_set][:table1]     
@@ -24,7 +24,7 @@ module AccountHelper
      	group_obj = product.plan_quota_groups.first_or_build({:solid_cp_quota_group_id=>group[:group_id]})
      	group_obj.group_name = group[:group_name]
      	group_obj.enabled = group[:enabled]
-	 end
+	  end
   end
 
   def build_quota(product,group_obj,quotas)
