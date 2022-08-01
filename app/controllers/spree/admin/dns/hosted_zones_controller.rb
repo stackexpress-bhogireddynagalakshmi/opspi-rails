@@ -139,10 +139,18 @@ module Spree
             if el.domain == @zone_name
             @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
               
-            @ftp_user = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
+            @ftp_user1 = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
             end 
           end
           #### 
+
+          @win_resources = begin
+            @response2 = current_spree_user.solid_cp.sql_server.all || []
+            convert_to_mash(@response2.body[:get_sql_databases_response][:get_sql_databases_result][:sql_database])
+          rescue StandardError
+            []
+          end
+          @resources_win = [@win_resources].to_a.flatten
 
           #### window ftp
           @win_user = begin
@@ -156,17 +164,41 @@ module Spree
             @win_users = @win_user.collect{|x| x if x.folder.split('\\')[1] == @zone_name}.compact
           ##########
 
-          if @resources.present?
-            @database_count = @resources.size
-          else
-            @database_count = 0
-          end
+          @win_user = begin
+                @res = current_spree_user.solid_cp.ftp_account.all
+                convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
+            rescue StandardError
+              []
+            end
+            @win_user = [@win_user].to_a.flatten
+            list_arr6 = []
+            for elem1 in @win_user
+              if elem1.folder.split('\\')[1] == @zone_name
+                list_arr6 << elem1
+                @win_ftp = list_arr6
+                
+              end
+            end
 
-          if @ftp_user.present?
-            @ftp_count = @ftp_user.size
-          else
-            @ftp_count = 0
-          end
+            if @resources.present? && @resources_win.present?
+              @database_count = @resources.size + @resources_win.size
+            elsif @resources.present?
+              @database_count = @resources.size
+            elsif @resources_win.present?
+              @database_count = @resources_win.size
+            else
+              @database_count = 0
+            end
+
+            if @ftp_user1.present? && @win_users.present?
+              @ftp_count = @ftp_user1.size + @win_users.compact.size 
+            elsif @win_users.present?
+              @ftp_count = @win_users.compact.size
+            elsif @ftp_user1.present?
+              @ftp_count = @ftp_user1.size
+            else
+              @ftp_count = 0
+            end
 
           if @win_users.present?
             @win_count = @win_users.size

@@ -89,7 +89,7 @@ a, a:hover, a:focus, a:active {
     </div>
     </div>
 
-    <%if current_spree_user.have_linux_access?%>
+
     <div class="col-lg-4">
     <div class="card" style="height: 120px;cursor: pointer" id="ftp_card">
         <div class="card-body">
@@ -109,27 +109,7 @@ a, a:hover, a:focus, a:active {
         </div>
     </div>
     </div>
-    <% else %>
-    <div class="col-lg-4">
-    <div class="card" style="height: 120px;cursor: pointer" id="ftp_card">
-        <div class="card-body">
-        <div class="row align-items-center">
-            <div class="col">
-            <h6 class="text-uppercase text-muted mb-2">
-                FTP Users
-            </h6>
-            <span class="h2 mb-0">
-                <%= @win_count %>
-            </span>
-            </div>
-            <div class="col-auto">
-            <span class="h2 fe fe-users text-muted mb-0"></span>
-           </div>
-        </div> 
-        </div>
-    </div>
-    </div>
-    <% end %>
+
 
     <div class="col-lg-4">
     <div class="card" style="height: 120px;cursor: pointer" id="database_card">
