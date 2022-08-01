@@ -4,10 +4,11 @@ module SolidCp
   class Plan < Base
     attr_reader :user, :plan
 
-    client wsdl: SOAP_PLAN_WSDL, endpoint: SOAP_PLAN_WSDL, log: SolidCp::Config.log
-    global :read_timeout, SolidCp::Config.timeout
-    global :open_timeout, SolidCp::Config.timeout
-    global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
+    def initialize(user)
+      @user = user
+
+      set_configurations(user, SOAP_PLAN_WSDL)
+    end
 
     operations :get_hosting_plans, :get_hosting_addons, :get_hosting_plan, :get_hosting_plan_quotas,
                :get_hosting_plan_context, :get_user_available_hosting_plans, :get_user_available_hosting_addons,
