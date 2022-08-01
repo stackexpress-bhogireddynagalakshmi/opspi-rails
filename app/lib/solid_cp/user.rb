@@ -2,17 +2,13 @@
 
 module SolidCp
   class User < Base
-    client wsdl: SOAP_USER_WSDL, endpoint: SOAP_USER_WSDL, log: SolidCp::Config.log
-    global :read_timeout, SolidCp::Config.timeout
-    global :open_timeout, SolidCp::Config.timeout
-    global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
-
     include RedisConcern
-
     attr_reader :user, :package
 
     def initialize(user)
       @user = user
+
+      set_configurations(user, SOAP_USER_WSDL)
     end
 
     operations :user_exists, :get_user_by_id, :get_user_by_username, :get_users, :add_user_v_lan, :delete_user_v_lan, :get_raw_users,

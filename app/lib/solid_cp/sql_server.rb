@@ -4,10 +4,11 @@ module SolidCp
   class SqlServer < Base
     attr_reader :user
 
-    client wsdl: SOAP_SQL_WSDL, endpoint: SOAP_SQL_WSDL, log: SolidCp::Config.log
-    global :read_timeout, SolidCp::Config.timeout
-    global :open_timeout, SolidCp::Config.timeout
-    global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
+    def initialize(user)
+      @user = user
+
+      set_configurations(user, SOAP_SQL_WSDL)
+    end
 
     operations :add_sql_database,
                :add_sql_user,

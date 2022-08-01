@@ -7,13 +7,11 @@ module SolidCp
   
         def initialize(user)
           @user = user
+
+          set_configurations(user, SOAP_WEB_SERVER_WSDL)
         end
   
-        client wsdl: SOAP_WEB_SERVER_WSDL, endpoint: SOAP_WEB_SERVER_WSDL, log: SolidCp::Config.log
-        global :read_timeout, SolidCp::Config.timeout
-        global :open_timeout, SolidCp::Config.timeout
-        global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
-  
+      
         operations :delete_web_site,
                    :get_web_sites,
                    :install_certificate,
