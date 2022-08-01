@@ -15,7 +15,7 @@
       font-size: 0.8rem;
   }
 </style>
-<%if !current_spree_user.solid_cp_id.blank? && !current_spree_user.isp_config_id.blank?%>
+<%if current_spree_user.have_linux_access? && current_spree_user.have_windows_access? && @resources.present? && @win_users.present?%>
 <div class="card mt-3">
       <div class="table-responsive">
           <table class="table table-sm card-table" style="width:100%">
@@ -109,7 +109,7 @@
       </div>
       </div>
 
-<%elsif !current_spree_user.isp_config_id.blank?%>
+<%elsif urrent_spree_user.have_linux_access? && @resources.present? %>
     <div class="card mt-3">
       <div class="table-responsive">
           <table class="table table-sm card-table" style="width:100%">
