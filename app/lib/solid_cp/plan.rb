@@ -115,7 +115,7 @@ module SolidCp
       response = begin
         super(message: { plan_id: plan_id })
       rescue StandardError => e
-        byebug
+        Rails.logger.error { e.message }
         []
       end
     end
