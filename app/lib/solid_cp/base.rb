@@ -24,5 +24,14 @@ module SolidCp
       self.class.global :open_timeout, SolidCp::Config.timeout
       self.class.global :basic_auth, SolidCp::Config.api_username(user), SolidCp::Config.api_password(user)
     end
+
+    def self.set_configurations(user, wsdl)
+      base_url = SolidCp::Config.api_url(user.panel_config[SolidCp::Config::SERVER_TYPE])
+      wsdl_url = "#{base_url}#{wsdl}"
+      client wsdl: wsdl_url, endpoint: wsdl_url, log: SolidCp::Config.log
+      global :read_timeout, SolidCp::Config.timeout
+      global :open_timeout, SolidCp::Config.timeout
+      global :basic_auth, SolidCp::Config.api_username(user), SolidCp::Config.api_password(user)
+    end
   end
 end
