@@ -45,13 +45,13 @@ module IspQuotaManager
               domain_space = domain[:space].collect{|x| kb_to_bytes(x)}
               database_space = database[:space].collect{|x| kb_to_bytes(x)}
 
-              total_isp_bytes = number_to_human_size([domain_space,mail[:space],database_space].reduce([], :concat).inject(0, :+))
+              # total_isp_bytes = number_to_human_size([domain_space,mail[:space],database_space].reduce([], :concat).inject(0, :+))
 
               wb_traffic_bytes  = get_bytes(@web_traffic[:response])
               ftp_traffic_bytes = get_bytes(@ftp_traffic[:response])
               total_traffic     = number_to_human_size(wb_traffic_bytes + ftp_traffic_bytes)
 
-              @quota = convert_to_json({isp_disk: total_isp_bytes,isp_bandwidth: total_traffic, solid_disk: @disk_space, solid_band: @bandwidth})
+              @quota = convert_to_json({isp_disk: {web: number_to_human_size(domain_space.inject(0, :+)), mail: number_to_human_size(mail[:space].inject(0, :+)), database: number_to_human_size(database_space.inject(0, :+))},isp_bandwidth: {web: total_traffic, mail: 0}, solid_disk: @disk_space, solid_band: @bandwidth})
               quota_usage_obj = QuotaUsage.new({
                                   user_id: user.id,
                                   product_id: product_id,
@@ -83,7 +83,7 @@ module IspQuotaManager
           # mailbox: resource[:mail][:count].presence || 0,
           # database: resource[:database][:count].presence || 0,
           ispconfig: {
-            disk_space: resource[:isp_disk],
+            disk_space: {web: resource[:isp_disk][:web], mail: resource[:isp_disk][:mail], database: resource[:isp_disk][:database]},
             bandwidth: resource[:isp_bandwidth]
           },
           solidcp: {
