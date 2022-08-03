@@ -301,7 +301,11 @@ module Spree
 
         @batch_jobs = @batch_jobs.with_indifferent_access if @batch_jobs.present?
 
-        @batch_jobs
+        @batch_jobs = @batch_jobs.select do |k,v|
+          job = v[0]
+          ActiveJob::Status.get(job["sidekiq_job_id"]).present?
+        end
+        
       end
 
       def create_user_domain
