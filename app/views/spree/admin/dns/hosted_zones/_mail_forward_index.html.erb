@@ -1,4 +1,3 @@
-<% if @resources3.present? %>
 <div class="card mt-4">
 <div class="table-responsive">
 <table class="table table-sm card-table" style="width:100%">
@@ -11,6 +10,7 @@
     </tr>
   </thead>
   <tbody class="fsbase">
+  <% if @resources3.present? %>
   <%@resources3.each do |forward| %>
     <tr data-hook="admin_orders_index_rows" >
       <td><%=forward.source%></td>
@@ -42,15 +42,16 @@
         </td>  
     </tr>
   <% end %>
+  <% else %>
+    <tr>
+    <td><label class="form-label table_row_label"> No Forwards found.</label></td>
+    </tr>
+  <% end %>
   </tbody>
 </table>
 </div>
 </div>
-<% else %>
-  <div class="alert alert-secondary no-objects-found">
-  <label class="form-label" style="margin-top: 0.5rem;"> No Forwards found.</label>
-  </div>
-<% end %>
+
 
 <div class="modal fade" id="mailForwardModal" tabindex="-1" role="dialog" aria-labelledby="mailForwardModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

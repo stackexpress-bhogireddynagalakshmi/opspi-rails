@@ -69,37 +69,6 @@ width:230px
             </a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="#sidebar-account" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-account" id="sidebar_account_dropdown">
-            <i class="fe fe-home" style="margin-right:10px"></i> My Account
-          </a>
-            <div class="collapse" id="sidebarAccount">
-                    <ul class="nav nav-sm flex-column">
-                      <li class="nav-item">
-                        <a href="<%= admin_my_account_orders_path %>" class="nav-link">
-                          Orders
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="<%= admin_my_account_subscriptions_path %>" class="nav-link">
-                        Subscriptions
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="<%= admin_my_account_invoices_path %>" class="nav-link">
-                        Invoices
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="<%= admin_my_account_profiles_path %>" class="nav-link">
-                        Profiles
-                        </a>
-                      </li>
-                      
-                    </ul>
-                  </div>
-          </li>
-
           <% if can? :admin, Spree::Order %>
           <li class="nav-item">
             <a class="nav-link" id="sidebarOrder" href="/admin/orders">
@@ -559,6 +528,36 @@ width:230px
               </ul>
             </div>
             </li>
+            <li class="nav-item">
+            <a class="nav-link" href="#sidebar-account" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-account" id="sidebar_account_dropdown">
+            <i class="fe fe-home" style="margin-right:10px"></i> My Account
+          </a>
+            <div class="collapse" id="sidebarAccount">
+                    <ul class="nav nav-sm flex-column">
+                      <li class="nav-item">
+                        <a href="<%= admin_my_account_orders_path %>" class="nav-link">
+                          Orders
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<%= admin_my_account_subscriptions_path %>" class="nav-link">
+                        Subscriptions
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<%= admin_my_account_invoices_path %>" class="nav-link">
+                        Invoices
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a href="<%= admin_my_account_profiles_path %>" class="nav-link">
+                        Profiles
+                        </a>
+                      </li>
+                      
+                    </ul>
+                  </div>
+          </li>
           </ul>
         </div>
         </li>

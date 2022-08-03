@@ -1,5 +1,4 @@
 
-<% if @spam_filter_white.present? %>
 <div class="card mt-4">
 <div class="table-responsive">
 <table class="table table-sm card-table" style="width:100%">
@@ -12,6 +11,7 @@
     </tr>
   </thead>
   <tbody class="fsbase">
+  <% if @spam_filter_white.present? %>
   <%@spam_filter_white.each do |resource| %>
     <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
       <td><%=resource.email%></td>
@@ -41,15 +41,16 @@
       </td>  
     </tr>
   <% end %>
+  <% else %>
+    <tr>
+      <td><label class="form-label table_row_label"> No Spamfilter Whitelist found.</label></td>
+    </tr>
+  <% end %>
   </tbody>
 </table>
 </div>
 </div>
-<% else %>
-  <div class="alert alert-secondary no-objects-found">
-  <label class="form-label" style="margin-top: 0.5rem;"> No Spamfilter Whitelist found.</label>
-  </div>
-<% end %>
+
 
 <div class="modal fade" id="spamWhiteModal" tabindex="-1" role="dialog" aria-labelledby="spamWhiteModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

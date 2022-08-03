@@ -1,4 +1,4 @@
-<% if @mailing_lists.present? %>
+
 <div class="card mt-4">
 <div class="table-responsive">
 <table class="table table-sm card-table" style="table-layout: fixed; width:100%">
@@ -10,6 +10,7 @@
     </tr>
   </thead>
   <tbody class="fsbase">
+  <% if @mailing_lists.present? %>
   <%@mailing_lists.each do |mailing_list| %>
     <tr data-hook="admin_orders_index_rows" class="<%= cycle('odd', 'even') %>">
       <td><%= mailing_list.listname%></td>
@@ -32,15 +33,16 @@
       </td>  
     </tr>
   <% end %>
+  <% else %>
+    <tr>
+    <td><label class="form-label table_row_label"> No Mailing Lists found</label> </td>
+    </tr>
+  <% end %>
   </tbody>
 </table>
 </div>
 </div>
-<% else %>
-  <div class="alert alert-secondary no-objects-found">
-  <label class="form-label" style="margin-top: 0.5rem;"> No Mailing Lists found</label>
-  </div>
-<% end %>
+
 
 <div class="modal fade" id="mailingListModal" tabindex="-1" role="dialog" aria-labelledby="mailingListModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
