@@ -46,9 +46,8 @@
    </div>
 </div>
 
-
 <%if current_admin_tenant?%>
- <%=render :partial=>'hosting/plan_cards',:locals=>{:products=>TenantManager::TenantHelper.unscoped_query{Spree::Product.reseller_products.where(subscribable: true, visible: true)},:title=>params[:slug].try(:titleize)}%>
+ <%=render :partial=>'hosting/plan_cards',:locals=>{:products=>get_reseller_products,:title=>params[:slug].try(:titleize)}%>
 <%else%>
  <%=render :partial=>'hosting/plan_cards',:locals=>{:products=>current_store.account.spree_products.where(subscribable: true, visible: true),:title=>params[:slug].try(:titleize)} if current_store.account.present? %>
 <%end%>

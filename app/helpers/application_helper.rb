@@ -10,7 +10,7 @@ module ApplicationHelper
   end
 
   def current_admin_tenant?
-    TenantManager::TenantHelper.current_admin_tenant?
+    current_store.account.admin_tenant?
   end
 
   def render_new_tenant_information(order)
@@ -251,5 +251,9 @@ module ApplicationHelper
     elsif product.domain?
       I18n.t(:domain_plan)
     end
+  end
+
+  def get_reseller_products
+    TenantManager::TenantHelper.unscoped_query{ Spree::Product.reseller_plan.where(subscribable: true, visible: true) }
   end
 end
