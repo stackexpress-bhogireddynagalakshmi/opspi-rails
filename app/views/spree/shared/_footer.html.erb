@@ -4,7 +4,12 @@
       <div class="row d-xl-flex justify-content-xl-around pb-xl-5">
         <div class="d-flex d-xl-block flex-xl-grow-0 col-xl-4">
           <figure class="logo mx-auto mx-xl-0 pt-xl-2 pb-xl-1">
-            <%= logo %>
+          <% @store = current_store %>
+          <%= link_to(
+            image_tag(main_app.url_for(@store.logo), id: 'logo', alt: current_store.name),
+            "/",
+            class: "logo navbar-brand"
+          ) %>
           </figure>
           <% if current_store.description %>
             <div class="d-none d-xl-block pt-xl-2 footer-spree-info">
