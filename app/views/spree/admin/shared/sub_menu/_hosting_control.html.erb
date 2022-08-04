@@ -1,9 +1,10 @@
 <ul id="sidebar-hosting_controls" class="border-top bg-white collapse nav nav-pills nav-stacked" data-hook="admin_hosting_controls_sub_tabs">
-    <%= tab Spree.t('dns'), url: spree.admin_dns_hosted_zones_path, icon: "report.svg"%>
-    <%= main_menu_tree Spree.t(:mail), icon: "report.svg", sub_menu: "mail", url: "#sidebar-mail" %>
-    <%= main_menu_tree Spree.t(:sites), icon: "report.svg", sub_menu: "sites", url: "#sidebar-sites" %>
+    <%= tab 'Quick Start', url: admin_site_builder_path, icon: "report.svg"%>
+    <%= tab 'Domains', url: spree.admin_dns_hosted_zones_path, icon: "report.svg"%>
+    <%#= main_menu_tree Spree.t(:mail), icon: "report.svg", sub_menu: "mail", url: "#sidebar-mail" %>
+    <%#= main_menu_tree Spree.t(:sites), icon: "report.svg", sub_menu: "sites", url: "#sidebar-sites" %>
     <%#= main_menu_tree Spree.t(:statistics), icon: "report.svg", sub_menu: "statistics", url: "#mail-statistics" %>
-    <%= tab Spree.t('start_wizard'), url: spree.admin_wizards_path, icon: "report.svg"%>
-    <%= tab Spree.t('website_builder'), url: admin_site_builder_path, icon: "report.svg"%>
-    <%= tab Spree.t(:database), url: admin_sites_isp_databases_path, icon: "report.svg"%>
+    <%#= tab Spree.t('start_wizard'), url: spree.admin_wizards_path, icon: "report.svg"%>
+    
+    <%#= tab Spree.t(:database), url: admin_sites_isp_databases_path, icon: "report.svg"%>
 </ul>
