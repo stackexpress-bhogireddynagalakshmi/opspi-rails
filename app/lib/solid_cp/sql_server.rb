@@ -6,7 +6,7 @@ module SolidCp
 
     def initialize(user)
       @user = user
-
+      
       set_configurations(user, SOAP_SQL_WSDL)
     end
 
@@ -22,9 +22,6 @@ module SolidCp
                :get_sql_user,
                :get_sql_users
 
-    def initialize(user)
-      @user = user
-    end
 
     def get_sql_databases
       response = super(message: { package_id: user.packages.first.try(:solid_cp_package_id) })
