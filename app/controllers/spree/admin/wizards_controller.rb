@@ -299,13 +299,14 @@ module Spree
       def set_batch_jobs
         @batch_jobs = eval(AppManager::RedisWrapper.get("batch_jobs_user_id_#{current_spree_user.id}").to_s)
 
-        @batch_jobs = @batch_jobs.with_indifferent_access if @batch_jobs.present?
+        if @batch_jobs.present?
+          @batch_jobs = @batch_jobs.with_indifferent_access
 
-        @batch_jobs = @batch_jobs.select do |k,v|
-          job = v[0]
-          ActiveJob::Status.get(job["sidekiq_job_id"]).present?
+          @batch_jobs = @batch_jobs.select do |k,v|
+            job = v[0]
+            ActiveJob::Status.get(job["sidekiq_job_id"]).present?
+          end
         end
-        
       end
 
       def create_user_domain
