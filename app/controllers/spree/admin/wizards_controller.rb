@@ -50,7 +50,9 @@ module Spree
           prepare_ftp_account_task
         end
 
-        if wizard_params[:enable_db_service] == 'y' && @server_type != 'windows'
+        ## && @server_type != 'windows'
+
+        if wizard_params[:enable_db_service] == 'y' 
           prepare_database_task
         end
 
@@ -275,6 +277,7 @@ module Spree
             domain: @domain,
             actions: true,
             data: {
+              server_type: @server_type,
               web_domain_id: "", # needed in later stage
               database_name: get_database_name(@domain),
               database_username: get_database_user_name(@domain),

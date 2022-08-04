@@ -32,19 +32,24 @@ module TaskManager
       end
 
       def windows_api
-        @user.solid_cp.database
+        @user.solid_cp.sql_server
       end
 
 
       def resource_params
-        response  = user.isp_config.website.all
-        if response[:success]
-          websites = response[:response].response
-          website  = websites.detect {|x| x.domain == task[:domain]}
-          @data[:web_domain_id] = website.domain_id
-          return @data
+        if windows?
+          @data[:group_name] = 'MsSQL2019'
+         return  @data
         else
-          raise "Something went wrong: #{response[:error]}"
+          response  = user.isp_config.website.all
+          if response[:success]
+            websites = response[:response].response
+            website  = websites.detect {|x| x.domain == task[:domain]}
+            @data[:web_domain_id] = website.domain_id
+            return @data
+          else
+            raise "Something went wrong: #{response[:error]}"
+          end
         end
       end
 
