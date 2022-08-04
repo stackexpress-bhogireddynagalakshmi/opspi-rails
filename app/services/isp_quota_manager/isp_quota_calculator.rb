@@ -29,11 +29,30 @@ module IspQuotaManager
           if user.solid_cp_id.present?
             return if user.packages.first.try(:solid_cp_package_id).nil?
 
-            solid_cp_quota = get_solid_cp_used_quotas
-            quota_array = solid_cp_quota.body[:get_package_context_response][:get_package_context_result][:quotas_array][:quota_value_info]
-            @disk_space = quota_array.collect{ |x| x[:quota_used_value] if x[:quota_name] == 'OS.Diskspace'}
-            @bandwidth = quota_array.collect{ |x| x[:quota_used_value] if x[:quota_name] == 'OS.Bandwidth'}
+            solid_cp_quota_dspace = get_solid_cp_used_space
+            solid_cp_quota_bwidth = get_solid_cp_used_bandwidth
+
+            quota_array = solid_cp_quota_dspace.body[:get_package_diskspace_response][:get_package_diskspace_result][:diffgram][:new_data_set][:table]
+            
+            bandwidth_quota = solid_cp_quota_bwidth.body[:get_package_bandwidth_response][:get_package_bandwidth_result][:diffgram]
+            
+            if bandwidth_quota[:new_data_set].present?
+              @web_bandwidth = bandwidth_quota[:new_data_set][:table][:bytes_total]
+            else
+              @web_bandwidth = 0
+            end
+            if quota_array.is_a?(Hash)
+              @file_disk_space = quota_array[:diskspace_bytes]
+            else
+              @file_disk_space = quota_array.collect {|x| x[:diskspace_bytes] if x[:group_name] == 'OS'}.compact.first
+              @web_disk_space = quota_array.collect {|x| x[:diskspace_bytes] if x[:group_name] == 'Web'}.compact.first
+              @ms_db_disk_space = quota_array.collect {|x| x[:diskspace_bytes] if x[:group_name] == 'MsSQL2019'}.compact.first
+            end
+            # @disk_space = quota_array.collect{ |x| x[:quota_used_value] if x[:quota_name] == 'OS.Diskspace'}
+            # @bandwidth = quota_array.collect{ |x| x[:quota_used_value] if x[:quota_name] == 'OS.Bandwidth'}
           end
+
+            # quota_array = solid_cp_quota.body[:get_package_context_response][:get_package_context_result][:quotas_array][:quota_value_info]
 
           if user.isp_config_id.present? || user.solid_cp_id.present?
             if @domain_response[:success] && @mail_response[:success] && @database_response[:success]
@@ -49,9 +68,11 @@ module IspQuotaManager
 
               wb_traffic_bytes  = get_bytes(@web_traffic[:response])
               ftp_traffic_bytes = get_bytes(@ftp_traffic[:response])
-              total_traffic     = number_to_human_size(wb_traffic_bytes + ftp_traffic_bytes)
 
-              @quota = convert_to_json({isp_disk: {web: number_to_human_size(domain_space.inject(0, :+)), mail: number_to_human_size(mail[:space].inject(0, :+)), database: number_to_human_size(database_space.inject(0, :+))},isp_bandwidth: {web: total_traffic, mail: 0}, solid_disk: @disk_space, solid_band: @bandwidth})
+              @quota = convert_to_json({isp_disk: {web: number_to_human_size(domain_space.inject(0, :+)), mail: number_to_human_size(mail[:space].inject(0, :+)), database: number_to_human_size(database_space.inject(0, :+))},
+              isp_bandwidth: {web: number_to_human_size(wb_traffic_bytes), ftp: number_to_human_size(ftp_traffic_bytes), mail: 0}, 
+              solid_disk: {file: number_to_human_size(@file_disk_space), web: number_to_human_size(@web_disk_space), database: number_to_human_size(@ms_db_disk_space)}, solid_band: {web: number_to_human_size(@web_bandwidth)}})
+
               quota_usage_obj = QuotaUsage.new({
                                   user_id: user.id,
                                   product_id: product_id,
@@ -69,8 +90,13 @@ module IspQuotaManager
       end
       private
 
-      def get_solid_cp_used_quotas
-        SolidCp::Package.new(user).get_package_context
+      def get_solid_cp_used_space
+        SolidCp::Package.new(user).get_package_diskspace
+        # get_package_context
+      end
+
+      def get_solid_cp_used_bandwidth
+        SolidCp::Package.new(user).get_package_bandwidth
       end
 
       def existing_quota
@@ -87,14 +113,20 @@ module IspQuotaManager
             bandwidth: resource[:isp_bandwidth]
           },
           solidcp: {
-            disk_space: "#{solid_cp_quota_value(resource[:solid_disk])} MB",
-            bandwidth: solid_cp_quota_value(resource[:solid_band])
+            disk_space: {web: resource[:solid_disk][:web], file: resource[:solid_disk][:file], database: resource[:solid_disk][:database]},
+            bandwidth: {web: resource[:solid_band][:web]}
           }
         }
       end
 
       def solid_cp_quota_value(value)
-        value.nil? ? 0 : value.compact.first
+        if value.nil? 
+          val =  0 
+        elsif value.is_a?(Array)
+          val = value.compact.first
+        else 
+          val = value
+        end
       end
   
       def get_quota_info(quota_data)
