@@ -50,16 +50,16 @@
                       </div>
                   <td>
                       <span class="d-flex justify-content-end">
-                        <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size', style: "margin-right:5px", method: :delete do %>
+                        <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px", method: :delete do %>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                         </svg>
                         <% end %>
-                        <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px", title: 'Reset Password' do %>
+                        <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
                         <%= render partial: '/spree/admin/shared/icons/reset_password' %>
                         <% end %>
-                        <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size', title: 'Configuration Details' do  %>
+                        <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
                         <%= render partial: '/spree/admin/shared/icons/gear' %>
                         <% end %>
                       </span>
@@ -112,7 +112,7 @@
                   </td>
                   <td>
                       <span class="d-flex justify-content-end">
-                      <%= link_to  admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'),type: 'button', class: 'btn btn-outline-danger btn-size', style: "margin-right:5px", data: {confirm: t('windows.ftp_account.delete_alert')}, method: :delete do %>
+                      <%= link_to  admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px", data: {confirm: t('windows.ftp_account.delete_alert')}, method: :delete do %>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -166,16 +166,16 @@
                       </div>
                   <td>
                       <span class="d-flex justify-content-end">
-                        <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size', style: "margin-right:5px", method: :delete do %>
+                        <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px", method: :delete do %>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                         </svg>
                         <% end %>
-                        <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px", title: 'Reset Password' do %>
+                        <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
                         <%= render partial: '/spree/admin/shared/icons/reset_password' %>
                         <% end %>
-                        <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size', title: 'Configuration Details' do  %>
+                        <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
                         <%= render partial: '/spree/admin/shared/icons/gear' %>
                         <% end %>
                       </span>
