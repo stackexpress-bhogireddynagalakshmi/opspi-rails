@@ -12,12 +12,7 @@
     </div>
     <div class="col text-center text-lg-left">
       <% @store = current_store %>
-      <%= link_to(
-        image_tag(main_app.url_for(@store.logo), id: 'logo', alt: current_store.name),
-        "/",
-        class: "logo navbar-brand"
-      ) %>
-
+      <%= logo %>
     </div>
 
     <div class="col-3 col-sm-4 text-right p-0">
@@ -25,3 +20,9 @@
     </div>
   </nav>
 </header>
+
+<style>
+img {
+width: 7rem;
+}
+</style>

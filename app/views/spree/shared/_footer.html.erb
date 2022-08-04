@@ -5,11 +5,7 @@
         <div class="d-flex d-xl-block flex-xl-grow-0 col-xl-4">
           <figure class="logo mx-auto mx-xl-0 pt-xl-2 pb-xl-1">
           <% @store = current_store %>
-          <%= link_to(
-            image_tag(main_app.url_for(@store.logo), id: 'logo', alt: current_store.name),
-            "/",
-            class: "logo navbar-brand"
-          ) %>
+          <%= logo %>
           </figure>
           <% if current_store.description %>
             <div class="d-none d-xl-block pt-xl-2 footer-spree-info">
