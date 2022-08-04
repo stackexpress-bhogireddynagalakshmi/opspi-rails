@@ -62,8 +62,9 @@ def create_admin_user
     admin = Spree::User.new(attributes)
     if admin.save
       role = Spree::Role.find_or_create_by(name: 'admin')
-      admin.spree_roles << role
+      admin.spree_roles << role if !admin.spree_roles.include?(role)
       admin.save
+      admin.confirm
       admin.generate_spree_api_key! if Spree::Auth::Engine.api_available?
       say "Done!"
     else
@@ -75,14 +76,3 @@ def create_admin_user
   end
 end
 
-if Spree::User.admin.empty?
-  create_admin_user
-# else
-
-  # puts 'Admin user has already been previously created.'
-  # if agree('Would you like to create a new admin user? (yes/no)')
-  #   create_admin_user
-  # else
-  #   puts 'No admin user created.'
-  # end
-end

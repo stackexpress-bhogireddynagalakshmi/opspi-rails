@@ -24,8 +24,11 @@ module StoreManager
 
       StoreManager::StoreAdminRoleAssignor.new(admin).call
 
-      admin
+      if admin.email == ENV['ADMIN_EMAIL'] && !admin.confirmed?
+        admin.confirm
+      end
 
+      admin
     end
 
     def admin_password
