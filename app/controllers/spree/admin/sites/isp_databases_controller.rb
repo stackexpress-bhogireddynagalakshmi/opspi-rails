@@ -29,7 +29,9 @@ module Spree
           @response = database_api.create(resource_params)
           if @response[:success]
             set_flash
-            redirect_to admin_sites_isp_databases_path
+            # redirect_to admin_sites_isp_databases_path
+            render "create.js"
+
           else
             render :new
           end
@@ -63,7 +65,8 @@ module Spree
 
         def resource_params
           if windows?
-            params.require("database").permit(:group_name, :database_name, :database_password, :database_username)
+            win_params = params.require("database").permit(:group_name, :database_name, :database_password, :database_username)
+            win_params = win_params.merge({group_name: params[:database][:database_type]})
           else
             isp_database_params
           end
