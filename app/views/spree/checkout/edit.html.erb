@@ -54,6 +54,9 @@
 .text-right {
     text-align: right !important;
 }
+img{
+  position:absolute;left:0;top:0;margin-top: 4px;
+}
 </style>
 
 
@@ -81,9 +84,7 @@ end
 
 <div id="checkout" class="container checkout" data-hook>
 
-<a  href="<%= spree.root_path %>" style="position:absolute;left:0;top:0;margin-top: 4px;">
-<%= image_tag 'OpsPi-logo.png', class: "navbar-img" %>
-</a>
+<%= logo %>
 
 
 
