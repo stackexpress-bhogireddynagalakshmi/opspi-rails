@@ -23,15 +23,19 @@
     overflow-y: auto;
 }
 img{
-  margin-left: -75px;
+  width: 9rem;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 </style>
 
-<body class="d-flex align-items-center bg-auth border-top border-top-2 border-primary">
-
 
 <%= logo %>
+
+<body class="d-flex align-items-center bg-auth border-top border-top-2 border-primary">
+
     <!-- CONTENT
     ================================================== -->
     <div class="container">
@@ -40,7 +44,8 @@ img{
 
           <!-- Image -->
           <div class="text-center">
-          <%=image_tag('happiness')%>
+          <%#=image_tag('happiness')%>
+          <%= image_tag 'happiness.svg', class: "img-fluid" ,id:"bannerimage1"%>
           </div>
 
         </div>
@@ -243,6 +248,10 @@ $(document).ready(function() {
     }
 });
 });
+
+$(document).ready(function() {
+  $('#bannerimage1').attr('style', 'position: relative;width: 100%;');
+  });
 
 </script>
 

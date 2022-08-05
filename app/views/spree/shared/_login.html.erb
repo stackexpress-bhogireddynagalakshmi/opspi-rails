@@ -12,9 +12,10 @@
     margin-left: 0;
 }
 img{
-
-  margin-top: 4px;
-  margin-left: -75px;
+  width:9rem;
+position: absolute;
+top:0;
+left:0;
 }
 </style>
 
@@ -44,7 +45,8 @@ img{
       <!-- Image -->
       <div class="text-center">
 
-        <%=image_tag('happiness')%>
+        <%#=image_tag('happiness')%>
+        <%= image_tag 'happiness.svg', class: "img-fluid" ,id:"bannerimage1"%>
       </div>
 
     </div>
@@ -162,5 +164,12 @@ $(document).ready(function() {
     $('#FlashAlertsContainer').removeClass('d-none');
   });
 
+
+
+  $(document).ready(function() {
+  $('#bannerimage1').attr('style', 'position: relative;width: 100%;');
+  
+  
+  });
 
 </script>

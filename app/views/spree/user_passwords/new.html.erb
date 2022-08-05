@@ -4,17 +4,21 @@
   max-height: 3.5rem;
   margin-left:5px;
 }
-# margin-top: -610px;margin-left:10px
+
+img{
+  width: 9rem;
+  position: absolute;
+    top: 0;
+    left: 0;
+}
 </style>
 
 
 
-<a href="<%= spree.root_path %>" style="position:absolute;left:0;top:0;margin-top:5px">
-<%= image_tag 'OpsPi-logo.png', class: "navbar-img" %>
-</a>
+
 
 <body class="d-flex align-items-center bg-auth border-top border-top-2 border-primary">
-
+<%= logo %>
 
 <!-- CONTENT
 ================================================== -->
@@ -26,7 +30,7 @@
       <!-- Image -->
       <div class="text-center">
       <%#=image_tag('coworking')%>
-      <%= image_tag 'coworking.svg', class: "img-fluid" %>
+      <%= image_tag 'coworking.svg', class: "img-fluid" ,id:"bannerimage1"%>
       </div>
 
     </div>
@@ -77,3 +81,11 @@
 
 
 </body>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+$('#bannerimage1').attr('style', 'position: relative;width: 100%;');
+
+});
+</script>
