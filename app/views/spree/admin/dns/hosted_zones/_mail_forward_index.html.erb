@@ -10,8 +10,8 @@
     </tr>
   </thead>
   <tbody class="fsbase">
-  <% if @resources3.present? %>
-  <%@resources3.each do |forward| %>
+  <% if @mail_forwards.any? %>
+  <%@mail_forwards.each do |forward| %>
     <tr data-hook="admin_orders_index_rows" >
       <td><%=forward.source%></td>
       <td><%=forward.destination%></td>
@@ -64,48 +64,47 @@
       </div>
       <div class="modal-body">
       <%=form_for "mail_forward", url: admin_mail_forwards_path, html: {method: :post} do |f|%> 
-
-        <%=hidden_field_tag :forwarding_id, @resources3.try("forwarding_id")%>
-        <%=f.hidden_field :type, value: 'forward'%>
+       <%=f.hidden_field :type, value: 'forward'%>
+       <%=f.hidden_field :source_domain, value: params[:zone_name]%>
         <fieldset>
           <div class="form-group">
             <label class="form-label">Source</label>
             <div class="input-group mb-3">
-              <%=f.text_field 'source', value: @resources3.try(:source).try(:split, '@').try(:first), class: 'form-control',style:"width: 50%;"%>
+              <%=f.text_field 'source', class: 'form-control',style:"width: 50%;"%>
               <span class="input-group-text" id='at-sign'>@</span>
-              <%=select_tag 'source_domain',options_for_select(@domains, params[:zone_name]), class: 'form-select'%>
+              <%=f.text_field 'source_domain', value: params[:zone_name], class: 'form-control', disabled: true%>
             </div>
           </div>
       
           <div class="form-group">
             <label class="form-label">Destination</label>
-            <%=f.text_area 'destination', value: @resources3.try(:destination), class: 'form-control', rows: 10, cols: 40%>
+            <%=f.text_area 'destination',  class: 'form-control', rows: 10, cols: 40%>
           </div>
                 
           <div class="form-group">
             <label class="form-label">Active</label>
-            <%=select_tag :active,options_for_select([['Yes','y'], ['No','n']]), class: 'form-select'%>
+            <%=f.select :active,options_for_select([['Yes','y'], ['No','n']]), {}, class: 'form-select'%>
           </div>
       
-          <div class="form-check">
+          <div>
             <div class="row">
-              <div class="col-2">
+              <div class="col-3">
                 <label class="form-check-label">Send as</label>
               </div>
-              <div class="col-10">
-                <%= f.check_box :allow_send_as, {checked: @resources3.try(:allow_send_as) == 'y', class:"form-check-input list-checkbox"}, 'y', 'n' %>
+              <div class="col-9">
+                <%= f.check_box :allow_send_as, {checked: false, class:"form-check-input list-checkbox"}, 'y', 'n' %>
                 <small>Allow target to send mail using this address as origin (if target is internal)</small>
               </div>
             </div>
           </div>
       
-          <div class="form-check mb-4">
+          <div class="mb-4">
             <div class="row">
-              <div class="col-2">
+              <div class="col-3">
                 <label class="form-check-label">Enable greylisting</label>
               </div>
-              <div class="col-10">
-                <%= f.check_box :greylisting, {checked: @resources3.try(:greylisting) == 'y' , class:"form-check-input list-checkbox"}, 'y', 'n' %>
+              <div class="col-9">
+                <%= f.check_box :greylisting, {checked: false , class:"form-check-input list-checkbox"}, 'y', 'n' %>
               </div>
             </div>
           </div>
