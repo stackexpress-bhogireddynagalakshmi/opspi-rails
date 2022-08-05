@@ -58,9 +58,11 @@ module Spree
 
         def delete_ftp(params)
           response = current_spree_user.solid_cp.ftp_account.all
-          ftp_users = response.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account] rescue []
-          
-          ftp_ids = ftp_users.collect{|x| x[:id] if x[:folder].split('\\')[1] == params[:domain]}.compact
+          @ftp_users = response.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account] rescue []
+
+          @ftp_users = [@ftp_users] if @ftp_users.is_a?(Hash)
+
+          ftp_ids = @ftp_users.collect{|x| x[:id] if x[:folder].split('\\')[1] == params[:domain]}.compact
           if ftp_ids.any?
             ftp_ids.each do |ftp_id|
               @response = current_spree_user.solid_cp.ftp_account.destroy(ftp_id)
