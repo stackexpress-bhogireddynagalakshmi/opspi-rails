@@ -42,6 +42,14 @@ module ApplicationHelper
     plans || []
   end
 
+  def window_server_type
+    [['Windows', 'windows']]
+  end
+
+  def linux_server_type
+    [['Linux', 'linux']]
+  end
+
   def superadmin_plans(_user)
     [
       ['Reseller Hosting Plan', 'reseller_plan'],
