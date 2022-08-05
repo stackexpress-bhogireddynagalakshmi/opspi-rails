@@ -234,35 +234,27 @@ module Spree
             @mail_forward_count = 0
           end
 
+          ### mailing list
           @mailing_list_response = mailing_list_api.all[:response].response
-          list_arr2 = []
-          @mailing_list_response.each do |ele|
-            if ele.domain == @zone_name
-              list_arr2 << ele
-             @mailing_lists = list_arr2  
-            end
-          end
-
-          if @mailing_lists.present?
-            @mailing_list_count = @mailing_lists.size
-          else
-            @mailing_list_count = 0
-          end
+          @mailing_lists = @mailing_list_response.collect{|x| x if x.domain == @zone_name}.compact
+          @mailing_list_count = @mailing_lists.present? ? @mailing_lists.size : 0
+          
+          ######
 
           @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
-          list_arr3 = []
-          @mail_domain_response.each do |ele|
-            if ele.domain == @zone_name
-              list_arr3 << ele
-             @mail_domain = list_arr3  
-            end
-          end
+          # list_arr3 = []
+          # @mail_domain_response.each do |ele|
+          #   if ele.domain == @zone_name
+          #     list_arr3 << ele
+          #    @mail_domain = list_arr3  
+          #   end
+          # end
 
-          if @mail_domain.present?
-          @mail_domain_count = @mail_domain.size
-          else
-            @mail_domain_count = 0
-          end
+          # if @mail_domain.present?
+          # @mail_domain_count = @mail_domain.size
+          # else
+          #   @mail_domain_count = 0
+          # end
 
           # @websites_response = current_spree_user.isp_config.website.all[:response].response
           list_arr4 = []

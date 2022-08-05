@@ -30,7 +30,7 @@ module Spree
           if @response[:success]
             redirect_to request.referrer
           else
-            render :new
+            redirect_to request.referrer
           end
         end
 
@@ -47,7 +47,6 @@ module Spree
         def destroy
           @response = mailing_list_api.destroy(@mailing_list.isp_config_mailing_list_id)
           set_flash
-          # redirect_to admin_mail_mailing_lists_path
           redirect_to request.referrer
         end
 

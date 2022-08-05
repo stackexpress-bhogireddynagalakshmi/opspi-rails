@@ -55,22 +55,20 @@
       </div>
       <div class="modal-body">
       <%=form_for "mailinglist", url: admin_mail_mailing_lists_path, html: {method: :post} do |f|%> 
-
-        <%=hidden_field_tag :domain_id, @mail_domain.try("domain_id")%>
-        <form>
+        <%=f.hidden_field :domain, value: params[:zone_name]%>
           <div class="form-group">
             <label class="form-label">Domain</label>
-            <%=f.text_field 'domain', value: @mailinglist.try(:domain), class: 'form-control',required: true%>
+            <%=f.text_field 'domain', value: params[:zone_name], class: 'form-control',disabled: true%>
           </div>
       
           <div class="form-group">
             <label class="form-label">Listname</label>
-            <%=f.text_field 'listname', value: @mailinglist.try(:listname), class: 'form-control',required: true%>
+            <%=f.text_field 'listname', class: 'form-control',required: true%>
           </div>
       
           <div class="form-group">
             <label class="form-label">Email</label>
-            <%=f.email_field 'email', value: @mailinglist.try(:email), class: 'form-control'%>
+            <%=f.email_field 'email', class: 'form-control'%>
           </div>
       
           <div class="form-group">
@@ -79,14 +77,8 @@
           </div>
       
           <%=submit_tag "Add Mailing List",class: 'btn btn-primary lift'%>
-      
-      </form>
       <%end%>
       </div>
-      <!-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" id='modal-close-button'>Close</button>
-        <button type="button" class="btn btn-primary" id='modal-save-button'>Save changes</button>
-      </div> -->
     </div>
   </div>
 </div>

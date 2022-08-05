@@ -86,7 +86,7 @@ module IspConfig
         if  response.code == "ok"
           {
             success: true,
-            message: I18n.t("isp_config.mail_domain.#{action}"),
+            message: I18n.t("isp_config.mailing_lists.#{action}"),
             response: response
           }
         else
