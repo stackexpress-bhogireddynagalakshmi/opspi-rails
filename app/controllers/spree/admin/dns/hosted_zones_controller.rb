@@ -105,12 +105,8 @@ module Spree
           ### mail boxes/user
           @mail_user = mail_user_api.all[:response].response
           @mailboxes = @mail_user.collect{|x| x if x.login.split('@')[1] == @zone_name}.compact
+          @mailbox_count = @mailboxes.present? ? @mailboxes.size : 0
           
-          if @mailboxes.present?
-            @mailbox_count = @mailboxes.size
-          else
-            @mailbox_count = 0
-          end
           ######
 
           #### website solidcp
