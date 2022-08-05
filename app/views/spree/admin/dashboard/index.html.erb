@@ -1,4 +1,8 @@
-<div class="header mt-4">
+<%if current_spree_user.store_admin? || current_spree_user&.superadmin? %>
+<h1 class="contextual-title px-0 mb-0 col" style="margin-top: -2rem;">Dashboard</h1>
+<hr>
+<%else%>
+<div class="header mt-2">
   <div class="header-body">
     <div class="row align-items-center">
       <div class="col">
@@ -12,3 +16,4 @@
       </div>
     </div>
     </div>
+<%end%> 
