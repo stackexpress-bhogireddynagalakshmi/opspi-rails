@@ -63,7 +63,7 @@ module SolidCp
           "PackageId" => user.packages.first.try(:solid_cp_package_id)
           # "Users" =>  {"string" => ["syed002"]},
         },
-        group_name: params[:group_name]
+        group_name: "MsSQL2019" #params[:group_name]
       }
       )
 

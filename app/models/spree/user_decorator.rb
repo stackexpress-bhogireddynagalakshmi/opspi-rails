@@ -30,6 +30,7 @@ module Spree
       base.has_many :isp_databases
       base.has_many :user_domains
       base.has_many :user_websites
+      base.has_many :user_databases
 
       base.after_commit :after_create_callbacks, on: [:create]
       base.accepts_nested_attributes_for :user_key, reject_if: :reject_if_key_blank

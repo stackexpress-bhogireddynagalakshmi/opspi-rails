@@ -3,7 +3,7 @@
 module Spree
   module Admin
     module Sites
-      #panel Database API Integration
+      # panel Database API Integration
       class IspDatabasesController < Spree::Admin::BaseController
         include ResetPasswordConcern
         include ApisHelper
@@ -27,20 +27,25 @@ module Spree
 
         def create
           @response = database_api.create(resource_params)
-          if @response[:success]
-            set_flash
-            # redirect_to admin_sites_isp_databases_path
-            render "create.js"
 
-          else
-            render :new
+          user_database_params = resource_params.reject { |k, _v| k == "database_password" }
+
+          if @response[:success]
+            current_spree_user.user_databases.create(
+              {
+                database_name: params[:database][:database_name],
+                database_user: database_username(params[:database][:database_name]),
+                database_type: params[:database][:database_type],
+                database_id: @response[:response].response
+              }
+            )
           end
+          render "create.js"
         end
 
         def destroy
           @response = database_api.destroy(params[:id])
           set_flash
-          # redirect_to admin_sites_isp_databases_path
           redirect_to request.referrer
         end
 
@@ -51,6 +56,20 @@ module Spree
                       else
                         @response[:success] ? @response[:response].response : []
                       end
+        end
+
+        def configurations
+          @database = current_spree_user.user_databases.find(params[:id])
+        end
+
+        def reset_password
+          @database = current_spree_user.user_databases.find(params[:id])
+          @response = database_api.find(@database.database_id)
+          if @response[:success]
+            db_user_id = @response[:response].response.database_user_id
+            @password = SecureRandom.hex
+            @response = database_api.reset_password(db_user_id, { database_password: @password })
+          end
         end
 
         private
@@ -65,15 +84,15 @@ module Spree
 
         def resource_params
           if windows?
-            win_params = params.require("database").permit(:group_name, :database_name, :database_password, :database_username)
-            win_params = win_params.merge({group_name: params[:database][:database_type]})
+            win_params = params.require("database").permit(:database_name, :database_password)
+            win_params = win_params.merge({ database_username: database_username(win_params[:database_password]) })
           else
             isp_database_params
           end
         end
 
         def isp_database_params
-          params.require("database").permit(:web_domain_id, :database_name, :database_username, :database_password)
+          params.require("database").permit(:web_domain_id, :database_name, :database_password)
         end
 
         def resource_index_path
@@ -116,6 +135,14 @@ module Spree
             data.map { |d| Hashie::Mash.new(d) }
           else
             data
+          end
+        end
+
+        def database_username(database_name)
+          if windows?
+            "c#{current_spree_user.isp_config_id}_#{database_name}"
+          else
+            "c#{current_spree_user.solid_cp_id}_#{database_name}"
           end
         end
       end
