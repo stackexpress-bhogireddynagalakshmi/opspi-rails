@@ -33,7 +33,7 @@
           <tr>
             <td><%=database.database_name%></td>
             <td><%=database.database_user%></td>
-            <td><%=database.database_type.upcase%></td>
+            <td><%=database.database_type.try(:upcase)%></td>
 
             <td class="pull-right">
                <%= link_to configurations_admin_sites_isp_database_path(database.id), remote: true  do %>
