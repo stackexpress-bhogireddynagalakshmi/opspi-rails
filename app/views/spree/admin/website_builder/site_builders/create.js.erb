@@ -1,7 +1,0 @@
-
-var status = <%= @response[:success] %>
-var url = <%= @response[:response].url %>
-
-if status{
- window.open(url, '_blank');
- }
