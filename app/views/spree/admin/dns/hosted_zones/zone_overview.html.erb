@@ -149,16 +149,16 @@
 
                     </div>
                     <div>
-                      <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], class: 'btn btn-primary lift', id: "server_type_id", onclick: "serverTypeWebDomain(this);" %>
+                      <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id] class: 'btn btn-primary lift', id: "server_type_id", onclick: "serverTypeWebDomain(this);" %>
                     </div>
                   <%end%>
                   <%if @isp_websites.any?%>
                     <div>
-                      <%=button_tag (@isp_web_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: (@isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site_id: (@isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site: params[:zone_name], class: 'btn btn-primary lift', id: "server_type_id", onclick: (@isp_web_id.to_i > 0) ? "updateWebDomain(this)" : "serverTypeWebDomain(this);" %>
+                      <%=button_tag (@isp_web_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: (@isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site_id: (@isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], class: 'btn btn-primary lift', id: "server_type_id", onclick: (@isp_web_id.to_i > 0) ? "updateWebDomain(this)" : "serverTypeWebDomain(this);" %>
                     </div>
                   <%elsif @windows_websites.any? %>
                     <div>
-                    <%=button_tag (@web_site_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @web_domain_id, data_web_site_id: @web_site_id, data_web_site: params[:zone_name], onclick: (@web_site_id.to_i > 0) ? "updateWinWebDomain(this);" : "serverTypeWebDomain(this);", id: "server_type_id", class: 'btn btn-primary lift' %>
+                    <%=button_tag (@web_site_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @web_domain_id, data_web_site_id: @web_site_id, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], onclick: (@web_site_id.to_i > 0) ? "updateWinWebDomain(this);" : "serverTypeWebDomain(this);", id: "server_type_id", class: 'btn btn-primary lift' %>
                     </div>
                   <%end%>
                   
@@ -170,7 +170,7 @@
                <div class="input-group">
                   <%if current_spree_user.have_linux_access? %>
                     <% isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
-                    <%=button_tag (isp_web_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: (isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site_id: (isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site: params[:zone_name], class: 'btn btn-primary lift', onclick: "updateWebDomain(this)" %>
+                    <%=button_tag (isp_web_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: (isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site_id: (isp_web_id.to_i > 0) ? @isp_websites.first.domain_id : 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], class: 'btn btn-primary lift', onclick: "updateWebDomain(this)" %>
                   <%elsif current_spree_user.have_windows_access?%>
                     <% @web_domain_id = "0" %>
                     <% @web_site_id = "0" %>
@@ -184,7 +184,7 @@
                       <% end %>
                       <%end%>
                     <%end%>
-                    <%=button_tag (@web_site_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @web_domain_id, data_web_site_id: @web_site_id, data_web_site: params[:zone_name], id: "data_web_domain_#{@web_site_id}", onclick: "updateWinWebDomain(this);", class: 'btn btn-primary lift' %>
+                    <%=button_tag (@web_site_id.to_i > 0) ? 'Delete WebService' : 'Enable WebService', data_web_domain_id: @web_domain_id, data_web_site_id: @web_site_id, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], id: "data_web_domain_#{@web_site_id}", onclick: "updateWinWebDomain(this);", class: 'btn btn-primary lift' %>
                   <%end%>
                </div>
               <%end%>
@@ -344,6 +344,7 @@ var updateWebDomain = function(element){
     var webDomainId = element.attributes.data_web_domain_id.value;
     var webSiteId = element.attributes.data_web_site_id.value;
     var website = element.attributes.data_web_site.value;
+    var dnsId = element.attributes.data_dns_id.value;
 
     if (parseInt(webSiteId) > 0) {
       var dataConfirm = '<%= I18n.t('windows.deactivate_domain') %>';
@@ -360,7 +361,8 @@ var updateWebDomain = function(element){
           data: { 
               web_site_id: web_site_id,
               web_domain_id: web_domain_id,
-              domain: website
+              domain: website,
+              dns_id: dnsId
           }
         });
       } ,5);
@@ -380,7 +382,8 @@ var updateWebDomain = function(element){
           url: "/admin/sites/websites/enable_webservice?server_type="+server_type,
           data: { 
             website: {
-              domain: web_site_name
+              domain: web_site_name,
+              dns_id: dnsId
             }
           }
         });
