@@ -13,6 +13,11 @@ module PanelConfiguration
     config_value_for(panel_id, url_key)
   end
 
+  def api_web_server_ip(user)
+    panel_id = panel_id_for(user)
+    config_value_for(panel_id, web_server_ip_key)
+  end
+
   def config_value_for(panel_id, key)
     value = PanelConfig.where(panel_id: panel_id, key: key).last&.value
 

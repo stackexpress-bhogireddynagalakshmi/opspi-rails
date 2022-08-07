@@ -149,7 +149,7 @@
 
                     </div>
                     <div>
-                      <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id] class: 'btn btn-primary lift', id: "server_type_id", onclick: "serverTypeWebDomain(this);" %>
+                      <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], class: 'btn btn-primary lift', id: "server_type_id", onclick: "serverTypeWebDomain(this);" %>
                     </div>
                   <%end%>
                   <%if @isp_websites.any?%>
