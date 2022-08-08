@@ -58,9 +58,11 @@ module Spree
 
         def delete_ftp(params)
           response = current_spree_user.solid_cp.ftp_account.all
-          ftp_users = response.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account] rescue []
-          
-          ftp_ids = ftp_users.collect{|x| x[:id] if x[:folder].split('\\')[1] == params[:domain]}.compact
+          @ftp_users = response.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account] rescue []
+
+          @ftp_users = [@ftp_users] if @ftp_users.is_a?(Hash)
+
+          ftp_ids = @ftp_users.collect{|x| x[:id] if x[:folder].split('\\')[1] == params[:domain]}.compact
           if ftp_ids.any?
             ftp_ids.each do |ftp_id|
               @response = current_spree_user.solid_cp.ftp_account.destroy(ftp_id)
@@ -70,8 +72,8 @@ module Spree
 
         def get_ssl
           if params[:website][:id].to_i == 0
-            pointer = current_spree_user.solid_cp.website.get_web_site_pointers(params)
-            current_spree_user.solid_cp.website.delete_web_site_pointer({web_site_id: pointer[:web_site_id], website:{ web_domain_id: pointer[:domain_id] }}) unless pointer.blank?
+            # pointer = current_spree_user.solid_cp.website.get_web_site_pointers(params)
+            # current_spree_user.solid_cp.website.delete_web_site_pointer({web_site_id: pointer[:web_site_id], website:{ web_domain_id: pointer[:domain_id] }}) unless pointer.blank?
           
             ensure_a_record(params)
             
@@ -99,7 +101,7 @@ module Spree
             ipv4: ENV['SOLID_CP_WEB_SERVER_IP'],
             ttl: "3600",
             hosted_zone_id: a_rec_params[:website][:dns_id],
-            client_id: user.isp_config_id
+            client_id: current_spree_user.isp_config_id
           }
           current_spree_user.isp_config.hosted_zone_record.create(a_record_params)
         end

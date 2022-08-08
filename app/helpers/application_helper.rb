@@ -10,7 +10,7 @@ module ApplicationHelper
   end
 
   def current_admin_tenant?
-    TenantManager::TenantHelper.current_admin_tenant?
+    current_store.account.admin_tenant?
   end
 
   def render_new_tenant_information(order)
@@ -40,6 +40,14 @@ module ApplicationHelper
 
     plans << ['Hsphere Plan', 'hsphere'] if get_purchased_plans.include?('hsphere')
     plans || []
+  end
+
+  def window_server_type
+    [['Windows', 'windows']]
+  end
+
+  def linux_server_type
+    [['Linux', 'linux']]
   end
 
   def superadmin_plans(_user)
@@ -252,4 +260,24 @@ module ApplicationHelper
       I18n.t(:domain_plan)
     end
   end
+
+  def get_reseller_products
+    TenantManager::TenantHelper.unscoped_query{ Spree::Product.reseller_plan.where(subscribable: true, visible: true) }
+  end
+
+  def get_database_types(user)
+    types = []
+    
+    if user.solid_cp_id.present? && user.have_windows_access?
+      types << ['MsSQL2019','ms_sql2019'] 
+    end
+
+
+    if user.isp_config_id.present? && user.have_linux_access?
+      types << ['MySQL','my_sql']
+    end
+
+    types
+  end
+  
 end

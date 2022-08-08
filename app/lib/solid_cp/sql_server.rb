@@ -4,10 +4,11 @@ module SolidCp
   class SqlServer < Base
     attr_reader :user
 
-    client wsdl: SOAP_SQL_WSDL, endpoint: SOAP_SQL_WSDL, log: SolidCp::Config.log
-    global :read_timeout, SolidCp::Config.timeout
-    global :open_timeout, SolidCp::Config.timeout
-    global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
+    def initialize(user)
+      @user = user
+      
+      set_configurations(user, SOAP_SQL_WSDL)
+    end
 
     operations :add_sql_database,
                :add_sql_user,
@@ -21,9 +22,6 @@ module SolidCp
                :get_sql_user,
                :get_sql_users
 
-    def initialize(user)
-      @user = user
-    end
 
     def get_sql_databases
       response = super(message: { package_id: user.packages.first.try(:solid_cp_package_id) })
@@ -65,7 +63,7 @@ module SolidCp
           "PackageId" => user.packages.first.try(:solid_cp_package_id)
           # "Users" =>  {"string" => ["syed002"]},
         },
-        group_name: params[:group_name]
+        group_name: "MsSQL2019" #params[:group_name]
       }
       )
 

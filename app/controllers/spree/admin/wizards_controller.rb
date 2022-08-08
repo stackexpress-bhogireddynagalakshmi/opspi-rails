@@ -50,7 +50,9 @@ module Spree
           prepare_ftp_account_task
         end
 
-        if wizard_params[:enable_db_service] == 'y' && @server_type != 'windows'
+        ## && @server_type != 'windows'
+
+        if wizard_params[:enable_db_service] == 'y' 
           prepare_database_task
         end
 
@@ -275,6 +277,7 @@ module Spree
             domain: @domain,
             actions: true,
             data: {
+              server_type: @server_type,
               web_domain_id: "", # needed in later stage
               database_name: get_database_name(@domain),
               database_username: get_database_user_name(@domain),
@@ -299,9 +302,14 @@ module Spree
       def set_batch_jobs
         @batch_jobs = eval(AppManager::RedisWrapper.get("batch_jobs_user_id_#{current_spree_user.id}").to_s)
 
-        @batch_jobs = @batch_jobs.with_indifferent_access if @batch_jobs.present?
+        if @batch_jobs.present?
+          @batch_jobs = @batch_jobs.with_indifferent_access
 
-        @batch_jobs
+          @batch_jobs = @batch_jobs.select do |k,v|
+            job = v[0]
+            ActiveJob::Status.get(job["sidekiq_job_id"]).present?
+          end
+        end
       end
 
       def create_user_domain

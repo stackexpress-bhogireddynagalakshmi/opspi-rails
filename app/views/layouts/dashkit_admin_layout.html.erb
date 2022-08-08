@@ -18,10 +18,11 @@
     <!-- Theme CSS -->
     <%= stylesheet_link_tag 'theme', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= render 'spree/shared/paths' %>
     <%= javascript_include_tag 'spree/backend/all' %>
+    <%= render "spree/admin/shared/translations" %>
     <%=render :partial=> 'spree/shared/google_analytics'%>
 
-    <%#= javascript_include_tag 'spree/frontend/all', defer: true, 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
@@ -34,6 +35,10 @@
         </div>
       </div>
     </div>
+     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none;" data-backdrop="static" data-keyboard="false">
+   
+     </div>
+    
   </body>
 </html>
 <script type="text/javascript">

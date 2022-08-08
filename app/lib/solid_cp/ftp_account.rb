@@ -4,10 +4,11 @@ module SolidCp
   class FtpAccount < Base
     attr_reader :user
 
-    client wsdl: SOAP_FTP_WSDL, endpoint: SOAP_FTP_WSDL, log: SolidCp::Config.log
-    global :read_timeout, SolidCp::Config.timeout
-    global :open_timeout, SolidCp::Config.timeout
-    global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
+    def initialize(user)
+      @user = user
+
+      set_configurations(user, SOAP_FTP_WSDL)
+    end
 
     operations :get_ftp_sites,
                :get_raw_ftp_accounts_paged,
@@ -17,9 +18,7 @@ module SolidCp
                :update_ftp_account,
                :delete_ftp_account
 
-    def initialize(user)
-      @user = user
-    end
+   
 
     def get_ftp_accounts
       response = super(message: { package_id: user.packages.first.try(:solid_cp_package_id) })

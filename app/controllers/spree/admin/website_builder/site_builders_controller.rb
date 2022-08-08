@@ -140,7 +140,7 @@ module Spree
               subdomain: 'www',
               php: 'y',
               ruby: 'n',
-              ssl: 'n',
+              ssl: 'y',
               stats_type: 'webalizer',
               allow_override: 'All',
               php_open_basedir: '/',

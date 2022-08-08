@@ -53,6 +53,8 @@ Rails.application.routes.draw do
         end
       end
       namespace :dns do
+        resources :user_domains
+        
         resources :hosted_zones do
           member do
             get :dns
@@ -90,8 +92,9 @@ Rails.application.routes.draw do
         resources :protected_folders
         resources :protected_folder_users
         resources :isp_databases do
-          collection do
+          member do
             get :reset_password
+            get :configurations
           end
         end
       end
@@ -108,7 +111,8 @@ Rails.application.routes.draw do
 
       post 'sites/websites/enable_disable_web_domain', :controller=> 'sites/websites', :action=> "enable_disable_web_domain", as: 'enable_disable_web_domain'
       post 'windows/domains/disable_webservice', :controller=> 'windows/domains', :action=> "disable_webservice", as: 'disable_webservice'
-      post 'sites/websites//enable_webservice', :controller=> 'sites/websites', :action=> "enable_webservice", as: 'enable_webservice'
+      post 'sites/websites/enable_webservice', :controller=> 'sites/websites', :action=> "enable_webservice", as: 'enable_webservice'
+      post 'sites/websites/update_isp_ssl', :controller=> 'sites/websites', :action=> "update_isp_ssl", as: 'update_isp_ssl'
       post 'dns/hosted_zones/enable_dns_services', :controller=> 'dns/hosted_zones',:action=>"enable_dns_services", as: 'enable_dns_services'
       post 'dns/hosted_zones/disable_dns_services', :controller=> 'dns/hosted_zones',:action=>"disable_dns_services", as: 'disable_dns_services'
       post 'dns/hosted_zones/get_config_details', :controller=> 'dns/hosted_zones',:action=>"get_config_details", as: 'get_config_details'

@@ -4,11 +4,6 @@ module SolidCp
   class Plan < Base
     attr_reader :user, :plan
 
-    client wsdl: SOAP_PLAN_WSDL, endpoint: SOAP_PLAN_WSDL, log: SolidCp::Config.log
-    global :read_timeout, SolidCp::Config.timeout
-    global :open_timeout, SolidCp::Config.timeout
-    global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
-
     operations :get_hosting_plans, :get_hosting_addons, :get_hosting_plan, :get_hosting_plan_quotas,
                :get_hosting_plan_context, :get_user_available_hosting_plans, :get_user_available_hosting_addons,
                :add_hosting_plan, :update_hosting_plan, :delete_hosting_plan, :search_service_items_paged,
@@ -19,6 +14,8 @@ module SolidCp
     def initialize(user, plan)
       @user = user
       @plan = plan
+
+      set_configurations(user, SOAP_PLAN_WSDL)
     end
 
     def self.get_hosting_plans
@@ -112,10 +109,13 @@ module SolidCp
       quota_hash
     end
 
-    def self.get_hosting_plan_quotas(plan_id)
+    def self.get_hosting_plan_quotas(plan_id,user)
+      set_configurations(user, SOAP_PLAN_WSDL)
+
       response = begin
         super(message: { plan_id: plan_id })
-      rescue StandardError
+      rescue StandardError => e
+        Rails.logger.error { e.message }
         []
       end
     end
@@ -126,7 +126,9 @@ module SolidCp
     end
 
     # syncronous api call
-    def self.master_plans_dropdown
+    def self.master_plans_dropdown(user)
+      set_configurations(user, SOAP_PLAN_WSDL)
+
       response = SolidCp::Plan.get_hosting_plans
       plans = response.body[:get_hosting_plans_response][:get_hosting_plans_result][:diffgram][:new_data_set][:table]
 

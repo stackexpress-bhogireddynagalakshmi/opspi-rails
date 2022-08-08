@@ -4,10 +4,11 @@ module SolidCp
   class Package < Base
     attr_reader :user
 
-    client wsdl: SOAP_PLAN_WSDL, endpoint: SOAP_PLAN_WSDL, log: SolidCp::Config.log
-    global :read_timeout, SolidCp::Config.timeout
-    global :open_timeout, SolidCp::Config.timeout
-    global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
+    def initialize(user)
+      @user = user
+
+      set_configurations(user, SOAP_PLAN_WSDL)
+    end
 
     operations :get_packages, :get_nested_packages_summary, :get_raw_packages, :get_packages_paged, :get_my_packages,
                :get_raw_my_packages, :get_package, :get_package_context, :get_package_quotas, :get_package_quotas_for_edit,
@@ -20,9 +21,8 @@ module SolidCp
                :add_package_with_resources, :create_user_wizard, :get_package_packages, :get_nested_packages_paged,
                :get_packages_bandwidth_paged, :get_packages_diskspace_paged, :get_package_bandwidth, :get_package_diskspace
 
-    def initialize(user)
-      @user = user
-    end
+
+   
 
     # Creates Hosting Space on SolidCP for a user
 

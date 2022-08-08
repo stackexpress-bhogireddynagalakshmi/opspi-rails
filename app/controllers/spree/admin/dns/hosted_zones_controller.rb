@@ -102,29 +102,22 @@ module Spree
             @hosted_zone_records_count = 0
           end
 
+          ### mail boxes/user
           @mail_user = mail_user_api.all[:response].response
+          @mailboxes = @mail_user.collect{|x| x if x.login.split('@')[1] == @zone_name}.compact
+          @mailbox_count = @mailboxes.present? ? @mailboxes.size : 0
           
-          list_arr = []
-          @mail_user.each do |element|
-            if element.login.split('@')[1] == @zone_name
-              list_arr << element
-             @mailboxes = list_arr  
-            end
-          end
+          ######
 
-          if @mailboxes.present?
-            @mailbox_count = @mailboxes.size
-          else
-            @mailbox_count = 0
-          end
-
-
-          #### website solidcp
+          #### website windows
           if current_spree_user.have_windows_access?
             @windows_resource = current_spree_user.solid_cp.web_domain.all || [] 
             @windows_resources = @windows_resource.body[:get_domains_response][:get_domains_result][:domain_info] rescue []
             @windows_websites = @windows_resources.collect{|x| x if x[:domain_name].include?(@zone_name)}.compact
             website_array = @windows_websites.collect{|c| c[:web_site_id] if c[:web_site_id].to_i > 0}.compact
+
+            @website_list = @windows_websites.collect{|c| c[:domain_name] if c[:web_site_id].to_i == 0}.compact
+
             if website_array.any?
             website_id = current_spree_user.solid_cp.website.get_certificates_for_site({web_site_id: website_array.first})
             @website_id = website_id.body[:get_certificates_for_site_response][:get_certificates_for_site_result][:ssl_certificate] rescue []
@@ -132,19 +125,27 @@ module Spree
           end
           ######
 
-          #### website ispconfig
+          #### website linux
           @web_domain = current_spree_user.isp_config.website.all[:response].response
           @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}.compact
           for el in @web_domain
             if el.domain == @zone_name
             @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
               
-            @ftp_user = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
+            @ftp_user1 = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
             end 
           end
           #### 
 
-          #### window ftp
+          @win_resources = begin
+            @response2 = current_spree_user.solid_cp.sql_server.all || []
+            convert_to_mash(@response2.body[:get_sql_databases_response][:get_sql_databases_result][:sql_database])
+          rescue StandardError
+            []
+          end
+          @resources_win = [@win_resources].to_a.flatten
+
+          #### windows ftp
           @win_user = begin
             @res = current_spree_user.solid_cp.ftp_account.all
             convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
@@ -156,17 +157,41 @@ module Spree
             @win_users = @win_user.collect{|x| x if x.folder.split('\\')[1] == @zone_name}.compact
           ##########
 
-          if @resources.present?
-            @database_count = @resources.size
-          else
-            @database_count = 0
-          end
+          @win_user = begin
+                @res = current_spree_user.solid_cp.ftp_account.all
+                convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
+            rescue StandardError
+              []
+            end
+            @win_user = [@win_user].to_a.flatten
+            list_arr6 = []
+            for elem1 in @win_user
+              if elem1.folder.split('\\')[1] == @zone_name
+                list_arr6 << elem1
+                @win_ftp = list_arr6
+                
+              end
+            end
 
-          if @ftp_user.present?
-            @ftp_count = @ftp_user.size
-          else
-            @ftp_count = 0
-          end
+            if @resources.present? && @resources_win.present?
+              @database_count = @resources.size + @resources_win.size
+            elsif @resources.present?
+              @database_count = @resources.size
+            elsif @resources_win.present?
+              @database_count = @resources_win.size
+            else
+              @database_count = 0
+            end
+
+            if @ftp_user1.present? && @win_users.present?
+              @ftp_count = @ftp_user1.size + @win_users.compact.size 
+            elsif @win_users.present?
+              @ftp_count = @win_users.compact.size
+            elsif @ftp_user1.present?
+              @ftp_count = @ftp_user1.size
+            else
+              @ftp_count = 0
+            end
 
           if @win_users.present?
             @win_count = @win_users.size
@@ -184,50 +209,34 @@ module Spree
             @spam_filter_black_count = 0
           end
           
-          @mail_forward = current_spree_user.isp_config.mail_forward.all[:response].response
-          list_arr1 = []
-          @mail_forward.each do |elem|
-            if elem.source.split('@')[1] == @zone_name
-              list_arr1 << elem
-             @resources3 = list_arr1  
-            end
-          end
+          ## mail forward
+          @mail_forward_records = current_spree_user.isp_config.mail_forward.all[:response].response
+          @mail_forwards = @mail_forward_records.collect{|x| x if x.source.split('@')[1] == @zone_name}.compact
+          @mail_forward_count = @mail_forwards.present? ? @mail_forwards.size : 0
 
-          if @resources3.present?
-            @mail_forward_count = @resources3.size
-          else
-            @mail_forward_count = 0
-          end
+          #####
 
+          ### mailing list
           @mailing_list_response = mailing_list_api.all[:response].response
-          list_arr2 = []
-          @mailing_list_response.each do |ele|
-            if ele.domain == @zone_name
-              list_arr2 << ele
-             @mailing_lists = list_arr2  
-            end
-          end
-
-          if @mailing_lists.present?
-            @mailing_list_count = @mailing_lists.size
-          else
-            @mailing_list_count = 0
-          end
+          @mailing_lists = @mailing_list_response.collect{|x| x if x.domain == @zone_name}.compact
+          @mailing_list_count = @mailing_lists.present? ? @mailing_lists.size : 0
+          
+          ######
 
           @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
-          list_arr3 = []
-          @mail_domain_response.each do |ele|
-            if ele.domain == @zone_name
-              list_arr3 << ele
-             @mail_domain = list_arr3  
-            end
-          end
+          # list_arr3 = []
+          # @mail_domain_response.each do |ele|
+          #   if ele.domain == @zone_name
+          #     list_arr3 << ele
+          #    @mail_domain = list_arr3  
+          #   end
+          # end
 
-          if @mail_domain.present?
-          @mail_domain_count = @mail_domain.size
-          else
-            @mail_domain_count = 0
-          end
+          # if @mail_domain.present?
+          # @mail_domain_count = @mail_domain.size
+          # else
+          #   @mail_domain_count = 0
+          # end
 
           # @websites_response = current_spree_user.isp_config.website.all[:response].response
           list_arr4 = []

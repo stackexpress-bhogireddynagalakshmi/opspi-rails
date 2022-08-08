@@ -1,4 +1,3 @@
-<% if @resources3.present? %>
 <div class="card mt-4">
 <div class="table-responsive">
 <table class="table table-sm card-table" style="width:100%">
@@ -11,7 +10,8 @@
     </tr>
   </thead>
   <tbody class="fsbase">
-  <%@resources3.each do |forward| %>
+  <% if @mail_forwards.any? %>
+  <%@mail_forwards.each do |forward| %>
     <tr data-hook="admin_orders_index_rows" >
       <td><%=forward.source%></td>
       <td><%=forward.destination%></td>
@@ -25,14 +25,14 @@
       <td>
       <span class="d-flex justify-content-end">
 
-      <%= link_to  admin_mail_forward_path(id: forward.forwarding_id),type: 'button',data: {confirm: t('general.delete')}, class: 'btn btn-outline-danger btn-size',style:"margin-right:5px", method: :delete do %>
+      <%= link_to  admin_mail_forward_path(id: forward.forwarding_id),type: 'button',data: {confirm: t('general.delete')}, class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete do %>
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
           <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
           <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
         </svg>
         <%end%>
 
-        <%= link_to  edit_admin_mail_forward_path(id: forward.forwarding_id),type: 'button', class: 'btn btn-outline-success btn-size',style:"margin-right:5px" do %>
+        <%= link_to  edit_admin_mail_forward_path(id: forward.forwarding_id),type: 'button', class: 'btn btn-outline-success btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Edit',style:"margin-right:5px" do %>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
@@ -42,69 +42,69 @@
         </td>  
     </tr>
   <% end %>
+  <% else %>
+    <tr>
+    <td><label class="form-label table_row_label"> No Forwards found.</label></td>
+    </tr>
+  <% end %>
   </tbody>
 </table>
 </div>
 </div>
-<% else %>
-  <div class="alert alert-secondary no-objects-found">
-  <label class="form-label" style="margin-top: 0.5rem;"> No Forwards found.</label>
-  </div>
-<% end %>
+
 
 <div class="modal fade" id="mailForwardModal" tabindex="-1" role="dialog" aria-labelledby="mailForwardModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h3 class="modal-title">Add Mail Forward</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-right: -8px;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-right: -8px;" data-bs-dismiss="modal">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
       <%=form_for "mail_forward", url: admin_mail_forwards_path, html: {method: :post} do |f|%> 
-
-        <%=hidden_field_tag :forwarding_id, @resources3.try("forwarding_id")%>
-        <%=f.hidden_field :type, value: 'forward'%>
+       <%=f.hidden_field :type, value: 'forward'%>
+       <%=f.hidden_field :source_domain, value: params[:zone_name]%>
         <fieldset>
           <div class="form-group">
             <label class="form-label">Source</label>
             <div class="input-group mb-3">
-              <%=f.text_field 'source', value: @resources3.try(:source).try(:split, '@').try(:first), class: 'form-control',style:"width: 50%;"%>
+              <%=f.text_field 'source', class: 'form-control',style:"width: 50%;"%>
               <span class="input-group-text" id='at-sign'>@</span>
-              <%=select_tag 'source_domain',options_for_select(@domains, params[:zone_name]), class: 'form-select'%>
+              <%=f.text_field 'source_domain', value: params[:zone_name], class: 'form-control', disabled: true%>
             </div>
           </div>
       
           <div class="form-group">
             <label class="form-label">Destination</label>
-            <%=f.text_area 'destination', value: @resources3.try(:destination), class: 'form-control', rows: 10, cols: 40%>
+            <%=f.text_area 'destination',  class: 'form-control', rows: 10, cols: 40%>
           </div>
                 
           <div class="form-group">
             <label class="form-label">Active</label>
-            <%=select_tag :active,options_for_select([['Yes','y'], ['No','n']]), class: 'form-select'%>
+            <%=f.select :active,options_for_select([['Yes','y'], ['No','n']]), {}, class: 'form-select'%>
           </div>
       
-          <div class="form-check">
+          <div>
             <div class="row">
-              <div class="col-2">
+              <div class="col-3">
                 <label class="form-check-label">Send as</label>
               </div>
-              <div class="col-10">
-                <%= f.check_box :allow_send_as, {checked: @resources3.try(:allow_send_as) == 'y', class:"form-check-input list-checkbox"}, 'y', 'n' %>
+              <div class="col-9">
+                <%= f.check_box :allow_send_as, {checked: false, class:"form-check-input list-checkbox"}, 'y', 'n' %>
                 <small>Allow target to send mail using this address as origin (if target is internal)</small>
               </div>
             </div>
           </div>
       
-          <div class="form-check mb-4">
+          <div class="mb-4">
             <div class="row">
-              <div class="col-2">
+              <div class="col-3">
                 <label class="form-check-label">Enable greylisting</label>
               </div>
-              <div class="col-10">
-                <%= f.check_box :greylisting, {checked: @resources3.try(:greylisting) == 'y' , class:"form-check-input list-checkbox"}, 'y', 'n' %>
+              <div class="col-9">
+                <%= f.check_box :greylisting, {checked: false , class:"form-check-input list-checkbox"}, 'y', 'n' %>
               </div>
             </div>
           </div>

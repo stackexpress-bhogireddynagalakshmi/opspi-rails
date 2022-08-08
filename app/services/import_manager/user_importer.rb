@@ -78,7 +78,6 @@ module ImportManager
 
                  variants         = product.variants.each {|v| v.option_values.select{ |x| x.option_type.name == 'plan-validity'}.first }
 
-
                  if billing_frequency == '1m'
                   variant = variants.select {|v| v.option_values.pluck(:name).include?(Spree::Product::MONTHLY_VALIDITY)}
                   freq = Spree::Product::MONTHLY_VALIDITY

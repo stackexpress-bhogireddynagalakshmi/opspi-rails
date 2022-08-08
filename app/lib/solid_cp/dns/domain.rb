@@ -7,12 +7,9 @@ module SolidCp
 
       def initialize(user)
         @user = user
-      end
 
-      client wsdl: SOAP_SERVER_WSDL, endpoint: SOAP_SERVER_WSDL, log: SolidCp::Config.log
-      global :read_timeout, SolidCp::Config.timeout
-      global :open_timeout, SolidCp::Config.timeout
-      global :basic_auth, SolidCp::Config.username, SolidCp::Config.password
+        set_configurations(user, SOAP_SERVER_WSDL)
+      end
 
       operations :get_domain_dns_records,
                  :get_domains,
@@ -31,14 +28,13 @@ module SolidCp
                  :create_domain_preview_domain,
                  :delete_domain_preview_domain
 
-    
       # <packageId>int</packageId>
       def get_domains
-        response = super(message: { package_id: user.packages.first.try(:solid_cp_package_id), user_id: user.solid_cp_id })
+        response = super(message: { package_id: user.packages.first.try(:solid_cp_package_id),
+                                    user_id: user.solid_cp_id })
       end
-      alias :all :get_domains
+      alias all get_domains
 
-   
       # @params
       # <DomainId>int</DomainId>
       # <PackageId>int</PackageId>
@@ -61,29 +57,29 @@ module SolidCp
       # <LastUpdateDate>dateTime</LastUpdateDate>
       # <RegistrarName>string</RegistrarName>
 
-      def  add_domain(params={})
+      def add_domain(params = {})
         response = super(message: {
           domain: {
-          "PackageId" => user.packages.first.try(:solid_cp_package_id),
-          "HostingAllowed" => true,
-          "DomainName" => params[:domain_name],
-          "IsSubDomain" => false,
-          "IsPreviewDomain" => false,
-          "IsDomainPointer" => true,
-          "UserId" => user.solid_cp_id
-        }}
+            "PackageId" => user.packages.first.try(:solid_cp_package_id),
+            "HostingAllowed" => true,
+            "DomainName" => params[:domain_name],
+            "IsSubDomain" => false,
+            "IsPreviewDomain" => false,
+            "IsDomainPointer" => true,
+            "UserId" => user.solid_cp_id
+          }
+        }
         )
-        if response.success? && response.body[:add_domain_response][:add_domain_result].to_i.positive? 
+        if response.success? && response.body[:add_domain_response][:add_domain_result].to_i.positive?
           domian_id = response.body[:add_domain_response][:add_domain_result].to_i
 
           update_dns_settings(domian_id, params[:enable_dns])
-        
+
           { success: true, message: 'Domain created successfully', response: response }
         else
           { success: false, message: 'Something went wrong. Please try again.', response: response }
         end
       end
-      
 
       # @params
       # <DomainId>int</DomainId>
@@ -108,47 +104,47 @@ module SolidCp
       # <RegistrarName>string</RegistrarName>
 
       def update_domain(id, params)
-          response = super(message: {
+        response = super(message: {
           domain: {
-          "DomainId"  => id,
-          "PackageId" => user.packages.first.try(:solid_cp_package_id),
-          "HostingAllowed" => true,
-          "DomainName" => params[:domain_name],
-          "IsSubDomain" => false,
-          "IsPreviewDomain" => false,
-          "IsDomainPointer" => true
-        }}
-        )
+            "DomainId" => id,
+            "PackageId" => user.packages.first.try(:solid_cp_package_id),
+            "HostingAllowed" => true,
+            "DomainName" => params[:domain_name],
+            "IsSubDomain" => false,
+            "IsPreviewDomain" => false,
+            "IsDomainPointer" => true
+          }
+        }
+      )
 
-        if response.success?            
+        if response.success?
           update_dns_settings(id, params[:enable_dns])
           { success: true, message: 'Domain updated successfully', response: response }
         else
           { success: false, message: 'Something went wrong. Please try again.', response: response }
         end
-
       end
-      alias :update :update_domain
+      alias update update_domain
 
       # @params
       # <domainId>int</domainId>
       def get_domain(id)
         response = super(message: { domain_id: id })
       end
-      alias :find :get_domain
+      alias find get_domain
 
       # @params
       # <domainId>int</domainId>
       def delete_domain(id)
-         response = super(message: { domain_id: id })
+        response = super(message: { domain_id: id })
 
-         if response.success? 
+        if response.success?
           { success: true, message: 'Domain deleted successfully', response: response }
         else
           { success: false, message: 'Something went wrong. Please try again.', response: response }
         end
       end
-      alias :destroy :delete_domain
+      alias destroy delete_domain
 
       # @params
       # <domainId>int</domainId>
@@ -162,7 +158,6 @@ module SolidCp
         response = super(message: { domain_id: id })
       end
 
-
       # @params
       #  <packageId>int</packageId>
       # <domainName>string</domainName>
@@ -173,10 +168,9 @@ module SolidCp
       # <createDnsZone>boolean</createDnsZone>
       # <createPreviewDomain>boolean</createPreviewDomain>
       # <allowSubDomains>boolean</allowSubDomains>
-      # <hostName>string</hostName> 
+      # <hostName>string</hostName>
 
-      def add_domain_with_provisioning(params={})
-
+      def add_domain_with_provisioning(params = {})
         hash_params = {
           "packageId" => user.packages.first.try(:solid_cp_package_id),
           "domainName" => sanitze_domain(params[:domain_name]),
@@ -185,23 +179,40 @@ module SolidCp
           "createDnsZone" => false,
           "createPreviewDomain" => false,
           "allowSubDomains" => true,
-          "hostName"=> "",
-         }
+          "hostName" => ""
+        }
 
-         response = super(message: hash_params )
+        response = super(message: hash_params)
 
-        if response.success? && response.body[:add_domain_with_provisioning_response][:add_domain_with_provisioning_result].to_i.positive? 
+        if response.success? && response.body[:add_domain_with_provisioning_response][:add_domain_with_provisioning_result].to_i.positive?
+          create_a_record(params)
           { success: true, message: 'Domain created successfully', response: response }
         else
           { success: false, message: 'Something went wrong. Please try again.', response: response }
         end
       end
-      alias :create :add_domain_with_provisioning 
-
+      alias create add_domain_with_provisioning
 
       private
+
+      def create_a_record(params)
+        dns_id = HostedZone.where(name: params[:domain_name]).pluck(:isp_config_host_zone_id).first
+          a_record_params={
+            type: "A",
+            name: 'www',
+            hosted_zone_name: sanitze_domain(params[:domain_name]),
+            ipv4: SolidCp::Config.api_web_server_ip(user),
+            ttl: "3600",
+            hosted_zone_id: dns_id,
+            client_id: user.isp_config_id
+          }
+          
+          user.isp_config.hosted_zone_record.create(a_record_params)
+       
+      end
+
       def update_dns_settings(domain_id, enable_dns)
-        if enable_dns == true || enable_dns == 'true'
+        if [true, 'true'].include?(enable_dns)
           enable_domain_dns(domain_id)
         else
           disable_domain_dns(domain_id)
@@ -213,7 +224,6 @@ module SolidCp
 
         domain
       end
-
     end
   end
 end

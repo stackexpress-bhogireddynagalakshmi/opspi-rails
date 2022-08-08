@@ -31,7 +31,7 @@
       <div data-hook="admin_product_form_reseller_product">
          <%= f.field_container :solid_cp_master_plan_id, class: ['form-group'], style: 'display:none' do %>
           <%= f.label :solid_cp_master_plan_id, raw(Spree.t(:solid_cp_plan) + required_span_tag) %>
-          <%= f.select :solid_cp_master_plan_id, options_for_select(SolidCp::Plan.master_plans_dropdown,f.object.solid_cp_master_plan_id),{prompt: '--Select--'},class: 'form-control title', id: 'product_solid_cp_master_plan' %>
+          <%= f.select :solid_cp_master_plan_id, options_for_select(SolidCp::Plan.master_plans_dropdown(current_spree_user) ,f.object.solid_cp_master_plan_id),{prompt: '--Select--'},class: 'form-control title', id: 'product_solid_cp_master_plan' %>
           <%= f.error_message_on :solid_cp_master_plan_id %>
         <% end %>
 

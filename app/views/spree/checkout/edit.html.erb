@@ -54,6 +54,9 @@
 .text-right {
     text-align: right !important;
 }
+img{
+  position:absolute;left:0;top:0;margin-top: 4px;
+}
 </style>
 
 
@@ -81,9 +84,7 @@ end
 
 <div id="checkout" class="container checkout" data-hook>
 
-<a  href="<%= spree.root_path %>" style="position:absolute;left:0;top:0;margin-top: 4px;">
-<%= image_tag 'OpsPi-logo.png', class: "navbar-img" %>
-</a>
+<%= logo %>
 
 
 
@@ -105,7 +106,7 @@ end
     </div>
   </div>
 
-  <%= flash_messages %>
+
 
   <div class="checkout-progress" data-hook="checkout_progress" role="navigation" aria-label="<%= Spree.t('checkout_page.checkout_navigation') %>">
     <ul class="nav justify-content-between checkout-progress-steps">
@@ -133,7 +134,9 @@ end
     </div>
   </div>
 
-  <div class="row checkout-content" data-hook="checkout_content">
+  <%= flash_messages %>
+
+  <div class="row checkout-content mt-3" data-hook="checkout_content">
     <%= form_for @order, url: spree.update_checkout_path(@order.state), html: { id: "checkout_form_#{@order.state}", class: "w-100 d-lg-flex align-items-lg-baseline  flex-wrap position-relative" } do |form| %>
 
       <%=hidden_field_tag :invoice_number,params[:invoice_number]%>
