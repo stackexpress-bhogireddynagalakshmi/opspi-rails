@@ -206,7 +206,7 @@
               <% end %>
             <%end%>
           <%end%>
-
+          <%if @web_site_id.to_i > 0 %>
             <div class="row align-items-center">
             <div class="col">
               <h1>
@@ -220,9 +220,9 @@
 
             <div class="card">
                 <div class="card-body" style="margin-bottom: -15px;">
-                <div class="row align-items-center mb-4">
-                  <div class="col">
-                  <%if @web_site_id.to_i > 0 %>
+                <div class="align-items-center mb-4">
+                  <div class="col-3">
+
                   <div class="flex-container">
                    <div class="flex-child">
                     <label class="form-check-label">SSL</label>
@@ -231,11 +231,12 @@
                   <div class="form-check form-switch flex-child">
                     <%= check_box_tag 'win_ssl', @website_id.kind_of?(Array) ? 0: @website_id[:id], @website_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
                   </div>
+
                   </div>
-                  <%end%>
+                  
                 </div>
             
-            <div class="col-auto">
+            <div class="col mt-4">
                         
                   <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
                   <div class="form-group d-none">
@@ -250,17 +251,19 @@
                   <% end %>
                 </div>
             </div>
+
             </div>
 
             </div>
-          
+            <%end%>
 
          <%end%>
 
          <%if current_spree_user.have_linux_access? && @isp_websites.any? %>
             <% @isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
             <% @isp_ssl = @isp_websites.first[:ssl_letsencrypt]%>
-          
+     
+            <%if @isp_web_id.to_i > 0 %>
             <div class="row align-items-center">
             <div class="col">
               <h1>
@@ -273,9 +276,9 @@
 
             <div class="card">
                 <div class="card-body" style="margin-bottom: -15px;">
-                <div class="row align-items-center mb-4">
-                    <div class="col">
-                    <%if @isp_web_id.to_i > 0 %>
+                <div class="align-items-center mb-4">
+                    <div class="col-3">
+
                       <div class="flex-container">
                         <div class="flex-child">
                           <label class="form-check-label">SSL</label>
@@ -285,10 +288,10 @@
                         <%= check_box_tag 'isp_ssl', @isp_ssl, (@isp_ssl == 'y') ? true : false, data_web_site_id: @isp_web_id, data_web_site: params[:zone_name], onclick: "updateIspSSL(this);", data_dns_id: params[:dns_id], class: "form-check-input" %>
                       </div>
                       </div>
-                    <%end%>
+                    
                     </div>
                   
-                  <div class="col-auto">
+                  <div class="col mt-4">
                   
                         <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
                         <div class="form-group d-none">
@@ -306,6 +309,8 @@
 
                 </div>
             </div>
+            <%end%>
+
             <%end%>
 
           <!-- ssl end -->
