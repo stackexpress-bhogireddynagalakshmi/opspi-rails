@@ -109,7 +109,7 @@ module Spree
           
           ######
 
-          #### website solidcp
+          #### website windows
           if current_spree_user.have_windows_access?
             @windows_resource = current_spree_user.solid_cp.web_domain.all || [] 
             @windows_resources = @windows_resource.body[:get_domains_response][:get_domains_result][:domain_info] rescue []
@@ -125,7 +125,7 @@ module Spree
           end
           ######
 
-          #### website ispconfig
+          #### website linux
           @web_domain = current_spree_user.isp_config.website.all[:response].response
           @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}.compact
           for el in @web_domain
@@ -145,7 +145,7 @@ module Spree
           end
           @resources_win = [@win_resources].to_a.flatten
 
-          #### window ftp
+          #### windows ftp
           @win_user = begin
             @res = current_spree_user.solid_cp.ftp_account.all
             convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
@@ -209,20 +209,12 @@ module Spree
             @spam_filter_black_count = 0
           end
           
-          @mail_forward = current_spree_user.isp_config.mail_forward.all[:response].response
-          list_arr1 = []
-          @mail_forward.each do |elem|
-            if elem.source.split('@')[1] == @zone_name
-              list_arr1 << elem
-             @resources3 = list_arr1  
-            end
-          end
+          ## mail forward
+          @mail_forward_records = current_spree_user.isp_config.mail_forward.all[:response].response
+          @mail_forwards = @mail_forward_records.collect{|x| x if x.source.split('@')[1] == @zone_name}.compact
+          @mail_forward_count = @mail_forwards.present? ? @mail_forwards.size : 0
 
-          if @resources3.present?
-            @mail_forward_count = @resources3.size
-          else
-            @mail_forward_count = 0
-          end
+          #####
 
           ### mailing list
           @mailing_list_response = mailing_list_api.all[:response].response

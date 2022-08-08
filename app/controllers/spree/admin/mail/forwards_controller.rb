@@ -19,7 +19,7 @@ module Spree
         end
 
         def resource_params
-          params.require("mail_forward").permit(:source, :destination, :type, :active, :allow_send_as, :greylisting)
+          params.require("mail_forward").permit(:source, :source_domain, :destination, :type, :active, :allow_send_as, :greylisting)
         end
 
         def resource_index_path
@@ -40,7 +40,7 @@ module Spree
         end
 
         def assemble_source_and_domain
-          params[:mail_forward][:source] = "#{params[:mail_forward][:source]}@#{params[:source_domain]}"
+          params[:mail_forward][:source] = "#{params[:mail_forward][:source]}@#{params[:mail_forward][:source_domain]}"
         end
       end
     end
