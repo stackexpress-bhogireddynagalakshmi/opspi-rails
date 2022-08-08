@@ -255,16 +255,15 @@
          </div>
          <div class="row align-items-center">
             <div class="col">
-               <h1>
-                  Databases
-               </h1>
+               <h1> Databases </h1>
             </div>
             <div class="col-auto">
                <%= button_link_to "Add New",
-                  "#",
-                  class: "btn btn-primary lift new_admin_database1",
+                  new_admin_sites_isp_database_path,
+                  class: "btn btn-primary lift",
                     icon: 'add.svg',
-                    id: 'new_admin_database' %>
+                    id: 'new_admin_database',
+                    remote: true %>
             </div>
          </div>
          <%= render partial: 'spree/admin/dns/hosted_zones/database_index' %>

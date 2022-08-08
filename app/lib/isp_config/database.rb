@@ -77,6 +77,7 @@ module IspConfig
 
       formatted_response(response, 'update')
     end
+    alias reset_password update_database_user_password
 
     def destroy(primary_ids)
       ## destroy db user

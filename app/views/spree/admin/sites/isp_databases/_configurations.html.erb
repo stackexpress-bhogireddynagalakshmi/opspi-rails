@@ -1,0 +1,43 @@
+<% content_for :modal_header do %>
+  <h3><%= header%></h3>
+<% end %>
+
+<% content_for :modal_body_and_footer do %>
+
+<div class="modal-body">  
+ <div id="error_div"  style="color: red;">
+   
+ </div> 
+   <table>
+    <tbody >
+      <tr>
+        <td><b>Database&nbsp;Name:</b></td>
+        <td><%=@database.database_name%></td>
+      </tr>
+      <tr>
+        <td><b>Username:</b></td>
+        <td><%=@database.database_user%></td>
+      </tr>
+      <tr id="db_<%=@database.id%>">
+        <td><b>Password:</b></td>
+
+        <td class="password-text">
+           <%=link_to 'Reset Password', reset_password_admin_sites_isp_database_path(@database.id), remote: true%>         
+        </td>
+      </tr>
+      <tr>
+        <td><b>Host:</b></td>
+        <td><%=@database.database_host%></td>
+      </tr>
+      <tr>
+        <td><b>Port:</b></td>
+        <td><%=@database.database_port%></td>
+      </tr>
+
+
+    </tbody>
+    </table>
+  </div>
+<% end %>
+
+<%= render :partial=>'spree/admin/shared/modal', locals: {modal_width: '40%'} %>
