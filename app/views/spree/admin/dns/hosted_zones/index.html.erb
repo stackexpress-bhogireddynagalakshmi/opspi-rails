@@ -102,10 +102,7 @@
       var serverName = $(this).data('origin');
       var ns1 = $(this).data('ns1');
       var ns2 = $(this).data('ns2');
-      var configDetails = getData(serverName);
-     
-      var check_web = configDetails[0] === null ? "" : "checked"
-      var check_mail = configDetails[1] === null ? "" : "checked"
+
 
       $('#exampleModalLabel').html("DNS Configuration Details");
       $('#exampleModal .modal-body').html(`
@@ -123,22 +120,7 @@
               <td><b>Nameserver 2:</b></td>
               <td>${ns2}</td>
             </tr>
-            <tr>
-              <td><b>Enable Web Service:</b></td>
-              <td>
-              <div class="form-check form-switch">
-              <input class="form-check-input" name="web_service" type="checkbox" value =${configDetails[0]}  id="flexSwitchCheckDefault_${configDetails[0]}" data_web_domain_name=${serverName} onclick= 'webService(this);' ${check_web}>
-              </div>
-              </td>
-            </tr>
-            <tr>
-              <td><b>Enable Mail Service:</b></td>
-              <td>
-              <div class="form-check form-switch">
-              <input class="form-check-input" name="mail_service" type="checkbox" value =${configDetails[1]}  id="mail_service_${configDetails[1]}" data_mail_domain_name=${serverName} onclick= 'mailService(this);' ${check_mail}>
-              </div>
-              </td>
-            </tr>
+
           </tbody>
         </table>
       `);
