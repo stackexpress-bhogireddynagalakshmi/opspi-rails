@@ -25,6 +25,11 @@ module Spree
 
         @domains = @orders
 
+        if current_spree_user.store_admin? || current_spree_user&.superadmin?
+          render layout: "spree/layouts/admin"
+        else
+          render layout: "dashkit_admin_layout"
+        end
                 
       end
 
@@ -42,6 +47,12 @@ module Spree
 
           @suggestions = ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds,
                                                                "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10", 'email' => current_spree_user.email)[:response]
+        end
+
+        if current_spree_user.store_admin? || current_spree_user&.superadmin?
+          render layout: "spree/layouts/admin"
+        else
+          render layout: "dashkit_admin_layout"
         end
       end
 
@@ -72,6 +83,12 @@ module Spree
         if request.post?
           spree_current_user.update(user_params)
           flash.now[:success] = "ResellerClub credentials saved successfully"
+        end
+
+        if current_spree_user.store_admin? || current_spree_user&.superadmin?
+          render layout: "spree/layouts/admin"
+        else
+          render layout: "dashkit_admin_layout"
         end
       end
 
