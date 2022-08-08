@@ -264,4 +264,20 @@ module ApplicationHelper
   def get_reseller_products
     TenantManager::TenantHelper.unscoped_query{ Spree::Product.reseller_plan.where(subscribable: true, visible: true) }
   end
+
+  def get_database_types(user)
+    types = []
+    
+    if user.solid_cp_id.present? && user.have_windows_access?
+      types << ['MsSQL2019','ms_sql2019'] 
+    end
+
+
+    if user.isp_config_id.present? && user.have_linux_access?
+      types << ['MySQL','my_sql']
+    end
+
+    types
+  end
+  
 end
