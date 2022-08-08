@@ -137,15 +137,15 @@
 
                   <%if @isp_web_id.to_i == 0 && @web_site_id.to_i == 0%>
                     <div class="mb-4">
-                        <%=label_tag :select_web_service %><br />
+                      <%=label_tag :select_web_service %><br />
 
-                          <span style="margin-right: 15px;">
-                            <%=radio_button_tag :server_type, "windows" , false , class: 'form-check-input list-checkbox', required: true %>
-                            <%=label_tag :server_type, "Windows", :value => "windows" %>
-                          </span>
-                      
-                          <%=radio_button_tag :server_type, "linux", false ,  class: 'form-check-input list-checkbox', required: true %>
-                          <%=label_tag :server_type, "Linux", :value => "linux"%>
+                        <span style="margin-right: 15px;">
+                          <%=radio_button_tag :server_type, "windows" , false , class: 'form-check-input list-checkbox', required: true %>
+                          <%=label_tag :server_type, "Windows", :value => "windows" %>
+                        </span>
+                    
+                        <%=radio_button_tag :server_type, "linux", false ,  class: 'form-check-input list-checkbox', required: true %>
+                        <%=label_tag :server_type, "Linux", :value => "linux"%>
 
                     </div>
                     <div>
@@ -191,6 +191,7 @@
             </div>
          </div>
          <!-- ssl -->
+
          <%if current_spree_user.have_windows_access?%>
           <% @web_domain_id = "0" %>
           <% @web_site_id = "0" %>
@@ -206,56 +207,52 @@
               <% end %>
             <%end%>
           <%end%>
+
           <%if @web_site_id.to_i > 0 %>
-            <div class="row align-items-center">
-            <div class="col">
-              <h1>
-                  Web Controls
-              </h1>
-            </div>
-            <div class="col-auto">
-            </div>
-        </div>
 
-
-            <div class="card">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h1>
+                      Web Controls
+                  </h1>
+                </div>
+                <div class="col-auto">
+                </div>
+              </div>
+              
+              <div class="card">
                 <div class="card-body" style="margin-bottom: -15px;">
                 <div class="align-items-center mb-4">
-                  <div class="col-3">
+                    <div class="col-3">
 
-                  <div class="flex-container">
-                   <div class="flex-child">
-                    <label class="form-check-label">SSL</label>
-                  </div>
+                    <div class="flex-container">
+                      <div class="flex-child">
+                      <label class="form-check-label">SSL</label>
+                    </div>
 
-                  <div class="form-check form-switch flex-child">
-                    <%= check_box_tag 'win_ssl', @website_id.kind_of?(Array) ? 0: @website_id[:id], @website_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
-                  </div>
-
-                  </div>
-                  
+                    <div class="form-check form-switch flex-child">
+                      <%= check_box_tag 'win_ssl', @website_id.kind_of?(Array) ? 0: @website_id[:id], @website_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
+                    </div>
+                    </div>
                 </div>
-            
-            <div class="col mt-4">
-                        
+              
+              <div class="col mt-4">      
                   <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
-                  <div class="form-group d-none">
-                      <label class="form-label"></label>
-                      <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
-                  </div>
-                  <div class="input-group">
-                      <div>
-                        <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
-                      </div>
-                  </div>
+                    <div class="form-group d-none">
+                        <label class="form-label"></label>
+                        <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
+                    </div>
+                    <div class="input-group">
+                        <div>
+                          <%#=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
+                        </div>
+                    </div>
                   <% end %>
-                </div>
-            </div>
-
-            </div>
-
-            </div>
-            <%end%>
+              </div>
+              </div>
+              </div>
+              </div>
+          <%end%>
 
          <%end%>
 
@@ -264,21 +261,22 @@
             <% @isp_ssl = @isp_websites.first[:ssl_letsencrypt]%>
      
             <%if @isp_web_id.to_i > 0 %>
+
             <div class="row align-items-center">
-            <div class="col">
-              <h1>
-                Web Controls
-                  </h1>
-                </div>
-                <div class="col-auto">
-                </div>
-            </div>
+              <div class="col">
+                <h1>
+                  Web Controls
+                    </h1>
+                  </div>
+                  <div class="col-auto">
+                  </div>
+              </div>
+            
 
             <div class="card">
-                <div class="card-body" style="margin-bottom: -15px;">
-                <div class="align-items-center mb-4">
+              <div class="card-body" style="margin-bottom: -15px;">
+              <div class="align-items-center mb-4">
                     <div class="col-3">
-
                       <div class="flex-container">
                         <div class="flex-child">
                           <label class="form-check-label">SSL</label>
@@ -292,23 +290,22 @@
                     </div>
                   
                   <div class="col mt-4">
-                  
-                        <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
-                        <div class="form-group d-none">
-                            <label class="form-label"></label>
-                            <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
-                        </div>
-                        <div class="input-group">
-                            <div>
-                              <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
-                            </div>
-                        </div>
-                        <% end %>
+                    <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
+                      <div class="form-group d-none">
+                          <label class="form-label"></label>
+                          <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
                       </div>
+                      <div class="input-group">
+                          <div>
+                            <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
+                          </div>
+                      </div>
+                    <% end %>
                   </div>
-
-                </div>
+              </div>
+              </div>
             </div>
+            
             <%end%>
 
             <%end%>
