@@ -53,6 +53,8 @@ Rails.application.routes.draw do
         end
       end
       namespace :dns do
+        resources :user_domains
+        
         resources :hosted_zones do
           member do
             get :dns
@@ -90,8 +92,9 @@ Rails.application.routes.draw do
         resources :protected_folders
         resources :protected_folder_users
         resources :isp_databases do
-          collection do
+          member do
             get :reset_password
+            get :configurations
           end
         end
       end
