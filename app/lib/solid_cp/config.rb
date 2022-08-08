@@ -15,6 +15,7 @@ module SolidCp
     USERNAME_KEY  = "SOLID_CP_USERNAME"
     PASSWORD_KEY  = "SOLID_CP_PASSWORD"
     URL_KEY       = "SOLID_CP_REMOTE_URL"
+    WEB_SERVER_IP_KEY  = "SOLID_CP_WEB_SERVER_IP"
     SERVER_TYPE   = "web_windows"
 
     def self.username_key
@@ -27,6 +28,10 @@ module SolidCp
 
     def self.url_key
       URL_KEY
+    end
+
+    def self.web_server_ip_key 
+      WEB_SERVER_IP_KEY
     end
 
     def self.server_type_key

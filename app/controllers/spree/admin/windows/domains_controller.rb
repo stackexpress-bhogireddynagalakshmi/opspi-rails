@@ -70,8 +70,8 @@ module Spree
 
         def get_ssl
           if params[:website][:id].to_i == 0
-            pointer = current_spree_user.solid_cp.website.get_web_site_pointers(params)
-            current_spree_user.solid_cp.website.delete_web_site_pointer({web_site_id: pointer[:web_site_id], website:{ web_domain_id: pointer[:domain_id] }}) unless pointer.blank?
+            # pointer = current_spree_user.solid_cp.website.get_web_site_pointers(params)
+            # current_spree_user.solid_cp.website.delete_web_site_pointer({web_site_id: pointer[:web_site_id], website:{ web_domain_id: pointer[:domain_id] }}) unless pointer.blank?
           
             ensure_a_record(params)
             
