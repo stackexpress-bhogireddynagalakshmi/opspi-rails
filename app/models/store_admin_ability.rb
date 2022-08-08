@@ -18,6 +18,11 @@ class StoreAdminAbility
     can :manage, ::Spree::Price
     
     can :manage, :domain_registrations
+    can :manage, :my_account_profiles
+    can :manage, :my_account_invoices
+    can :manage, :my_account_orders
+    can :manage, :my_account_subscriptions
+    can :manage, :dashboard
 
     # Removing hosting control access for store admin as of May 9 2022
     # can :manage, :domains

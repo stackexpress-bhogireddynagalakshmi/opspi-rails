@@ -13,7 +13,7 @@
     </div>
     </div>
 
-<% if @orders.present? %>
+
 <div class="card mt-4">
 <div class="table-responsive">
 <table class="table table-sm card-table" style="width:100%">
@@ -27,6 +27,7 @@
     </tr>
   </thead>
   <tbody class="fsbase">
+  <% if @orders.present? %>
   <% @orders.complete.each do |order| %>
     <tr>
       <td class="account-page-order-number"><%= link_to order.number, order_url(order), class: "text-primary" %></td>
@@ -39,11 +40,13 @@
       </td>
     </tr>
   <% end %>
+  <% else %>
+  <tr>
+  <td><span class="table_row_label"><%= Spree.t(:you_have_no_orders_yet) %></span></td>
+  </tr>
+  <% end %>
   </tbody>
 </table>
 </div>
 </div>
 
-<% else %>
-  <p class="text-center"><%= Spree.t(:you_have_no_orders_yet) %></p>
-<% end %>

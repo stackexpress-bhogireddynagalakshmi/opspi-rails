@@ -23,25 +23,17 @@
           <table class="table table-sm card-table" style="width:100%">
             <thead>
                 <tr>
-                  <!-- <th>ID</th> -->
-                  <!-- <th>Web Domain</th> -->
                   <th>Username</th>
-                  <!-- <th>User identifier (UID)</th> -->
-                  <!-- <th>Group identifier (GID)</th> -->
                   <th>Directory</th>
                   <th>Active</th>
                   <th style="text-align:end">Actions</th>
                 </tr>
             </thead>
             <tbody class="fs-base">
-            <% if @ftp_user1.present? %>
+              <% if @ftp_user1.present? %>
                 <%@ftp_user1.each do |ftp_user| %>
                 <tr data-hook="admin_orders_index_rows" class=" ftp_user_<%=ftp_user.ftp_user_id%>">
-                  <!-- <td><%=ftp_user.ftp_user_id%></td> -->
-                  <!-- <td><%=ftp_user.parent_domain_id%></td> -->
                   <td><%=ftp_user.username%></td>
-                  <!-- <td><%=ftp_user.uid%></td> -->
-                  <!-- <td><%=ftp_user.gid%></td> -->
                   <td><%=ftp_user.dir%></td>
                   <td>
                       <div class="form-check form-switch">
@@ -50,16 +42,16 @@
                       </div>
                   <td>
                       <span class="d-flex justify-content-end">
-                        <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size', style: "margin-right:5px", method: :delete do %>
+                        <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px", method: :delete do %>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                         </svg>
                         <% end %>
-                        <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px", title: 'Reset Password' do %>
+                        <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
                         <%= render partial: '/spree/admin/shared/icons/reset_password' %>
                         <% end %>
-                        <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size', title: 'Configuration Details' do  %>
+                        <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
                         <%= render partial: '/spree/admin/shared/icons/gear' %>
                         <% end %>
                       </span>
@@ -67,7 +59,7 @@
                   </td>
                 </tr>
                 <% end %>
-                <% else %>
+              <% else %>
                 <tr>
                   <td><label class="form-label"> No FTP Users Found </label></td>
                 </tr>
@@ -85,7 +77,6 @@
                 <tr>
                   <th>Username</th>
                   <th>Folder</th>
-                  <!--  <th>Enabled</th> -->
                   <th>Can Read</th>
                   <th>Can Write</th>
                   <th style="text-align:end">Actions</th>
@@ -97,7 +88,6 @@
                 <tr>
                   <td><%= ftp_account.name %></td>
                   <td><%= ftp_account.folder %></td>
-                  <!-- <td><%#= ftp_account.enabled %></td> -->
                   <td style="text-align: center;"><% if ftp_account.can_read%>
                       <i class="fe fe-check-circle" style="color: green;"></i>
                       <% else %>
@@ -112,7 +102,7 @@
                   </td>
                   <td>
                       <span class="d-flex justify-content-end">
-                      <%= link_to  admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'),type: 'button', class: 'btn btn-outline-danger btn-size', style: "margin-right:5px", data: {confirm: t('windows.ftp_account.delete_alert')}, method: :delete do %>
+                      <%= link_to  admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px", data: {confirm: t('windows.ftp_account.delete_alert')}, method: :delete do %>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -139,11 +129,7 @@
           <table class="table table-sm card-table" style="width:100%">
             <thead>
                 <tr>
-                  <!-- <th>ID</th> -->
-                  <!-- <th>Web Domain</th> -->
                   <th>Username</th>
-                  <!-- <th>User identifier (UID)</th> -->
-                  <!-- <th>Group identifier (GID)</th> -->
                   <th>Directory</th>
                   <th>Active</th>
                   <th style="text-align:end">Actions</th>
@@ -153,11 +139,7 @@
             <tbody class="fsbase">
                 <%@ftp_user1.each do |ftp_user| %>
                 <tr data-hook="admin_orders_index_rows" class=" ftp_user_<%=ftp_user.ftp_user_id%>">
-                  <!-- <td><%=ftp_user.ftp_user_id%></td> -->
-                  <!-- <td><%=ftp_user.parent_domain_id%></td> -->
                   <td><%=ftp_user.username%></td>
-                  <!-- <td><%=ftp_user.uid%></td> -->
-                  <!-- <td><%=ftp_user.gid%></td> -->
                   <td><%=ftp_user.dir%></td>
                   <td>
                       <div class="form-check form-switch">
@@ -166,16 +148,16 @@
                       </div>
                   <td>
                       <span class="d-flex justify-content-end">
-                        <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size', style: "margin-right:5px", method: :delete do %>
+                        <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px", method: :delete do %>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                         </svg>
                         <% end %>
-                        <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px", title: 'Reset Password' do %>
+                        <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
                         <%= render partial: '/spree/admin/shared/icons/reset_password' %>
                         <% end %>
-                        <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size', title: 'Configuration Details' do  %>
+                        <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
                         <%= render partial: '/spree/admin/shared/icons/gear' %>
                         <% end %>
                       </span>
@@ -202,7 +184,6 @@
                 <tr>
                   <th>Username</th>
                   <th>Folder</th>
-                  <!--  <th>Enabled</th> -->
                   <th>Can Read</th>
                   <th>Can Write</th>
                   <th style="text-align:end">Actions</th>
@@ -214,7 +195,6 @@
                 <tr>
                   <td><%= ftp_account.name %></td>
                   <td><%= ftp_account.folder %></td>
-                  <!-- <td><%#= ftp_account.enabled %></td> -->
                   <td style="text-align: center;"><% if ftp_account.can_read%>
                       <i class="fe fe-check-circle" style="color: green;"></i>
                       <% else %>
@@ -229,7 +209,7 @@
                   </td>
                   <td>
                       <span class="d-flex justify-content-end">
-                      <%= link_to  admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'),type: 'button', data: {confirm: t('windows.ftp_account.delete_alert')} , class: 'btn btn-outline-danger btn-size',style:"margin-right:5px", method: :delete do %>
+                      <%= link_to  admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'),type: 'button', data: {confirm: t('windows.ftp_account.delete_alert')} , class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete do %>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                           <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                           <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -281,6 +261,81 @@
       </div>
       <div class="modal-body">
       
+      <%= render partial: 'spree/admin/sites/ftp_users/set_remaining_fields_value', collection: @isp_websites, as: :website %>
+
+        <%=form_for "ftp_user", url: admin_sites_ftp_users_path, html: {method: :post} do |f|%> 
+
+            <fieldset>
+              <div class="form-group">
+                <label class="form-label">Select Hosting Type:</label>
+                <%if current_spree_user.have_linux_access? && current_spree_user.have_windows_access?%>
+                  <%= select_tag :server_type, options_for_select(@isp_websites.any? ? linux_server_type : window_server_type),include_blank: true, class: 'form-select', id: 'hosting_type', required: true  %>
+                <%else%>
+                  <%= select_tag :server_type, options_for_select(plan_type_values(current_spree_user)),include_blank: true, class: 'form-select', id: 'hosting_type', required: true  %>
+                <%end%>
+              </div>
+
+            
+              <div class="form-group">
+                <label class="form-label">Username:</label>
+                <%=f.text_field 'username', class: 'form-control', placeholder: "Please enter UserName", required: true %>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Password:</label>
+                <%=f.password_field 'password', class: 'form-control', placeholder: "Please enter Password", required: true%>
+              </div>
+              <% if current_spree_user.have_windows_access?%>
+              <div id="windows-fields" style="display: none;">
+                <div class="form-group">
+                <label class="form-label">Select Domain:</label>
+                  <%= f.select(:domain, @website_list, {:prompt => 'Select Web Domain'}, class: 'form-select js-filterable',id: "domain_name_dropdown" )%>
+                </div>   
+
+                <div class="form-group">
+                  <label class="form-label">Folder:</label>
+                  <%=f.text_field 'folder', value: "", class: 'form-control', disabled: true, id: "folder_path" %>
+                </div>   
+              </div>
+              <%end%>
+              <div id="linux-fields" style="display: none;">
+                <div class="form-group">
+                  <label class="form-label">Select Domain:</label>
+                  <%= collection_select(:ftp_user, :parent_domain_id, @isp_websites, :domain_id, :domain, {:prompt => 'Select Web Domain'}, {class: 'form-select js-filterable'}) %>
+                </div>
+
+
+                <div class="form-group">
+                  <label class="form-label">Harddisk-Quota(MB):</label>
+                  <%=f.text_field 'quota_size', value: -1 , class: 'form-control', type: 'number', placeholder: "Please enter Harddisk-Quota In MB (example: 1000)"%>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Active</label>
+                  <%=f.select 'active',options_for_select(Website.actives.collect{ |k, v| [v, k]}),{}, class: 'form-select'%>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">User identifier (UID):</label>
+                  <%=f.text_field 'uid', class: 'form-control', readonly: true%>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Group identifier (GID):</label>
+                  <%=f.text_field 'gid', class: 'form-control', readonly: true%>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Directory:</label>
+                  <%=f.text_field 'dir', value: '/var/www/clients/client312/web29', class: 'form-control', readonly: true %>
+                </div>
+              </div>
+              
+
+              <%=submit_tag "Add FTP User",class: 'btn btn-primary lift mb-4'%>
+
+            </fieldset>
+          <% end %>
       </div>
       <!-- <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" id='modal-close-button'>Close</button>
@@ -381,6 +436,18 @@ $(document).on('click', '.btn-close', function(event){
   $('#ftpModal').modal('hide');
 });
 
+
+$('#ftp_user_parent_domain_id').change(function () {
+    var domain_id = $('#ftp_user_parent_domain_id').val();
+    var currentDomainId = $('#ftp_user_parent_domain_'+domain_id);
+    var dir  = currentDomainId.data("dir");
+    $('#ftp_user_dir').val(dir);
+    var uid  = currentDomainId.data("uid");
+    $('#ftp_user_uid').val(uid);
+    var gid  = currentDomainId.data("gid");
+    $('#ftp_user_gid').val(gid);
+  });
+
 $(document).ready(function (argument) {
     $("#hosting_type").on('change',function (argument) {
       var val = $(this).val();
@@ -397,9 +464,10 @@ $(document).ready(function (argument) {
 });
 
 $('#domain_name_dropdown').on('change', function(){
-      var val = $(this).text();
+      var val = $(this).val();
       var folder = "\\"+val+"\\wwwroot"
       $('#folder_path').val(folder)
     });
   
 </script>
+
