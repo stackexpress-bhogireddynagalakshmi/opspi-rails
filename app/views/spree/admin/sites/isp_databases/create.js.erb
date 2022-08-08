@@ -1,0 +1,5 @@
+<%if @response[:success] == true%>
+  $("#myModal").modal('hide')
+<%else%>
+  $('#error_div').html("<%=@response[:message]%>")
+<%end%>

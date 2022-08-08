@@ -185,6 +185,7 @@ module SolidCp
         response = super(message: hash_params)
 
         if response.success? && response.body[:add_domain_with_provisioning_response][:add_domain_with_provisioning_result].to_i.positive?
+          create_a_record(params)
           { success: true, message: 'Domain created successfully', response: response }
         else
           { success: false, message: 'Something went wrong. Please try again.', response: response }
@@ -193,6 +194,22 @@ module SolidCp
       alias create add_domain_with_provisioning
 
       private
+
+      def create_a_record(params)
+        dns_id = HostedZone.where(name: params[:domain_name]).pluck(:isp_config_host_zone_id).first
+          a_record_params={
+            type: "A",
+            name: 'www',
+            hosted_zone_name: sanitze_domain(params[:domain_name]),
+            ipv4: SolidCp::Config.api_web_server_ip(user),
+            ttl: "3600",
+            hosted_zone_id: dns_id,
+            client_id: user.isp_config_id
+          }
+          
+          user.isp_config.hosted_zone_record.create(a_record_params)
+       
+      end
 
       def update_dns_settings(domain_id, enable_dns)
         if [true, 'true'].include?(enable_dns)
