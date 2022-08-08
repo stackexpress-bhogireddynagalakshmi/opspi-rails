@@ -65,7 +65,6 @@ module SolidCp
            if response.success? 
             domain_response = Domain.new(user).destroy(params[:web_domain_id])
             
-            # delete_a_records(params)
             if domain_response[:success] == true 
               { success: true, message: 'Website deleted successfully', response: response }
             else
@@ -76,10 +75,6 @@ module SolidCp
            end
         end
         alias :destroy :delete_web_site
-
-        # def delete_a_records(params)
-        #   dns_id = HostedZone.where(name: params[:domain]).pluck(:isp_config_host_zone_id).first
-        # end
 
         #  <siteItemId>int</siteItemId>
         #  <email>string</email>
