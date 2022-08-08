@@ -23,7 +23,7 @@ p{
         </svg>
       <% end %>
                
-      <%= link_to 'javascript:void(0);', data: {origin: hosted_zone.name, ns1: ENV['ISPCONFIG_DNS_SERVER_NS1'], ns2: ENV['ISPCONFIG_DNS_SERVER_NS2']}, class: ' configure-dns-modal-link btn btn-outline-primary btn-size', id: "dns_config_details_#{hosted_zone.name}",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
+      <%= link_to 'javascript:void(0);', data: {origin: hosted_zone.name, ns1: user_domain.nameserver1, ns2: user_domain.nameserver2}, class: ' configure-dns-modal-link btn btn-outline-primary btn-size', id: "dns_config_details_#{hosted_zone.name}",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
         <%= render partial: '/spree/admin/shared/icons/gear' %>
       <% end %>
         </span>
