@@ -18,7 +18,8 @@
 }
 </style>
 
-<table class="table table-sm card-table table-hover">
+
+<table class="table">
   <%domains.each do |key, value|%>
     <%disabled = order.line_items.pluck(:domain).include?(key) rescue false%>
     <tr id="<%=generate_id_from_key(key)%>">
