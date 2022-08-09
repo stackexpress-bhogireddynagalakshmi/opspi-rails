@@ -8,6 +8,7 @@ services:
       - '3000:3000'
     volumes:
       - /var/log/opspi/:/project/log/
+      - "${DATA_DIR}/db:/project/db/data" 
       - "${DATA_DIR}/config/enc-keys:/project/config/enc-keys:ro"
     restart: unless-stopped
   cron:
