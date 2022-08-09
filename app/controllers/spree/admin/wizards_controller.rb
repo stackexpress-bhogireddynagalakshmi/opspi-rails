@@ -189,7 +189,7 @@ module Spree
               domain: @domain,
               active: 'y'
             },
-            depends_on: 1,
+            depends_on: nil,
             sidekiq_job_id: nil
           }
 
