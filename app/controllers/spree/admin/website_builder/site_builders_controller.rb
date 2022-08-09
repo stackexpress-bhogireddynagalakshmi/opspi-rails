@@ -9,8 +9,6 @@ module Spree
 
         def create
           if params[:server_type] == 'linux'
-            dns_record_res = create_dns_record
-            if dns_record_res[:success] 
               website = get_web_domain_id
               if website.present?
                 ftp = get_ftp_user(website)
@@ -23,11 +21,7 @@ module Spree
               else
                 @new_domain_ftp_response = create_web_domain  
               end
-            else
-              Rails.logger.debug{@new_domain_ftp_response.inspect}
-              flash[:error] = dns_record_res[:message]
-              redirect_to admin_site_builder_path
-            end
+            
             if @new_domain_ftp_response[:ftp_user_response].present? && @new_domain_ftp_response[:ftp_user_response][:success]
               @response = SitePro::SiteBuilder.new(current_spree_user).create(site_builder_params.merge({username: @new_domain_ftp_response[:ftp_user_params][:username],password: @new_domain_ftp_response[:ftp_user_params][:password],server_type: params[:server_type]}))
               if @response[:success] 
@@ -43,8 +37,6 @@ module Spree
               redirect_to admin_site_builder_path
             end
           else
-            dns_record_res = create_dns_record
-            if dns_record_res[:success] 
               website = get_web_domain_id
               if website.present?
                 ftp = get_ftp_user(website)
@@ -62,10 +54,7 @@ module Spree
               else
                 @new_domain_ftp_response = create_win_web_domain  
               end
-            else
-              flash.now[:error] = "Something went wrong - Dns record create"
-              redirect_to request.referrer
-            end
+            
             if @new_domain_ftp_response.present? && @new_domain_ftp_response[:id].present?
               @response = SitePro::SiteBuilder.new(current_spree_user).create(site_builder_params.merge({username: @new_domain_ftp_response[:name],password: @new_domain_ftp_response[:password],folder: @new_domain_ftp_response[:folder],server_type: params[:server_type]}))
               if @response[:success] 
@@ -82,54 +71,6 @@ module Spree
             end
           end
         end
-
-        def create_dns_record
-          host_zone_record_params = {}
-          dns_response = current_spree_user.isp_config.hosted_zone.all_zones
-          dns_domain = dns_response[:response].response.map{|k| k.id if k[:origin] == site_builder_params[:dns_domain_name]+"."}
-          # delete_a_record(dns_domain.compact.first)
-          a_record_params={
-            type: "A",
-            name: site_builder_params[:dns_domain_name],
-            hosted_zone_name: nil,
-            ipv4: webserver_ip(params[:server_type]),
-            ttl: "3600",
-            hosted_zone_id: dns_domain.compact.first,
-            client_id: current_spree_user.isp_config_id
-          }
-
-          dns_record_response = current_spree_user.isp_config.hosted_zone_record.create(a_record_params)
-        end
-
-        def webserver_ip(server)
-          server_type = server == 'linux' ? 'web_linux' : 'web_windows'
-          web_ip_key = server == 'linux' ? 'ISPCONFIG_WEB_SERVER_IP' : 'SOLID_CP_WEB_SERVER_IP'
-          panel_id = panel_id_for(server_type)
-          config_value_for(panel_id, web_ip_key)
-        end
-      
-        def config_value_for(panel_id, key)
-          value = PanelConfig.where(panel_id: panel_id, key: key).last&.value
-      
-          return value if value.present?
-      
-          raise "Value for #{key} with Panel ID #{panel_id} does not exist."
-        end
-      
-        def panel_id_for(server)
-          current_spree_user.panel_config[server] 
-        end
-        
-
-        # def delete_a_record(dns_domain_id)
-        #   dns_record_response = current_spree_user.isp_config.hosted_zone.get_all_hosted_zone_records(dns_domain_id)
-        #   dns_a_recs = dns_record_response[:response].response.map{|k| k.id if k[:type] == "A"}
-        #   unless dns_a_recs.compact.first.blank?
-        #     dns_a_recs.compact.each do |a_record| 
-        #       host_zone_record_api.destroy({type: "A",id: a_record})
-        #     end
-        #   end
-        # end
 
         def get_web_domain_id
           if params[:server_type] == "linux"
