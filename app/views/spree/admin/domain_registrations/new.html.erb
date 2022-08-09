@@ -50,7 +50,7 @@
 
 
 <%if  @response && @response["status"]!='ERROR'%>
-<div>
+<div class="col-12 px-0">
   <h5>Other matching domains that are available</h5>
   <%= render partial: 'hosting/domain_list',locals: {domains: @suggestions,order: @order} if @suggestions.present?%>
 </div>
