@@ -32,6 +32,7 @@ module IspConfig
                            }
                          })
         if response.code == "ok"
+          create_mx_records(params)
           user.mail_domains.create({ isp_config_mail_domain_id: response["response"] }) 
         end
 
@@ -80,7 +81,22 @@ module IspConfig
 
       private
 
-     
+      def create_mx_records(params)   
+        dns_id = HostedZone.where(name: params[:domain]).pluck(:isp_config_host_zone_id).first
+        mx_records = [IspConfig::Config.api_mx_server_1(user), IspConfig::Config.api_mx_server_1(user)]
+        mx_records.each do |mx|
+          mx_record_params={
+            type: "MX",
+            name: params[:domain],
+            mailserver: mx,
+            ttl: "3600",
+            priority: 60,
+            hosted_zone_id: dns_id,
+            client_id: user.isp_config_id
+          }
+          user.isp_config.hosted_zone_record.create(mx_record_params)
+        end
+      end  
 
       def mail_domain_ids
         user.mail_domains.pluck(:isp_config_mail_domain_id)
