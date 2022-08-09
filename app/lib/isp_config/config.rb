@@ -14,6 +14,8 @@ module IspConfig
     PASSWORD_KEY  = "ISP_CONFIG_PASSWORD"
     URL_KEY       = "ISP_CONFIG_REMOTE_URL"
     SERVER_TYPE   = "web_linux"
+    MAIL_SERVER_1 = "ISPCONFIG_MAIL_SERVER_01"
+    MAIL_SERVER_2 = "ISPCONFIG_MAIL_SERVER_02"
 
     def self.username_key
       USERNAME_KEY
@@ -25,6 +27,14 @@ module IspConfig
 
     def self.url_key
       URL_KEY
+    end
+
+    def self.mail_server_1_key
+      MAIL_SERVER_1
+    end
+
+    def self.mail_server_2_key
+      MAIL_SERVER_2
     end
 
     def self.server_type_key

@@ -29,11 +29,7 @@ module Spree
 
           @response = mail_user_api.create(mail_user_param)
           set_flash
-          if @response[:success]
-            redirect_to request.referrer
-          else
-            render :new
-          end
+          redirect_to request.referrer
         end
 
         def update
@@ -67,7 +63,7 @@ module Spree
         # mailboxes
         def mail_user_params
           params.require("mailuser").permit(:name, :login, :email, :password, :quota, :cc, :forward_in_lda, :policy, :postfix,
-                                            :disablesmtp, :disabledeliver, :greylisting, :disableimap, :disablepop3)
+                                            :disablesmtp, :disabledeliver, :greylisting, :disableimap, :disablepop3, :mail_domain)
         end
 
         def mail_user_api
@@ -82,7 +78,7 @@ module Spree
 
         def formatted_email
           email = mail_user_params[:email].gsub("@", '')
-          "#{email}@#{params[:mail_domain]}"
+          "#{email}@#{params[:mailuser][:mail_domain]}"
         end
       end
     end

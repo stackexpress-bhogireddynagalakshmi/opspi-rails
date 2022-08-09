@@ -22,13 +22,20 @@
     max-height: 400px;
     overflow-y: auto;
 }
+img{
+  width: 7rem;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
 
 </style>
 
+
+<%= logo %>
+
 <body class="d-flex align-items-center bg-auth border-top border-top-2 border-primary">
-<a href="<%= spree.root_path %>" style="position:absolute;left:0;top:0;margin-top:6px">
-<%= image_tag 'OpsPi-logo.png', class: "navbar-img" %>
-</a>
+
     <!-- CONTENT
     ================================================== -->
     <div class="container">
@@ -37,7 +44,8 @@
 
           <!-- Image -->
           <div class="text-center">
-          <%=image_tag('happiness')%>
+          <%#=image_tag('happiness')%>
+          <%= image_tag 'happiness.svg', class: "img-fluid" ,id:"bannerimage1"%>
           </div>
 
         </div>
@@ -240,6 +248,10 @@ $(document).ready(function() {
     }
 });
 });
+
+$(document).ready(function() {
+  $('#bannerimage1').attr('style', 'position: relative;width: 100%;');
+  });
 
 </script>
 

@@ -1,0 +1,27 @@
+<style type="text/css">
+    <% if local_assigns.has_key?(:modal_width)%>
+      #myModal .modal-dialog{
+        min-width: <%= modal_width %>;
+      }
+    <% end %>
+    .modal-body{
+      max-height: 540px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+</style>
+
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div id="exampleModalLabel" class="modal-title">
+        <%= yield :modal_header %>
+      </div>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-bs-dismiss="modal">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div id='errors-container'></div>
+    <%= yield :modal_body_and_footer %>
+  </div>
+</div>
