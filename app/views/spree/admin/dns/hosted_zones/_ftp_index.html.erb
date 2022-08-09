@@ -25,7 +25,6 @@
                 <tr>
                   <th>Username</th>
                   <th>Directory</th>
-                  <th>Active</th>
                   <th style="text-align:end">Actions</th>
                 </tr>
             </thead>
@@ -35,12 +34,6 @@
                 <tr data-hook="admin_orders_index_rows" class=" ftp_user_<%=ftp_user.ftp_user_id%>">
                   <td><%=ftp_user.username%></td>
                   <td><%=ftp_user.dir%></td>
-                  <td>
-                      <div class="form-check form-switch">
-                        <%= check_box_tag('active', ftp_user.active, ('checked' if (ftp_user.active == 'y')), class: "form-check-input", data_ftp_user_id: ftp_user.ftp_user_id, id: "data_ftp_user_#{ftp_user.ftp_user_id}", onclick: "updateFtpUser(this)" ) %>
-                        <label class="form-check-label" for="data_ftp_user_<%=ftp_user.ftp_user_id %>"></label>
-                      </div>
-                  <td>
                       <span class="d-flex justify-content-end">
                         <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px", method: :delete do %>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -76,9 +69,7 @@
             <thead>
                 <tr>
                   <th>Username</th>
-                  <th>Folder</th>
-                  <th>Can Read</th>
-                  <th>Can Write</th>
+                  <th>Directory</th>
                   <th style="text-align:end">Actions</th>
                 </tr>
             </thead>
@@ -88,18 +79,6 @@
                 <tr>
                   <td><%= ftp_account.name %></td>
                   <td><%= ftp_account.folder %></td>
-                  <td style="text-align: center;"><% if ftp_account.can_read%>
-                      <i class="fe fe-check-circle" style="color: green;"></i>
-                      <% else %>
-                      <i class="fe fe-x-circle" style="color: red;"></i>
-                      <% end %>
-                  </td>
-                  <td style="text-align: center;"><% if ftp_account.can_write%>
-                      <i class="fe fe-check-circle" style="color: green;"></i>
-                      <% else %>
-                      <i class="fe fe-x-circle" style="color: red;"></i>
-                      <% end %>
-                  </td>
                   <td>
                       <span class="d-flex justify-content-end">
                       <%= link_to  admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px", data: {confirm: t('windows.ftp_account.delete_alert')}, method: :delete do %>
@@ -108,6 +87,9 @@
                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                         </svg>
                         <% end %>
+                      <%= link_to 'javascript:void(0);', data: {username: ftp_account.name, password: ftp_account.password, host: ENV['SOLID_CP_WEB_SERVER_IP'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_account.id}_pwd_text", email: ftp_account.name, id: ftp_account.id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
+                        <%= render partial: '/spree/admin/shared/icons/gear' %>
+                      <% end %>
                       </span>
                   </td>
                 </tr>
@@ -131,7 +113,6 @@
                 <tr>
                   <th>Username</th>
                   <th>Directory</th>
-                  <th>Active</th>
                   <th style="text-align:end">Actions</th>
                 </tr>
             </thead>
@@ -141,11 +122,6 @@
                 <tr data-hook="admin_orders_index_rows" class=" ftp_user_<%=ftp_user.ftp_user_id%>">
                   <td><%=ftp_user.username%></td>
                   <td><%=ftp_user.dir%></td>
-                  <td>
-                      <div class="form-check form-switch">
-                        <%= check_box_tag('active', ftp_user.active, ('checked' if (ftp_user.active == 'y')), class: "form-check-input", data_ftp_user_id: ftp_user.ftp_user_id, id: "data_ftp_user_#{ftp_user.ftp_user_id}", onclick: "updateFtpUser(this)" ) %>
-                        <label class="form-check-label" for="data_ftp_user_<%=ftp_user.ftp_user_id %>"></label>
-                      </div>
                   <td>
                       <span class="d-flex justify-content-end">
                         <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px", method: :delete do %>
@@ -183,9 +159,7 @@
             <thead>
                 <tr>
                   <th>Username</th>
-                  <th>Folder</th>
-                  <th>Can Read</th>
-                  <th>Can Write</th>
+                  <th>Directory</th>
                   <th style="text-align:end">Actions</th>
                 </tr>
             </thead>
@@ -195,18 +169,6 @@
                 <tr>
                   <td><%= ftp_account.name %></td>
                   <td><%= ftp_account.folder %></td>
-                  <td style="text-align: center;"><% if ftp_account.can_read%>
-                      <i class="fe fe-check-circle" style="color: green;"></i>
-                      <% else %>
-                      <i class="fe fe-x-circle" style="color: red;"></i>
-                      <% end %>
-                  </td>
-                  <td style="text-align: center;"><% if ftp_account.can_write%>
-                      <i class="fe fe-check-circle" style="color: green;"></i>
-                      <% else %>
-                      <i class="fe fe-x-circle" style="color: red;"></i>
-                      <% end %>
-                  </td>
                   <td>
                       <span class="d-flex justify-content-end">
                       <%= link_to  admin_sites_ftp_user_path(id: ftp_account.id, server_type: 'windows'),type: 'button', data: {confirm: t('windows.ftp_account.delete_alert')} , class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete do %>
@@ -214,6 +176,9 @@
                           <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                           <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                         </svg>
+                      <% end %>
+                      <%= link_to 'javascript:void(0);', data: {username: ftp_account.name, password: ftp_account.password, host: ENV['SOLID_CP_WEB_SERVER_IP'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_account.id}_pwd_text", email: ftp_account.name, id: ftp_account.id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
+                        <%= render partial: '/spree/admin/shared/icons/gear' %>
                       <% end %>
                       </span>
                   </td>
@@ -385,13 +350,6 @@
             <td><b>Port:</b></td>
             <td>${port}</td>
             </tr>
-            <tr>
-            <td>Reset Password</td>
-            <td>
-                <a href="/admin/sites/ftp_users/reset_password?email=${email}&type=create_ftp_account&div_class=ftp_user_${id}" data-remote="true">Reset Pasword</a>
-                <div class='password-text'></div>
-            </td>
-            </tr>
         </tbody>
         </table>
     `);
@@ -471,3 +429,10 @@ $('#domain_name_dropdown').on('change', function(){
   
 </script>
 
+  <!--tr>
+    <td>Reset Password</td>
+    <td>
+        <a href="/admin/sites/ftp_users/reset_password?email=${email}&type=create_ftp_account&div_class=ftp_user_${id}" data-remote="true">Reset Pasword</a>
+        <div class='password-text'></div>
+    </td>
+    </tr-->
