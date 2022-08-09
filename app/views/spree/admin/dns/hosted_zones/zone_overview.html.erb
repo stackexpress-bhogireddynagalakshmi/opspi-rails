@@ -270,6 +270,7 @@
                 </div>
             </div>
           <%end%>
+          <%end%>
           <!-- ssl -->
           <%if (current_spree_user.have_linux_access? && @isp_websites.any?) || (current_spree_user.have_windows_access? && @windows_websites.kind_of?(Array) && @windows_websites.any?) %>
             <% id = @isp_websites.any? ? @isp_websites.first.domain_id : @windows_websites.last[:web_site_id] %>
