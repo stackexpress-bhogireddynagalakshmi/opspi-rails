@@ -188,6 +188,7 @@
         <%end%>
  
          <!-- ssl -->
+
          <%if current_spree_user.have_windows_access?%>
           <% @web_domain_id = "0" %>
           <% @web_site_id = "0" %>
@@ -203,53 +204,112 @@
               <% end %>
             <%end%>
           <%end%>
+
           <%if @web_site_id.to_i > 0 %>
-            <div class="card">
-                <div class="card-body flex-container">
-                   <div class="flex-child">
-                    <label class="form-check-label">SSL</label>
-                  </div>
-                  <div class="form-check form-switch flex-child">
-                    <%= check_box_tag 'win_ssl', @website_id.kind_of?(Array) ? 0: @website_id[:id], @website_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
-                  </div>
+
+              <div class="row align-items-center">
+                <div class="col">
+                  <h1>
+                      Web Controls
+                  </h1>
                 </div>
-            </div>
+                <div class="col-auto">
+                </div>
+              </div>
+              
+              <div class="card">
+                <div class="card-body" style="margin-bottom: -15px;">
+                <div class="align-items-center mb-4">
+                    <div class="col-3">
+
+                    <div class="flex-container">
+                      <div class="flex-child">
+                      <label class="form-check-label">SSL</label>
+                    </div>
+
+                    <div class="form-check form-switch flex-child">
+                      <%= check_box_tag 'win_ssl', @website_id.kind_of?(Array) ? 0: @website_id[:id], @website_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
+                    </div>
+                    </div>
+                </div>
+              
+              <div class="col mt-4">      
+                  <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
+                    <div class="form-group d-none">
+                        <label class="form-label"></label>
+                        <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
+                    </div>
+                    <div class="input-group">
+                        <div>
+                          <%#=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
+                        </div>
+                    </div>
+                  <% end %>
+              </div>
+              </div>
+              </div>
+              </div>
           <%end%>
+
          <%end%>
 
          <%if current_spree_user.have_linux_access? && @isp_websites.any? %>
             <% @isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
             <% @isp_ssl = @isp_websites.first[:ssl_letsencrypt]%>
-          <%end%>
+     
+            <%if @isp_web_id.to_i > 0 %>
 
-          <%if @isp_web_id.to_i > 0 %>
+            <div class="row align-items-center">
+              <div class="col">
+                <h1>
+                  Web Controls
+                    </h1>
+                  </div>
+                  <div class="col-auto">
+                  </div>
+              </div>
+            
+
             <div class="card">
-                <div class="card-body flex-container">
-                  <div class="flex-child">
-                    <label class="form-check-label">SSL</label>
+              <div class="card-body" style="margin-bottom: -15px;">
+              <div class="align-items-center mb-4">
+                    <div class="col-3">
+                      <div class="flex-container">
+                        <div class="flex-child">
+                          <label class="form-check-label">SSL</label>
+                        </div>
+                      
+                      <div class="form-check form-switch flex-child">
+                        <%= check_box_tag 'isp_ssl', @isp_ssl, (@isp_ssl == 'y') ? true : false, data_web_site_id: @isp_web_id, data_web_site: params[:zone_name], onclick: "updateIspSSL(this);", data_dns_id: params[:dns_id], class: "form-check-input" %>
+                      </div>
+                      </div>
+                    
+                    </div>
+                  
+                  <div class="col mt-4">
+                    <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
+                      <div class="form-group d-none">
+                          <label class="form-label"></label>
+                          <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
+                      </div>
+                      <div class="input-group">
+                          <div>
+                            <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
+                          </div>
+                      </div>
+                    <% end %>
                   </div>
-                  <div class="form-check form-switch flex-child">
-                    <%= check_box_tag 'isp_ssl', @isp_ssl, (@isp_ssl == 'y') ? true : false, data_web_site_id: @isp_web_id, data_web_site: params[:zone_name], onclick: "updateIspSSL(this);", data_dns_id: params[:dns_id], class: "form-check-input" %>
-                  </div>
-                </div>
+              </div>
+              </div>
             </div>
-          <%end%>
-          <!-- ssl -->
-         <div class="card">
-            <div class="card-body">
-               <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
-               <div class="form-group d-none">
-                  <label class="form-label"></label>
-                  <%=select_tag 'dns_domain_name', options_for_select(get_dns_domains,params[:zone_name]), class: 'form-select js-filterable', prompt: 'Select Web Domain', html: {selected: true} %>
-               </div>
-               <div class="input-group">
-                  <div>
-                     <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
-                  </div>
-               </div>
-               <% end %>
-            </div>
-         </div>
+            
+            <%end%>
+
+            <%end%>
+
+          <!-- ssl end -->
+          
+
          <div class="row align-items-center">
             <div class="col">
                <h1> Databases </h1>
