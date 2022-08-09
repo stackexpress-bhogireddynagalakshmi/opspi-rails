@@ -350,6 +350,13 @@
             <td><b>Port:</b></td>
             <td>${port}</td>
             </tr>
+            <tr>
+            <td>Reset Password</td>
+            <td>
+                <a href="/admin/sites/ftp_users/reset_password?email=${email}&type=create_ftp_account&div_class=ftp_user_${id}" data-remote="true">Reset Pasword</a>
+                <div class='password-text'></div>
+            </td>
+            </tr>
         </tbody>
         </table>
     `);
@@ -428,11 +435,3 @@ $('#domain_name_dropdown').on('change', function(){
     });
   
 </script>
-
-  <!--tr>
-    <td>Reset Password</td>
-    <td>
-        <a href="/admin/sites/ftp_users/reset_password?email=${email}&type=create_ftp_account&div_class=ftp_user_${id}" data-remote="true">Reset Pasword</a>
-        <div class='password-text'></div>
-    </td>
-    </tr-->
