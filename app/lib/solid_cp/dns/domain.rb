@@ -197,18 +197,19 @@ module SolidCp
 
       def create_a_record(params)
         dns_id = HostedZone.where(name: params[:domain_name]).pluck(:isp_config_host_zone_id).first
+        a_record_name = [sanitze_domain(params[:domain_name]), 'www']
+        a_record_name.each do |name|
           a_record_params={
             type: "A",
-            name: 'www',
+            name: name,
             hosted_zone_name: sanitze_domain(params[:domain_name]),
             ipv4: SolidCp::Config.api_web_server_ip(user),
             ttl: "3600",
             hosted_zone_id: dns_id,
             client_id: user.isp_config_id
           }
-          
           user.isp_config.hosted_zone_record.create(a_record_params)
-       
+        end
       end
 
       def update_dns_settings(domain_id, enable_dns)

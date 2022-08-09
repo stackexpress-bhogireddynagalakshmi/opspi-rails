@@ -120,6 +120,8 @@ module IspConfig
           record_name+"."
         elsif zone_name.present? && record_name.eql?("@")
           zone_name+"."
+        elsif record_name.eql?(zone_name)
+          record_name+"."
         else
           record_name+"."+zone_name+"."
         end
