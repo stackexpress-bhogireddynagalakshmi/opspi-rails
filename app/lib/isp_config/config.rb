@@ -32,6 +32,8 @@ module IspConfig
 
     def self.web_server_ip_key 
       WEB_SERVER_IP_KEY
+    end
+    
     def self.mail_server_1_key
       MAIL_SERVER_1
     end
