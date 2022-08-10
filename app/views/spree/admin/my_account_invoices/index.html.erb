@@ -1,3 +1,53 @@
+<%if current_spree_user.store_admin? || current_spree_user&.superadmin? %>
+<h1 class="contextual-title px-0 mb-0 col" style="margin-top: -2rem;">Invoices</h1>
+<hr>
+
+<table class="table table-sm card-table" style="width:100%">
+  <thead>
+    <tr>
+    <th><%=Spree.t(:invoice_number)%></th>
+    <th style="width: 20%;"><%=Spree.t(:invoice)%></th>
+    <th><%=Spree.t(:order)%></th>
+    <th><%= Spree.t(:status) %></th>
+    <th><%= Spree.t(:start_date) %></th>
+    <th><%= Spree.t(:end_date) %></th>
+    <th><%= Spree.t(:amount) %></th>
+    <th style="text-align:center;">Action</th>
+    </tr>
+  </thead>
+  <tbody class="fsbase">
+  <%TenantManager::TenantHelper.unscoped_query { current_spree_user.invoices.order(created_at: :desc) }.order(created_at: :desc).each do |invoice|%>
+    
+    <%order = TenantManager::TenantHelper.unscoped_query{invoice.order}%>
+    <tr>
+      <td>
+        <%if order%>
+          <%= link_to invoice.invoice_number, spree.order_path(order) %>
+        <%else%>
+            <%=invoice.invoice_number%>
+        <%end%>                    
+      </td>
+      <td><%=invoice.name%></td>
+      <td><%=TenantManager::TenantHelper.unscoped_query{invoice.order.present? ? 'Yes' : 'No'}%></td>
+      <td><%=invoice.status.upcase%></td>
+      <td><%=invoice.started_on%></td>
+      <td><%=invoice.finished_on%></td>
+      <td><%=number_to_currency(invoice.balance)%></td>
+      <td> 
+      <%if invoice.status == 'closed'  || invoice.status == 'processing'%>
+        
+      
+        <%else%>
+          <%=link_to 'Pay Now',spree.checkout_path(invoice_number: invoice.invoice_number),class: 'btn btn-primary','data-turbolinks': false%>
+        <%end%>
+      </td>
+    </tr>
+  <%end%>
+  </tbody>
+</table>
+
+<%else%>
+
 <div class="header mt-4">
   <div class="header-body">
     <div class="row align-items-center">
@@ -66,3 +116,4 @@
   <p class="alert alert-secondary text-center">You Have No Invoices Yet</p>
 <% end %>
 
+<%end%>
