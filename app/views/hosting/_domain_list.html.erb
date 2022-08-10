@@ -33,7 +33,7 @@
                 </span>
               <span style="margin-left: 10px;margin-right: 10px;"><%=number_to_currency(get_tld_pricing(key,@tld_pricing))%>/Yr</span>
               <%= hidden_field_tag "order_id", @order.try(:id),class: 'order_id' %>
-              <%= hidden_field_tag "variant_id", @product.try(:id) %>
+              <%= hidden_field_tag "variant_id", @variant.try(:id) %>
               <%= hidden_field_tag :tlds, params[:tlds]%>
               <%=hidden_field_tag 'options[domain]',key%>
               

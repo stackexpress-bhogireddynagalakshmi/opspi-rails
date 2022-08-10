@@ -37,7 +37,7 @@ module Spree
         @order = current_domain_order
         cookies.signed[:token] = @order.token if @order.present?
         @product = TenantManager::TenantHelper.unscoped_query { Spree::Product.domain.first }
-
+        @variant = @product.master
         if params[:domian_names].present?
           domains = params[:domian_names].split(",")
           tlds    = params[:tlds] || ["com"]
@@ -59,7 +59,7 @@ module Spree
       def create
         TenantManager::TenantHelper.unscoped_query do
           @product = Spree::Product.domain.first
-
+          byebug
           @order   = Spree::Order.find_by_id(params[:order_id]) || current_domain_order
           @variant = Spree::Variant.find(params[:variant_id])
 
