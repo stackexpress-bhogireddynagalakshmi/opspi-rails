@@ -14,7 +14,6 @@
       <div class="form-group">
           <label class="form-label">Database Type</label>
           <%=f.select :database_type, options_for_select(get_database_types(current_spree_user)), {prompt: '--select--'}, class: 'form-select' %>
-         
           <%=f.hidden_field :zone_name,value: params[:zone_name]%>
           <%=f.hidden_field :dns_id, value: params[:dns_id]%>
           <%=hidden_field_tag :server_type,"", id: 'create_database_server_type_id'%>

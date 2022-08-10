@@ -29,14 +29,13 @@ module Spree
         def new; end
 
         def create
-          if params[:server_type] == "windows"
+          if params[:server_type].include?("windows")
             @response = windows_api.create(resource_params)
             if @response[:success]
               set_flash
               redirect_to request.referrer
             else
               get_websites
-              #render :new
               redirect_to request.referrer
             end
           else
@@ -46,7 +45,6 @@ module Spree
               redirect_to request.referrer
             else
               get_websites
-              #render :new
               redirect_to request.referrer
             end
           end
@@ -55,7 +53,6 @@ module Spree
         def destroy
           @response = ftp_user_api.destroy(ftp_user_id)
           set_flash
-          # redirect_to admin_sites_ftp_users_path
           redirect_to request.referrer
         end
 
@@ -84,9 +81,9 @@ module Spree
         end
 
         def resource_params
-          if params[:server_type] == "windows"
+          if params[:server_type].include?("windows")
             windows_resource_params
-          elsif params[:server_type] == "linux"
+          elsif params[:server_type].include?("linux")
             linux_resource_params
           end
           
@@ -97,8 +94,12 @@ module Spree
         end
 
         def linux_resource_params 
-          params.require("ftp_user").permit(:parent_domain_id, :username, :password, :quota_size, :active, :uid, :gid,
-          :dir)
+          params.require("ftp_user").permit(:parent_domain_id, :username, :password, :uid, :gid,
+          :dir).merge(linux_extra_params)
+        end
+
+        def linux_extra_params
+          {quota_size: '-1',active: 'y'}
         end
 
         def windows_resource_params 

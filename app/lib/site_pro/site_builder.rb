@@ -1,5 +1,10 @@
 module SitePro
   class SiteBuilder < Base
+    attr_accessor :user
+
+    def initialize user
+      @user = user
+    end
    
     def create(params = {})
       response = query({
@@ -9,11 +14,11 @@ module SitePro
                          body: {
                           type: "external",
                           domain: params[:dns_domain_name],
-                          apiUrl: SitePro::Config.api_url,
+                          apiUrl: web_server_ip(user,params[:server_type]),
                           lang: "en",
                           username: params[:username],
                           password: params[:password],
-                          uploadDir: "/web"
+                          uploadDir: upload_dir(params[:server_type], params[:username])
                          }
                        })
 
@@ -23,6 +28,9 @@ module SitePro
    
     private
 
+    def upload_dir(server_type, user_name)
+      (server_type == "linux") ? "/web" : "/#{user_name}"
+    end
    
     def formatted_response(response, action)
       unless response.nil?
