@@ -553,11 +553,13 @@ width:230px
                         Invoices
                         </a>
                       </li>
+                      <%if current_spree_user.end_user? %>
                       <li class="nav-item">
-                        <a href="<%= admin_my_account_profiles_path %>" class="nav-link">
+                        <a href="<%= admin_my_account_profiles_path %>" class="nav-link sidebar_align">
                         Profile
                         </a>
                       </li>
+                      <%end%>
                       
                     </ul>
                   </div>
