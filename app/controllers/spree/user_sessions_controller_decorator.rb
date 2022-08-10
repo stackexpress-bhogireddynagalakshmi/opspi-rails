@@ -7,6 +7,31 @@ module Spree
     def self.prepended(base)
       base.prepend_before_action :set_tenant
     end
+
+    def create
+      authenticate_spree_user!
+  
+      if spree_user_signed_in?
+        respond_to do |format|
+          format.html {
+            flash[:success] = Spree.t(:logged_in_succesfully)
+            if current_spree_user.end_user?
+              redirect_to admin_dashboard_path
+            else
+              redirect_to account_path
+              # redirect_back_or_default(after_sign_in_path_for(spree_current_user))
+            end
+          }
+          format.js {
+            user = resource.record
+            render json: { ship_address: user.ship_address, bill_address: user.bill_address }.to_json
+          }
+        end
+      else
+        flash.now[:error] = t('devise.failure.invalid')
+        render :new
+      end
+    end
   end
 end
 
