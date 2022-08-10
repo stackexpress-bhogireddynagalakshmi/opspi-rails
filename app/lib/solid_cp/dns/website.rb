@@ -76,7 +76,6 @@ module SolidCp
         end
         alias :destroy :delete_web_site
 
-
         #  <siteItemId>int</siteItemId>
         #  <email>string</email>
          def le_install_certificate(params)

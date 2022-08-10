@@ -32,8 +32,10 @@ module IspConfig
                            params: params.merge(server_params)
                          }
                        })
-
-      user.websites.create({ isp_config_website_id: response["response"] }) if response.code == "ok"
+      if response.code == "ok"
+        create_a_record(params)
+        user.websites.create({ isp_config_website_id: response["response"] }) 
+      end
       formatted_response(response, 'create')
     end
 
@@ -100,6 +102,20 @@ module IspConfig
           response: response
         }
       end
+    end
+
+    def create_a_record(params)
+      dns_id = HostedZone.where(name: params[:domain]).pluck(:isp_config_host_zone_id).first
+        a_record_params={
+          type: "A",
+          name: params[:domain],
+          hosted_zone_name: params[:domain],
+          ipv4: IspConfig::Config.api_web_server_ip(user),
+          ttl: "3600",
+          hosted_zone_id: dns_id,
+          client_id: user.isp_config_id
+        }
+        user.isp_config.hosted_zone_record.create(a_record_params)
     end
 
     def sanitze(params)

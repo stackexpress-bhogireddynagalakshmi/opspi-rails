@@ -78,8 +78,8 @@ module Spree
 
         def enable_disable_web_domain
           if params[:web_site_id].to_i > 0
-            response = isp_config_api.destroy(params[:web_site_id])
-            if response[:success]
+            @response = isp_config_api.destroy(params[:web_site_id])
+            if @response[:success]
               ftp_users = current_spree_user.isp_config.ftp_user.find(parent_domain_id: params[:web_site_id])[:response].response
               ftp_ids = ftp_users.collect{|x| x[:ftp_user_id]}.compact
               if ftp_ids.any?
@@ -89,9 +89,9 @@ module Spree
               end
             end
           else
-            response = isp_config_api.create({domain: params[:website][:domain]})
-            if response[:success]
-              website  = current_spree_user.isp_config.website.find(response[:response][:response])
+            @response = isp_config_api.create({domain: params[:website][:domain]})
+            if @response[:success]
+              website  = current_spree_user.isp_config.website.find(@response[:response][:response])
               if website[:success] && website[:response]
                 ftp_user_params = ftp_users_resource_params(website[:response][:response])
                 @response = current_spree_user.isp_config.ftp_user.create(ftp_user_params)

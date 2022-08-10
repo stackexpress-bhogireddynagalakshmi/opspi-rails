@@ -18,6 +18,9 @@
   max-height: 1.5rem;
 }
 
+.sidebar_align{
+  margin-left: 20px;
+}
 .navbar-vertical .navbar-nav .nav-link {
     display: flex;
     align-items: center;
@@ -113,32 +116,32 @@ width:230px
             <div class="collapse" id="sidebarProduct">
                     <ul class="nav nav-sm flex-column">
                       <li class="nav-item">
-                        <a href="/admin/products" class="nav-link">
+                        <a href="/admin/products" class="nav-link sidebar_align" >
                           Products
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="/admin/option_types" class="nav-link">
+                        <a href="/admin/option_types" class="nav-link sidebar_align" >
                         Option Types
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="/admin/properties" class="nav-link">
+                        <a href="/admin/properties" class="nav-link sidebar_align" >
                         Properties
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="/admin/prototypes" class="nav-link">
+                        <a href="/admin/prototypes" class="nav-link sidebar_align" >
                         Prototypes
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="/admin/taxonomies" class="nav-link">
+                        <a href="/admin/taxonomies" class="nav-link sidebar_align" >
                         Taxonomies
                         </a>
                       </li>
                       <li class="nav-item">
-                      <a href="/admin/taxons" class="nav-link">
+                      <a href="/admin/taxons" class="nav-link sidebar_align" >
                       Taxons
                       </a>
                     </li>
@@ -164,12 +167,12 @@ width:230px
             <div class="collapse" id="sidebarPromotion">
               <ul class="nav nav-sm flex-column">
                 <li class="nav-item">
-                  <a href="/admin/promotions" class="nav-link">
+                  <a href="/admin/promotions" class="nav-link sidebar_align" >
                     Promotions
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a href="/admin/promotion_categories" class="nav-link">
+                  <a href="/admin/promotion_categories" class="nav-link sidebar_align">
                   Promotion Categories
                   </a>
                 </li>
@@ -196,21 +199,21 @@ width:230px
               <ul class="nav nav-sm flex-column">
               <% if can? :manage, Spree::Config %>
                 <li class="nav-item">
-                  <a href="<%= spree.edit_admin_general_settings_path %>" class="nav-link">
+                  <a href="<%= spree.edit_admin_general_settings_path %>" class="nav-link sidebar_align">
                     General Settings
                   </a>
                 </li>
                 <%end%>
 
                 <li class="nav-item">
-                  <a href="<%= admin_my_store_index_path %>" class="nav-link">
+                  <a href="<%= admin_my_store_index_path %>" class="nav-link sidebar_align" >
                     My Store
                   </a>
                 </li>
 
                 <% if can? :manage, Spree::Store%>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_stores_path %>" class="nav-link">
+                  <a href="<%= spree.admin_stores_path %>" class="nav-link sidebar_align">
                     Stores
                   </a>
                 </li>
@@ -218,7 +221,7 @@ width:230px
 
                 <% if can? :manage, Spree::TaxCategory %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_tax_categories_path %>" class="nav-link">
+                  <a href="<%= spree.admin_tax_categories_path %>" class="nav-link sidebar_align" >
                     Tax Category
                   </a>
                 </li>
@@ -226,7 +229,7 @@ width:230px
 
                 <% if can? :manage, Spree::TaxRate %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_tax_rates_path %>" class="nav-link">
+                  <a href="<%= spree.admin_tax_rates_path %>" class="nav-link sidebar_align" >
                     Tax Rates
                   </a>
                 </li>
@@ -234,7 +237,7 @@ width:230px
 
                 <% if can? :manage, Spree::Zone %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_zones_path %>" class="nav-link">
+                  <a href="<%= spree.admin_zones_path %>" class="nav-link sidebar_align">
                     Zones
                   </a>
                 </li>
@@ -242,7 +245,7 @@ width:230px
 
                 <% if can? :manage, Spree::Country %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_countries_path %>" class="nav-link">
+                  <a href="<%= spree.admin_countries_path %>" class="nav-link sidebar_align">
                     Countries
                   </a>
                 </li>
@@ -251,7 +254,7 @@ width:230px
                 <% if country = current_store.default_country %>
                 <% if can? :manage, Spree::Country %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_country_states_path(country)%>" class="nav-link">
+                  <a href="<%= spree.admin_country_states_path(country)%>" class="nav-link sidebar_align" >
                     States
                   </a>
                 </li>
@@ -260,7 +263,7 @@ width:230px
 
                 <% if can? :manage, Spree::PaymentMethod %>
                 <li class="nav-item">
-                  <a href="<%= admin_payment_methods_path %>" class="nav-link">
+                  <a href="<%= admin_payment_methods_path %>" class="nav-link sidebar_align" >
                     Payment Method
                   </a>
                 </li>
@@ -268,7 +271,7 @@ width:230px
 
                 <% if can? :manage, Spree::ShippingMethod %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_shipping_methods_path %>" class="nav-link">
+                  <a href="<%= spree.admin_shipping_methods_path %>" class="nav-link sidebar_align" >
                     Shipping Method
                   </a>
                 </li>
@@ -276,7 +279,7 @@ width:230px
 
                 <% if can? :manage, Spree::ShippingCategory %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_shipping_categories_path %>" class="nav-link">
+                  <a href="<%= spree.admin_shipping_categories_path %>" class="nav-link sidebar_align" >
                     Shipping Categories
                   </a>
                 </li>
@@ -284,7 +287,7 @@ width:230px
 
                 <% if can? :manage, Spree::StoreCreditCategory %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_store_credit_categories_path %>" class="nav-link">
+                  <a href="<%= spree.admin_store_credit_categories_path %>" class="nav-link sidebar_align" >
                     Store Credit Category
                   </a>
                 </li>
@@ -292,7 +295,7 @@ width:230px
 
                 <% if can? :manage, Spree::RefundReason %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_refund_reasons_path%>" class="nav-link">
+                  <a href="<%= spree.admin_refund_reasons_path%>" class="nav-link sidebar_align" >
                     Refund Reasons
                   </a>
                 </li>
@@ -300,7 +303,7 @@ width:230px
 
                 <% if can? :manage, Spree::ReimbursementType %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_reimbursement_types_path %>" class="nav-link">
+                  <a href="<%= spree.admin_reimbursement_types_path %>" class="nav-link sidebar_align" >
                     Reimbursement Types
                   </a>
                 </li>
@@ -308,7 +311,7 @@ width:230px
 
                 <% if can? :manage, Spree::ReturnAuthorizationReason %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_return_authorization_reasons_path %>" class="nav-link">
+                  <a href="<%= spree.admin_return_authorization_reasons_path %>" class="nav-link sidebar_align" >
                     Return Authorization Reason
                   </a>
                 </li>
@@ -316,7 +319,7 @@ width:230px
 
                 <% if can? :manage, Spree::Role %>
                 <li class="nav-item">
-                  <a href="<%= spree.admin_roles_path %>" class="nav-link">
+                  <a href="<%= spree.admin_roles_path %>" class="nav-link sidebar_align" >
                     Role
                   </a>
                 </li>
@@ -349,7 +352,7 @@ width:230px
           <div class="collapse" id="sidebarOpsbot">
           <ul class="nav nav-sm flex-column">
             <li class="nav-item">
-              <a href="#" class="nav-link">
+              <a href="#" class="nav-link sidebar_align" >
               CI/CD
               </a>
             </li>
@@ -366,13 +369,13 @@ width:230px
           <div class="collapse" id="sidebarDashboards">
           <ul class="nav nav-sm flex-column">
             <li class="nav-item">
-              <a href="<%= spree.admin_wizards_path %>" class="nav-link">
+              <a href="<%= spree.admin_wizards_path %>" class="nav-link sidebar_align" >
                 Quick Start
               </a>
             </li>
 
             <li class="nav-item">
-              <a href="<%= spree.admin_dns_hosted_zones_path %>" class="nav-link">
+              <a href="<%= spree.admin_dns_hosted_zones_path %>" class="nav-link sidebar_align" >
                Domains
               </a>
             </li>
@@ -536,22 +539,22 @@ width:230px
             <div class="collapse" id="sidebarAccount">
                     <ul class="nav nav-sm flex-column">
                       <li class="nav-item">
-                        <a href="<%= admin_my_account_orders_path %>" class="nav-link">
+                        <a href="<%= admin_my_account_orders_path %>" class="nav-link sidebar_align" >
                           Orders
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<%= admin_my_account_subscriptions_path %>" class="nav-link">
+                        <a href="<%= admin_my_account_subscriptions_path %>" class="nav-link sidebar_align" >
                         Subscriptions
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<%= admin_my_account_invoices_path %>" class="nav-link">
+                        <a href="<%= admin_my_account_invoices_path %>" class="nav-link sidebar_align" >
                         Invoices
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a href="<%= admin_my_account_profiles_path %>" class="nav-link">
+                        <a href="<%= admin_my_account_profiles_path %>" class="nav-link sidebar_align">
                         Profiles
                         </a>
                       </li>
