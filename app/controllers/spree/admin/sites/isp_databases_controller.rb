@@ -31,7 +31,7 @@ module Spree
           user_database_params = resource_params.reject { |k, _v| k == "database_password" }
 
           if @response[:success]
-            current_spree_user.user_databases.create(
+            @database = current_spree_user.user_databases.create(
               {
                 database_name: params[:database][:database_name],
                 database_user: database_username(params[:database][:database_name]),
@@ -40,7 +40,7 @@ module Spree
               }
             )
           end
-          render "create.js"
+          render "create"
         end
 
         def destroy
