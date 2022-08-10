@@ -114,9 +114,11 @@
          <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
       </div>
       <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">
-        <%if current_spree_user.have_windows_access? && current_spree_user.have_linux_access?%>
-          <%if @isp_websites.any? || @windows_websites.any?%>
+        <%if (@current_user_website == 'linux') || (@current_user_website == 'windows')%>
+          <%if @current_user_website == 'linux'%>
             <% @isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
+          <%end%>
+          <%if @current_user_website == 'windows'%>
             <% @web_domain_id = "0" %>
             <% @web_site_id = "0" %>
             <% if @windows_websites.any? && @windows_websites.kind_of?(Array) %>
@@ -151,44 +153,11 @@
           <%end%>
         <%else%>
         <!-- seperate -->
-          <%if current_spree_user.have_linux_access? %>
-            <% isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
-            <%if isp_web_id.to_i == 0%>
-            <div class="card">
-              <div class="card-body">
-                <div class="input-group">
-                  <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], class: 'btn btn-primary lift', onclick: "updateWebDomain(this)" %>
-                </div>
-              </div>
-            </div>
-            <%end%>
-          <%elsif current_spree_user.have_windows_access?%>
-            <% @web_domain_id = "0" %>
-            <% @web_site_id = "0" %>
-            <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
-              <%@windows_websites.reverse.each do |domain| %>
-              <% if domain[:web_site_id].to_i > 0 %>
-                <% @web_site_id = domain[:web_site_id]%>
-              <%end%>
-              <% if domain[:web_site_id].to_i == 0 %>
-                <% @web_domain_id = domain[:domain_id]%>
-              <% end %>
-              <%end%>
-            <%end%>
-            <%if @web_domain_id.to_i == 0 && @web_site_id.to_i == 0%>
-            <div class="card">
-              <div class="card-body">
-                <div class="input-group">
-                  <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], id: "data_web_domain_#{@web_site_id}", onclick: "updateWinWebDomain(this);", class: 'btn btn-primary lift' %>
-                </div>
-              </div>
-            </div>
-            <%end%>
-          <%end%>
+          
         <%end%>
  
          <!-- web control -->
-          <%if (current_spree_user.have_linux_access? && @isp_websites.any?) || (current_spree_user.have_windows_access? && @windows_websites.kind_of?(Array) && @windows_websites.any?) %>
+          <%if (@current_user_website == 'linux') || (@current_user_website == 'windows') %>
             <div class="row align-items-center">
               <div class="col">
                 <h1>
@@ -199,7 +168,7 @@
             <div class="card">
               <div class="card-body" style="margin-bottom: -15px;">
                 <div class="align-items-center mb-4">
-                  <%if current_spree_user.have_windows_access?%>
+                  <%if @current_user_website == 'windows'%>
                   <% @web_domain_id = "0" %>
                   <% @web_site_id = "0" %>
                   <% @web_domain_name = nil %>
@@ -216,7 +185,7 @@
                     <%end%> 
                   <%end%>
 
-                  <%if current_spree_user.have_linux_access? && @isp_websites.any? %>
+                  <%if @current_user_website == 'linux'%>
                     <% @isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
                     <% @isp_ssl = @isp_websites.first[:ssl_letsencrypt]%>
                   <%end%>
@@ -225,12 +194,12 @@
                       <div class="flex-child">
                         <label class="form-check-label">SSL</label>
                       </div>
-                      <%if @windows_websites.present? && @windows_websites.any?%>
+                      <%if @current_user_website == 'windows' %>
                         <div class="form-check form-switch flex-child">
-                          <%= check_box_tag 'win_ssl', @website_id.kind_of?(Array) ? 0: @website_id[:id], @website_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
+                          <%= check_box_tag 'win_ssl', @website_certificate_id.kind_of?(Array) ? 0: @website_certificate_id[:id], @website_certificate_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
                         </div>
                       <%end%>
-                      <% if @isp_websites.any? %>
+                      <% if @current_user_website == 'linux' %>
                         <div class="form-check form-switch flex-child">
                           <%= check_box_tag 'isp_ssl', @isp_ssl, (@isp_ssl == 'y') ? true : false, data_web_site_id: @isp_web_id, data_web_site: params[:zone_name], onclick: "updateIspSSL(this);", data_dns_id: params[:dns_id], class: "form-check-input" %>
                         </div>
@@ -239,16 +208,13 @@
                   </div>
 
                   <div class="col mt-4">
-                    <% id = @isp_websites.any? ? @isp_websites.first.domain_id : @windows_websites.last[:web_site_id] %>
-                    <%if id.to_i > 0 %>
-                      <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
-                        <%= hidden_field_tag "dns_domain_name", params[:zone_name] %>
-                        <%= hidden_field_tag "server_type", @isp_websites.any? ? 'linux' : 'windows' %>
-                        <div>
-                          <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
-                        </div>
-                      <% end %>
-                    <%end%>
+                    <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
+                      <%= hidden_field_tag "dns_domain_name", params[:zone_name] %>
+                      <%= hidden_field_tag "server_type", @current_user_website  %>
+                      <div>
+                        <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
+                      </div>
+                    <% end %>
                   </div>
 
                 </div>

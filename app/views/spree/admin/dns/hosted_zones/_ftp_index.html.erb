@@ -230,12 +230,12 @@
             <fieldset>
               <div class="form-group">
                 <label class="form-label">Select Hosting Type:</label>
-                <%if current_spree_user.have_linux_access? && current_spree_user.have_windows_access?%>
-                  <%= select_tag :server_type, options_for_select(@isp_websites.any? ? linux_server_type : window_server_type), class: 'form-select', id: 'hosting_type', disabled: true  %>
-                  <%= hidden_field_tag :server_type,  @isp_websites.any? ? linux_server_type : window_server_type%>
+                <%if current_spree_user.have_linux_access? && @current_spree_user.have_windows_access?%>
+                  <%= select_tag :server_type, options_for_select([@current_user_website]), class: 'form-select', id: 'hosting_type', disabled: true  %>
+                  <%= hidden_field_tag :server_type,  @current_user_website%>
                 <%else%>
-                  <%= select_tag :server_type, options_for_select(plan_type_values(current_spree_user)), class: 'form-select', id: 'hosting_type', disabled: true  %>
-                  <%=hidden_field_tag :server_type, plan_type_values(current_spree_user) %>
+                  <%= select_tag :server_type, options_for_select([@current_user_website]), class: 'form-select', id: 'hosting_type', disabled: true  %>
+                  <%=hidden_field_tag :server_type, @current_user_website %>
                 <%end%>
               </div>
               
@@ -248,12 +248,12 @@
                 <label class="form-label">Password:</label>
                 <%=f.password_field 'password', class: 'form-control', placeholder: "Please enter Password", required: true%>
               </div>
-              <% if current_spree_user.have_windows_access? && @website_list.any?%>
+              <% if current_spree_user.have_windows_access? && (@current_user_website == 'windows')%>
                 <div class="form-group">
                   <%=f.hidden_field :domain, value: @website_list.first%>
                 </div>
               <%end%>
-              <% if current_spree_user.have_linux_access? && @isp_websites.any?%>
+              <% if current_spree_user.have_linux_access? && (@current_user_website == 'linux')%>
                 <div class="form-group">
                   <%=f.hidden_field :parent_domain_id, value: @isp_websites[0][:domain_id]%>
                   <%=f.hidden_field :dir, value: @isp_websites[0][:document_root]%>

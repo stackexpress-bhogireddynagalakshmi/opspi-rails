@@ -29,7 +29,7 @@ module Spree
         def new; end
 
         def create
-          if params[:server_type].include?("windows")
+          if params[:server_type] == "windows"
             @response = windows_api.create(resource_params)
             if @response[:success]
               set_flash
@@ -81,9 +81,9 @@ module Spree
         end
 
         def resource_params
-          if params[:server_type].include?("windows")
+          if params[:server_type] == "windows"
             windows_resource_params
-          elsif params[:server_type].include?("linux")
+          elsif params[:server_type] == "linux"
             linux_resource_params
           end
           
