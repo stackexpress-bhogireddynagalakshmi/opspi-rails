@@ -242,6 +242,7 @@
                   FTP Users
                </h1>
             </div>
+            <% if @windows_websites.any? || @isp_websites.any? %>
             <div class="col-auto">
                <%= button_link_to "Add New",
                   "#",
@@ -249,6 +250,7 @@
                     icon: 'add.svg',
                     id: 'admin_new_ftp_user' %>
             </div>
+           <%end%>
          </div>
          <%= render partial: 'spree/admin/dns/hosted_zones/ftp_index' %>
       </div>
