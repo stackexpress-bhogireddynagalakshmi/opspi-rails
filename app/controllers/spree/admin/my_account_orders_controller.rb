@@ -14,7 +14,7 @@ class MyAccountOrdersController < Spree::Admin::BaseController
           elsif current_spree_user&.superadmin?
             render layout: "spree/layouts/admin"
           end
-      end
+    end
 end
 end
 end
