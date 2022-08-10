@@ -114,3 +114,13 @@ padding: 0.3rem 0.45rem;
 font-size: 0.8rem;
 }
 </style>
+<script type="text/javascript"> 
+$(document).ready(function (argument) {
+ 
+    if(!window.location.hash) {
+        window.location = window.location + '#loaded';
+        window.location.reload();
+    }
+
+});
+</script>
