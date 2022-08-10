@@ -59,7 +59,7 @@ module Spree
       def create
         TenantManager::TenantHelper.unscoped_query do
           @product = Spree::Product.domain.first
-          byebug
+          
           @order   = Spree::Order.find_by_id(params[:order_id]) || current_domain_order
           @variant = Spree::Variant.find(params[:variant_id])
 
