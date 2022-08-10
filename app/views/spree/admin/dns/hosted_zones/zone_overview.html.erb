@@ -187,7 +187,7 @@
 
                   <%if @current_user_website == 'linux'%>
                     <% @isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
-                    <% @isp_ssl = @isp_websites.first[:ssl_letsencrypt]%>
+                    <% @isp_ssl = @isp_websites.any? ? @isp_websites.first[:ssl_letsencrypt] : "0"%>
                   <%end%>
                   <div class="col-3">
                     <div class="flex-container">

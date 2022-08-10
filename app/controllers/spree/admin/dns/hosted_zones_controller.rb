@@ -132,13 +132,15 @@ module Spree
 
           #### website linux
           @web_domain = current_spree_user.isp_config.website.all[:response].response
-          @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}.compact
-          for el in @web_domain
-            if el.domain == @zone_name
-            @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
-              
-            @ftp_user1 = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
-            end 
+          if (current_spree_user.have_linux_access?) && (@current_user_website == 'linux')
+            @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}.compact
+            for el in @web_domain
+              if el.domain == @zone_name
+              @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
+                
+              @ftp_user1 = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
+              end 
+            end
           end
           #### 
 
