@@ -71,7 +71,16 @@ module SolidCp
       error = SolidCp::ErrorCodes.get_by_code(code)
 
       if response.success? && code.positive?
-        add_sql_user(params)
+        user_response = add_sql_user(params)
+        user.user_databases.create(
+          {
+            database_name: params[:database_name],
+            database_user: params[:database_username],
+            database_type: params[:database_type],
+            database_id: response.body[:add_sql_database_response][:add_sql_database_result]
+          }
+        )
+        user_response
       else
         { success: false, message: I18n.t(:panel_error, msg: error[:msg]), response: response }
       end

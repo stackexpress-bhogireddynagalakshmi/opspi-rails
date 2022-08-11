@@ -31,14 +31,7 @@ module Spree
           user_database_params = resource_params.reject { |k, _v| k == "database_password" }
 
           if @response[:success]
-            @database = current_spree_user.user_databases.create(
-              {
-                database_name: params[:database][:database_name],
-                database_user: database_username(params[:database][:database_name]),
-                database_type: params[:database][:database_type],
-                database_id: (params[:database][:database_type] == "ms_sql2019") ? @response[:response].body[:add_sql_user_response][:add_sql_user_result] : @response[:response].response
-              }
-            )
+            @database = current_spree_user.user_databases.find_by_database_name(user_database_params[:database_name]) 
           end
           render "create"
         end
