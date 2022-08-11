@@ -313,7 +313,7 @@ module Spree
       end
 
       def create_user_domain
-        current_spree_user.user_domains.create({domain: @domain, web_hosting_type: @server_type})
+        current_spree_user.user_domains.create({domain: @domain})
       end
 
       def get_database_name(domain)

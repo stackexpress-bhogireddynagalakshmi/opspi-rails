@@ -109,8 +109,13 @@ module Spree
           
           ######
 
+          ##### user domain details
+          @current_user_website = current_spree_user.user_domains.collect{|x| x.web_hosting_type if x.domain == @zone_name}.compact.last
+
+          #######
+
           #### website windows
-          if current_spree_user.have_windows_access?
+          if (current_spree_user.have_windows_access?) && (@current_user_website == 'windows')
             @windows_resource = current_spree_user.solid_cp.web_domain.all || [] 
             @windows_resources = @windows_resource.body[:get_domains_response][:get_domains_result][:domain_info] rescue []
             @windows_websites = @windows_resources.collect{|x| x if x[:domain_name].include?(@zone_name)}.compact
@@ -120,20 +125,22 @@ module Spree
 
             if website_array.any?
             website_id = current_spree_user.solid_cp.website.get_certificates_for_site({web_site_id: website_array.first})
-            @website_id = website_id.body[:get_certificates_for_site_response][:get_certificates_for_site_result][:ssl_certificate] rescue []
+            @website_certificate_id = website_id.body[:get_certificates_for_site_response][:get_certificates_for_site_result][:ssl_certificate] rescue []
             end
           end
           ######
 
           #### website linux
           @web_domain = current_spree_user.isp_config.website.all[:response].response
-          @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}.compact
-          for el in @web_domain
-            if el.domain == @zone_name
-            @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
-              
-            @ftp_user1 = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
-            end 
+          if (current_spree_user.have_linux_access?) && (@current_user_website == 'linux')
+            @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}.compact
+            for el in @web_domain
+              if el.domain == @zone_name
+              @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
+                
+              @ftp_user1 = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
+              end 
+            end
           end
           #### 
 
