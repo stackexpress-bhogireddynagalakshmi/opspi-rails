@@ -15,12 +15,9 @@ module Spree
         respond_to do |format|
           format.html {
             flash[:success] = Spree.t(:logged_in_succesfully)
-            if current_spree_user.end_user?
-              redirect_to admin_dashboard_path
-            else
-              redirect_to account_path
-              # redirect_back_or_default(after_sign_in_path_for(spree_current_user))
-            end
+            redirect_to admin_dashboard_path
+          
+            # redirect_back_or_default(after_sign_in_path_for(spree_current_user))
           }
           format.js {
             user = resource.record
