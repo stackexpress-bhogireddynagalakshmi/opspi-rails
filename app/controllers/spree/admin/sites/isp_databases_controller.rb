@@ -36,7 +36,7 @@ module Spree
                 database_name: params[:database][:database_name],
                 database_user: database_username(params[:database][:database_name]),
                 database_type: params[:database][:database_type],
-                database_id: @response[:response].response
+                database_id: (params[:database][:database_type] == "ms_sql2019") ? @response[:response].body[:add_sql_user_response][:add_sql_user_result] : @response[:response].response
               }
             )
           end
@@ -84,15 +84,16 @@ module Spree
 
         def resource_params
           if windows?
-            win_params = params.require("database").permit(:database_name, :database_password)
-            win_params = win_params.merge({ database_username: database_username(win_params[:database_password]) })
+            win_params = params.require("database").permit(:database_name, :database_password, :database_type)
+            win_params = win_params.merge({ database_username: database_username(win_params[:database_name]) })
           else
             isp_database_params
           end
         end
 
         def isp_database_params
-          params.require("database").permit(:web_domain_id, :database_name, :database_password)
+          lin_params = params.require("database").permit(:web_domain_id, :database_name, :database_password, :database_type)
+          lin_params = lin_params.merge({ database_username: database_username(lin_params[:database_name]) })
         end
 
         def resource_index_path
@@ -140,9 +141,9 @@ module Spree
 
         def database_username(database_name)
           if windows?
-            "c#{current_spree_user.isp_config_id}_#{database_name}"
-          else
             "c#{current_spree_user.solid_cp_id}_#{database_name}"
+          else
+            "c#{current_spree_user.isp_config_id}_#{database_name}"
           end
         end
       end

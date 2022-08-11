@@ -88,7 +88,7 @@ module SolidCp
           "Name" => params[:database_username],
           "Password" => params[:database_password]
         },
-        group_name: params[:group_name]
+        group_name: "MsSQL2019"  #params[:group_name]
       }
       )
 

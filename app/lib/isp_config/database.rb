@@ -37,8 +37,18 @@ module IspConfig
                          method: :POST,
                          body: database_hash
                        })
+      if response.code == "ok"
+        user.isp_databases.create({ isp_config_database_id: response["response"] }) 
 
-      user.isp_databases.create({ isp_config_database_id: response["response"] }) if response.code == "ok"
+        # @database = user.user_databases.create(
+        #   {
+        #     database_name: database_hash[:params][:database_name],
+        #     database_user: create_params[:database_username],
+        #     database_type: create_params[:database_type],
+        #     database_id: response.response
+        #   }
+        # )
+      end
 
       formatted_response(response, 'create')
     end
