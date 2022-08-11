@@ -1,3 +1,40 @@
+<%if current_spree_user.store_admin? || current_spree_user&.superadmin? %>
+<h1 class="contextual-title px-0 mb-0 col" style="margin-top: -2rem;">Orders</h1>
+<hr>
+
+<table class="table" style="width:100%">
+  <thead>
+    <tr>
+    <th><%= Spree::Order.human_attribute_name(:number) %></th>
+    <th><%= Spree.t(:date) %></th>
+    <th><%= Spree.t(:status) %></th>
+    <th><%= Spree.t(:payment_state) %></th>
+    <th><%= Spree.t(:total) %></th>
+    </tr>
+  </thead>
+  <tbody class="fsbase">
+  <% if TenantManager::TenantHelper.unscoped_query { current_spree_user.orders.order('created_at desc') }.present? %>
+  <% TenantManager::TenantHelper.unscoped_query { current_spree_user.orders.order('created_at desc') }.complete.each do |order| %>
+    <tr>
+      <td class="account-page-order-number"><%= link_to order.number, order_url(order), class: "text-primary" %></td>
+      <td class="account-page-order-date"><%=  order.completed_at&.to_date %></td>
+      <td class="account-page-order-status"><%= Spree.t("order_state.#{order.state}").titleize %></td>
+      <td class="account-page-order-payment-state"><%= Spree.t("payment_states.#{order.payment_state}").titleize if order.payment_state %></td>
+      <td class="account-page-text-primary account-page-order-total account-page-lead"><%= order.display_total %></td>
+      <td class="account-page-arrow-container" data-order-path="<%= spree.order_path(order) %>">
+        <%= link_to '', spree.order_path(order), { class: "account-page-order-arrow" } %>
+      </td>
+    </tr>
+  <% end %>
+  <% else %>
+  <tr>
+  <td><span class="table_row_label"><%= Spree.t(:you_have_no_orders_yet) %></span></td>
+  </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%else%>
 <div class="header mt-4">
   <div class="header-body">
     <div class="row align-items-center">
@@ -50,3 +87,4 @@
 </div>
 </div>
 
+<%end%>
