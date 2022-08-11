@@ -118,12 +118,13 @@ en:
     user_created: 'IspConfig user account created successfully'
     user_updated: 'IspConfig user account updated successfully'
     user_already_exists: 'IspConfig user account already exists for this user.'
-    something_went_wrong: "Something went wrong. Error: %{message}"
+    something_went_wrong: "Error: %{message}"
     user_does_not_exists: 'IspConfig user account does not exists.'
     host_zone: 
       create: 'DNS zone created successfully'
       delete: 'DNS zone deleted successfully'
       update: 'DNS zone updated successfully'
+      delete_alert: "Are you sure you want to delete this domain?"
     host_zone_record: 
       create: 'DNS Record Created Successfully'
       update: "DNS Record updated successfully"

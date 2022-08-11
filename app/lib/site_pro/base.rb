@@ -45,6 +45,25 @@ module SitePro
           data
         end
       end
+
+      def web_server_ip(user, server_type)
+        server = server_type == 'linux' ? 'web_linux' : 'web_windows'
+        web_ip_key = server_type == 'linux' ? 'ISPCONFIG_WEB_SERVER_IP' : 'SOLID_CP_WEB_SERVER_IP'
+        panel_id = panel_id_for(user, server)
+        config_value_for(panel_id, web_ip_key)
+      end
+    
+      def config_value_for(panel_id, key)
+        value = PanelConfig.where(panel_id: panel_id, key: key).last&.value
+    
+        return value if value.present?
+    
+        raise "Value for #{key} with Panel ID #{panel_id} does not exist."
+      end
+    
+      def panel_id_for(user,server)
+        user.panel_config[server] 
+      end
   
   
     end

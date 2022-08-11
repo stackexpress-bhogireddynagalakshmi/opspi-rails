@@ -28,19 +28,9 @@
             <th style="text-align:end">Actions</th>
           </tr>
       </thead>
-      <tbody class="fs-base">
+      <tbody class="fs-base" id="databases_list_table">
         <%current_spree_user.user_databases.each do |database|%>
-          <tr>
-            <td><%=database.database_name%></td>
-            <td><%=database.database_user%></td>
-            <td><%=database.database_type.try(:upcase)%></td>
-
-            <td class="pull-right">
-               <%= link_to configurations_admin_sites_isp_database_path(database.id), remote: true  do %>
-                  <%= render partial: '/spree/admin/shared/icons/gear' %>
-              <% end %>
-            </td>
-          </tr>
+           <%=render partial: 'spree/admin/sites/isp_databases/row', locals: {database: database}%>
         <%end%>
         </tbody>
       </table>
