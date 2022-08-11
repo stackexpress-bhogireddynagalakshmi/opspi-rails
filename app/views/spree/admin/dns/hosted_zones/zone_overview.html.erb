@@ -114,114 +114,129 @@
          <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
       </div>
       <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">
-        <%if (@current_user_website == 'linux') || (@current_user_website == 'windows')%>
-          <%if @current_user_website == 'linux'%>
-            <% @isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
-          <%end%>
-          <%if @current_user_website == 'windows'%>
-            <% @web_domain_id = "0" %>
-            <% @web_site_id = "0" %>
-            <% if @windows_websites.any? && @windows_websites.kind_of?(Array) %>
-              <%@windows_websites.reverse.each do |domain| %>
-                <% if domain[:web_site_id].to_i > 0 %>
-                  <% @web_site_id = domain[:web_site_id]%>
-                <%end%>
-                <% if domain[:web_site_id].to_i == 0 %>
-                  <% @web_domain_id = domain[:domain_id]%>
-                <% end %>
-              <%end%>
-            <%end%>
-          <%end%>
-          <%if @isp_web_id.to_i == 0 && @web_site_id.to_i == 0%>
-          <div class="card">
-            <div class="card-body">
-              <div class="mb-4">
-                  <%=label_tag :select_web_service %><br />
-                    <span style="margin-right: 15px;">
-                      <%=radio_button_tag :server_type, "windows" , false , class: 'form-check-input list-checkbox', required: true %>
-                      <%=label_tag :server_type, "Windows", :value => "windows" %>
-                    </span>
-                
-                    <%=radio_button_tag :server_type, "linux", false ,  class: 'form-check-input list-checkbox', required: true %>
-                    <%=label_tag :server_type, "Linux", :value => "linux"%>
-              </div>
-              <div>
-                <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], class: 'btn btn-primary lift', id: "server_type_id", onclick: "serverTypeWebDomain(this);" %>
-              </div>
-            </div>
-          </div>
-          <%end%>
-        <%else%>
-        <!-- seperate -->
-          
-        <%end%>
- 
-         <!-- web control -->
-          <%if (@current_user_website == 'linux') || (@current_user_website == 'windows') %>
-            <div class="row align-items-center">
-              <div class="col">
-                <h1>
-                    Web Controls
-                </h1>
-              </div>
-            </div>
+        <% if @current_user_website.nil? %>
+          <%if current_spree_user.have_linux_access? && current_spree_user.have_windows_access?%>
             <div class="card">
-              <div class="card-body" style="margin-bottom: -15px;">
-                <div class="align-items-center mb-4">
-                  <%if @current_user_website == 'windows'%>
-                  <% @web_domain_id = "0" %>
-                  <% @web_site_id = "0" %>
-                  <% @web_domain_name = nil %>
-                    <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
-                      <%@windows_websites.reverse.each do |domain| %>
-                        <% if domain[:web_site_id].to_i > 0 %>
-                          <% @web_site_id = domain[:web_site_id]%>
-                        <%end%>
-                        <% if domain[:web_site_id].to_i == 0 %>
-                          <% @web_domain_id = domain[:domain_id]%>
-                          <% @web_domain_name = domain[:domain_name]%>
-                        <% end %>
-                      <%end%>
-                    <%end%> 
-                  <%end%>
-
-                  <%if @current_user_website == 'linux'%>
-                    <% @isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
-                    <% @isp_ssl = @isp_websites.any? ? @isp_websites.first[:ssl_letsencrypt] : "0"%>
-                  <%end%>
-                  <div class="col-3">
-                    <div class="flex-container">
-                      <div class="flex-child">
-                        <label class="form-check-label">SSL</label>
-                      </div>
-                      <%if @current_user_website == 'windows' %>
-                        <div class="form-check form-switch flex-child">
-                          <%= check_box_tag 'win_ssl', @website_certificate_id.kind_of?(Array) ? 0: @website_certificate_id[:id], @website_certificate_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
-                        </div>
-                      <%end%>
-                      <% if @current_user_website == 'linux' %>
-                        <div class="form-check form-switch flex-child">
-                          <%= check_box_tag 'isp_ssl', @isp_ssl, (@isp_ssl == 'y') ? true : false, data_web_site_id: @isp_web_id, data_web_site: params[:zone_name], onclick: "updateIspSSL(this);", data_dns_id: params[:dns_id], class: "form-check-input" %>
-                        </div>
-                      <%end%>
-                    </div>
+                <div class="card-body">
+                  <div class="mb-4">
+                      <%=label_tag :select_web_service %><br />
+                        <span style="margin-right: 15px;">
+                          <%=radio_button_tag :server_type, "windows" , false , class: 'form-check-input list-checkbox', required: true %>
+                          <%=label_tag :server_type, "Windows", :value => "windows" %>
+                        </span>
+                    
+                        <%=radio_button_tag :server_type, "linux", false ,  class: 'form-check-input list-checkbox', required: true %>
+                        <%=label_tag :server_type, "Linux", :value => "linux"%>
                   </div>
-
-                  <div class="col mt-4">
-                    <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
-                      <%= hidden_field_tag "dns_domain_name", params[:zone_name] %>
-                      <%= hidden_field_tag "server_type", @current_user_website  %>
-                      <div>
-                        <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
-                      </div>
-                    <% end %>
+                  <div>
+                    <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], class: 'btn btn-primary lift', id: "server_type_id", onclick: "serverTypeWebDomain(this);" %>
                   </div>
-
                 </div>
               </div>
-            </div>
-          <%end%> 
+            <%elsif current_spree_user.have_linux_access?%>
+              <div class="card">
+                <div class="card-body">
+                  <div>
+                    <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], class: 'btn btn-primary lift', id: "server_type_id", onclick: "updateWebDomain(this);"  %>
+                  </div>
+                </div>
+              </div>
+            <%elsif current_spree_user.have_windows_access?%>
+              <div class="card">
+                <div class="card-body">
+                  <div>
+                    <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], class: 'btn btn-primary lift', id: "server_type_id", onclick: "updateWinWebDomain(this);"  %>
+                  </div>
+                </div>
+              </div>
+            <%end%>
+          <%end%>
+ 
+         <!-- web control -->
+          <% unless @current_user_website.nil? %>
+            <%if (@current_user_website == 'linux') || (@current_user_website == 'windows') %>
+              <div class="row align-items-center">
+                <div class="col">
+                  <h1>
+                      Web Controls
+                  </h1>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body" style="margin-bottom: -15px;">
+                  <div class="align-items-center mb-4">
+                    <%if @current_user_website == 'windows'%>
+                    <% @web_domain_id = "0" %>
+                    <% @web_site_id = "0" %>
+                    <% @web_domain_name = nil %>
+                      <% if @windows_websites.kind_of?(Array) && @windows_websites.any?%>
+                        <%@windows_websites.reverse.each do |domain| %>
+                          <% if domain[:web_site_id].to_i > 0 %>
+                            <% @web_site_id = domain[:web_site_id]%>
+                          <%end%>
+                          <% if domain[:web_site_id].to_i == 0 %>
+                            <% @web_domain_id = domain[:domain_id]%>
+                            <% @web_domain_name = domain[:domain_name]%>
+                          <% end %>
+                        <%end%>
+                      <%end%> 
+                    <%end%>
 
+                    <%if @current_user_website == 'linux'%>
+                      <% @isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
+                      <% @isp_ssl = @isp_websites.any? ? @isp_websites.first[:ssl_letsencrypt] : "0"%>
+                    <%end%>
+                    <div class="col-3">
+                      <div class="flex-container">
+                        <div class="flex-child">
+                          <label class="form-check-label">SSL</label>
+                        </div>
+                        <%if @current_user_website == 'windows' %>
+                          <div class="form-check form-switch flex-child">
+                            <%= check_box_tag 'win_ssl', @website_certificate_id.kind_of?(Array) ? 0: @website_certificate_id[:id], @website_certificate_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
+                          </div>
+                        <%end%>
+                        <% if @current_user_website == 'linux' %>
+                          <div class="form-check form-switch flex-child">
+                            <%= check_box_tag 'isp_ssl', @isp_ssl, (@isp_ssl == 'y') ? true : false, data_web_site_id: @isp_web_id, data_web_site: params[:zone_name], onclick: "updateIspSSL(this);", data_dns_id: params[:dns_id], class: "form-check-input" %>
+                          </div>
+                        <%end%>
+                      </div>
+                    </div>
+
+                    <div class="col mt-4">
+                      <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
+                        <%= hidden_field_tag "dns_domain_name", params[:zone_name] %>
+                        <%= hidden_field_tag "server_type", @current_user_website  %>
+                        <div>
+                          <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
+                        </div>
+                      <% end %>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            <%end%> 
+          <%end%>
+          <% unless @current_user_website.nil? %>
+            <div class="row align-items-center">
+                <div class="col">
+                  <h1>
+                      FTP Users
+                  </h1>
+                </div>
+                
+                <div class="col-auto">
+                  <%= button_link_to "Add New",
+                      "#",
+                      class: "btn btn-primary lift admin_new_ftp_user1",
+                        icon: 'add.svg',
+                        id: 'admin_new_ftp_user' %>
+                </div>
+            </div>
+            <%= render partial: 'spree/admin/dns/hosted_zones/ftp_index' %>
+         <%end%>
          <div class="row align-items-center">
             <div class="col">
                <h1> Databases </h1>
@@ -236,23 +251,6 @@
             </div>
          </div>
          <%= render partial: 'spree/admin/dns/hosted_zones/database_index' %>
-         <div class="row align-items-center">
-            <div class="col">
-               <h1>
-                  FTP Users
-               </h1>
-            </div>
-            <% if @windows_websites.any? || @isp_websites.any? %>
-            <div class="col-auto">
-               <%= button_link_to "Add New",
-                  "#",
-                  class: "btn btn-primary lift admin_new_ftp_user1",
-                    icon: 'add.svg',
-                    id: 'admin_new_ftp_user' %>
-            </div>
-           <%end%>
-         </div>
-         <%= render partial: 'spree/admin/dns/hosted_zones/ftp_index' %>
       </div>
    </div>
 </div>

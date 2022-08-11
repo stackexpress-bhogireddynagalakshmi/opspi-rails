@@ -35,6 +35,7 @@ module IspConfig
       if response.code == "ok"
         create_a_record(params)
         user.websites.create({ isp_config_website_id: response["response"] }) 
+        user.user_domains.where(domain: params[:domain], web_hosting_type: nil).update(web_hosting_type: 1)
       end
       formatted_response(response, 'create')
     end

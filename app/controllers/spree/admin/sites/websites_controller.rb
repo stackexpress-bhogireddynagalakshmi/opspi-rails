@@ -22,8 +22,8 @@ module Spree
         end
 
         def enable_webservice
-          response = windows_api.create(resource_params)
-          if response[:success]
+          @response = windows_api.create(resource_params)
+          if @response[:success]
             @response = create_ftp(params)
           end
           set_flash
