@@ -1,63 +1,3 @@
-<%if current_spree_user.store_admin? || current_spree_user&.superadmin?%>
-<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
-
-<% content_for :page_title do %>
- <div class="mt-2"></div>
-  <%= link_to Spree.t(:domain), spree.admin_domain_registrations_url %> /
-  <%= Spree.t(:new_domain) %>
-<% end %>
-<% content_for :page_actions do %>
-  <%= button_link_to "Checkout #{@order.try(:line_items).try(:count)}",
-    spree.cart_path,
-    class: "btn-success",
-      icon: '',
-      id: 'proceed_to_checkout' %>
-<% end %>
-
-
- <%=form_for "search_domian", url: "/admin/domain_registrations/new",html: {method: :get} do |f|%> 
-  <fieldset>
-    <div class="form-group field">
-      <label>Check upto 15 domian names</label>
-      <%=text_field_tag :domian_names,params[:domian_names],class: 'form-control',required: true,placeholder: 'test,test2,abc'%>
-    </div>
-          
-    <div class="form-group field">
-      <label >Most Popular Domain Extensions:</label>
-      <table class="table">
-       <%['com', 'net', 'org', 'online', 'live', 'me', 'news', 'co', 'biz', 'xyz'].in_groups_of(5) do |group|%>
-       <tr>
-          <%group.each do |tld|%>
-          <%checked = params[:tlds].include?(tld) rescue false%>
-          <td><%=check_box_tag 'tlds[]',tld,checked,class: 'mr-2'%> <%=tld%></td>
-          <%end%>
-        </tr>
-       <%end%>
-      </table>
-    </div>
-    <%=submit_tag 'Search for Domain Name(s)',class: 'btn btn-primary'%>
-
-  </fieldset>
-<%end%>
-
-  <%if @response && @response["status"]=='ERROR'%>
-    <div style="color: red;" class="mt-3"><%=@response["message"]%></</div> 
-  <%else%>
-   <h5 class="mt-4">Domain Availibility</h5>
-  <%= render partial: 'hosting/domain_list',locals: {domains: @response,order: @order} if @response.present?%>
-  <%end%>
-</div>
-
-
-<%if  @response && @response["status"]!='ERROR'%>
-<div class="col-12 px-0">
-  <h5>Other matching domains that are available</h5>
-  <%= render partial: 'hosting/domain_list',locals: {domains: @suggestions,order: @order} if @suggestions.present?%>
-</div>
-<%end%>
-
-<%else%>
-
 <div class="header mt-4">
   <div class="header-body">
     <div class="row align-items-center">
@@ -140,7 +80,6 @@
 </div>
 <%end%>
 
-<%end%>
 
 <script type="text/javascript">
   

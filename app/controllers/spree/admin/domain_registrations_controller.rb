@@ -24,13 +24,7 @@ module Spree
                          .order('spree_orders.created_at desc')
 
         @domains = @orders
-
-        if current_spree_user.store_admin? || current_spree_user&.superadmin?
-          render layout: "spree/layouts/admin"
-        else
-          render layout: "dashkit_admin_layout"
-        end
-                
+     
       end
 
       def new
@@ -49,11 +43,6 @@ module Spree
                                                                "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10", 'email' => current_spree_user.email)[:response]
         end
 
-        if current_spree_user.store_admin? || current_spree_user&.superadmin?
-          render layout: "spree/layouts/admin"
-        else
-          render layout: "dashkit_admin_layout"
-        end
       end
 
       def create
