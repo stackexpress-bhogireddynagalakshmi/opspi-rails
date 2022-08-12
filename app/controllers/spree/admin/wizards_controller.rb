@@ -17,6 +17,7 @@ module Spree
         @server_type = wizard_params[:server_type]
 
         if valid_domain?(@domain)
+          create_user_domain
           @tasks = []
           
           build_tasks
@@ -27,7 +28,6 @@ module Spree
           
           set_batch_jobs
 
-          create_user_domain
 
           redirect_to admin_wizard_path(id: @batch_jobs.keys.last)
         else
@@ -281,7 +281,8 @@ module Spree
               web_domain_id: "", # needed in later stage
               database_name: get_database_name(@domain),
               database_username: get_database_user_name(@domain),
-              database_password: SecureRandom.hex
+              database_password: SecureRandom.hex,
+              user_domain_id: @user_domain.id
             },
             depends_on: 2,
             sidekiq_job_id: nil
@@ -313,7 +314,7 @@ module Spree
       end
 
       def create_user_domain
-        current_spree_user.user_domains.create({domain: @domain})
+        @user_domain = current_spree_user.user_domains.create({domain: @domain})
       end
 
       def get_database_name(domain)
