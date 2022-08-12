@@ -39,6 +39,8 @@ module TaskManager
       def resource_params
         if windows?
           @data[:group_name] = 'MsSQL2019'
+          @data[:database_username] = database_username(task[:domain])
+          @data[:database_type] = 'ms_sql2019'
          return  @data
         else
           response  = user.isp_config.website.all
@@ -46,10 +48,20 @@ module TaskManager
             websites = response[:response].response
             website  = websites.detect {|x| x.domain == task[:domain]}
             @data[:web_domain_id] = website.domain_id
+            @data[:database_username] = database_username(task[:domain])
+            @data[:database_type] = 'my_sql'
             return @data
           else
             raise "Something went wrong: #{response[:error]}"
           end
+        end
+      end
+
+      def database_username(database_name)
+        if windows?
+          "c#{@user.solid_cp_id}_#{database_name}"
+        else
+          "c#{@user.isp_config_id}_#{database_name}"
         end
       end
 

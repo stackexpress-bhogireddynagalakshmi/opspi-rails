@@ -25,7 +25,7 @@ class UserDatabase < ApplicationRecord
     if my_sql?
       config_value_for(user.panel_config["database_mysql"], 'MYSQL_SERVER_PORT')
     elsif ms_sql2019?
-     config_value_for(user.panel_config["database_mysql"], 'MSSQL_SERVER_PORT')
+     config_value_for(user.panel_config["database_mssql"], 'MSSQL_SERVER_PORT')
     end    
   end
 
