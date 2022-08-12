@@ -39,3 +39,22 @@
 }
 
 }
+
+
+.close-button {
+    border: none;
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap
+}
+
+.x-button{
+   position: absolute;
+   right:10px; 
+}
