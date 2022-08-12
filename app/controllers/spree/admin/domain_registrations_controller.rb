@@ -24,15 +24,14 @@ module Spree
                          .order('spree_orders.created_at desc')
 
         @domains = @orders
-
-                
+     
       end
 
       def new
         @order = current_domain_order
         cookies.signed[:token] = @order.token if @order.present?
         @product = TenantManager::TenantHelper.unscoped_query { Spree::Product.domain.first }
-
+        @variant = @product.master
         if params[:domian_names].present?
           domains = params[:domian_names].split(",")
           tlds    = params[:tlds] || ["com"]
@@ -43,12 +42,13 @@ module Spree
           @suggestions = ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds,
                                                                "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10", 'email' => current_spree_user.email)[:response]
         end
+
       end
 
       def create
         TenantManager::TenantHelper.unscoped_query do
           @product = Spree::Product.domain.first
-
+          
           @order   = Spree::Order.find_by_id(params[:order_id]) || current_domain_order
           @variant = Spree::Variant.find(params[:variant_id])
 
@@ -72,6 +72,12 @@ module Spree
         if request.post?
           spree_current_user.update(user_params)
           flash.now[:success] = "ResellerClub credentials saved successfully"
+        end
+
+        if current_spree_user.store_admin? || current_spree_user&.superadmin?
+          render layout: "spree/layouts/admin"
+        else
+          render layout: "dashkit_admin_layout"
         end
       end
 

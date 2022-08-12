@@ -1,3 +1,45 @@
+<%if current_spree_user.store_admin? || current_spree_user&.superadmin? %>
+<%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
+
+<% content_for :page_title do %>
+ <div class="mt-2"></div>
+  <%= link_to Spree.t(:reseller_club), spree.admin_domain_registrations_url %> /
+  <%= Spree.t(:setup_reseller_club) %>
+<% end %>
+
+
+ <%=form_for spree_current_user, url: "/admin/domain_registrations/setup_reseller_club",html: {method: :post} do |f|%> 
+  <%f.object.build_user_key if f.object.user_key.blank? %>
+  <%=f.fields_for :user_key do |ff|%>
+  <fieldset>
+    <div class="form-group field">
+      <label>Account Id</label>
+      <%=ff.text_field :reseller_club_account_id, class: 'form-control',required: true%>
+    </div>
+
+    <div class="form-group field">
+      <label >API Key</label>
+      <%=ff.password_field :reseller_club_account_key_enc,value: '', class: 'form-control',required: true%>
+    </div>
+    <%end%>
+    
+     <div class="form-group field">
+      <label>Reseller Club Customer Id <span style="color: grey;margin-left: 10px;">(If you don't already have, We will create one)</span></label>
+      <%=f.text_field :reseller_club_customer_id, class: 'form-control'%>
+    </div>
+
+    <div class="form-group field">
+      <label>Reseller Club  Contact Id,<span  style="color: grey;margin-left: 10px;">(If you don't already have, We will create one)</span></label>
+      <%=f.text_field :reseller_club_contact_id, class: 'form-control'%>
+    </div>
+          
+    <%=submit_tag 'Save',class: 'btn btn-primary'%>
+
+  </fieldset>
+<%end%>
+
+<% else %>
+
 <%= render partial: 'spree/admin/shared/error_messages', locals: { target: @product } %>
 
 <div class="header mt-4">
@@ -51,6 +93,7 @@
   </fieldset>
 <%end%>
 
+<% end %>
 
 <script type="text/javascript">
   $(document).ready(function (argument) {
