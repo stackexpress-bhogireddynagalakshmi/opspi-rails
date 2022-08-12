@@ -1,5 +1,5 @@
 module Spree
-    module FrontEndDecorator
+    module FrontendHelperDecorator
         def class_for(flash_type)
             {
               success: 'success',
@@ -28,7 +28,7 @@ module Spree
     end
   end
   
-  if ::Spree::FrontendHelper.included_modules.exclude?(Spree::FrontEndDecorator)
-    ::Spree::FrontendHelper.prepend Spree::FrontEndDecorator
+  if ::Spree::FrontendHelper.included_modules.exclude?(Spree::FrontendHelperDecorator)
+    ::Spree::FrontendHelper.prepend Spree::FrontendHelperDecorator
   end
   
