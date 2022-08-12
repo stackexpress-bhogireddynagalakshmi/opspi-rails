@@ -38,7 +38,7 @@ module IspConfig
         user_domain = user.user_domains.where(domain: params[:domain], web_hosting_type: nil).last
 
         user_domain.update(web_hosting_type: 1)
-        user.user_websites.create({user_domain_id: user_domain.try(:id), panel_id: user_domain.try(:panel_id), website_id: response["response"]})
+        user.user_websites.create({user_domain_id: user_domain.try(:id), panel_id: user.panel_config["web_linux"], website_id: response["response"]})
       end
       formatted_response(response, 'create')
     end

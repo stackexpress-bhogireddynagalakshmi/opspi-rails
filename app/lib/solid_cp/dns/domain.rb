@@ -188,7 +188,7 @@ module SolidCp
           create_a_record(params)
           user_domain = user.user_domains.where(domain: sanitze_domain(params[:domain_name]), web_hosting_type: nil).last
           user_domain.update(web_hosting_type: 0)
-          user.user_websites.create({user_domain_id: user_domain.try(:id), panel_id: user_domain.try("panel_id")})
+          user.user_websites.create({user_domain_id: user_domain.try(:id), panel_id: user.panel_config["web_windows"]})
           { success: true, message: 'Domain created successfully', response: response }
         else
           { success: false, message: 'Something went wrong. Please try again.', response: response }
