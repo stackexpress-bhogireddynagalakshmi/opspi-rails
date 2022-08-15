@@ -24,7 +24,21 @@
                      <a class="nav-link" id="mail-tab" data-bs-toggle="tab" href="#mail" role="tab" aria-controls="mail" aria-selected="false">Mail</a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" id="website-tab" data-bs-toggle="tab" href="#website" role="tab" aria-controls="website" aria-selected="false">Website</a>
+                     <a class="nav-link" id="website-tab" data-bs-toggle="tab" href="#website" role="tab" aria-controls="website" aria-selected="false">Website
+                     <% @isp_web_id = @isp_websites.present? ? @isp_websites.first.domain_id : "0" %>
+                     <% if @windows_websites.kind_of?(Array) && @windows_websites.present?%>
+                        <%@windows_websites.reverse.each do |domain| %>
+                          <% if domain[:web_site_id].to_i > 0 %>
+                            <% @web_site_id = domain[:web_site_id]%>
+                          <%end%>
+                        <%end%>
+                     <%end%> 
+                     <%if @plan_type == "linux" && @isp_web_id.to_i > 0%>
+                     <span class="badge bg-success-soft">Linux</span>
+                     <%elsif @plan_type == "windows" && @web_site_id.to_i > 0%>
+                     <span class="badge bg-success-soft">Window</span>
+                     <%end%>
+                     </a>
                   </li>
                </ul>
             </div>
