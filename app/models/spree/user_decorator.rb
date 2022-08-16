@@ -29,7 +29,6 @@ module Spree
       base.has_many :protected_folder_users
       base.has_many :isp_databases
       base.has_many :user_domains
-      base.has_many :user_websites
       base.has_many :user_databases
 
       base.after_commit :after_create_callbacks, on: [:create]

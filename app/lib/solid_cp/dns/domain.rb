@@ -186,7 +186,15 @@ module SolidCp
 
         if response.success? && response.body[:add_domain_with_provisioning_response][:add_domain_with_provisioning_result].to_i.positive?
           create_a_record(params)
-          user.user_domains.where(domain: sanitze_domain(params[:domain_name]), web_hosting_type: nil).update(web_hosting_type: 0)
+          user_domain = user.user_domains.where(domain: sanitze_domain(params[:domain_name]), web_hosting_type: nil).last
+          user_domain.update(web_hosting_type: 0)
+
+          all_domains = user.solid_cp.web_domain.all.body
+          website_id = all_domains[:get_domains_response][:get_domains_result][:domain_info].detect{ |x| x[:web_site_name] == sanitze_domain(params[:domain_name]) }[:web_site_id] rescue nil
+
+
+          user_domain.create_user_website({user_domain_id: user_domain.try(:id), hosting_type: 1, remote_website_id: website_id})
+
           { success: true, message: 'Domain created successfully', response: response }
         else
           { success: false, message: 'Something went wrong. Please try again.', response: response }
