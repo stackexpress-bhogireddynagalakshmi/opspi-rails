@@ -79,8 +79,9 @@ module Spree
             web_domain_id.compact
           else
             windows_resource = current_spree_user.solid_cp.website.all || [] 
-            windows_resources = windows_resource.body[:get_web_sites_response][:get_web_sites_result][:web_site] rescue []
-            web_domain_id = windows_resources.collect{|x| x[:id] if x[:name] == site_builder_params[:dns_domain_name]}.compact.first
+            @windows_resources = windows_resource.body[:get_web_sites_response][:get_web_sites_result][:web_site] rescue []
+            @windows_resources = [@windows_resources] if @windows_resources.is_a?(Hash)
+            web_domain_id = @windows_resources.collect{|x| x[:id] if x[:name] == site_builder_params[:dns_domain_name]}.compact.first
           end
         end
 
