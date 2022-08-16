@@ -77,7 +77,8 @@ module SolidCp
             database_name: params[:database_name],
             database_user: params[:database_username],
             database_type: params[:database_type],
-            database_id: response.body[:add_sql_database_response][:add_sql_database_result]
+            database_id: response.body[:add_sql_database_response][:add_sql_database_result],
+            user_domain_id: params[:user_domain_id]
           }
         )
         user_response

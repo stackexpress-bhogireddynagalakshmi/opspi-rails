@@ -78,7 +78,7 @@ module Spree
         def resource_params
           if windows?
             win_params = params.require("database").permit(:database_name, :database_password, :database_type)
-            win_params = win_params.merge({ database_username: database_username(win_params[:database_name]) })
+            win_params = win_params.merge({ database_username: database_username(win_params[:database_name]), user_domain_id: user_domain_id })
           else
             isp_database_params
           end
@@ -86,7 +86,7 @@ module Spree
 
         def isp_database_params
           lin_params = params.require("database").permit(:web_domain_id, :database_name, :database_password, :database_type)
-          lin_params = lin_params.merge({ database_username: database_username(lin_params[:database_name]) })
+          lin_params = lin_params.merge({ database_username: database_username(lin_params[:database_name]), user_domain_id: user_domain_id })
         end
 
         def resource_index_path
@@ -130,6 +130,10 @@ module Spree
           else
             data
           end
+        end
+
+        def user_domain_id
+          current_spree_user.user_domains.collect{|x| x.id if x.domain == params[:database][:domain_name] }.compact.last
         end
 
         def database_username(database_name)

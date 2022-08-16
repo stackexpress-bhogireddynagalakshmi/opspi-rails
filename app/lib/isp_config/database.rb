@@ -45,7 +45,8 @@ module IspConfig
             database_name: create_params[:database_name],
             database_user: create_params[:database_username],
             database_type: create_params[:database_type],
-            database_id: response.response
+            database_id: response.response,
+            user_domain_id: create_params[:user_domain_id]
           }
         )
       end
@@ -68,8 +69,20 @@ module IspConfig
                          method: :POST,
                          body: body_params
                        })
-
-      formatted_response(response, 'create')
+      if  response.code == "ok"
+        {
+          success: true,
+          message: I18n.t("isp_config.database.create"),
+          response: response
+        }
+      else
+        {
+          success: false,
+          message: I18n.t('isp_config.something_went_wrong', message: error_message(response.message)),
+          response: response
+        }
+      end
+      # formatted_response(response, 'create')
     end
 
     def update_database_user_password(database_user_id, params)
@@ -157,6 +170,10 @@ module IspConfig
           response: response
         }
       end
+    end
+
+    def error_message(error)
+      error.sub("database_user_error_regex", "Please give database name without any symbols or spaces")
     end
 
     def database_hash(database_params)

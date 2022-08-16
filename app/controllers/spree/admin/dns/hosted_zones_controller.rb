@@ -144,6 +144,12 @@ module Spree
           end
           #### 
 
+          #### database
+          user_domain_id = current_spree_user.user_domains.collect{|x| x.id if x.domain == @zone_name}.compact.last
+          @user_databases = current_spree_user.user_databases.where(user_domain_id: user_domain_id)
+          @database_count = @user_databases.present? ? @user_databases.size : 0
+
+          ############
           @win_resources = begin
             @response2 = current_spree_user.solid_cp.sql_server.all || []
             convert_to_mash(@response2.body[:get_sql_databases_response][:get_sql_databases_result][:sql_database])
@@ -180,15 +186,6 @@ module Spree
               end
             end
 
-            if @resources.present? && @resources_win.present?
-              @database_count = @resources.size + @resources_win.size
-            elsif @resources.present?
-              @database_count = @resources.size
-            elsif @resources_win.present?
-              @database_count = @resources_win.size
-            else
-              @database_count = 0
-            end
 
             if @ftp_user1.present? && @win_users.present?
               @ftp_count = @ftp_user1.size + @win_users.compact.size 

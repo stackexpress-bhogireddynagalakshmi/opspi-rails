@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_06_032035) do
+ActiveRecord::Schema.define(version: 2022_08_12_070024) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -1588,13 +1588,13 @@ ActiveRecord::Schema.define(version: 2022_08_06_032035) do
     t.integer "database_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "user_domain_id"
   end
 
   create_table "user_domains", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_id"
     t.string "domain"
     t.integer "web_hosting_type"
-    t.integer "hosted_zone_id"
     t.boolean "success"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
