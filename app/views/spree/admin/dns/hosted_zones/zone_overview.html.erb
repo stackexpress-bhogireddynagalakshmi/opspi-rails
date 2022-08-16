@@ -25,10 +25,10 @@
                   </li>
                   <li class="nav-item">
                      <a class="nav-link" id="website-tab" data-bs-toggle="tab" href="#website" role="tab" aria-controls="website" aria-selected="false">Website
-                     <%if @current_user_website == "linux"%>
-                     <span class="badge bg-success-soft">Linux</span>
-                     <%elsif @current_user_website == "windows"%>
-                     <span class="badge bg-success-soft">Window</span>
+                     <%if @current_user_website.nil?%>
+                     <span class="badge bg-secondary-soft">No Website</span>
+                     <%else%>
+                     <span class="badge bg-success-soft"><%= @current_user_website%></span>
                      <%end%>
                      </a>
                   </li>
