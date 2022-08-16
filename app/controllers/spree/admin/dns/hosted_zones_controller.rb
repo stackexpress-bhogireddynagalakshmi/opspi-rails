@@ -96,7 +96,6 @@ module Spree
           @hosted_zone_records_reponse = host_zone_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
           @hosted_zone_records = @hosted_zone_records_reponse[:response][:response]
 
-          @plan_type = current_spree_user.user_domains.where(domain: @zone_name).first.web_hosting_type
 
           if @hosted_zone_records.present?
             @hosted_zone_records_count = @hosted_zone_records.size
