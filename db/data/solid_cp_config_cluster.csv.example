@@ -1,0 +1,9 @@
+key,value,cluster_id
+SOLID_CP_USERNAME,admin,2
+SOLID_CP_PASSWORD,password,2
+SOLID_CP_REMOTE_URL,http://jodocppanel.infiops.com:9002/,2
+SOLID_CP_USER_URL,http://jodocppanel.infiops.com:9001/,2
+SOLID_CP_ENABLED,TRUE,2
+MSSQL_SERVER_HOSTNAME,http://jodocppanel.infiops.com:9001/,2
+MSSQL_SERVER_PORT,1433,2
+SOLID_CP_WEB_SERVER_IP,173.0.140.28,2
