@@ -18,7 +18,7 @@ class BatchJobsExecuter < ApplicationJob
       status.update(blocked: false)
     else
       Rails.logger.info { "----------- Putting back in Queue #{service_class.name}--------" }
-      error = 'Parent Job not yet completed'
+      error = "Parent Job not yet completed for #{service_class.name}"
       status.update(blocked: true, parent_task_id: parent_task_id, error_message: error)
 
       raise StandardError, error
