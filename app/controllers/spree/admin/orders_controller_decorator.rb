@@ -5,8 +5,13 @@ module Spree
     module OrdersControllerDecorator
       def index
         super
+        
         if TenantManager::TenantHelper.current_admin_tenant? && current_spree_user.store_admin?
-          @orders = @orders.where(account_id: current_spree_user.account_id) # rescue []
+          if current_spree_user.account_id != TenantManager::TenantHelper.admin_tenant_id
+            @orders = @orders.where(account_id: current_spree_user.account_id)
+          else
+            @orders = @orders.where(account_id: -1)
+          end
         elsif current_spree_user.end_user?
           @orders = @orders.where(user_id: current_spree_user.id)
         elsif current_spree_user.store_admin?
