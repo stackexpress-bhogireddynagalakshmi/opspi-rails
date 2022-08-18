@@ -4,7 +4,7 @@
   <td><%=database.database_type.try(:upcase)%></td>
 
   <td class="pull-right">
-     <%= link_to configurations_admin_sites_isp_database_path(database.id), remote: true  do %>
+     <%= link_to configurations_admin_sites_isp_database_path(database.id), class: 'btn btn-outline-primary btn-size', style:"margin-right:5px", remote: true  do %>
         <%= render partial: '/spree/admin/shared/icons/gear' %>
     <% end %>
   </td>

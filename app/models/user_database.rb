@@ -4,13 +4,17 @@ class UserDatabase < ApplicationRecord
   belongs_to :user, class_name: 'Spree::User'
 
   validates :database_name, presence: true
-  validates :database_user, presence: true
+  # validates :database_user, presence: true
 
   enum database_type: {
     my_sql: 1,
     ms_sql2019: 2
   }
 
+  enum status: {
+    failed: 0,
+    success: 1
+  }
 
   def database_host
     if my_sql?
