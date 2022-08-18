@@ -50,8 +50,6 @@ module Spree
           prepare_ftp_account_task
         end
 
-        ## && @server_type != 'windows'
-
         if wizard_params[:enable_db_service] == 'y' 
           prepare_database_task
         end
@@ -59,7 +57,9 @@ module Spree
         if wizard_params[:enable_mail_service] == 'y'
           prepare_mail_domain_task
 
-          prepare_mail_box_task
+          if wizard_params[:emails].present?
+            prepare_mail_box_task
+          end
         end
 
         @tasks = @tasks.flatten
