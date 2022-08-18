@@ -15,9 +15,12 @@ module Spree
         respond_to do |format|
           format.html {
             flash[:success] = Spree.t(:logged_in_succesfully)
-            redirect_to admin_dashboard_path
-          
-            # redirect_back_or_default(after_sign_in_path_for(spree_current_user))
+            cart = spree_current_user.orders.collect{|x| x.state == "address"}.last
+            if cart
+              redirect_back_or_default(after_sign_in_path_for(spree_current_user))
+            else
+              redirect_to admin_dashboard_path
+            end
           }
           format.js {
             user = resource.record
