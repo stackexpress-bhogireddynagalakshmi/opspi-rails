@@ -225,22 +225,9 @@ class OrdersPdf
 
   def company_address(pdf)
     pdf.bounding_box([0, pdf.cursor], width: bounds.width,:height=>50) do
-      if@current_spree_user.superadmin?
-        pdf.text "APYL Inc.", size: 12, align: :right, style: :bold
-        pdf.text "1516 E Hillcrest Street, Suite 103", size: 10, align: :right
-        pdf.text "Orlando, FL 32803", size: 10, align: :right
-      elsif @current_spree_user.store_admin?
-        admin = Spree::User.select(&:superadmin?).first
-        pdf.text "#{admin.account.orgainization_name}", size: 12, align: :right, style: :bold
-        unless admin.addresses.first.nil?
-          pdf.text "#{admin.addresses.first.address1}, #{admin.addresses.first.address2}", size: 10, align: :right
-          pdf.text "#{admin.addresses.first.city}, #{admin.addresses.first.state.abbr} #{admin.addresses.first.zipcode}", size: 10, align: :right
-        end
-      else
-        pdf.text "#{@current_spree_user.account.orgainization_name}", size: 12, align: :right, style: :bold
-        pdf.text "#{@current_spree_user.addresses.first.address1}, #{@current_spree_user.addresses.first.address2}", size: 10, align: :right
-        pdf.text "#{@current_spree_user.addresses.first.city}, #{@current_spree_user.addresses.first.state.abbr} #{@current_spree_user.addresses.first.zipcode}", size: 10, align: :right
-      end
+      pdf.text "#{@current_spree_user.account.orgainization_name}", size: 12, align: :right, style: :bold
+      pdf.text "#{@current_spree_user.addresses.first.address1}, #{@current_spree_user.addresses.first.address2}", size: 10, align: :right
+      pdf.text "#{@current_spree_user.addresses.first.city}, #{@current_spree_user.addresses.first.state.abbr} #{@current_spree_user.addresses.first.zipcode}", size: 10, align: :right
     end
   end
 
