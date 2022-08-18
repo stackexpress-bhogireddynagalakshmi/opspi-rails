@@ -21,6 +21,7 @@ class OrdersPdf
     @invoice = TenantManager::TenantHelper.unscoped_query{current_spree_user.invoices.find_by(order_id: @order.id)}
     @file_path = file_path
     @store = store
+    @current_spree_user = current_spree_user
   end
 
   def call
@@ -224,9 +225,9 @@ class OrdersPdf
 
   def company_address(pdf)
     pdf.bounding_box([0, pdf.cursor], width: bounds.width,:height=>50) do
-      pdf.text "APYL Inc.", size: 12, align: :right, style: :bold
-      pdf.text "1516 E Hillcrest Street, Suite 103", size: 10, align: :right
-      pdf.text "Orlando, FL 32803", size: 10, align: :right
+      pdf.text "#{@current_spree_user.account.orgainization_name}", size: 12, align: :right, style: :bold
+      pdf.text "#{@current_spree_user.addresses.first.address1}, #{@current_spree_user.addresses.first.address2}", size: 10, align: :right
+      pdf.text "#{@current_spree_user.addresses.first.city}, #{@current_spree_user.addresses.first.state.abbr} #{@current_spree_user.addresses.first.zipcode}", size: 10, align: :right
     end
   end
 
