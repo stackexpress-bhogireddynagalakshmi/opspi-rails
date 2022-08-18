@@ -20,7 +20,7 @@ module Spree
       @current_store = user.account.spree_store
       @confirmation_url = spree.confirmation_url(confirmation_token: token, host: @current_store.url)
       @email = user.email
-      mail to: user.email, from: @current_store.mail_from_address, subject: @current_store.name + ' ' + I18n.t(:subject, scope: [:devise, :mailer, :confirmation_instructions]), store_url: @current_store.url
+      mail to: user.email, from: @current_store.mail_from_address, subject: @current_store.name + ' - Confirmation Instructions for Control Panel ' + I18n.t(:subject, scope: [:devise, :mailer, :confirmation_instructions]), store_url: @current_store.url
     end  
     
   end
