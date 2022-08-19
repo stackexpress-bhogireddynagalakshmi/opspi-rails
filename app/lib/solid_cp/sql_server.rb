@@ -55,8 +55,13 @@ module SolidCp
     # <groupName>string</groupName>
 
     def add_sql_database(params = {})
-      # database_user = add_sql_user(params)
-      # return { success: false, message: 'Something went wrong. Please try again.'} unless database_user[:success]
+      database_user = user.user_databases.create(
+        {
+          database_name: params[:database_name],
+          database_type: params[:database_type],
+          user_domain_id: params[:user_domain_id]
+        }
+      )
       response = super(message: {
         item: {
           "Name" => params[:database_name],
@@ -71,18 +76,12 @@ module SolidCp
       error = SolidCp::ErrorCodes.get_by_code(code)
 
       if response.success? && code.positive?
-        user_response = add_sql_user(params)
-        user.user_databases.create(
-          {
-            database_name: params[:database_name],
-            database_user: params[:database_username],
-            database_type: params[:database_type],
-            database_id: response.body[:add_sql_database_response][:add_sql_database_result],
-            user_domain_id: params[:user_domain_id]
-          }
-        )
+        user_response = add_sql_user(params.merge(database_username: database_user.id))
+        database_user.update(database_user: formatted_database_name(database_user.id),database_id: response.body[:add_sql_database_response][:add_sql_database_result], status: 1)
+        
         user_response
       else
+        database_user.update(database_user: formatted_database_name(database_user.id),status: 0)
         { success: false, message: I18n.t(:panel_error, msg: error[:msg]), response: response }
       end
     rescue StandardError => e
@@ -95,7 +94,7 @@ module SolidCp
         item: {
           "Databases" => { "string" => [params[:database_name]] },
           "PackageId" => user.packages.first.try(:solid_cp_package_id),
-          "Name" => params[:database_username],
+          "Name" => formatted_database_name(params[:database_username]),
           "Password" => params[:database_password]
         },
         group_name: "MsSQL2019"  #params[:group_name]
@@ -126,5 +125,9 @@ module SolidCp
       end
     end
     alias destroy delete_sql_database
+
+    def formatted_database_name(database_username)
+      "du_#{database_username.to_s.rjust(8, padstr='0')}"
+    end
   end
 end
