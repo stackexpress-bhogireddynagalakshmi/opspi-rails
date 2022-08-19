@@ -147,7 +147,7 @@ module Spree
 
           #### database
           user_domain_id = current_spree_user.user_domains.collect{|x| x.id if x.domain == @zone_name}.compact.last
-          @user_databases = current_spree_user.user_databases.where(user_domain_id: user_domain_id)
+          @user_databases = current_spree_user.user_databases.where(user_domain_id: user_domain_id, status: "success")
           @database_count = @user_databases.present? ? @user_databases.size : 0
 
           ############
