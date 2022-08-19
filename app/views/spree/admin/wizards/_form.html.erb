@@ -91,7 +91,7 @@
           <div class="form-group field">
             <label class="form-label">Email</label>
             <div class="input-group">
-              <%= text_field_tag 'wizard[emails][]', '', class: 'form-control', placeholder: "Enter Email", "data-input-count" => 0 %>
+              <%= text_field_tag 'wizard[emails][]', '', class: 'form-control', placeholder: "Enter Email", "data-input-count" => 0, id: 'wizard_mailbox_one' %>
               <div class="input-group-text">
                 <span id="selected_domain_button">@</span>
               </div>
@@ -122,11 +122,16 @@
 
   $(document).ready(function (argument) {
     var mailService = document.getElementById("wizard_mail_service");
+
     var div = document.getElementById("wizard_mail"); 
     if (mailService.value == 'n') {
       div.style.display = "none"; 
+      $('#wizard_mailbox_one').removeAttr('required');
+
     } else{
       div.style.display = "block"; 
+      $('#wizard_mailbox_one').attr('required', 'required');
+
     }
 
     var domain = $('#wizard_domain').val();
@@ -153,10 +158,12 @@
       element.value = 'y';
       if (id == 'wizard_mail_service') {
         div.style.display = "block"; 
+        $('#wizard_mailbox_one').attr('required', 'required');
       }
     } else {
       element.value = 'n';
       div.style.display = "none"; 
+      $('#wizard_mailbox_one').removeAttr('required');
     }
   }
 
@@ -168,7 +175,7 @@
     var html = '';
     html += '<div id="inputUsernameField">';
     html += '<div class="input-group mb-3">';
-    html += '<input type="text" name="wizard[emails][]" class="form-control m-input" placeholder="Enter Email" autocomplete="off" "data-input-count" = '+inputCount+'>';
+    html += '<input type="text" name="wizard[emails][]" required="required" class="form-control m-input" placeholder="Enter Email" autocomplete="off" "data-input-count" = '+inputCount+'>';
     
     html += '<div class="input-group-text">';
     html += '<span id="selected_domain_button">@'+domain+'</span>';
