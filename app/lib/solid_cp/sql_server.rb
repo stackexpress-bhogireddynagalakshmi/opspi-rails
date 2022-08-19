@@ -33,10 +33,34 @@ module SolidCp
     end
     alias find get_sql_database
 
+    def get_sql_user
+      response = super(message: { itemId: id })
+    end
+    alias find_db_user get_sql_user
+
     def get_sql_users
       response = super(message: { package_id: user.packages.first.try(:solid_cp_package_id) })
     end
+    alias all_db_users get_sql_users
 
+    def update_sql_user(database_user_id, params)
+      response = super(message: {
+        item: {
+          "Databases" => { "string" => [params[:database_name]] },
+          "Password" => params[:database_password]
+        }
+      }
+      )
+      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
+      error = SolidCp::ErrorCodes.get_by_code(code)
+
+      if response.success? && code.positive?
+        { success: true, message: I18n.t(:'windows.database.create'), response: response }
+      else
+        { success: false, message: I18n.t(:panel_error, msg: error[:msg]), response: response }
+      end
+    end
+    alias update_database_user_password update_sql_user
     # <item>
     #   <DataName>string</DataName> name
     #   <DataPath>string</DataPath>

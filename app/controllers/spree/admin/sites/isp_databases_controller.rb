@@ -57,11 +57,15 @@ module Spree
 
         def reset_password
           @database = current_spree_user.user_databases.find(params[:id])
-          @response = database_api.find(@database.database_id)
-          if @response[:success]
-            db_user_id = @response[:response].response.database_user_id
-            @password = SecureRandom.hex
-            @response = database_api.reset_password(db_user_id, { database_password: @password })
+          if @database.database_type == 'my_sql'
+            @response = database_api.find(@database.database_id)
+            if @response[:success]
+              db_user_id = @response[:response].response.database_user_id
+              @password = SecureRandom.hex
+              @response = database_api.reset_password(db_user_id, { database_password: @password })
+            end
+          else
+            @response = database_api.find(@database.database_id)
           end
         end
 

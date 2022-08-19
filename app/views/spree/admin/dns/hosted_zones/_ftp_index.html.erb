@@ -43,10 +43,11 @@
                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                         </svg>
                         <% end %>
-                        <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
+                        <%=link_to reset_password_admin_sites_ftp_users_path(email: ftp_user.username, type: 'create_ftp_account', server_type: @current_user_website, div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
                         <%= render partial: '/spree/admin/shared/icons/reset_password' %>
                         <% end %>
-                        <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user1_#{ftp_user.ftp_user_id}_pwd_text", email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
+
+                        <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", server_type: @current_user_website, email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
                         <%= render partial: '/spree/admin/shared/icons/gear' %>
                         <% end %>
                       </span>
@@ -90,7 +91,7 @@
                             <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                         </svg>
                         <% end %>
-                      <%= link_to 'javascript:void(0);', data: {username: ftp_account.name, password: ftp_account.password, host: ENV['SOLID_CP_WEB_SERVER_IP'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_account.id}_pwd_text", email: ftp_account.name, id: ftp_account.id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
+                      <%= link_to 'javascript:void(0);', data: {username: ftp_account.name, password: ftp_account.password, host: ENV['FTP_SERVER_WINDOWS_HOSTNAME'], port: ENV['FTP_SERVER_WINDOWS_PORT'], pwd_div_id: "ftp_user_#{ftp_account.id}_pwd_text", server_type: @current_user_website,  email: ftp_account.name, id: ftp_account.id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
                         <%= render partial: '/spree/admin/shared/icons/gear' %>
                       <% end %>
                       </span>
@@ -203,6 +204,7 @@
     var port = $(this).data('port');
     var email = $(this).data('email');
     var id = $(this).data('id');
+    var serverType = $(this).data('server-type');
     $('#exampleModalLabel1').html("FTP Configuration Details");
     $('#exampleModal1 .modal-body').html(`
         <table>
@@ -223,14 +225,19 @@
             <tr>
             <td>Reset Password</td>
             <td>
+<<<<<<< HEAD
                 <a href="/admin/sites/ftp_users/reset_password?email=${email}&type=create_ftp_account&div_class=ftp_user1_${id}" data-remote="true">Reset Password</a>
                 <div class='password-text1' id="ftp_user1_${id}_pwd_text"></div>
+=======
+                <a href="/admin/sites/ftp_users/reset_password?email=${email}&type=create_ftp_account&div_class=ftp_user_${id}&server_type=${serverType}" data-remote="true">Reset Pasword</a>
+                <div class='password-text'></div>
+>>>>>>> initial commit
             </td>
             </tr>
         </tbody>
         </table>
     `);
-    $('#modal-save-button').hide();
+    // $('#modal-save-button').hide();
     $('#exampleModal1').modal('show');
     });
 

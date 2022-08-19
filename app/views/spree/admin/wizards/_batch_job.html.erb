@@ -25,7 +25,7 @@ Wizard status for <%=batch_job.first[:domain]%>
             <td> <%=get_sidekiq_job_status(job)[:message]&.html_safe%></td>
             <th class="password">
               <% if job[:actions] == true %>
-                <%=link_to 'Reset Password', reset_password_admin_wizards_path(email: get_data_for_task(job), type: job[:type], div_class: job[:sidekiq_job_id], source: 'wizard'), remote: true, class: "#{status.to_s.include?('completed') ? '' : 'd-none'}"%>
+                <%=link_to 'Reset Password', reset_password_admin_wizards_path(email: get_data_for_task(job), type: job[:type], div_class: job[:sidekiq_job_id], server_type: job[:data][:server_type], source: 'wizard'), remote: true, class: "#{status.to_s.include?('completed') ? '' : 'd-none'}"%>
                 <div class='password-text'></div>
               <%end%>
             </th>
