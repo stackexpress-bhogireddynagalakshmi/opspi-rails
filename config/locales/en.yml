@@ -40,6 +40,7 @@ en:
     products: 'Services'
     hosting_controls: Hosting Control
     opsbot: OpsBot
+    invalid_tenant: "You don't have an active plan yet"
     mail: Mail
     ci_cd: CI/CD
     dns: DNS
