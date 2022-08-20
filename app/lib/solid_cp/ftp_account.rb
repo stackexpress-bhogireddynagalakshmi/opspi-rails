@@ -56,10 +56,10 @@ module SolidCp
       if response.success? && code > 0
         { success: true, message: 'Ftp Account created successfully', response: response }
       else
-        { success: false, message: "Something went wrong. #{error[:msg]}.", response: response }
+        { success: false, message: error[:msg], response: response }
       end
     rescue => e
-      { success: false, message: "Something went wrong. #{e.message}.", response: response }
+      { success: false, message: e.message, response: response }
     end
     alias create add_ftp_account
 
@@ -83,10 +83,10 @@ module SolidCp
       if response.success?
         { success: true, message: 'Ftp User updated successfully', response: response }
       else
-        { success: false, message: "Something went wrong. #{error[:msg]}.", response: response }
+        { success: false, message:  error[:msg], response: response }
       end
      rescue => e
-      { success: false, message: "Something went wrong. #{e.message}.", response: response }
+      { success: false, message: e.message, response: response }
     end
     alias update update_ftp_account
 
