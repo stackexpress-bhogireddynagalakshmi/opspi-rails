@@ -8,11 +8,16 @@
         
       </div>
       <div class="col-auto">
+        <%= button_link_to Spree.t(:refresh),
+        admin_wizard_path(params[:id]),
+        class: "btn btn-light lift",
+         
+          id: 'reload' %>
       <%= button_link_to Spree.t(:start_wizard),
-    new_admin_wizard_path,
-    class: "btn btn-primary lift",
-      icon: 'add.svg',
-      id: 'admin_wizard' %>
+        new_admin_wizard_path,
+        class: "btn btn-primary lift",
+          icon: 'add.svg',
+          id: 'admin_wizard' %>
       </div>
     </div>
 
