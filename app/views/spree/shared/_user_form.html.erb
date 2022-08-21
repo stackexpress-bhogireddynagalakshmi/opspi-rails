@@ -68,7 +68,7 @@ img{
                 Business Name
               </label>
 
-              <%= f.text_field :business_name, class: 'form-control',required:true,placeholder: "Business Name" %>
+              <%= f.text_field :business_name, class: 'form-control',required:true,placeholder: "Business Name" , id:"text_business_name"%>
             </div>
 
 
@@ -81,7 +81,7 @@ img{
                     <span class="input-group-text" id="basic-addon3">https://</span>
                 </div>
 
-                <%= f.text_field :subdomain, class: 'form-control', placeholder: 'Subdomain',required:true %>
+                <%= f.text_field :subdomain, class: 'form-control', placeholder: 'Subdomain',required:true , id:"text_subdomain"%>
                 
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">.<%=ENV['BASE_DOMAIN']%></span>
@@ -101,7 +101,7 @@ img{
               </label>
 
               <!-- Input -->
-              <%= f.email_field :email, class: 'form-control', placeholder: Spree.t(:email) %>
+              <%= f.email_field :email, class: 'form-control', placeholder: Spree.t(:email) ,id:"text_email"%>
 
             </div>
 
@@ -117,7 +117,7 @@ img{
               <div class="input-group input-group-merge">
 
                 <!-- Input -->
-                <%= f.password_field :password, class: 'form-control pwd', placeholder: Spree.t(:password) %>
+                <%= f.password_field :password, class: 'form-control pwd', placeholder: Spree.t(:password) ,id:"text_password"%>
 
                 <!-- Icon -->
                 <span class="input-group-text eye_icon">
@@ -139,7 +139,7 @@ img{
               <div class="input-group input-group-merge">
 
                 <!-- Input -->
-                <%= f.password_field :password_confirmation, class: 'form-control pwd1', placeholder: Spree.t(:confirm_password) %>
+                <%= f.password_field :password_confirmation, class: 'form-control pwd1', placeholder: Spree.t(:confirm_password) , id:"text_confirm_password"%>
 
                 <!-- Icon -->
                 <span class="input-group-text eye_icon1">
@@ -162,7 +162,7 @@ img{
             </small>
 
             <!-- Submit -->
-            <%= f.submit Spree.t(:sign_up), class: 'btn btn-lg w-100 btn-primary mb-3 mt-2' %>
+            <%= f.submit Spree.t(:sign_up), class: 'btn btn-lg w-100 btn-primary mb-3 mt-2' ,id:"btn_signup"%>
             
 
             <!-- Link -->
@@ -212,6 +212,44 @@ img{
 
 
 <script type="text/javascript">
+
+
+  function getSavedValue(v){
+    if (localStorage.getItem(v) == "undefined" || localStorage.getItem(v) == "") {
+        return "";
+    }
+    
+    return localStorage.getItem(v);
+  }
+
+$(document).ready(function() {
+
+$('#btn_signup').on('click', function(event) {
+
+  var business_name = $('#text_business_name').val();
+  var subdomain = $('#text_subdomain').val();
+  var email = $('#text_email').val();
+  var password = $('#text_password').val();
+  var password_confirmation = $('#text_confirm_password').val();
+  
+  if(password.length < 6 || password_confirmation.length < 6 || password != password_confirmation){
+  
+    localStorage.setItem("text_business_name", business_name);
+    localStorage.setItem("text_subdomain", subdomain);
+    localStorage.setItem("text_email", email);
+    localStorage.setItem("text_password", password);
+    localStorage.setItem("text_confirm_password", password_confirmation);
+  } 
+});
+
+$('#text_business_name').val(getSavedValue("text_business_name"));
+$('#text_subdomain').val(getSavedValue("text_subdomain"));
+$('#text_email').val(getSavedValue("text_email"));
+$('#text_password').val(getSavedValue("text_password"));
+$('#text_confirm_password').val(getSavedValue("text_confirm_password"));
+
+localStorage.clear();
+});
 
 $(document).ready(function() {
   $("#terms_modal").on('click', function(event) {
