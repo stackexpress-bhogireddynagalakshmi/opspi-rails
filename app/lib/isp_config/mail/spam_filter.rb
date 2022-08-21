@@ -102,7 +102,7 @@ module IspConfig
 
       def server_params
         {
-          server_id: ENV['ISP_CONFIG_WEB_SERVER_ID']
+          server_id: IspConfig::Config.api_web_server_id(user)
         }
       end
     end

@@ -17,7 +17,7 @@ module IspConfig
                              method: :GET,
                              body: {
                                client_id: user.isp_config_id,
-                               server_id: ENV['ISP_CONFIG_DNS_SERVER_ID']
+                               server_id: IspConfig::Config.api_dns_server_id(user)
                              }
                            })
 
@@ -47,8 +47,6 @@ module IspConfig
           })
 
           create_ns_records(response["response"] , create_params)
-          # create_a_records(response["response"] , create_params)
-          # create_mx_record(response["response"], create_params)
 
           { success: true, message: I18n.t('isp_config.host_zone.create'), response: response }
         else
@@ -64,36 +62,11 @@ module IspConfig
                           ttl: "3600",
                           hosted_zone_id: host_zone_id
                         }
-        nameservers = [{nameserver: ENV['ISPCONFIG_DNS_SERVER_NS1']},{nameserver: ENV['ISPCONFIG_DNS_SERVER_NS2']}]
+        nameservers = [{nameserver: IspConfig::Config.api_name_server_1(user)},{nameserver: IspConfig::Config.api_name_server_2(user)}]
         nameservers.each do |ns|
           user.isp_config.hosted_zone_record.create(ns_record_params.merge(ns))
         end   
       end
-
-      #  def create_a_records(host_zone_id,create_params)
-      #   ns_record_params = {
-      #                     type: "A",
-      #                     name: create_params[:name],
-      #                     ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
-      #                     ttl: "60",
-      #                     hosted_zone_id: host_zone_id
-      #                   }
-       
-      #    user.isp_config.hosted_zone_record.create(ns_record_params)
-      # end
-
-      #  def create_mx_record(hosted_zone_id, params)
-      #    ns_record_params = {
-      #                     type: "MX",
-      #                     name: params[:name],
-      #                     mailserver: "mail.#{get_sanitized_domain(params[:name])}",
-      #                     ttl: 60,
-      #                     priority: 60,
-      #                     hosted_zone_id: hosted_zone_id
-      #                   }
-
-      #    response = user.isp_config.hosted_zone_record.create(ns_record_params)
-      # end
 
       def get_zone(id)
         response = query({
@@ -163,9 +136,9 @@ module IspConfig
         {
           "client_id": user.isp_config_id,
           "params": {
-            server_id: ENV['ISP_CONFIG_DNS_SERVER_ID'],
+            server_id: IspConfig::Config.api_dns_server_id(user),
             origin: hosted_zone[:name]+".",
-            ns: ENV['ISPCONFIG_DNS_SERVER_NS1']+".",
+            ns: IspConfig::Config.api_name_server_1(user)+".",
             mbox: mbox(hosted_zone[:mbox])+".",
             serial: "1",
             refresh: hosted_zone[:refresh],

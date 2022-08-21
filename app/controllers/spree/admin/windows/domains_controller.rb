@@ -5,6 +5,7 @@ module Spree
     module Windows
       # Domain controller
       class DomainsController < Spree::Admin::WindowsResourcesController
+        include PanelConfiguration
         def index
           @response = windows_api.all || []
           @resources = begin
@@ -87,7 +88,7 @@ module Spree
 
         def ensure_a_record(params)
           dns_records = current_spree_user.isp_config.hosted_zone.get_all_hosted_zone_records(params[:website][:dns_id])[:response].response
-          a_records = dns_records.select{|x| x[:id] if x[:type] == 'A' && x[:data] == ENV['SOLID_CP_WEB_SERVER_IP']}
+          a_records = dns_records.select{|x| x[:id] if x[:type] == 'A' && x[:data] == config_value_for(current_spree_user.panel_config["web_windows"], 'SOLID_CP_WEB_SERVER_IP')}
 
           create_a_record(params) if a_records.blank?
         end
@@ -98,7 +99,7 @@ module Spree
             type: "A",
             name: a_rec_params[:website][:domain],
             hosted_zone_name: nil,
-            ipv4: ENV['SOLID_CP_WEB_SERVER_IP'],
+            ipv4: config_value_for(current_spree_user.panel_config["web_windows"], 'SOLID_CP_WEB_SERVER_IP'),
             ttl: "3600",
             hosted_zone_id: a_rec_params[:website][:dns_id],
             client_id: current_spree_user.isp_config_id

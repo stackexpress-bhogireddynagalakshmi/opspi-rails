@@ -227,7 +227,7 @@ module IspConfig
           email: user.email,
           "internet": "",
           "icq": "",
-          web_servers: ENV['ISP_CONFIG_WEB_SERVER_ID'],
+          web_servers: IspConfig::Config.api_web_server_id(user),
           notes: @product&.description,
           default_mailserver: template.default_mailserver,
           limit_cgi: bool_yn(template.limit_cgi),
@@ -265,7 +265,7 @@ module IspConfig
           limit_shell_user: template.limit_shell_user,
           ssh_chroot: "no,jailkit,ssh-chroot",
           limit_webdav_user: template.limit_webdav_user,
-          default_dnsserver: ENV['ISP_CONFIG_DNS_SERVER_ID'], # TODO: need to change this at some point
+          default_dnsserver: IspConfig::Config.api_dns_server_id(user), # TODO: need to change this at some point
           limit_dns_zone: template.limit_dns_zone,
           limit_dns_slave_zone: template.limit_dns_slave_zone,
           limit_dns_record: template.limit_dns_record,

@@ -8,6 +8,7 @@ module IspConfig
 
       def initialize(user)
         @user = user
+        set_base_uri( user.panel_config["dns"] )
       end
 
       def create(create_params)
@@ -101,7 +102,7 @@ module IspConfig
         {
           "client_id": user.isp_config_id,
           "params": {
-            server_id: ENV['ISP_CONFIG_DNS_SERVER_ID'],
+            server_id: IspConfig::Config.api_dns_server_id(user),
             zone: hosted_zone_record[:hosted_zone_id],
             name: append_zone_name_with_record_name(hosted_zone_record[:name],hosted_zone_record[:hosted_zone_name]),
             type: hosted_zone_record[:type],

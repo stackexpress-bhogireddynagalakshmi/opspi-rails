@@ -17,6 +17,10 @@ module IspConfig
     WEB_SERVER_IP_KEY  = "ISPCONFIG_WEB_SERVER_IP"
     MAIL_SERVER_1 = "ISPCONFIG_MAIL_SERVER_01"
     MAIL_SERVER_2 = "ISPCONFIG_MAIL_SERVER_02"
+    DNS_SERVER_ID = "ISP_CONFIG_DNS_SERVER_ID"
+    DNS_NAMESERVER_1 = "ISPCONFIG_DNS_SERVER_NS1"
+    DNS_NAMESERVER_2 = "ISPCONFIG_DNS_SERVER_NS2"
+    WEB_SERVER_ID_KEY = "ISP_CONFIG_WEB_SERVER_ID"
 
     def self.username_key
       USERNAME_KEY
@@ -30,6 +34,10 @@ module IspConfig
       URL_KEY
     end
 
+    def self.web_server_id_key 
+      WEB_SERVER_ID_KEY
+    end
+
     def self.web_server_ip_key 
       WEB_SERVER_IP_KEY
     end
@@ -40,6 +48,18 @@ module IspConfig
 
     def self.mail_server_2_key
       MAIL_SERVER_2
+    end
+    
+    def self.dns_server_id_key 
+      DNS_SERVER_ID
+    end
+    
+    def self.name_server_1_key
+      DNS_NAMESERVER_1
+    end
+
+    def self.name_server_2_key
+      DNS_NAMESERVER_2
     end
 
     def self.server_type_key

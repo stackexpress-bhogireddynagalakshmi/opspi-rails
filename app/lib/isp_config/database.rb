@@ -58,7 +58,7 @@ module IspConfig
       body_params = {
         client_id: user.isp_config_id,
         params: {
-          server_id: ENV['ISP_CONFIG_WEB_SERVER_ID'],
+          server_id: IspConfig::Config.api_web_server_id(user),
           database_user: formatted_database_name(params[:database_username]),
           database_password: params[:database_password]
         }
@@ -180,7 +180,7 @@ module IspConfig
       {
         "client_id": user.isp_config_id,
         "params": {
-          server_id: ENV['ISP_CONFIG_WEB_SERVER_ID'],
+          server_id: IspConfig::Config.api_web_server_id(user),
           type: "mysql",
           parent_domain_id: database_params[:web_domain_id],
           database_name: "c#{user.isp_config_id}_#{database_params[:database_name]}",

@@ -149,6 +149,10 @@ en:
       create: Mailing List created successfully.
       update: Mailing List updated successfully.
       delete: Mailing List deleted successfully.
+    spam_filters:
+      create: Spamfilter created successfully.
+      update: Spamfilter updated successfully.
+      delete: Spamfilter deleted successfully.
     spamfilter:
       whitelist: Spamfilter Whitelist
       add_whitelist: New Whitelist Record
