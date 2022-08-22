@@ -37,9 +37,10 @@ module IspQuotaManager
             bandwidth_quota = solid_cp_quota_bwidth.body[:get_package_bandwidth_response][:get_package_bandwidth_result][:diffgram]
             
             if bandwidth_quota[:new_data_set].present?
-              @web_bandwidth = bandwidth_quota[:new_data_set][:table][:bytes_total]
-            else
-              @web_bandwidth = 0
+              @table_recs = bandwidth_quota[:new_data_set][:table]
+              @table_recs = [@table_recs] if @table_recs.is_a?(Hash)
+              @web_bandwidth = @table_recs.collect{|x| x[:bytes_total] if x[:group_name] == 'Web'}.compact.first
+              @ftp_bandwidth = @table_recs.collect{|x| x[:bytes_total] if x[:group_name] == 'FTP'}.compact.first
             end
             if quota_array.is_a?(Hash)
               @file_disk_space = quota_array[:diskspace_bytes]
@@ -71,7 +72,7 @@ module IspQuotaManager
 
               @quota = convert_to_json({isp_disk: {web: number_to_human_size(domain_space.inject(0, :+)), mail: number_to_human_size(mail[:space].inject(0, :+)), database: number_to_human_size(database_space.inject(0, :+))},
               isp_bandwidth: {web: number_to_human_size(wb_traffic_bytes), ftp: number_to_human_size(ftp_traffic_bytes), mail: 0}, 
-              solid_disk: {file: number_to_human_size(@file_disk_space), web: number_to_human_size(@web_disk_space), database: number_to_human_size(@ms_db_disk_space)}, solid_band: {web: number_to_human_size(@web_bandwidth)}})
+              solid_disk: {file: number_to_human_size(@file_disk_space), web: number_to_human_size(@web_disk_space), database: number_to_human_size(@ms_db_disk_space)}, solid_band: {web: number_to_human_size(@web_bandwidth),ftp: number_to_human_size(@ftp_bandwidth)}})
 
               quota_usage_obj = QuotaUsage.new({
                                   user_id: user.id,
@@ -114,7 +115,7 @@ module IspQuotaManager
           },
           solidcp: {
             disk_space: {web: resource[:solid_disk][:web], file: resource[:solid_disk][:file], database: resource[:solid_disk][:database]},
-            bandwidth: {web: resource[:solid_band][:web]}
+            bandwidth: {web: resource[:solid_band][:web],ftp: resource[:solid_band][:ftp]}
           }
         }
       end
