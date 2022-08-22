@@ -1,6 +1,7 @@
 module DnsManager  
   module ResellerClub
     class DomainRegistrar < ApplicationService
+      include PanelConfiguration
       attr_reader :user,:domain,:validity,:protect_privacy,:line_item
 
       def initialize(user,opts={})
@@ -43,7 +44,8 @@ module DnsManager
       end
 
       def name_server
-       [ENV['DNS_SERVER_NS1'], ENV['DNS_SERVER_NS2']]
+       [config_value_for(user.panel_config["web_linux"], 'ISPCONFIG_DNS_SERVER_NS1'), config_value_for(user.panel_config["web_linux"], 'ISPCONFIG_DNS_SERVER_NS2')]
+      #  [ENV['DNS_SERVER_NS1'], ENV['DNS_SERVER_NS2']]
       end
 
     end

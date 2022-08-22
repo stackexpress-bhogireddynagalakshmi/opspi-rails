@@ -5,6 +5,7 @@ module Spree
     module Dns
       class HostedZonesController < Spree::Admin::BaseController
         include ApisHelper
+        include PanelConfiguration
         before_action :ensure_hosting_panel_access
         before_action :set_zone_list, only: %i[edit update destroy dns zone_overview]
         
@@ -351,7 +352,7 @@ module Spree
             data: {
               type: "A",
               name: @domain,
-              ipv4: ENV['ISPCONFIG_WEB_SERVER_IP'],
+              ipv4: config_value_for(current_spree_user.panel_config["web_linux"], 'ISPCONFIG_WEB_SERVER_IP'),
               ttl: "3600",
               hosted_zone_id: dns_domain.compact.first
             },
@@ -396,7 +397,7 @@ module Spree
             data: {
               type: "MX",
               name: @domain,
-              mailserver: ENV['ISPCONFIG_MAIL_SERVER_01'],
+              mailserver: config_value_for(current_spree_user.panel_config["web_linux"], 'ISPCONFIG_MAIL_SERVER_01'),
               ttl: 60,
               priority: 10,
               hosted_zone_id: dns_domain.compact.first

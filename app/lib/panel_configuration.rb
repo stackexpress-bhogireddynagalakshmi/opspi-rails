@@ -13,6 +13,11 @@ module PanelConfiguration
     config_value_for(panel_id, url_key)
   end
 
+  def api_web_server_id(user)
+    panel_id = panel_id_for(user)
+    config_value_for(panel_id, web_server_id_key)
+  end
+
   def api_web_server_ip(user)
     panel_id = panel_id_for(user)
     config_value_for(panel_id, web_server_ip_key)
@@ -26,6 +31,21 @@ module PanelConfiguration
   def api_mx_server_2(user)
     panel_id = panel_id_for(user)
     config_value_for(panel_id, mail_server_2_key)
+  end
+
+  def api_dns_server_id(user)
+    panel_id = panel_id_for(user)
+    config_value_for(panel_id, dns_server_id_key)
+  end
+
+  def api_name_server_1(user)
+    panel_id = panel_id_for(user)
+    config_value_for(panel_id, name_server_1_key)
+  end
+
+  def api_name_server_2(user)
+    panel_id = panel_id_for(user)
+    config_value_for(panel_id, name_server_2_key)
   end
 
   def config_value_for(panel_id, key)
