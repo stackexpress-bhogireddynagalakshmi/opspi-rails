@@ -33,7 +33,7 @@ module SolidCp
     end
     alias find get_sql_database
 
-    def get_sql_user
+    def get_sql_user(id)
       response = super(message: { itemId: id })
     end
     alias find_db_user get_sql_user
@@ -43,11 +43,13 @@ module SolidCp
     end
     alias all_db_users get_sql_users
 
-    def update_sql_user(database_user_id, params)
+    def update_sql_user(id, params)
       response = super(message: {
         item: {
           "Databases" => { "string" => [params[:database_name]] },
-          "Password" => params[:database_password]
+          "Password" => params[:database_password],
+          "itemId" => id,
+          "PackageId" => user.packages.first.try(:solid_cp_package_id),
         }
       }
       )
