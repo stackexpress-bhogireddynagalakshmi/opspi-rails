@@ -2,5 +2,5 @@
   $("#myModal").modal('hide')
   $('#databases_list_table').append("<%=j render partial: 'spree/admin/sites/isp_databases/row', locals: {database: @database}%>")
 <%else%>
-  $('#error_div').html("<%=j @response[:response][:message].html_safe%>");
+  $('#error_div').html("<%=j @response[:message].html_safe%>");
 <%end%>
