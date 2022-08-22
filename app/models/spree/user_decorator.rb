@@ -138,7 +138,7 @@ module Spree
     def inactive_message
       return super unless confirmed?
 
-      "Invalid Username or Password"
+      I18n.t("spree.invalid_tenant")
     end
 
     def reseller_club_password_key
