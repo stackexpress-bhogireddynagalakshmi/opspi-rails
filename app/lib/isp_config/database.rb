@@ -162,9 +162,10 @@ module IspConfig
 
     def error_message(error)
       if error.include?('regex')
-        error = "Allowed symbols: a-z  A-Z  0-9  _"
+        error = "Error: Database name should not contain any symbol except (underscore) or spaces"
+      else
+        error.humanize
       end
-      error.humanize
     end
 
     def database_hash(database_params)

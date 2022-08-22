@@ -132,10 +132,10 @@ module SolidCp
 
     def error_message(error)
       if error.include?('package item exists')
-        error = "Database already exists with this name"
+        error = "Error: Database already exists"
+      else
+        error.humanize
       end
-      
-      error.humanize
     end
   end
 end
