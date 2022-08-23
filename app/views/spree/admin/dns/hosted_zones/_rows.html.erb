@@ -13,6 +13,17 @@ p{
       <!-- Text -->
       <div class="d-flex" style="justify-content: space-between;">
       <p class="card-text" style="word-break: break-all;">
+      <%if user_domain.web_hosting_type.nil?%>
+      <span class="badge bg-secondary-soft">No Website</span>
+      <%elsif user_domain.web_hosting_type == 'linux'%>
+      <span>
+      <%= render partial: '/spree/admin/shared/icons/linuxicon' %>
+      </span>
+      <%elsif user_domain.web_hosting_type == 'windows'%>
+      <span>
+      <%= render partial: '/spree/admin/shared/icons/windowsicon' %>
+      </span>
+      <%end%>
       <%=link_to hosted_zone.name, "/admin/dns/hosted_zones/zone_overview?zone_name=#{hosted_zone.name}&dns_id=#{hosted_zone.isp_config_host_zone_id}"%>
       </p>
       <span class="ml-2 justify-content-end">
