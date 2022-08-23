@@ -69,20 +69,8 @@ module IspConfig
                          method: :POST,
                          body: body_params
                        })
-      if  response.code == "ok"
-        {
-          success: true,
-          message: I18n.t("isp_config.database.create"),
-          response: response
-        }
-      else
-        {
-          success: false,
-          message: I18n.t('isp_config.something_went_wrong', message: error_message(response.message)),
-          response: response
-        }
-      end
-      # formatted_response(response, 'create')
+      
+      formatted_response(response, 'create')
     end
 
     def update_database_user_password(database_user_id, params)
@@ -166,14 +154,18 @@ module IspConfig
       else
         {
           success: false,
-          message: I18n.t('isp_config.something_went_wrong', message: response.message),
+          message: error_message(response.message),
           response: response
         }
       end
     end
 
     def error_message(error)
-      error.sub("database_user_error_regex", "Please give database name without any symbols or spaces")
+      if error.include?('regex')
+        error = "Error: Database name should not contain any symbol except (underscore) or spaces"
+      else
+        error.humanize
+      end
     end
 
     def database_hash(database_params)

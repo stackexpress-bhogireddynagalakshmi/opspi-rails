@@ -68,7 +68,7 @@ module SolidCp
           "PackageId" => user.packages.first.try(:solid_cp_package_id)
           # "Users" =>  {"string" => ["syed002"]},
         },
-        group_name: "MsSQL2019" #params[:group_name]
+        group_name: "MsSQL2019"
       }
       )
 
@@ -82,7 +82,7 @@ module SolidCp
         user_response
       else
         database_user.update(database_user: formatted_database_name(database_user.id),status: 0)
-        { success: false, message: I18n.t(:panel_error, msg: error[:msg]), response: response }
+        { success: false, message: error_message(error[:msg]), response: response }
       end
     rescue StandardError => e
       { success: false, message: I18n.t(:panel_error, msg: e.message), response: response }
@@ -97,7 +97,7 @@ module SolidCp
           "Name" => formatted_database_name(params[:database_username]),
           "Password" => params[:database_password]
         },
-        group_name: "MsSQL2019"  #params[:group_name]
+        group_name: "MsSQL2019"
       }
       )
 
@@ -106,7 +106,7 @@ module SolidCp
       if response.success? && code.positive?
         { success: true, message: I18n.t(:'windows.database.create'), response: response }
       else
-        { success: false, message: I18n.t(:panel_error, msg: error[:msg]), response: response }
+        { success: false, message: error_message(error[:msg]), response: response }
       end
     rescue StandardError => e
       { success: false, message: I18n.t(:panel_error, msg: e.message), response: response }
@@ -128,6 +128,14 @@ module SolidCp
 
     def formatted_database_name(database_username)
       "du_#{database_username.to_s.rjust(8, padstr='0')}"
+    end
+
+    def error_message(error)
+      if error.include?('package item exists')
+        error = "Error: Database already exists"
+      else
+        error.humanize
+      end
     end
   end
 end

@@ -31,7 +31,7 @@ module Spree
           user_database_params = resource_params.reject { |k, _v| k == "database_password" }
 
           if @response[:success]
-            @database = current_spree_user.user_databases.find_by_database_name(user_database_params[:database_name]) 
+            @database = current_spree_user.user_databases.where(database_name: user_database_params[:database_name], status: 'success').last 
           end
           render "create"
         end
