@@ -127,12 +127,13 @@
                   <div class="mb-4">
                       <%=label_tag :select_web_service %><br />
                         <span style="margin-right: 15px;">
-                          <%=radio_button_tag :server_type, "windows" , false , class: 'form-check-input list-checkbox', required: true %>
+                          <%=radio_button_tag :server_type, "windows" , false , class: 'form-check-input list-checkbox' %>
                           <%=label_tag :server_type, "Windows", :value => "windows" %>
                         </span>
                     
-                        <%=radio_button_tag :server_type, "linux", false ,  class: 'form-check-input list-checkbox', required: true %>
+                        <%=radio_button_tag :server_type, "linux", false ,  class: 'form-check-input list-checkbox' %>
                         <%=label_tag :server_type, "Linux", :value => "linux"%>
+                        <span id="error_msg"></span>
                   </div>
                   <div>
                     <%=button_tag 'Enable WebService', data_web_domain_id: 0, data_web_site_id: 0, data_web_site: params[:zone_name], data_dns_id: params[:dns_id], class: 'btn btn-primary lift', id: "server_type_id", onclick: "serverTypeWebDomain(this);" %>
@@ -277,6 +278,15 @@ $("input[name='server_type']").change(function(){
 });
 
 var serverTypeWebDomain = function(element){
+  var error = document.getElementById("error_msg")
+  var option=document.getElementsByName('server_type');
+     
+  if (!(option[0].checked || option[1].checked)) {
+      error.textContent = "Please Select Server Type"
+      error.style.color = "red"
+      error.style.fontSize= "small"   
+      return false;
+  }
   var serverType = element.value; 
   if (serverType == "windows"){
     updateWinWebDomain(element);
