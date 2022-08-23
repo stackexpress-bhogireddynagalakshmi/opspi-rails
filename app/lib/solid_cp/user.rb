@@ -20,6 +20,10 @@ module SolidCp
       super(message: { user_id: user.solid_cp_id })
     end
 
+    def self.get_user_by_id(user_id)
+      super(message: { user_id: user_id})
+    end
+
     def get_user_by_username
       super(message: { username: user.login })
     end
@@ -100,12 +104,25 @@ module SolidCp
     # By default It will pull all the users from SolidCP
     # if we provide the owner_id then it will pulls only those user created under that owner
 
-    def self.get_users(owner_id = 1)
-      response = super(message: { owner_id: owner_id, recursive: true })
+    def self.get_users(owner_id = 0)
+      response = super(message: { ownerId: owner_id, recursive: true })
       user_arr = response.body[:get_users_response][:get_users_result][:user_info]
       users = user_arr.collect { |user| OpenStruct.new(user) }
       { success: true, users: users }
     end
+
+
+    def ping
+      response = self.class.get_user_by_id(1)
+      if response.success?
+        { success: response.success?, message: "Connected to SolidCP Server" }
+      else
+        { success: response.success?, message: "Unable to connect to SolidCP Server" }
+      end
+    rescue => e
+      { success: false, message: e.message}
+    end
+
 
     # This action is used internally to sync the no existing users on SolidCP
     # It will create non existing users of opspi on solidCP server

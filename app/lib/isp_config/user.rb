@@ -135,6 +135,25 @@ module IspConfig
       end
     end
 
+
+    def ping
+
+      response = query({
+         endpoint: '/json.php?get_function_list',
+         method: :GET,
+         body: {}
+       })
+      
+       if response.code == "ok"
+        { success: true, message: 'Connected to Remote Panel.'}
+       else
+        { success: false, message: response.message}
+       end
+
+     rescue =>e
+      { success: false, message: e.message }
+    end
+
     # Package API interface for the  user/Reseller
     def template
       @template ||= IspConfig::Template.new(user)
