@@ -196,7 +196,7 @@ en:
     wizard_started: Wizard Jobs Started. Your services will be activated in few miniutes.
     domain_not_allowed: This domain is not allowed.
   
-  panel_error: "Something went wrong. Please try again. %{msg}"
+  panel_error: "%{msg}"
 
   my_store:
     cname_not_added: "- Please setup the following CNAME type record for your domain in order to use it as custom domain:<br/> &nbsp; &nbsp;&nbsp;%{custom_domain} =>  %{cname} <br/>

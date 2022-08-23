@@ -11,6 +11,7 @@ Wizard status for <%=batch_job.first[:domain]%>
         <th> Type </th>
         <th> Data</th>
         <th> Status </th>
+        <th> Message</th>
         <th> Action </th>
       </tr>
       </thead>
@@ -21,6 +22,7 @@ Wizard status for <%=batch_job.first[:domain]%>
             <td> <%=get_data_for_task(job)%> </td>
             <%status = get_task_status(job)%>
             <td class="status"> <%=status%></td>
+            <td> <%=get_sidekiq_job_status(job)[:message]&.html_safe%></td>
             <th class="password">
               <% if job[:actions] == true %>
                 <%=link_to 'Reset Password', reset_password_admin_wizards_path(email: get_data_for_task(job), type: job[:type], div_class: job[:sidekiq_job_id], source: 'wizard'), remote: true, class: "#{status.to_s.include?('completed') ? '' : 'd-none'}"%>

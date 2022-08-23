@@ -235,6 +235,12 @@ module ApplicationHelper
     "<i class='fa fa-check'></i> #{status}".html_safe
   end
 
+  def get_sidekiq_job_status(job)
+    return nil if job[:sidekiq_job_id].blank?
+
+    ActiveJob::Status.get(job[:sidekiq_job_id])
+  end
+
   def get_wizard_status(batch_job)
     statuses = []
     batch_job.each do |job|
