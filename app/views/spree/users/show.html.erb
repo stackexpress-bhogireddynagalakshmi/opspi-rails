@@ -197,7 +197,7 @@
                   <td class="account-page-order-payment-state">every <%=subscription.validity%> mo</td>
                   <td class="account-page-order-payment-state"><%=number_to_currency(subscription.price)%></td>
                    <td class="account-page-order-payment-state"><%=subscription.canceled_at%></td>
-                  <td>
+                  <td> 
                     <%if subscription.active?%>
                      <%=link_to 'Cancel', "/account/subscription_cancel?subscription_id=#{subscription.id}",data: {confirm: 'Are you sure?'} %> </td>
                     <%end%>

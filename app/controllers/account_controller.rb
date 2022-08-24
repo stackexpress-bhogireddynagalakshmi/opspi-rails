@@ -21,7 +21,8 @@ class AccountController < Spree::StoreController
       end
     end
 
-    render "subscription"
+    # render "subscription"
+    redirect_to request.referrer
   end
 
   def create_solidcp_account
