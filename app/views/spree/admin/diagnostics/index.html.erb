@@ -1,0 +1,28 @@
+<% content_for :page_title do %>
+  Diagnostics Page
+<% end %>
+
+
+<div class="table-responsive">
+  <table class="table sortable" id='listing_payment_methods' data-hook data-sortable-link="<%= update_positions_admin_payment_methods_url %>">
+    <thead>
+
+      <tr>
+        <th>Service Name</th>
+        <th>Check Passed?</th>
+        <th> Message</th>
+      </tr>
+     
+    </thead>
+    <tbody id="sortVert">
+
+      <%@diagnostics_hash.each do |k,v|%>
+        <tr>
+          <td> <%=v[:label]%></td>
+          <td> <%=v[:check_passed] ? "<i class='fa fa-check'></i>".html_safe : "<i class='fa fa-times'></i>".html_safe %></td>
+          <td> <%= v[:message]%></td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+  </div>

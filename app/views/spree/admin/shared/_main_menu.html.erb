@@ -90,4 +90,9 @@
       <%= main_menu_tree Spree.t(:opsbot), icon: "report.svg", sub_menu: "opsbot", url: "#sidebar-opsbot" %>
     </ul>
   <%end%>
+
+   <ul class="nav nav-sidebar border-bottom" id="sidebarDiagnostics">
+      <%= tab 'Diagnostic Page', url: "/admin/diagnostics", icon: 'settings.svg' %>
+    </ul>
+
 </nav>

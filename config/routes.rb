@@ -26,6 +26,7 @@ Rails.application.routes.draw do
     end
   end
     namespace :admin do
+      resources :diagnostics, only: [:index]
       resources :my_store do
         collection do 
           post :validate_domain
