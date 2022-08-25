@@ -112,18 +112,6 @@ module SolidCp
     end
 
 
-    def ping
-      response = self.class.get_user_by_id(1)
-      if response.success?
-        { success: response.success?, message: "Connected to SolidCP Server" }
-      else
-        { success: response.success?, message: "Unable to connect to SolidCP Server" }
-      end
-    rescue => e
-      { success: false, message: e.message}
-    end
-
-
     # This action is used internally to sync the no existing users on SolidCP
     # It will create non existing users of opspi on solidCP server
 
