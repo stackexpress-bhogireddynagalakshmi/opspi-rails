@@ -53,9 +53,21 @@
       <div class="col-lg-6">
         <div class="form-group field">
           <div class="form-check">
-            <%= check_box_tag('wizard[enable_web_service]', 'n', ('checked' if false), class: "form-check-input list-checkbox", id: "wizard_web_service", onclick: "checkServiceStatus(this)" ) %>
+            <%= check_box_tag('wizard[enable_web_service]', 'n', ('checked'), class: "form-check-input list-checkbox", id: "wizard_web_service", onclick: "checkServiceStatus(this)", disabled: true ) %>
             <label class="form-check-label" for="wizard_web_service">Enable Web Services</label>
             <div class="text-muted"><%=t('wizards.enable_web_service_help')%></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="form-group field">
+          <div class="form-check">
+            <%= check_box_tag('wizard[enable_ftp_service]', 'n', ('checked' if false), class: "form-check-input list-checkbox", id: "wizard_ftp_service", onclick: "checkServiceStatus(this)" ) %>
+            <label class="form-check-label" for="wizard_ftp_service">Create Ftp Account</label>
+            <div class="text-muted"><%=t('wizards.enable_ftp_service_help')%></div>
           </div>
         </div>
       </div>
@@ -77,7 +89,7 @@
       <div class="col-lg-6">
         <div class="form-group field">
           <div class="form-check">
-            <%= check_box_tag('wizard[enable_mail_service]', 'n', ('checked' if false), class: "form-check-input list-checkbox", id: "wizard_mail_service", onclick: "checkServiceStatus(this)" ) %>
+            <%= check_box_tag('wizard[enable_mail_service]', 'n', ('checked'), class: "form-check-input list-checkbox", id: "wizard_mail_service", onclick: "checkServiceStatus(this)", disabled: true ) %>
             <label class="form-check-label" for="wizard_mail_service">Enable Mail Service</label>
             <div class="text-muted"><%=t('wizards.enable_mail_service_help')%></div>
           </div>
@@ -85,13 +97,13 @@
       </div>
     </div>
 
-    <div id="wizard_mail">
+    <div> <!-- id="wizard_mail" -->
       <div class="row">
         <div class="col-lg-6">
           <div class="form-group field">
             <label class="form-label">Email</label>
             <div class="input-group">
-              <%= text_field_tag 'wizard[emails][]', '', class: 'form-control', placeholder: "Enter Email", "data-input-count" => 0, id: 'wizard_mailbox_one' %>
+              <%= text_field_tag 'wizard[emails][]', '', class: 'form-control', placeholder: "Enter Email", "data-input-count" => 0, id: 'wizard_mailbox_one', required: true %>
               <div class="input-group-text">
                 <span id="selected_domain_button">@</span>
               </div>

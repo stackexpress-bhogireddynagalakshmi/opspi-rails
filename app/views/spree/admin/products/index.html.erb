@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
   <%#= plural_resource_name(Spree::Product) %>
-  <%=Spree.t(:products)%><span id="error_msg" style= "display: flex;justify-content: center;"><%=flash_messages%></span>
+  <%=Spree.t(:products)%><span id="error_msg" style= "display: flex;justify-content: center;"></span>
 <% end %>
 
 <%@collection = @collection.where(account_id: params[:q][:account_id]) if params[:q][:account_id].present?%>
