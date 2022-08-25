@@ -13,8 +13,12 @@ module Spree
 
       def common_checks
         check_db_connection
-        check_isp_config_connection
-        check_solid_cp_connection
+        panel_ids = PanelConfig.pluck(:panel_id).uniq
+
+        panel_ids.each do |panel_id|
+          check_panel_connection(panel_id)
+        end
+
         check_superadmin_payment_method(current_spree_user)
       end
 
@@ -30,24 +34,15 @@ module Spree
         end
       end
 
-      def check_isp_config_connection
+      def check_panel_connection(panel_id)
         begin
-          label = 'ISP Connection'
-          response = current_spree_user.isp_config.ping
-
-          @diagnostics_hash[:isp_config] =  { check_passed: response[:success], message: response[:message], label: label }
-        rescue => e
-          @diagnostics_hash[:isp_config] =  { check_passed: false, message: e.message, label: label}
-        end
-      end
-
-      def check_solid_cp_connection
-        begin
-          label = 'Solid CP Connection'
-          response = current_spree_user.solid_cp.ping
-          @diagnostics_hash[:solid_cp] =  { check_passed: response[:success], message: response[:message], label: label }
-        rescue => e
-          @diagnostics_hash[:solid_cp] =  { check_passed: false, message: e.message, label: label}
+          panel = Panel.find(panel_id)
+          response = RemotePanelPing.new(panel_id).call
+          @diagnostics_hash[panel_id] =  { check_passed: response[:success], message: response[:message], label:  panel.abbr}
+          
+        rescue Exception => e
+          Rails.logger.error { e.backtrace }
+          @diagnostics_hash[panel_id] =  { check_passed: false, message: "Panel not responding", label: panel.abbr}
         end
       end
 
