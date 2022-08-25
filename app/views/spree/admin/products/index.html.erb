@@ -120,7 +120,7 @@ var checkActivePlan = function(element){
   var error = document.getElementById("error_msg")
   var val = element.attributes.data.value
   if (val != 'true') {
-      error.textContent = "Your Payment is not captured yet"
+      error.textContent = '<%= I18n.t('spree.payment_not_confirmed') %>'
       error.style.color = "red"
       error.style.fontSize= "medium"   
       event.preventDefault();
