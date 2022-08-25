@@ -23,6 +23,16 @@ module Spree
           render :edit, status: :unprocessable_entity
         end
       end
+
+      def addresses
+        if request.put?
+          if @user.update(user_params)
+            flash.now[:success] = Spree.t(:account_updated)
+          end
+          
+          render params.key?(:done) ? :edit : :addresses
+        end
+      end
     end
   end
 end
