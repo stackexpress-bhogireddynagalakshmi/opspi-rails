@@ -200,7 +200,7 @@
                         </div>
                         <%if @current_user_website == 'windows' %>
                           <div class="form-check form-switch flex-child">
-                            <%= check_box_tag 'win_ssl', @website_certificate_id.kind_of?(Array) ? 0: @website_certificate_id[:id], @website_certificate_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
+                            <%= check_box_tag 'win_ssl', @website_certificate_id.nil? ? 0 : @website_certificate_id[:id], @website_certificate_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
                           </div>
                         <%end%>
                         <% if @current_user_website == 'linux' %>
