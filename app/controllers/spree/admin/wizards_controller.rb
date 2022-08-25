@@ -61,7 +61,7 @@ module Spree
           if wizard_params[:emails].present?
             prepare_mail_box_task
           end
-        # end
+        # end 
 
         @tasks = @tasks.flatten
       end
