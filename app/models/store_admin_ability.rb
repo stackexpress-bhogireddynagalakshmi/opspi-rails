@@ -16,6 +16,7 @@ class StoreAdminAbility
     can :manage, ::Spree::StockLocation unless TenantManager::TenantHelper.current_admin_tenant?
     can :manage, ::Spree::StockMovement
     can :manage, ::Spree::Price
+    can :manage, ::Spree::StoreCredit unless TenantManager::TenantHelper.current_admin_tenant?
     
     can :manage, :domain_registrations
     can :manage, :my_account_profiles
