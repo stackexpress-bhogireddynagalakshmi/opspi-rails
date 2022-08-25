@@ -1,11 +1,12 @@
 <% content_for :page_title do %>
   <%#= plural_resource_name(Spree::Product) %>
-  <%=Spree.t(:products)%>
+  <%=Spree.t(:products)%><span id="error_msg" style= "display: flex;justify-content: center;"><%=flash_messages%></span>
 <% end %>
 
 <%@collection = @collection.where(account_id: params[:q][:account_id]) if params[:q][:account_id].present?%>
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:new_product), new_object_url, { class: "btn-success", icon: 'add.svg', id: 'admin_new_product' } %>
+  <% plan_present = plan_type_values(current_spree_user).any? ? true : false %>
+  <%= button_link_to Spree.t(:new_product), new_object_url, { data: plan_present,class: "btn-success", icon: 'add.svg', id: 'admin_new_product', onclick: "checkActivePlan(this);" } %>
 <% end if can?(:create, Spree::Product) %>
 
 <% content_for :table_filter do %>
@@ -114,3 +115,15 @@
 <% end %>
 
 <%= render partial: 'spree/admin/shared/index_table_options', locals: { collection: @collection } %>
+<script type="text/javascript">
+var checkActivePlan = function(element){
+  var error = document.getElementById("error_msg")
+  var val = element.attributes.data.value
+  if (val != 'true') {
+      error.textContent = '<%= I18n.t('spree.payment_not_confirmed') %>'
+      error.style.color = "red"
+      error.style.fontSize= "medium"   
+      event.preventDefault();
+  }
+}
+</script>
