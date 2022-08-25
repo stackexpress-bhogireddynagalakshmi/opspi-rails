@@ -129,7 +129,7 @@ module Spree
             website_id = current_spree_user.solid_cp.website.get_certificates_for_site({web_site_id: website_array.first})
             @website_certificate_id = website_id.body[:get_certificates_for_site_response][:get_certificates_for_site_result][:ssl_certificate] rescue []
             @website_certificate_id = [@website_certificate_id] if @website_certificate_id.is_a?(Hash)
-            @website_certificate_id = @website_certificate_id.first
+            @website_certificate_id = @website_certificate_id.first 
             end
           end
           ######
