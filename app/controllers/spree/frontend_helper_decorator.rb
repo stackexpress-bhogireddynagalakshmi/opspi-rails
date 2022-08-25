@@ -9,9 +9,9 @@ module Spree
               warning: 'warning',
               notice: 'success'
             }[flash_type.to_sym]
-          end
+        end
     
-          def flash_messages(opts = {})
+        def flash_messages(opts = {})
           flashes = ""
           excluded_types = opts[:excluded_types].to_a.map(&:to_s)
     

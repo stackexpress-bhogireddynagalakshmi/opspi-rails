@@ -1,5 +1,6 @@
+<div style="margin-top: 25px;"><%= flash_messages%></div>
 <%if current_spree_user.store_admin? || current_spree_user&.superadmin? %>
-<h1 class="contextual-title px-0 mb-0 col" style="margin-top: -2rem;">Subscriptions</h1>
+<h1 class="contextual-title px-0 mb-0 col" style="margin-top: -1rem;">Subscriptions</h1>
 <hr>
 
 <%if spree_current_user.subscriptions.present?%>
@@ -29,7 +30,7 @@
        <td class="account-page-order-payment-state"><%=subscription.canceled_at%></td>
       <td>
         <%if subscription.active?%>
-          <%=link_to 'Cancel', admin_account_subscription_cancel_path(subscription_id: subscription.id),data: {confirm: 'Are you sure?'} %> </td>
+          <%=link_to 'Cancel', "/account/subscription_cancel?subscription_id=#{subscription.id}",data: {confirm: 'Are you sure?'} %> </td>
         <%end%>
     </tr>
 <%end%>
@@ -47,14 +48,12 @@
         <h1 class="header-title">
         Subscriptions
         </h1>
-        
       </div>
       <div class="col-auto">
-      
       </div>
     </div>
-    </div>
-    </div>
+  </div>
+</div>
 
 <%if spree_current_user.subscriptions.present?%>
 <div class="card mt-4">
@@ -85,7 +84,7 @@
        <td class="account-page-order-payment-state"><%=subscription.canceled_at%></td>
       <td>
         <%if subscription.active?%>
-          <%=link_to 'Cancel', admin_account_subscription_cancel_path(subscription_id: subscription.id),data: {confirm: 'Are you sure?'} %> </td>
+          <%=link_to 'Cancel', "/account/subscription_cancel?subscription_id=#{subscription.id}",data: {confirm: 'Are you sure?'} %> </td>
         <%end%>
     </tr>
 <%end%>
@@ -99,3 +98,13 @@
 
 <%end%>
 
+<style type="text/css">
+.x-button {
+    position: absolute;
+    right: 10px;
+}
+button {
+    border: none;
+    outline: none;
+}
+</style>
