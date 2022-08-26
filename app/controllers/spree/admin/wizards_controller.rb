@@ -45,8 +45,9 @@ module Spree
 
       def build_tasks
         prepare_dns_task
-        if wizard_params[:enable_web_service] == 'y'
           prepare_web_domain_task
+
+        if wizard_params[:enable_ftp_service] == 'y'
           prepare_ftp_account_task
         end
 
@@ -54,13 +55,13 @@ module Spree
           prepare_database_task
         end
 
-        if wizard_params[:enable_mail_service] == 'y'
+        # if wizard_params[:enable_mail_service] == 'y'
           prepare_mail_domain_task
 
           if wizard_params[:emails].present?
             prepare_mail_box_task
           end
-        end
+        # end 
 
         @tasks = @tasks.flatten
       end
@@ -297,7 +298,7 @@ module Spree
       end
 
       def wizard_params
-        params.require("wizard").permit(:domain, :server_type, :enable_web_service, :enable_mail_service, :enable_db_service, emails: [])
+        params.require("wizard").permit(:domain, :server_type, :enable_web_service, :enable_mail_service, :enable_ftp_service, :enable_db_service, emails: [])
       end
 
       def set_batch_jobs

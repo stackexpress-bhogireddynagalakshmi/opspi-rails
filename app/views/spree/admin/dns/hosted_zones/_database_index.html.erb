@@ -29,9 +29,15 @@
           </tr>
       </thead>
       <tbody class="fs-base" id="databases_list_table">
+      <%if@user_databases.any? %>
         <%@user_databases.each do |database|%>
            <%=render partial: 'spree/admin/sites/isp_databases/row', locals: {database: database}%>
         <%end%>
+      <%else%>
+        <tr>
+          <td><label class="form-label table_row_label"> No Database found </label></td>
+        </tr>
+      <%end%>
         </tbody>
       </table>
     </div>
