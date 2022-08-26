@@ -84,7 +84,7 @@
                 <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
               </svg>
             <% end %> 
-               <%= link_to 'javascript:void(0);', data: {email: mailbox.email, name: mailbox.name, smtp: ENV['OPSPI_SMTP_SERVER'], imap: ENV['MAIL_SERVER_IMAP_URL'], pop: ENV['MAIL_SERVER_POP_URL'], webmail_url: ENV['WEBMAIL_URL'],smtp: ENV['MAIL_SERVER_SMTP_URL']}, class: 'configure-mailbox-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
+               <%= link_to 'javascript:void(0);', data: {email: mailbox.email, name: mailbox.name, smtp: ENV['OPSPI_SMTP_SERVER'], imap: ENV['MAIL_SERVER_IMAP_URL'], pop: ENV['MAIL_SERVER_POP_URL'], webmail_url: ENV['WEBMAIL_URL'],smtp: ENV['MAIL_SERVER_SMTP_URL'], pwd_div_id: "mail_box_#{mailbox.mailuser_id}_pwd_text", id: mailbox.mailuser_id}, class: 'configure-mailbox-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
                   <%= render partial: '/spree/admin/shared/icons/gear' %>
                 <% end %>
             </span>
@@ -219,6 +219,7 @@
       var pop = $(this).data('pop');
       var smtp = $(this).data('smtp');
       var webmailUrl = $(this).data('webmail-url');
+      var id = $(this).data('id');
       $('#exampleModalLabel').html("MailBox Configuration Details");
       // <tr>
       //         <td><b>SMTP:</b></td>
@@ -247,6 +248,13 @@
             <tr>
               <td><b>WEBMAIL&nbsp;URL:</b></td>
               <td>${webmailUrl}</td>
+            </tr>
+            <tr>
+            <td><b>Reset Password:</b></td>
+            <td>
+                <a href="/admin/wizards/reset_password?email=${email}&type=create_mail_box&div_class=mail_box_${id}" data-remote="true">Reset Password</a>
+                <div class='password-text'></div>
+            </td>
             </tr>
           </tbody>
         </table>
