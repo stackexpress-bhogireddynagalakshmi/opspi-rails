@@ -150,7 +150,7 @@ module Spree
         return nil if current_spree_user.end_user?
 
         unless current_spree_user.account.reseller_club_configured?
-           flash[:error] = 'Please configure ResellerClub credentials before using Domain Resgistration service'
+           flash[:error] = I18n.t(:reseller_club_configuration_error) 
           redirect_to  setup_reseller_club_admin_domain_registrations_url  
         end
       end

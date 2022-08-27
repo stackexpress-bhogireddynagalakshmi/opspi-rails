@@ -31,11 +31,21 @@
 
 en:
   hello: "Hello world"
+  connected: "Connected"
+  failed_to_connect: Failed to Connect
+  panel_not_responding: Panel not responding
   windows_hosting_plan: 'Windows Shared Hosting'
   linux_hosting_plan: 'Linux Hosting Plan'
   reseller_plan: 'Reseller Plan' 
   domain_plan: 'Domain Reselling Plan'
-
+  reseller_club: "Reseller Club"
+  reseller_club_configuration_error: "Please configure ResellerClub credentials before using Domain Resgistration service"
+  reseller_club_not_configured: "Reseller club credentials is not configured"
+  reseller_club_configured: "Reseller club credentials is configured"
+  account_exist: Account exists
+  account_does_not_exist: Account does not exists
+  hosting_space_exists: Hosting space exists
+  hosting_space_does_exists: Hosting Space does not exists
   spree:
     products: 'Services'
     hosting_controls: Hosting Control
