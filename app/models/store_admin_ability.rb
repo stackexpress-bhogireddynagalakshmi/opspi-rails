@@ -53,6 +53,7 @@ class StoreAdminAbility
     end
 
     can :manage, :bookkeeping_documents
+    can :manage,   :diagnostics
 
     can :manage, ::Spree::Payment
     can :read, ::Spree::Country
@@ -65,5 +66,6 @@ class StoreAdminAbility
     can :read, ::Spree::Variant
     can :read, ::Spree::Zone
     can :manage, :dashboard
+
   end
 end
