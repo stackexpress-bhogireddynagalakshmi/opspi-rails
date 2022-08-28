@@ -53,9 +53,9 @@ Rails.application.routes.draw do
           post :setup_reseller_club
         end
       end
+
+      resources :user_domains
       namespace :dns do
-        resources :user_domains
-        
         resources :hosted_zones do
           member do
             get :dns
