@@ -1,0 +1,23 @@
+<style type="text/css">
+  .formSuccess{
+    color: green;
+  }
+</style>
+<div class="header mt-4">
+  <div class="header-body">
+    <div class="row align-items-center">
+      <div class="col">
+        <h1 class="header-title">
+        <%= link_to Spree.t(:dns_zones), spree.admin_dns_hosted_zones_url %> / <%=Spree.t(:new_dns_zone)%>
+        </h1>
+        
+      </div>
+      <div class="col-auto">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%= flash_messages %>
+<%=render :partial=>'spree/admin/wizards/form'%>

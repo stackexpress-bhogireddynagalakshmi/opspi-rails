@@ -7,6 +7,7 @@ class UserAbility
 
   def apply_user_permissions(user)
     can :read,   :orders
+    can :manage, :user_domains
     can :manage, :domain_registrations
     can :manage, :domains
     can :manage, :mail_boxes
