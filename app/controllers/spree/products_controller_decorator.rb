@@ -6,9 +6,9 @@ module Spree
       @products = current_store.try(:account).try(:spree_products).where(subscribable: true)
     end
 
-    # def load_product
-    #     TenantManager::TenantHelper.unscoped_query{super}
-    # end
+    def load_product
+        TenantManager::TenantHelper.unscoped_query{super}
+    end
   end
 end
 
