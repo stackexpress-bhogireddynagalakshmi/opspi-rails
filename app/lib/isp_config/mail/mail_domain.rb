@@ -33,7 +33,10 @@ module IspConfig
                          })
         if response.code == "ok"
           create_mx_records(params)
-          user.mail_domains.create({ isp_config_mail_domain_id: response["response"] }) 
+          user.mail_domains.create({ isp_config_mail_domain_id: response["response"] })  #TODO: legacy table to be removed 
+         
+          user_domain = user.user_domains.where(domain: params[:domain]).last
+          user_domain.create_user_mail_domain({user_domain_id: user_domain.try(:id), remote_mail_domain_id: response["response"]})
         end
 
         formatted_response(response, 'create')
@@ -62,7 +65,12 @@ module IspConfig
                              primary_id: primary_id
                            }
                          })
-        user.mail_domains.find_by_isp_config_mail_domain_id(primary_id).destroy if response.code == "ok"
+        if response.code == "ok"
+          user.mail_domains.find_by_isp_config_mail_domain_id(primary_id).destroy #TODO: legacy  table, to be removed
+         
+          UserMailDomain.find_by_remote_mail_domain_id(primary_id)&.destroy
+        end
+
         formatted_response(response, 'delete')
       end
 
