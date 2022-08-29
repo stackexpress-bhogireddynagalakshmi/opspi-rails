@@ -26,6 +26,36 @@ $(document).ready(function(){
 })
 
 $(document).ready(function(){
+    $('#address_address1').keypress(function(e) {
+        max_length_address(e);
+    });
+})
+
+$(document).ready(function(){
+    $('#address_address2').keypress(function(e) {
+        max_length_address2(e);
+    });
+})
+
+$(document).ready(function(){
+    $('#order_bill_address_attributes_address1').keypress(function(e) {
+        max_length_order_address(e);
+    });
+})
+
+$(document).ready(function(){
+    $('#order_bill_address_attributes_address2').keypress(function(e) {
+        max_length_order_address2(e);
+    });
+})
+
+$(document).ready(function(){
+    $('#address_city').keypress(function(e) {
+        preventNumberInput(e);
+    });
+})
+
+$(document).ready(function(){
     $('#address_phone').keypress(function(e) {
         preventAphabetInput(e);
         max_length(e);
@@ -45,6 +75,12 @@ $(document).ready(function(){
 })
 
 $(document).ready(function(){
+    $('#order_bill_address_attributes_city').keypress(function(e) {
+        preventNumberInput(e);
+    });
+})
+
+$(document).ready(function(){
     $('#order_bill_address_attributes_phone').keypress(function(e) {
         preventAphabetInput(e);
         max_length_order(e);
@@ -58,6 +94,34 @@ if(myInput.value.length >= 10){
 e.preventDefault();
 }
 
+}
+
+function max_length_address(e){
+    var myInput = document.getElementById("address_address1");
+    if(myInput.value.length >= 35){
+    e.preventDefault();
+    }  
+}
+
+function max_length_address2(e){
+    var myInput2 = document.getElementById("address_address2");
+    if(myInput2.value.length >= 35){
+        e.preventDefault();
+    } 
+}
+
+function max_length_order_address(e){
+    var myInput = document.getElementById("order_bill_address_attributes_address1");
+    if(myInput.value.length >= 35){
+    e.preventDefault();
+    }
+}
+
+function max_length_order_address2(e){
+    var myInput1 = document.getElementById("order_bill_address_attributes_address2");
+    if(myInput1.value.length >= 35){
+        e.preventDefault();
+    }
 }
 
 function max_length_order(e){
