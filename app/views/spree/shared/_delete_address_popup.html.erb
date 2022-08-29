@@ -12,7 +12,7 @@
       </h4>
 
       <!-- Close -->
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="opacity:1" ></button>
+      <button type="button" class="close-button x-button" data-dismiss="modal" aria-label="Close" style="opacity:1;top:2px;" >&times;</button>
 
     </div>
     <p class="delete-address-popup-header" style="text-align: center;font-weight: 600;font-size: 1.5rem;margin-bottom: 27px;">
@@ -40,9 +40,30 @@
 </div>
 </div>
 
+<style type="text/css">
+.close-button {
+    border: none;
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: inherit;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap
+}
+
+.x-button{
+   position: absolute;
+   right:10px; 
+}
+
+</style>
+
 <script type="text/javascript">
 $(document).ready(function() {
-  $(".btn-close").on('click', function(event) {
+  $(".close-button").on('click', function(event) {
     $('#myModal1').attr('aria-hidden','true');
     $("#myModal1").css('display','none');
     $("#myModal1").removeClass("show");
