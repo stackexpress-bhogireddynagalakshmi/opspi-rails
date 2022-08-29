@@ -103,7 +103,7 @@ module SolidCp
 
     def error_message(error)
       if error.include?("password policy requirements")
-        error = "The password does not meet the password policy requirements. Valid Password must have atleast 8 characters and atleast one capital letter"
+        error = I18n.t("windows.password_hint_message")
       else
         error
       end
