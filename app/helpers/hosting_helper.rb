@@ -16,7 +16,7 @@ module HostingHelper
 
 	def formatted_quota_text(quota, unit="")
 		if quota.quota_value == -1
-			"Unlimitted #{quota.formatted_quota_name}"
+			"Unlimited #{quota.formatted_quota_name}"
 		elsif quota.quota_value == 0
 			nil			
 		else
