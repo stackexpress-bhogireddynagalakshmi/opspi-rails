@@ -59,7 +59,7 @@ module SolidCp
         { success: false, message: error[:msg], response: response }
       end
     rescue => e
-      { success: false, message: e.message, response: response }
+      { success: false, message: error_message(e.message), response: response }
     end
     alias create add_ftp_account
 
@@ -100,5 +100,13 @@ module SolidCp
       end
     end
     alias destroy delete_ftp_account
+
+    def error_message(error)
+      if error.include?("password policy requirements")
+        error = "The password does not meet the password policy requirements. Valid Password must have atleast 8 characters and atleast one capital letter"
+      else
+        error
+      end
+    end
   end
 end

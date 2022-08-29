@@ -29,25 +29,9 @@ module Spree
         def new; end
 
         def create
-          if params[:server_type] == "windows"
-            @response = windows_api.create(resource_params)
-            if @response[:success]
-              set_flash
-              redirect_to request.referrer
-            else
-              get_websites
-              redirect_to request.referrer
-            end
-          else
-            @response = current_spree_user.isp_config.ftp_user.create(resource_params)
-            if @response[:success]
-              set_flash
-              redirect_to request.referrer
-            else
-              get_websites
-              redirect_to request.referrer
-            end
-          end
+          @response = ftp_user_api.create(resource_params)
+          set_flash
+          redirect_to request.referrer
         end
 
         def destroy
@@ -76,7 +60,7 @@ module Spree
           if @response[:success]
             flash[:success] = @response[:message]
           else
-            flash.now[:error] = @response[:message]
+            flash[:error] = @response[:message]
           end
         end
 
