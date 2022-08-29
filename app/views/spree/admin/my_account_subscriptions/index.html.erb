@@ -1,7 +1,8 @@
-<div style="margin-top: 25px;"><%= flash_messages%></div>
+
 <%if current_spree_user.store_admin? || current_spree_user&.superadmin? %>
-<h1 class="contextual-title px-0 mb-0 col" style="margin-top: -1rem;">Subscriptions</h1>
+<h1 class="contextual-title px-0 mb-0 col" style="margin-top: -2rem;">Subscriptions</h1>
 <hr>
+<div style="margin-top: 25px;"><%= flash_messages%></div>
 
 <%if spree_current_user.subscriptions.present?%>
 <table class="table table-sm card-table" style="width:100%">
@@ -54,7 +55,7 @@
     </div>
   </div>
 </div>
-
+<div style="margin-top: 25px;"><%= flash_messages%></div>
 <%if spree_current_user.subscriptions.present?%>
 <div class="card mt-4">
 <div class="table-responsive">
