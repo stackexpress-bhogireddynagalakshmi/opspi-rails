@@ -6,7 +6,7 @@ namespace :quota_usages do
       account.users.each do |user|
         next unless user.subscriptions.any?
         user.subscriptions.active.each do |subscription|
-          IspQuotaManager::IspQuotaCalculator.new(subscription).call 
+          QuotaManager::QuotaCalculator.new(subscription).call 
         end
       end
     end
