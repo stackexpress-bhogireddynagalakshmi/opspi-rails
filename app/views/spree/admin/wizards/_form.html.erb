@@ -79,7 +79,13 @@
           <div class="form-check">
             <%= check_box_tag('wizard[enable_db_service]', 'n', ('checked' if false), class: "form-check-input list-checkbox", id: "wizard_db_service", onclick: "checkServiceStatus(this)" ) %>
             <label class="form-check-label" for="wizard_db_service">Create Database</label>
-            <div class="text-muted"><%=t('wizards.enable_db_service_help')%></div>
+            <%if current_spree_user.have_linux_access? && current_spree_user.have_windows_access?%>
+            <div class="text-muted" id="div3"></div>
+            <%elsif current_spree_user.have_linux_access?%>
+            <div class="text-muted" id="div1"><%=t('wizards.enable_db_service_help')%></div>
+            <%elsif current_spree_user.have_windows_access?%>
+            <div class="text-muted" id="div2"><%=t('wizards.enable_db_service_help1')%></div>
+            <%end%>
           </div>
         </div>
       </div>
@@ -201,6 +207,15 @@
       $("#addRowEmail").hide();
     }
   });
+
+  $('input[type="radio"]').on('click change', function(e) {
+   
+    if(e.currentTarget.value == "windows"){
+      $("#div3").html('MsSQL Database would be created');
+    } else {
+      $("#div3").html('MySQL Database would be created');
+    }
+});
 
   $(document).on('click', '#removeRowEmail', function () {
     var fieldCount = $('#addRowEmail').data('field-count'); //get myvalue
