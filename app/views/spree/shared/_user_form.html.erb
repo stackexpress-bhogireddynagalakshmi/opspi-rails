@@ -81,7 +81,7 @@ img{
                     <span class="input-group-text" id="basic-addon3">https://</span>
                 </div>
 
-                <%= f.text_field :subdomain, class: 'form-control', placeholder: 'Subdomain',required:true , id:"text_subdomain"%>
+                <%= f.text_field :subdomain, class: 'form-control', placeholder: 'Subdomain',required:true , maxlength: "30", id:"text_subdomain"%>
                 
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">.<%=ENV['BASE_DOMAIN']%></span>
