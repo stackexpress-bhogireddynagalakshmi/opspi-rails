@@ -22,61 +22,61 @@ module QuotaManager
             @database_response = get_database_quota
             
             @web_traffic       = get_web_traffic
-            @web_bandwidth     = @web_traffic[:response]
             @ftp_traffic       = get_ftp_traffic
-            @ftp_bandwidth     = @ftp_traffic[:response]
             ## mail
-            if user.isp_config_id.present? || user.solid_cp_id.present?
-              if @domain_response[:success] && @mail_response[:success] && @database_response[:success]
+          end
+          if user.isp_config_id.present? || user.solid_cp_id.present?
+            if @domain_response[:success] && @mail_response[:success] && @database_response[:success]
 
-                domain    = get_quota_info(@domain_response[:response])
-                mail      = get_quota_info(@mail_response[:response])
-                database  = get_quota_info(@database_response[:response])
+              domain    = get_quota_info(@domain_response[:response])
+              mail      = get_quota_info(@mail_response[:response])
+              database  = get_quota_info(@database_response[:response])
 
-                domain_space = domain[:space].collect{|x| kb_to_bytes(x)}
-                database_space = database[:space].collect{|x| kb_to_bytes(x)}
+              domain_space = domain[:space].collect{|x| kb_to_bytes(x)}
+              database_space = database[:space].collect{|x| kb_to_bytes(x)}
 
 
-                wb_traffic_bytes  = get_bytes(@web_traffic[:response])
-                ftp_traffic_bytes = get_bytes(@ftp_traffic[:response])
+              wb_traffic_bytes  = get_bytes(@web_traffic[:response])
+              ftp_traffic_bytes = get_bytes(@ftp_traffic[:response])
 
-                # @quota = convert_to_json({isp_disk: {web: number_to_human_size(domain_space.inject(0, :+)), mail: number_to_human_size(mail[:space].inject(0, :+)), database: number_to_human_size(database_space.inject(0, :+))},
-                # isp_bandwidth: {web: number_to_human_size(wb_traffic_bytes), ftp: number_to_human_size(ftp_traffic_bytes), mail: 0}, 
-                # solid_disk: {file: number_to_human_size(@file_disk_space), web: number_to_human_size(@web_disk_space), database: number_to_human_size(@ms_db_disk_space)}, solid_band: {web: number_to_human_size(@web_bandwidth),ftp: number_to_human_size(@ftp_bandwidth)}})
-                total_usage = {
-                  disk_space:{
-                    web_linux: number_to_human_size(domain_space.inject(0, :+)),
-                    mail: number_to_human_size(mail[:space].inject(0, :+)),
-                    database_mysql: number_to_human_size(database_space.inject(0, :+))
-                  },
-                  bandwidth:{
-                    ftp: number_to_human_size(ftp_traffic_bytes),
-                    web_linux: number_to_human_size(wb_traffic_bytes),
-                    mail: 0
-                  }
+              # @quota = convert_to_json({isp_disk: {web: number_to_human_size(domain_space.inject(0, :+)), mail: number_to_human_size(mail[:space].inject(0, :+)), database: number_to_human_size(database_space.inject(0, :+))},
+              # isp_bandwidth: {web: number_to_human_size(wb_traffic_bytes), ftp: number_to_human_size(ftp_traffic_bytes), mail: 0}, 
+              # solid_disk: {file: number_to_human_size(@file_disk_space), web: number_to_human_size(@web_disk_space), database: number_to_human_size(@ms_db_disk_space)}, solid_band: {web: number_to_human_size(@web_bandwidth),ftp: number_to_human_size(@ftp_bandwidth)}})
+              total_usage = {
+                disk_space:{
+                  web_linux: number_to_human_size(domain_space.inject(0, :+)),
+                  mail: number_to_human_size(mail[:space].inject(0, :+)),
+                  database_mysql: number_to_human_size(database_space.inject(0, :+))
+                },
+                bandwidth:{
+                  ftp: number_to_human_size(ftp_traffic_bytes),
+                  web_linux: number_to_human_size(wb_traffic_bytes),
+                  mail: 0
                 }
-                database_mysql = @database_response[:response].collect{|x| [x[:database_name],x[:used]]}.compact.to_h
-                website_quota = @domain_response[:response].collect{|x| [x[:domain],x[:used]]}
-                @all_domains = []
-                website_quota.each do |website|
-                  @all_domains << domain(website)
-                end
-                 
+              }
+              database_mysql = @database_response[:response].collect{|x| [x[:database_name],x[:used]]}.compact.to_h
+              website_quota = @domain_response[:response].collect{|x| [x[:domain],x[:used]]}
+              @all_domains = []
+              web_bandwidth = @web_traffic[:response].to_a.collect{|x| x if x.last[:this_year].present?}
               
+              
+              website_quota.each do |website|
+                web = @web_traffic[:response].to_a.collect{|x| x.last[:this_year] if x.first == website.first}.compact.first
+                ftp = @ftp_traffic[:response].to_a.collect{|x| x.last[:this_year] if x.first == website.first}.compact.first
+                @all_domains << domain(website,web,ftp)
+              end
+                
+              @quota = convert_to_hash(total_usage,database_mysql)
+              quota_usage_obj = QuotaUsage.new({
+                user_id: user.id,
+                product_id: product_id,
+                quota_used: @quota
+              })
 
-
-                @quota = convert_to_hash(total_usage,database_mysql)
-                quota_usage_obj = QuotaUsage.new({
-                  user_id: user.id,
-                  product_id: product_id,
-                  quota_used: @quota
-                })
-
-                if existing_quota.blank?
-                  quota_usage_obj.save!
-                else
-                  existing_quota.update(quota_used: @quota)
-                end
+              if existing_quota.blank?
+                quota_usage_obj.save!
+              else
+                existing_quota.update(quota_used: @quota)
               end
             end
           end
@@ -95,21 +95,22 @@ module QuotaManager
       }
       end
 
-      def domain(website)
+      def domain(website,web,ftp)
         domains = {
           "#{website.first}": {
-            disk_space: domain_disk_space(website)
+            disk_space: domain_disk_space(website),
+            bandwidth:  domain_bandwidth(web,ftp)
           }
         }
       end
 
-      # def domain_bandwidth()
-      #   {
-      #   ftp: ,
-      #   web_linux: ,
-      #   mailboxes: mailbox_bandwidth()
-      #   }
-      # end
+      def domain_bandwidth(web,ftp)
+        {
+        ftp: ftp,
+        web_linux: web,
+        mailboxes: {}
+        }
+      end
 
       def domain_disk_space(web_res)
         {
