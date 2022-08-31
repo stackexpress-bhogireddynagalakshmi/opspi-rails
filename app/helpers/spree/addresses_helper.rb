@@ -34,7 +34,7 @@ module Spree
                         required: is_required,
                         pattern: ZIPCODE_REGEX,
                         title: 'Invalid Zipcode',
-                        maxlength: "6",
+                        maxlength: "12",
                         placeholder: is_required ? "#{method_name} #{required}" : method_name,
                         aria: { label: Spree.t(:zipcode) })
       end
