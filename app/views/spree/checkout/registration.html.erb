@@ -2,7 +2,14 @@
 <div class="checkout-registration container">
   <div class="row col-xs-12 col-lg-11 mx-auto">
     <div class="col-xs-12 col-lg-6">
-      <%= render partial: 'spree/shared/login' if defined?(spree_login_path) %>
+      <%#= render partial: 'spree/shared/login' if defined?(spree_login_path) %>
+    <%if defined?(spree_login_path) %>
+      <%= form_for Spree.user_class.new, as: :spree_user, url: spree.registration_path do |f| %>
+        <div data-hook="signup_inside_form">
+        <%= render partial: 'spree/shared/user_form', locals: { f: f, remember_me_field: true } %>
+        </div>
+        <%end%>
+    <%end%>    
     </div>
     <div class="col-xs-12 col-lg-6">
       <div class="col-lg-11 mx-auto">
