@@ -24,7 +24,7 @@ p{
       <%= render partial: '/spree/admin/shared/icons/windowsicon' %>
       </span>
       <%end%>
-      <%=link_to hosted_zone.name, "/admin/dns/hosted_zones/zone_overview?zone_name=#{hosted_zone.name}&dns_id=#{hosted_zone.isp_config_host_zone_id}"%>
+      <%=link_to hosted_zone.name, "/admin/dns/hosted_zones/zone_overview?zone_name=#{hosted_zone.name}&dns_id=#{hosted_zone.isp_config_host_zone_id}&user_domain_id=#{user_domain.id}"%>
       </p>
       <span class="ml-2 justify-content-end">
       <%= link_to  admin_dns_hosted_zone_path(hosted_zone.isp_config_host_zone_id),type: 'button', data: {confirm: t('isp_config.host_zone.delete_alert')} , class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete do %>

@@ -11,86 +11,21 @@
       <table class="table table-sm card-table" style="width:100%">
         <thead>
           <tr>
-          <th>Email</th>
-          <!--<th>Realname</th>-->
-          <th>AutoRespond</th>
-          <th>Receiving</th>
-          <th>SMTP</th>
-          <th>Inbox</th>
-          <th>IMAP</th>
-          <th>POP3</th>
-          <th style="text-align: center">Actions</th>
+            <th>Name</th>
+            <th>Email</th>
+           <!--  <th>AutoRespond</th> -->
+            <th>Receiving</th>
+            <th>SMTP</th>
+            <th>Inbox</th>
+            <th>IMAP</th>
+            <th>POP3</th>
+            <th style="text-align: center">Actions</th>
           </tr>
         </thead>
-        <tbody class="fs-base">
+        <tbody class="fs-base" id="mailboxes_list_table">
         <% if @mailboxes.any? %>
-        <%@mailboxes.each do |mailbox| %>
-          <tr data-hook="admin_orders_index_rows">
-            <td><%= mailbox.email%></td>
-            <!--<td><%= mailbox.name%></td>-->
-            <td style="text-align: center;"><% if mailbox.autoresponder == 'y' %>
-            <i class="fe fe-check-circle" style="color: green;"></i>
-            <% else %>
-            <i class="fe fe-x-circle" style="color: red;"></i>
-            <% end %>
-            </td>
-            <td style="text-align: center;"><% if mailbox.postfix == 'y' %>
-            <i class="fe fe-check-circle" style="color: green;"></i>
-            <% else %>
-            <i class="fe fe-x-circle" style="color: red;"></i>
-            <% end %>
-            </td>
-            <td style="text-align: center;"><% if mailbox.disablesmtp == 'y' %>
-            <i class="fe fe-check-circle" style="color: green;"></i>
-            <% else %>
-            <i class="fe fe-x-circle" style="color: red;"></i>
-            <% end %>
-            </td>
-            <td style="text-align: center;"> <% if ['y','n'].reject{|x| x == mailbox.disablesmtp}[0] == 'y' %>
-            <i class="fe fe-check-circle" style="color: green;"></i>
-            <% else %>
-            <i class="fe fe-x-circle" style="color: red;"></i>
-            <% end %>
-            </td>
-            <td style="text-align: center;"><% if ['y','n'].reject{|x| x == mailbox.disableimap}[0] == 'y' %>
-            <i class="fe fe-check-circle" style="color: green;"></i>
-            <% else %>
-            <i class="fe fe-x-circle" style="color: red;"></i>
-            <% end %>
-            </td>
-            <td style="text-align: center;"><% if ['y','n'].reject{|x| x == mailbox.disablepop3}[0] == 'y' %>
-            <i class="fe fe-check-circle" style="color: green;"></i>
-            <% else %>
-            <i class="fe fe-x-circle" style="color: red;"></i>
-            <% end %>
-            </td>
-            <td>
-
-            <span class="d-flex justify-content-end">
-            <%= link_to  admin_mail_mail_box_path(id: mailbox.mailuser_id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete do %>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-              <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-              <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-            </svg>
-            <%end%>
-            <%= link_to  edit_admin_mail_mail_box_path(id: mailbox.mailuser_id),type: 'button', class: 'btn btn-outline-success btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Edit',style:"margin-right:5px" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-            </svg> 
-            <% end %>
-            <%= link_to  get_web_mail_client_url, target: '_blank',type: 'button', class: 'btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Webmail',style:"margin-right:5px" do %>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
-                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
-              </svg>
-            <% end %> 
-               <%= link_to 'javascript:void(0);', data: {email: mailbox.email, name: mailbox.name, smtp: ENV['OPSPI_SMTP_SERVER'], imap: ENV['MAIL_SERVER_IMAP_URL'], pop: ENV['MAIL_SERVER_POP_URL'], webmail_url: ENV['WEBMAIL_URL'],smtp: ENV['MAIL_SERVER_SMTP_URL'], pwd_div_id: "mail_box_#{mailbox.mailuser_id}_pwd_text", id: mailbox.mailuser_id}, class: 'configure-mailbox-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
-                  <%= render partial: '/spree/admin/shared/icons/gear' %>
-                <% end %>
-            </span>
-            
-            </td>  
-          </tr>
+          <%@mailboxes.each do |mailbox| %>
+          <%=render :partial=>'spree/admin/mail/mail_boxes/row', locals: { mailbox: mailbox }%>
         <% end %>
         <% else %>
           <tr>
@@ -102,103 +37,6 @@
     </div>
   </div>
   
-
-
-  <%= render partial: '/spree/admin/shared/modal/modal' %>
-
-<div class="modal fade" id="mailboxModal" tabindex="-1" role="dialog" aria-labelledby="mailboxModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="exampleModalLabel2">Add Mailbox</h3>
-        <button type="button" class="close-button" data-dismiss="modal" aria-label="Close" style="margin-right: -8px;" data-bs-dismiss="modal">
-        &times;
-        </button>
-      </div>
-      <div class="modal-body">
-      <%=form_for "mailuser", url: admin_mail_mail_boxes_path, html: {method: :post} do |f|%> 
-       <%=f.hidden_field :mail_domain, value: params[:zone_name]%>
-        <fieldset>
-          <div class="form-group">
-            <label class="form-label">Name</label>
-            <%=f.text_field 'name', class: 'form-control', required: true%>
-          </div>
-      
-          <div class="form-group">
-            <label class="form-label">Email</label>
-      
-            <div class="input-group">
-               <%=f.text_field 'email', class: 'form-control', pattern: MAILBOX_REGEX, title: "Invalid input", required: true, style:"width: 20%;"%>
-                <span class="input-group-text">@</span>
-                <%=f.text_field 'mail_domain', value: params[:zone_name], class: 'form-control', disabled: true%>
-            </div>
-          </div>
-      
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <%=f.password_field 'password', class: 'form-control', required: true%>
-          </div>
-      
-          <div class="form-group">
-            <label class="form-label">Quota (0 for unlimited)</label>
-            <%=f.text_field 'quota', value: 0, class: 'form-control'%>
-          </div>
-      
-           <div class="form-group">
-            <label class="form-label">Send copy to (Separate multiple email addresses with commas)</label>
-            <%=f.text_field 'cc', class: 'form-control'%>
-          </div>
-       
-      
-          <div class="form-group form-check">
-            <label class="form-check-label">Copy during delivery</label>
-            <%=f.check_box 'forward_in_lda', class: 'form-check-input list-checkbox'%>
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label">Spamfilter</label>
-            <%=f.select 'policy', options_for_select([['- Inherit domain setting -',0],['Non-paying',1],['Normal',5],['Permissive',7],['Trigger happy',6],['Uncensored',2],['Wants all spam',3],['Wants viruses',4]], @mail_user.try(:policy)), {}, class: 'form-select'%>
-          </div>
-      
-          <div class="form-group form-check">
-            <label class="form-check-label">Enable receiving</label>
-            <%=f.check_box 'postfix',{ value: 'y', checked:  true , class: 'form-check-input list-checkbox'}, 'y', 'n'%>
-          </div>
-          
-      
-          <div class="form-group form-check">
-            <label class="form-check-label">Disable sending</label>
-            <%=f.check_box 'disablesmtp', { value: 'y',class: 'form-check-input list-checkbox'} , 'y', 'n'%>
-          </div>
-      
-          <div class="form-group form-check">
-            <label class="form-check-label">Disable (local) delivering</label>
-            <%=f.check_box 'disabledeliver', { value: 'y', class: 'form-check-input list-checkbox'} , 'y', 'n'%>
-          </div>
-      
-           <div class="form-group form-check">
-            <label class="form-check-label">Enable greylisting</label>
-            <%=f.check_box 'greylisting', { value: 'y',class: 'form-check-input list-checkbox'} , 'y', 'n'%>
-          </div>
-      
-           <div class="form-group form-check">
-            <label class="form-check-label">Disable IMAP</label>
-            <%=f.check_box 'disableimap', { value: 'y', class: 'form-check-input list-checkbox'} , 'y', 'n'%>
-          </div>
-          <div class="form-group form-check">
-            <label class="form-check-label">Disable POP3</label>
-            <%=f.check_box 'disablepop3', { value: 'y',  class: 'form-check-input list-checkbox' } , 'y', 'n'%>
-          </div>
-      
-          <%=submit_tag "Add Mailbox",class: 'btn btn-primary lift mb-4'%>
-      
-        </fieldset>
-      <%end%>
-      </div>
-    </div>
-  </div>
-</div>
-
 
 <script type="text/javascript">
   

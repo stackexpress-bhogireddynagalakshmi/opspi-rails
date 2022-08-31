@@ -22,7 +22,8 @@ module IspConfig
         formatted_response(response, 'find')
       end
 
-      def create(params = {})
+      def create(params = {}, opts={})
+        params = sanitize(params)
         response = query({
                            endpoint: '/json.php?mail_user_add',
                            method: :POST,
@@ -32,23 +33,36 @@ module IspConfig
                            }
                          })
 
-        user.mail_users.create({ isp_config_mailuser_id: response["response"] }) if response.code == "ok"
+
+        if response.code == "ok"
+          user.mail_users.create({ isp_config_mailuser_id: response["response"] }) #TODO: Legacy table to be removed
+          user_domain = opts[:user_domain]
+          user_domain.user_mailboxes.create(mailbox_params(params).merge({ remote_mailbox_id: response["response"] })) if user_domain.present?
+        end
+
 
         formatted_response(response, 'create')
       end
 
-      def update(primary_id, params = {})
+      def update(id, params = {})
+        params = sanitize(params)
+        mailbox = UserMailbox.find(id)
+
         response = query({
                            endpoint: '/json.php?mail_user_update',
                            method: :POST,
                            body: {
                              client_id: user.isp_config_id,
-                             primary_id: primary_id,
+                             primary_id: mailbox.remote_mailbox_id,
                              params: params.merge(server_params).merge({ login: params[:email] }).reject do |_x, v|
                                        v.blank?
                                      end
                            }
                          })
+
+        if response.code == "ok"
+          mailbox.update(mailbox_params(params))
+        end
 
         formatted_response(response, 'update')
       end
@@ -110,6 +124,35 @@ module IspConfig
           purge_trash_days: 90,
           purge_junk_days: 90
         }
+      end
+
+
+      def sanitize(params)
+        return params if  params[:email].blank?
+        params[:email] = params[:email][0..-2]  if  params[:email][-1] == '.'
+
+        return params
+      end
+
+      def mailbox_params(params)
+        {
+          name:              params[:name],
+          email:             params[:email],
+          quota:             params[:quota],
+          cc:                params[:cc],
+          forward_in_lda:    params[:forward_in_lda],
+          policy:            params[:policy],
+          postfix:           boolean(params[:postfix]),
+          disablesmtp:       boolean(params[:disablesmtp]),
+          disabledeliver:    boolean(params[:disabledeliver]),
+          greylisting:       boolean(params[:greylisting]),
+          disableimap:       boolean(params[:disableimap]),
+          disablepop3:       boolean(params[:disablepop3])
+        }
+      end
+
+      def boolean(val)
+        val == 'y' ? true : false
       end
     end
   end

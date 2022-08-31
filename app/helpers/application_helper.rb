@@ -284,5 +284,21 @@ module ApplicationHelper
 
     types
   end
-  
+
+
+  def html_boolean(boolean, opts={})
+    if opts[:reverse] == true
+      if boolean == true
+         '<i class="fe fe-x-circle red"></i>'.html_safe
+      else
+        '<i class="fe fe-check-circle green"></i>'.html_safe
+      end
+    else
+      if boolean == true
+        '<i class="fe fe-check-circle green"></i>'.html_safe
+      else
+        '<i class="fe fe-x-circle red"></i>'.html_safe
+      end
+    end
+  end
 end
