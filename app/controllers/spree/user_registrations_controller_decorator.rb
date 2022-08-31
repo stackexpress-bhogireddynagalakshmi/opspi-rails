@@ -16,7 +16,7 @@ module Spree
         if  request.url == '/checkout/registration'
           sign_in(resource_name, resource)
           session[:spree_user_session] = true
-
+          resource.send_confirmation_instructions(current_store) if Spree::Auth::Config[:confirmable]
         flash[:success] = Spree.t(:send_instructions)
 
         redirect_to spree.checkout_state_path(:address)
