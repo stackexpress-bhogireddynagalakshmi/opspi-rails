@@ -17,6 +17,7 @@ module QuotaManager
           product = Spree::Product.where(id:product_id).first
           # if product.linux?
           if user.isp_config_id.present? 
+            @domain_list = get_domain_list
             @domain_response   = get_domain_quota
             @mail_response     = get_mail_quota 
             @database_response = get_database_quota
@@ -55,15 +56,23 @@ module QuotaManager
                 }
               }
               database_mysql = @database_response[:response].collect{|x| [x[:database_name],x[:used]]}.compact.to_h
+              domain_list = @domain_list[:response].response.collect{|x| x[:origin]}
               website_quota = @domain_response[:response].collect{|x| [x[:domain],x[:used]]}
               @all_domains = []
-              web_bandwidth = @web_traffic[:response].to_a.collect{|x| x if x.last[:this_year].present?}
+              # web_bandwidth = @web_traffic[:response].to_a.collect{|x| x if x.last[:this_year].present?}
               
               
-              website_quota.each do |website|
-                web = @web_traffic[:response].to_a.collect{|x| x.last[:this_year] if x.first == website.first}.compact.first
-                ftp = @ftp_traffic[:response].to_a.collect{|x| x.last[:this_year] if x.first == website.first}.compact.first
-                @all_domains << domain(website,web,ftp)
+              domain_list.each do |domain|
+                web_disk = @domain_response[:response].collect{|x| x[:used] if x[:domain] == sanitize_domain(domain)}.compact.first
+                web_bw = @web_traffic[:response].to_a.collect{|x| x.last[:this_year] if x.first == sanitize_domain(domain)}.compact.first
+                ftp_bw = @ftp_traffic[:response].to_a.collect{|x| x.last[:this_year] if x.first == sanitize_domain(domain)}.compact.first
+                hash_params = {
+                  domain: sanitize_domain(domain),
+                  web_linux: web_disk,
+                  web_bw: web_bw,
+                  ftp_bw: ftp_bw
+                }
+                @all_domains << domain(hash_params)
               end
                 
               @quota = convert_to_hash(total_usage,database_mysql)
@@ -84,6 +93,10 @@ module QuotaManager
       end
       private
 
+      def sanitize_domain(domain)
+        domain.chomp('.')
+      end
+
       def convert_to_hash(total_usage,database_mysql)
        usage_hash = { usage: {
         domains: @all_domains,
@@ -95,27 +108,27 @@ module QuotaManager
       }
       end
 
-      def domain(website,web,ftp)
+      def domain(resources ={})
         domains = {
-          "#{website.first}": {
-            disk_space: domain_disk_space(website),
-            bandwidth:  domain_bandwidth(web,ftp)
+          "#{resources[:domain]}": {
+            disk_space: domain_disk_space(resources),
+            bandwidth:  domain_bandwidth(resources)
           }
         }
       end
 
-      def domain_bandwidth(web,ftp)
+      def domain_bandwidth(bandwidth)
         {
-        ftp: ftp,
-        web_linux: web,
+        ftp: bandwidth[:ftp_bw],
+        web_linux: bandwidth[:web_bw],
         mailboxes: {}
         }
       end
 
-      def domain_disk_space(web_res)
+      def domain_disk_space(disk)
         {
-        web_linux: web_res.last,
-        mailboxes: mailbox_disk_space(web_res.first)
+        web_linux: disk[:web_linux],
+        mailboxes: mailbox_disk_space(disk[:domain])
         }
       end
 
@@ -177,6 +190,11 @@ module QuotaManager
         kb * 1000
       end
   
+      def get_domain_list
+        Rails.logger.info { "Domain list called" }
+        IspConfig::Dns::HostedZone.new(user).all_zones
+      end
+
       def get_domain_quota
         Rails.logger.info { "Domain quota called" }
         IspConfig::QuotaDashboard.new(user).domain_quota
