@@ -12,24 +12,35 @@ module Spree
     yield resource if block_given?
     
     if resource_saved
-        
-        if  request.url == '/checkout/registration'
-          sign_in(resource_name, resource)
-          session[:spree_user_session] = true
-          resource.send_confirmation_instructions(current_store) if Spree::Auth::Config[:confirmable]
-        flash[:success] = Spree.t(:send_instructions)
-
+      sign_in(resource_name, resource)
+      session[:spree_user_session] = true
+      resource.send_confirmation_instructions(current_store) if Spree::Auth::Config[:confirmable]
+      flash[:success] = Spree.t(:send_instructions)
+      cart = spree_current_user.orders.collect{|x| x.state == "address"}.last
+      if cart
         redirect_to spree.checkout_state_path(:address)
-        else
+      else
+        redirect_to account_path
+      end
+        
+        # if  request.url == '/checkout/registration'
+        #   sign_in(resource_name, resource)
+        #   session[:spree_user_session] = true
+        #   resource.send_confirmation_instructions(current_store) if Spree::Auth::Config[:confirmable]
+        # flash[:success] = Spree.t(:send_instructions)
 
-          resource.send_confirmation_instructions(current_store) if Spree::Auth::Config[:confirmable]
-          flash[:success] = Spree.t(:send_instructions)
+        # redirect_to spree.checkout_state_path(:address)
+        # else
 
-          redirect_to '/login'
-        end
+        #   resource.send_confirmation_instructions(current_store) if Spree::Auth::Config[:confirmable]
+        #   flash[:success] = Spree.t(:send_instructions)
+
+        #   redirect_to '/login'
+        # end
 
     else
-      # flash[:error] = resource.inactive_message 
+       flash[:error] = resource.inactive_message 
+       render :new
     end
 
       if resource.persisted?
