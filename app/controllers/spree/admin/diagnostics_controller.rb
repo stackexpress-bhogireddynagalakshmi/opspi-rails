@@ -21,7 +21,7 @@ module Spree
             check_panel_connection(panel_id)
           end
 
-          check_superadmin_payment_method
+          check_superadmin_payment_method(user)
         elsif user.store_admin?
 
           # for reseller check thier respective panel on which they are signed up
