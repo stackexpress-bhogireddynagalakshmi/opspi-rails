@@ -67,16 +67,20 @@ module IspConfig
         formatted_response(response, 'update')
       end
 
-      def destroy(primary_id)
+      def destroy(id)
+        mailbox = UserMailbox.find(id)
         response = query({
                            endpoint: '/json.php?mail_user_delete',
                            method: :DELETE,
                            body: {
                              client_id: user.isp_config_id,
-                             primary_id: primary_id
+                             primary_id: mailbox.remote_mailbox_id
                            }
                          })
-        user.mail_users.find_by_isp_config_mailuser_id(primary_id).destroy if response.code == "ok"
+        if response.code == "ok"
+          user.mail_users.find_by_isp_config_mailuser_id(mailbox.remote_mailbox_id).destroy 
+          mailbox.destroy
+        end
 
         formatted_response(response, 'delete')
       end

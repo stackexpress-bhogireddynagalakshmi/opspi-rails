@@ -6,8 +6,8 @@ module Spree
       # Mail Domain controller
       class MailBoxesController < Spree::Admin::BaseController
         before_action :ensure_hosting_panel_access
-        before_action :set_user_domain, only: [:new, :create, :update, :edit, :index]
-        before_action :set_mail_box, only: %i[edit update destroy]
+        before_action :set_user_domain, only: [:new, :create, :update, :edit, :index, :destroy,:configurations]
+        before_action :set_mail_box, only: %i[edit update destroy, configurations]
 
         def index
           @mailboxes = @user_domain.user_mailboxes.order("created_at desc")
@@ -26,20 +26,20 @@ module Spree
           if @response[:success]
             @mailbox = @user_domain.user_mailboxes.where(email: mail_user_param[:email]).last 
           end
-          set_flash
         end
 
         def update
           mail_user_param = mail_user_params.merge({ email: formatted_email })
           @response = mail_user_api.update(@mailbox.id, mail_user_param)
           @mailbox.reload
-          set_flash
         end
 
         def destroy
-          @response = mail_user_api.destroy(@mailbox.remote_mailbox_id)
-          set_flash
-          redirect_to request.referrer
+          @response = mail_user_api.destroy(@mailbox.id)
+        end
+
+        def configurations
+
         end
 
         private
