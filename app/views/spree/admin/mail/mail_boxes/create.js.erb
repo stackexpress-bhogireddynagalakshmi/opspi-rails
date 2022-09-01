@@ -1,0 +1,6 @@
+<%if @response[:success] == true%>
+  $("#myModal").modal('hide')
+  $('#mailboxes_list_table').append("<%=j render partial: 'spree/admin/mail/mail_boxes/row', locals: { mailbox: @mailbox}%>")
+<%else%>
+  $('#error_div').html("<%=j @response[:message].html_safe%>");
+<%end%>

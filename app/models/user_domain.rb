@@ -4,6 +4,7 @@ class UserDomain < ApplicationRecord
   belongs_to :user, class_name: 'Spree::User',foreign_key: 'user_id'
   has_one :user_website, class_name: 'UserWebsite'
   has_one :user_mail_domain
+  has_many :user_mailboxes
   has_one :hosted_zone
 
   validates :domain, presence: true

@@ -6,6 +6,8 @@ module Spree
       class HostedZonesController < Spree::Admin::BaseController
         include ApisHelper
         include PanelConfiguration
+
+        before_action :set_user_domain, only: [:zone_overview]
         before_action :ensure_hosting_panel_access
         before_action :set_zone_list, only: %i[edit update destroy dns zone_overview]
         
@@ -88,6 +90,7 @@ module Spree
         end
 
         def zone_overview
+
           @zone_name = params[:zone_name]
           @dns_id = params[:dns_id]
 
@@ -105,10 +108,7 @@ module Spree
           end
 
           ### mail boxes/user
-          @mail_user = mail_user_api.all[:response].response
-          @mailboxes = @mail_user.collect{|x| x if x.login.split('@')[1] == @zone_name}.compact
-          @mailbox_count = @mailboxes.present? ? @mailboxes.size : 0
-          
+            @mailboxes = @user_domain.user_mailboxes
           ######
 
           ##### user domain details
@@ -483,6 +483,11 @@ module Spree
           else
             data
           end
+        end
+
+
+        def set_user_domain
+          @user_domain = current_spree_user.user_domains.find(params[:user_domain_id])
         end
 
       end
