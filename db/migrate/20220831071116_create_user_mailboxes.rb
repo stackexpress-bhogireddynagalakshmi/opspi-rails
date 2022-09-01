@@ -8,7 +8,7 @@ class CreateUserMailboxes < ActiveRecord::Migration[6.1]
       t.integer :quota
       t.text :cc
       t.boolean :forward_in_lda
-      t.boolean :policy
+      t.integer :policy
       t.boolean :postfix
       t.boolean :disablesmtp
       t.boolean :disabledeliver
@@ -17,7 +17,5 @@ class CreateUserMailboxes < ActiveRecord::Migration[6.1]
       t.boolean :disablepop3
       t.timestamps
     end
-
-
   end
 end
