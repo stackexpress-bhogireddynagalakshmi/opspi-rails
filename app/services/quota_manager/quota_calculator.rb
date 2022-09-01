@@ -68,7 +68,7 @@ module QuotaManager
                 ftp_bw = @ftp_traffic[:response].to_a.collect{|x| x.last[:this_year] if x.first == sanitize_domain(domain)}.compact.first
                 hash_params = {
                   domain: sanitize_domain(domain),
-                  web_linux: web_disk,
+                  web_linux: kb_to_bytes(web_disk.to_i),
                   web_bw: web_bw,
                   ftp_bw: ftp_bw
                 }
