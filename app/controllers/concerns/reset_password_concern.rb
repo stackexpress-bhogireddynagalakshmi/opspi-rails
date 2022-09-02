@@ -49,12 +49,16 @@ module ResetPasswordConcern
 
     def windows_database(db_user_name,database_name)
       db_users  = current_spree_user.solid_cp.sql_server.all_db_users
-      db_users = db_users.body[:get_sql_users_response][:get_sql_users_result][:sql_user] || []
-      db_users = [db_users] if db_users.is_a?(Hash)
-      db_user   = db_users.detect { |x| x[:name] == db_user_name }
-      @response = current_spree_user.solid_cp.sql_server.update_database_user_password(
-        db_user[:id], { database_password: @password, database_name: database_name }
-        )
+      db_users = db_users.body[:get_sql_users_response][:get_sql_users_result][:sql_user] || [] rescue []
+      if db_users .present?
+        db_users = [db_users] if db_users.is_a?(Hash)
+        db_user   = db_users.detect { |x| x[:name] == db_user_name }
+        byebug
+        @response = current_spree_user.solid_cp.sql_server.delete_sql_user(db_user[:id]) if db_user.present?
+      end
+
+      @response = current_spree_user.solid_cp.sql_server.add_sql_user({database_username: db_user_name,database_name:database_name,  database_password: @password})
+      return { success: false,  error: "something went wrong. Please try after sometime."} if @response.nil?
     end
 
 end

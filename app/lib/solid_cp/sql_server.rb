@@ -6,7 +6,7 @@ module SolidCp
 
     def initialize(user)
       @user = user
-      
+
       set_configurations(user, SOAP_SQL_WSDL)
     end
 
@@ -21,7 +21,6 @@ module SolidCp
                :get_sql_databases,
                :get_sql_user,
                :get_sql_users
-
 
     def get_sql_databases
       response = super(message: { package_id: user.packages.first.try(:solid_cp_package_id) })
@@ -49,8 +48,9 @@ module SolidCp
           "Databases" => { "string" => [params[:database_name]] },
           "Password" => params[:database_password],
           "itemId" => id,
-          "PackageId" => user.packages.first.try(:solid_cp_package_id),
+          "PackageId" => user.packages.first.try(:solid_cp_package_id)
         }
+
       }
       )
       code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
@@ -103,11 +103,12 @@ module SolidCp
 
       if response.success? && code.positive?
         user_response = add_sql_user(params.merge(database_username: database_user.id))
-        database_user.update(database_user: formatted_database_name(database_user.id),database_id: response.body[:add_sql_database_response][:add_sql_database_result], status: 1)
-        
+        database_user.update(database_user: formatted_database_user_name(database_user.id),
+                             database_id: response.body[:add_sql_database_response][:add_sql_database_result], status: 1)
+
         user_response
       else
-        database_user.update(database_user: formatted_database_name(database_user.id),status: 0)
+        database_user.update(database_user: formatted_database_user_name(database_user.id), status: 0)
         { success: false, message: error_message(error[:msg]), response: response }
       end
     rescue StandardError => e
@@ -120,7 +121,7 @@ module SolidCp
         item: {
           "Databases" => { "string" => [params[:database_name]] },
           "PackageId" => user.packages.first.try(:solid_cp_package_id),
-          "Name" => formatted_database_name(params[:database_username]),
+          "Name" => formatted_database_user_name(params[:database_username]),
           "Password" => params[:database_password]
         },
         group_name: "MsSQL2019"
@@ -152,8 +153,20 @@ module SolidCp
     end
     alias destroy delete_sql_database
 
-    def formatted_database_name(database_username)
-      "du_#{database_username.to_s.rjust(8, padstr='0')}"
+    def delete_sql_user(id)
+      response = super(message: { itemId: id })
+      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
+      error = SolidCp::ErrorCodes.get_by_code(code)
+
+      if response.success?
+        { success: true, message: I18n.t(:'windows.database.user_delete'), response: response }
+      else
+        { success: false, message: I18n.t(:panel_error, msg: e.message), response: response }
+      end
+    end
+
+    def formatted_database_user_name(database_username)
+      "du_#{database_username.to_s.rjust(8, padstr = '0')}"
     end
 
     def error_message(error)

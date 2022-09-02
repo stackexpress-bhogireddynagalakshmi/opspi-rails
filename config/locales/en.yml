@@ -191,6 +191,7 @@ en:
     deactivate_domain: "Are you sure to Deactivate this Domain?, This will affect your other services and delete your ftp accounts"
     install_ssl: 'Are you sure to Install ssl certificate?'
     delete_ssl: 'Are you sure to Delete ssl certificate?'
+    user_delete: 'Database user deleted successfully.'
     database: 
       create: 'Database created successfully'
       delete: 'Database deleted successfully'
