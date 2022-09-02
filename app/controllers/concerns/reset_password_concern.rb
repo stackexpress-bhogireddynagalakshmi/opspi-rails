@@ -53,7 +53,6 @@ module ResetPasswordConcern
       if db_users .present?
         db_users = [db_users] if db_users.is_a?(Hash)
         db_user   = db_users.detect { |x| x[:name] == db_user_name }
-        byebug
         @response = current_spree_user.solid_cp.sql_server.delete_sql_user(db_user[:id]) if db_user.present?
       end
 
