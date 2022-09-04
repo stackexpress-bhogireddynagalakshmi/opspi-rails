@@ -67,7 +67,7 @@
         <th scope="col" colspan="2"><%= sort_link @search,:name, Spree.t(:name), { default_order: "desc" }, {title: 'admin_products_listing_name_title'} %></th>
         <th scope="col"><%= Spree.t(:sku) %></th>
         <th scope="col"><%= Spree.t(:plan_type) %></th>
-        <!--<th scope="col"><%= Spree.t(:store) %></th> -->
+        <!--<th scope="col"><%#= Spree.t(:store) %></th> -->
         <th scope="col"><%= Spree.t(:status) %></th>
         <th scope="col" class="text-center">
           <%= sort_link @search, :master_default_price_amount, Spree.t(:master_price), {}, {title: 'admin_products_listing_price_title'} %>
@@ -90,7 +90,7 @@
 <!--            <td><%# Spree::Store.find_by(account_id: product.account_id).try(:store_id) %></td>-->
          <!-- <td class="store">
             <span data-ransack-field="q_store_id_in" data-ransack-value="<%= Spree::Store.find_by(account_id: product.account_id).try(:store_id) %>">
-            <%= Spree::Store.find_by(account_id: product.account_id).try(:name) %>
+            <%#= Spree::Store.find_by(account_id: product.account_id).try(:name) %>
             </span>
           </td> -->
           <td class="status"><%= active_badge(available_status == Spree.t(:available), label: available_status) %></td>
