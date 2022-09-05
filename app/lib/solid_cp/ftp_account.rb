@@ -80,7 +80,7 @@ module SolidCp
       code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
       error = SolidCp::ErrorCodes.get_by_code(code)
 
-      if response.success?
+      if response.success? && code > 0
         { success: true, message: 'Ftp User updated successfully', response: response }
       else
         { success: false, message:  error[:msg], response: response }
