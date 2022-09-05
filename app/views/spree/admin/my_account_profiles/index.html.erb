@@ -36,7 +36,9 @@
     Phone Number
   </div>
   <div class="col-sm-9">
-    <span><%= current_store.contact_phone%></span>
+  <% current_spree_user.addresses.each_with_index do |address, index| %>
+    <span><%= address.phone%></br></span>
+    <%end%>
   </div>
 </div>
 <hr>
