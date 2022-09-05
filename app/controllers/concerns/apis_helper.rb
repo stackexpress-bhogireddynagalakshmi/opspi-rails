@@ -6,7 +6,11 @@ module ApisHelper
   end
 
   def ftp_user_api
-    current_spree_user.isp_config.ftp_user
+    if params[:server_type] == 'linux'
+      current_spree_user.isp_config.ftp_user
+    else
+      current_spree_user.solid_cp.ftp_account
+    end
   end
 
   def db_user_api
