@@ -23,7 +23,7 @@
 
   </div>
 </div>
-<%= alert(resource_alert("domain"),"info")%>
+<%= alert(resource_alert("domain"),"warning")%>
 <span id="error_msg"></span>
 
 
@@ -43,7 +43,6 @@ var checkResourceLimit = function(element){
   var error = document.getElementById("error_msg")
   var val = element.attributes.data.value
   if (val == 'true') {
-      // error.innerHTML = "<div class='alert alert-warning' role='alert'>Your limit reached.please update plan to create new resources</div>";
       event.preventDefault();
   }
 }
