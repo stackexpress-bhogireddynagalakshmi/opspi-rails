@@ -9,9 +9,10 @@ module Spree
     @user = build_resource(spree_user_params)
     resource_saved = resource.save
 
-    yield resource if block_given?
+    # yield resource if block_given?
     
     if resource_saved
+      
       sign_in(resource_name, resource)
       session[:spree_user_session] = true
       resource.send_confirmation_instructions(current_store) if Spree::Auth::Config[:confirmable]
@@ -22,21 +23,6 @@ module Spree
       else
         redirect_to account_path
       end
-        
-        # if  request.url == '/checkout/registration'
-        #   sign_in(resource_name, resource)
-        #   session[:spree_user_session] = true
-        #   resource.send_confirmation_instructions(current_store) if Spree::Auth::Config[:confirmable]
-        # flash[:success] = Spree.t(:send_instructions)
-
-        # redirect_to spree.checkout_state_path(:address)
-        # else
-
-        #   resource.send_confirmation_instructions(current_store) if Spree::Auth::Config[:confirmable]
-        #   flash[:success] = Spree.t(:send_instructions)
-
-        #   redirect_to '/login'
-        # end
 
     else
        flash[:error] = resource.inactive_message 
