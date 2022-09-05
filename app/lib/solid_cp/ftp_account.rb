@@ -42,12 +42,12 @@ module SolidCp
       response = super(message: {
         item: {
           "PackageId" => user.packages.first.try(:solid_cp_package_id),
-          "CanRead" => params[:can_read],
-          "CanWrite" => params[:can_write],
+          "CanRead" => params[:can_read] || true,
+          "CanWrite" => params[:can_write] || true,
           "Folder" => params[:folder],
           "Name" => params[:username],
           "Password" => params[:password],
-          "Enabled" => true
+          "Enabled" => params[:enabled] || true
         }
       }
       )
@@ -65,6 +65,7 @@ module SolidCp
 
     def update_ftp_account(id, params)
       response = super(message: {
+
         item: {
           "itemId" => id,
           "PackageId" => user.packages.first.try(:solid_cp_package_id),
