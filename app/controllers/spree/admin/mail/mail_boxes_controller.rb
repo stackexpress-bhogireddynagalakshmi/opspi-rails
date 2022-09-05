@@ -21,6 +21,7 @@ module Spree
 
         def create
           mail_user_param = mail_user_params.merge({ email: formatted_email })
+          
           @response = mail_user_api.create(mail_user_param, user_domain: @user_domain)
 
           if @response[:success]
@@ -66,10 +67,6 @@ module Spree
           @mailbox = @user_domain.user_mailboxes.find(params[:id])
 
           redirect_to admin_mail_mail_boxes_path, notice: 'Not Authorized' if @mailbox .blank?
-        end
-
-        def set_user_domain
-          @user_domain = current_spree_user.user_domains.find(params[:user_domain_id])
         end
 
         def formatted_email

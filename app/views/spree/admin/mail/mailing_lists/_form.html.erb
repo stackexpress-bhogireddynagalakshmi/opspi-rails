@@ -1,52 +1,62 @@
-<style type="text/css">
-  .formSuccess{
-    color: green;
-  }
-</style>
+<% content_for :modal_header do %>
+  <h3><%= header%></h3>
+<% end %>
 
+<% content_for :modal_body_and_footer do %>
+
+<div class="modal-body">   
+
+ <%= flash_messages %>
 
 <!-- @mailinglist here is api object not database object -->
-<% url =  @mailinglist.present? ?   admin_mail_mailing_list_path(@mailinglist.mailinglist_id) : admin_mail_mailing_lists_path%>
+<% url =  @mailing_list.persisted? ?   admin_mail_mailing_list_path(@mailing_list.id) : admin_mail_mailing_lists_path%>
 
- <%=form_for "mailinglist", url: url, html: {method: @mailinglist.present? ? :put : :post} do |f|%> 
+ <%=form_for "mailinglist", url: url, html: {method: @mailing_list.persisted? ? :put : :post, remote: true} do |f|%> 
+ <%=hidden_field_tag :user_domain_id, @user_domain.id%>
+ <div id="error_div" style="color: red;">
+
+ </div>
 
   <%=hidden_field_tag :domain_id, @mail_domain.try("domain_id")%>
-  <form>
+
     <div class="form-group">
       <label class="form-label">Domain</label>
-      <%=f.text_field 'domain', value: @mailinglist.try(:domain), class: 'form-control',required: true%>
+      <%=f.text_field 'domain', value: @mailing_list&.user_domain&.domain, class: 'form-control', disabled: true %>
     </div>
 
     <div class="form-group">
       <label class="form-label">Listname</label>
-      <%=f.text_field 'listname', value: @mailinglist.try(:listname), class: 'form-control',required: true%>
+      <%=f.text_field 'listname', value: @mailing_list.try(:listname), class: 'form-control',required: true%>
     </div>
 
     <div class="form-group">
       <label class="form-label">Email</label>
-      <%=f.email_field 'email', value: @mailinglist.try(:email), class: 'form-control'%>
+      <%=f.email_field 'email', value: @mailing_list.try(:email), class: 'form-control'%>
     </div>
 
     <div class="form-group">
       <label class="form-label">Password</label>
       <%=f.password_field 'password', class: 'form-control'%>
     </div>
-
-    <%=submit_tag "#{@mail_domain.present? ? 'Update' : 'Add'} Mailing List",class: 'btn btn-primary lift'%>
-
-</form>
+    <%=submit_tag "#{@mailing_list.persisted? ? 'Update' : 'Add'} Mailing List",class: 'btn btn-primary lift'%>
 <%end%>
 
-<div>
- 
-  <%if @response && @response["status"]=='ERROR'%>
-    <div style="color: red;" class="mt-3"><%=@response["message"]%></</div> 
-  <%end%>
-</div>
+
+  </div>
+<% end %>
+
+<%= render :partial=>'spree/admin/shared/modal', locals: {modal_width: '40%'} %>
 
 
-<script type="text/javascript">
-  $(document).ready(function (argument) {
-    $('#FlashAlertsContainer').removeClass('d-none');
-  });
-</script>
+
+
+
+<style type="text/css">
+  .formSuccess{
+    color: green;
+  }
+</style>
+
+>
+
+
