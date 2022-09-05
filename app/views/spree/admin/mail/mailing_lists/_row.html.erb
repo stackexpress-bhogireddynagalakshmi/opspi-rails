@@ -1,0 +1,14 @@
+<tr id="mailinglist_id_<%=mailing_list.id%>">
+  <td><%= mailing_list.listname%></td>
+  <td><%= mailing_list.email%></td>
+  <td><span class="d-flex justify-content-end">
+     <%= link_to  admin_mail_mailing_list_path(id: mailing_list.id, user_domain_id: @user_domain.id),type: 'button',data: {confirm: t('general.delete')} , class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete, remote: true do %>
+       <%=render :partial=> 'spree/admin/shared/icons/delete'%>
+      <%end%>
+
+     <%= link_to  edit_admin_mail_mailing_list_path(id: mailing_list.id, user_domain_id: @user_domain.id),type: 'button', class: 'btn btn-outline-success btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Edit',style:"margin-right:5px", remote: true do %>
+        <%= render :partial=> 'spree/admin/shared/icons/edit'%>
+      <% end %>
+    </span>
+  </td>  
+</tr>

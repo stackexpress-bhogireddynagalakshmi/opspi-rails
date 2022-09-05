@@ -1,0 +1,6 @@
+<% if @response[:success] == true %>
+  $("#myModal").modal('hide')
+  $('#mailing_list_table #mailing_list_id_<%=@mailing_list.id%>').remove();
+<% else %>
+  $('#error_div').html("<%=j @response[:message].html_safe%>");
+<% end %>

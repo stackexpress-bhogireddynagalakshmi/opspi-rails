@@ -222,31 +222,12 @@ module Spree
           @mail_forwards = @mail_forward_records.collect{|x| x if x.source.split('@')[1] == @zone_name}.compact
           @mail_forward_count = @mail_forwards.present? ? @mail_forwards.size : 0
 
-          #####
-
-          ### mailing list
-          @mailing_list_response = mailing_list_api.all[:response].response
-          @mailing_lists = @mailing_list_response.collect{|x| x if x.domain == @zone_name}.compact
-          @mailing_list_count = @mailing_lists.present? ? @mailing_lists.size : 0
+          # user mailing list
+          @mailing_lists = @user_domain.user_mailing_lists
           
-          ######
 
           @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
-          # list_arr3 = []
-          # @mail_domain_response.each do |ele|
-          #   if ele.domain == @zone_name
-          #     list_arr3 << ele
-          #    @mail_domain = list_arr3  
-          #   end
-          # end
-
-          # if @mail_domain.present?
-          # @mail_domain_count = @mail_domain.size
-          # else
-          #   @mail_domain_count = 0
-          # end
-
-          # @websites_response = current_spree_user.isp_config.website.all[:response].response
+          
           list_arr4 = []
           @web_domain.each do |el|
             if el.domain == @zone_name
@@ -483,11 +464,6 @@ module Spree
           else
             data
           end
-        end
-
-
-        def set_user_domain
-          @user_domain = current_spree_user.user_domains.find(params[:user_domain_id])
         end
 
       end

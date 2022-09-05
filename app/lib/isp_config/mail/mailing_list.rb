@@ -22,7 +22,7 @@ module IspConfig
         formatted_response(response, 'find')
       end
 
-      def create(params = {})
+      def create(params = {}, opts={})
         response = query({
                            endpoint: '/json.php?mail_mailinglist_add',
                            method: :POST,
@@ -31,35 +31,51 @@ module IspConfig
                              params: params.merge(server_params)
                            }
                          })
-        user.mailing_lists.create({ isp_config_mailing_list_id: response["response"] }) if response.code == "ok"
+        if response.code == "ok"
+          user.mailing_lists.create({ isp_config_mailing_list_id: response["response"] }) 
+          user_domain = opts[:user_domain]
+          user_domain.user_mailing_lists.create(mailing_list_params(params).merge({ remote_mailing_list_id: response["response"] })) if user_domain.present?
+        end
 
         formatted_response(response, 'create')
       end
 
-      def update(primary_id, params = {})
+      def update(id, params = {})
+        mailing_list = UserMailingList.find(id)
         response = query({
                            endpoint: '/json.php?mail_mailinglist_update',
                            method: :POST,
                            body: {
                              client_id: user.isp_config_id,
-                             primary_id: primary_id,
+                             primary_id: mailing_list.remote_mailing_list_id,
                              params: params.merge(server_params)
                            }
                          })
 
+
+        if response.code == "ok"
+          mailing_list.update(mailing_list_params(params))
+        end
+
         formatted_response(response, 'update')
       end
 
-      def destroy(primary_id)
+      def destroy(id)
+        mailing_list = UserMailingList.find(id)
         response = query({
                            endpoint: '/json.php?mail_mailinglist_delete',
                            method: :DELETE,
                            body: {
                              client_id: user.isp_config_id,
-                             primary_id: primary_id
+                             primary_id: mailing_list.remote_mailing_list_id
                            }
                          })
-        user.mailing_lists.find_by_isp_config_mailing_list_id(primary_id).destroy if response.code == "ok"
+
+        if response.code == "ok"
+          user.mailing_lists.find_by_isp_config_mailing_list_id(mailing_list.remote_mailing_list_id).destroy 
+          mailing_list.destroy
+        end
+
         formatted_response(response, 'delete')
       end
 
@@ -102,6 +118,15 @@ module IspConfig
         {
           server_id: IspConfig::Config.api_web_server_id(user)
         }
+      end
+
+      def mailing_list_params(params)
+
+        {
+          listname: params[:listname],
+          email:    params[:email],
+        }
+
       end
     end
   end

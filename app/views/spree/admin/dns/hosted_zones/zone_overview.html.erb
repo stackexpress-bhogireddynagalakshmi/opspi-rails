@@ -70,12 +70,17 @@
             </div>
             <div class="col-auto">
                <%= button_link_to "Add New",
-                  "#",
-                  class: "btn btn-primary lift admin_mailling_list1",
-                  icon: 'add.svg'  %>
+                  new_admin_mail_mailing_list_path(user_domain_id: params[:user_domain_id]),
+                  class: "btn btn-primary lift",
+                  icon: 'add.svg',
+                  remote: true 
+                    %>
             </div>
          </div>
          <%= render partial: 'spree/admin/dns/hosted_zones/mailing_list_index' %>
+
+
+         
          <div class="row align-items-center mb-2">
             <div class="col">
                <h1 class="header-title">

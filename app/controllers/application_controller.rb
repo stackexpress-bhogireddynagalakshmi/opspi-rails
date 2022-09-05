@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
     set_tenant
   end
 
+  def set_user_domain
+    @user_domain = current_spree_user.user_domains.find(params[:user_domain_id])
+  end
+
   def ensure_hosting_panel_access
 
     return nil if current_spree_user.isp_config_id.present? || current_spree_user.solid_cp_id.present?
