@@ -31,17 +31,6 @@
     </div>
   </div>
   <hr>
-  <div class="row">
-  <div class="col-sm-3">
-    Phone Number
-  </div>
-  <div class="col-sm-9">
-  <% current_spree_user.addresses.each_with_index do |address, index| %>
-    <span><%= address.phone%></br></span>
-    <%end%>
-  </div>
-</div>
-<hr>
     <div class="row">
     <div class="col-sm-3">
       Custom Domain
