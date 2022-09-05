@@ -67,11 +67,13 @@
         new_admin_user_domain_path,
         class: "btn btn-primary lift",
           icon: 'add.svg',
-          id: 'admin_new_dns_zone' %>
+          id: 'admin_new_dns_zone', data: resource_limit_exceeded("domain"), onclick: "checkResourceLimit(this);" %>
       <% end  %>
       </div>
     </div>
     </div>
+<%= alert(resource_alert("domain"),"info")%>
+<span id="error_msg"></span>
 
 <%= flash_messages %>
 <% if @user_domains.any? %>
@@ -238,4 +240,14 @@
     }
 
   } 
+</script>
+<script type="text/javascript">
+var checkResourceLimit = function(element){
+  var error = document.getElementById("error_msg")
+  var val = element.attributes.data.value
+  if (val == 'true') {
+    //  error.innerHTML = "<div class='alert alert-warning' role='alert'>Your limit reached.please update plan to create new resources</div>";
+      event.preventDefault();
+  }
+}
 </script>

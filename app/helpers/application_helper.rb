@@ -181,6 +181,35 @@ module ApplicationHelper
     Addressable::URI.parse(request.original_url).host
   end
 
+  def current_user_product
+    TenantManager::TenantHelper.unscoped_query do
+      current_spree_user.orders.collect do |o|
+        o.products.find_by_server_type("linux")
+      end.flatten
+    end.compact.map(&:id).first
+  end
+
+  def get_linux_resource_limit
+    IspConfigLimit.where(product_id: current_user_product).last
+  end
+
+  def current_plan_domain_limit
+    get_linux_resource_limit.limit_dns_zone
+  end
+
+  def resource_limit_exceeded(resource)
+    if resource == 'domain'
+      current_spree_user.user_domains.count >= current_plan_domain_limit.to_i ? true : false
+    end
+  end
+  # alias resource_limit_exceeded? resource_limit_exceeded
+
+  def resource_alert(res)
+   if resource_limit_exceeded(res)
+    I18n.t('spree.resource_limit_exceeds')
+   end
+  end
+
   def months_dropdown
     [
       ['1 Month',  1],

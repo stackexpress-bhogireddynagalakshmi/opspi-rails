@@ -71,6 +71,7 @@ en:
     domain_registration: Domain Registrations
     pending_invoices: "You have pending invoices. You can make a payment by using the “Pay Now” button on the “My Billing” tab."
     payment_not_confirmed: "The payment is not confirmed yet."
+    resource_limit_exceeds: "Your limit reached.Please update plan to create new resource"
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout

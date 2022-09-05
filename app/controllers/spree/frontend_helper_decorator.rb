@@ -7,7 +7,8 @@ module Spree
               error: 'danger',
               alert: 'danger',
               warning: 'warning',
-              notice: 'success'
+              notice: 'success',
+              info: 'info'
             }[flash_type.to_sym]
         end
     
@@ -24,6 +25,15 @@ module Spree
             end
           end
           flashes.html_safe
+        end
+
+        def alert(text,msg_type)
+          alerts = ""
+          alerts << content_tag(:div, class: "alert alert-#{class_for(msg_type)} mb-4") do
+            content_tag(:button, '&times;'.html_safe, class: 'close-button x-button', data: { dismiss: 'alert', hidden: true }) +
+            content_tag(:span, text)
+          end
+          alerts.html_safe
         end
     end
   end
