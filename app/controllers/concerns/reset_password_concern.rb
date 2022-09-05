@@ -2,13 +2,15 @@ module ResetPasswordConcern
   extend ActiveSupport::Concern
     
     def reset_password
-      @password = SecureRandom.hex
+      @password = SecureRandom.urlsafe_base64
+      @user_domain = current_spree_user.user_domains.find(params[:user_domain_id])
       case params[:type]
       when 'create_mail_box'
         mailboxes = mail_user_api.all
         mailboxes = mailboxes[:response].response
-        mailbox   = mailboxes.detect { |x| x.email == params[:email] }
+        mailbox   = mailboxes.detect { |x| x.email == params[:email].downcase }
         @response = mail_user_api.update(mailbox.mailuser_id, { password: @password })
+
       when 'create_ftp_account'
         if params[:server_type] == 'linux'
           ftp_users = ftp_user_api.all
@@ -17,10 +19,15 @@ module ResetPasswordConcern
           @response = ftp_user_api.update(ftp_user.ftp_user_id, { password: @password })
         else
           ftp_users = ftp_user_api.all
-          ftp_users = ftp_users.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account]  || []
-          ftp_users = [ftp_users] if ftp_users.is_a?(Hash)
-          ftp_user  = ftp_users.detect { |x| x[:name] == params[:email] }
-          @response = ftp_user_api.update(ftp_user[:id], { password: @password, username: ftp_user[:name], can_read: ftp_user[:can_read], can_write: ftp_user[:can_write], folder: ftp_user[:folder]})
+          ftp_users = ftp_users.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account]  || [] rescue []
+
+          if ftp_users.present?
+            ftp_users = [ftp_users] if ftp_users.is_a?(Hash)
+            ftp_user  = ftp_users.detect { |x| x[:name] == params[:email] }
+            @response = ftp_user_api.destroy(ftp_user[:id]) if ftp_user.present?
+          end
+          domain = @user_domain.domain
+          @response = ftp_user_api.create({ password: @password, username:  params[:email], folder: @user_domain.remote_folder_path})        
         end
       when 'create_database'
         db_user_name = current_spree_user.user_databases.where(database_name: params[:email]).first.database_user

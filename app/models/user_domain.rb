@@ -23,6 +23,14 @@ class UserDomain < ApplicationRecord
    config_value_for(user.panel_config["dns"], 'ISPCONFIG_DNS_SERVER_NS2')
   end
 
+  def remote_folder_path
+    if windows?
+      "\\#{domain}\\wwwroot"
+    else
+      # TODO: Yet to be implemented
+    end
+  end
+
   private
 
   def ensure_panel_id_is_set

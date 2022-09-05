@@ -38,6 +38,7 @@ module Spree
 
       def show
         @tasks = @batch_jobs[params[:id]] || @batch_jobs[params[:id].to_i]
+        @user_domain = current_spree_user.user_domains.find_by_domain(@tasks.first["domain"])
       end
 
       
