@@ -35,7 +35,7 @@ module ApplicationHelper
     plans = []
     
     if user.have_reseller_plan? && user.isp_config_id.present? && user.solid_cp_id.present?
-      plans = [['Windows Hosting Plan', 'windows'], ['Linux Hosting Plan', 'linux']]
+      plans = [['Windows Hosting', 'windows'], ['Linux Hosting', 'linux']]
     end
 
     plans << ['Hsphere Plan', 'hsphere'] if get_purchased_plans.include?('hsphere')
