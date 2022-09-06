@@ -5,6 +5,7 @@ module Spree
     module Mail
       # Mail Domain controller
       class MailBoxesController < Spree::Admin::BaseController
+        include ApplicationHelper
         before_action :ensure_hosting_panel_access
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :index, :destroy,:configurations]
         before_action :set_mail_box, only: %i[edit update destroy, configurations]
@@ -20,6 +21,7 @@ module Spree
         def edit; end
 
         def create
+          return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} if resource_limit_exceeded("mail_box")
           mail_user_param = mail_user_params.merge({ email: formatted_email })
           
           @response = mail_user_api.create(mail_user_param, user_domain: @user_domain)

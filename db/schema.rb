@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_18_091003) do
+ActiveRecord::Schema.define(version: 2022_08_31_071116) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -1606,6 +1606,41 @@ ActiveRecord::Schema.define(version: 2022_08_18_091003) do
     t.integer "user_id"
     t.string "reseller_club_account_id"
     t.text "reseller_club_account_key_enc"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_mail_domains", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_domain_id"
+    t.integer "remote_mail_domain_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_mailboxes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_domain_id"
+    t.integer "remote_mailbox_id"
+    t.string "name"
+    t.string "email"
+    t.integer "quota"
+    t.text "cc"
+    t.boolean "forward_in_lda"
+    t.integer "policy"
+    t.boolean "postfix"
+    t.boolean "disablesmtp"
+    t.boolean "disabledeliver"
+    t.boolean "greylisting"
+    t.boolean "disableimap"
+    t.boolean "disablepop3"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_mailing_lists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_domain_id"
+    t.string "listname"
+    t.string "email"
+    t.integer "remote_mailing_list_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

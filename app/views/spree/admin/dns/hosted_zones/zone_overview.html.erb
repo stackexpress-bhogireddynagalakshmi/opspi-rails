@@ -57,10 +57,11 @@
                   new_admin_mail_mail_box_path(user_domain_id: params[:user_domain_id]), 
                   class: "btn btn-primary lift",
                     icon: 'add.svg',
-                    id: 'new_admin_mailbox',
+                    id: 'new_admin_mailbox', data: resource_limit_exceeded("mail_box"), onclick: "checkResourceLimit(this);",
                     remote: true %>
             </div>
          </div>
+         <span id="error_msg"></span>
          <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
          <div class="row align-items-center mb-2">
             <div class="col">
@@ -448,4 +449,16 @@ var updateWebDomain = function(element){
       }
 
   }
+</script>
+<script type="text/javascript">
+var checkResourceLimit = function(element){
+  var error = document.getElementById("error_msg")
+  var val = element.attributes.data.value
+  if (val == 'true') {
+     error.innerHTML = "<div class='alert alert-warning' role='alert'>"+'<%= I18n.t('spree.resource_limit_exceeds')%>'+"</div>";
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return false;
+  }
+}
 </script>
