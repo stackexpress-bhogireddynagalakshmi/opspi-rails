@@ -72,8 +72,7 @@
       </div>
     </div>
     </div>
-<%= alert(resource_alert("domain"),"warning")%>
-<span id="error_msg"></span>
+<span id="res_limit_error_message"></span>
 
 <%= flash_messages %>
 <% if @user_domains.any? %>
@@ -240,13 +239,4 @@
     }
 
   } 
-</script>
-<script type="text/javascript">
-var checkResourceLimit = function(element){
-  var error = document.getElementById("error_msg")
-  var val = element.attributes.data.value
-  if (val == 'true') {
-      event.preventDefault();
-  }
-}
 </script>

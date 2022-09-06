@@ -61,7 +61,7 @@
                     remote: true %>
             </div>
          </div>
-         <span id="error_msg"></span>
+         <span id="res_limit_error_message"></span>
          <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
          <div class="row align-items-center mb-2">
             <div class="col">
@@ -449,16 +449,4 @@ var updateWebDomain = function(element){
       }
 
   }
-</script>
-<script type="text/javascript">
-var checkResourceLimit = function(element){
-  var error = document.getElementById("error_msg")
-  var val = element.attributes.data.value
-  if (val == 'true') {
-     error.innerHTML = "<div class='alert alert-warning' role='alert'>"+'<%= I18n.t('spree.resource_limit_exceeds')%>'+"</div>";
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      return false;
-  }
-}
 </script>

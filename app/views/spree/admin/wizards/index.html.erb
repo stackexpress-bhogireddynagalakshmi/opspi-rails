@@ -18,8 +18,8 @@
 
   </div>
 </div>
-<%= alert(resource_alert("domain"),"warning")%>
-<span id="error_msg"></span>
+<%#= alert(resource_alert("domain"),"warning")%>
+<span id="res_limit_error_message"></span>
 
 <h4>List of Wizard jobs</h4>
 <div class="card">
@@ -52,13 +52,4 @@
   $(document).ready(function (argument) {
     $('#FlashAlertsContainer').removeClass('d-none');
   });
-</script>
-<script type="text/javascript">
-var checkResourceLimit = function(element){
-  var error = document.getElementById("error_msg")
-  var val = element.attributes.data.value
-  if (val == 'true') {
-      event.preventDefault();
-  }
-}
 </script>
