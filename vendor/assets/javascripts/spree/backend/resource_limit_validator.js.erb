@@ -1,8 +1,10 @@
 var checkResourceLimit = function(element){
-  var error = document.getElementById("res_limit_error_message")
   var val = element.attributes.data.value
+  var error_id = element.attributes.error_id.value
+  var error = document.getElementById("res_limit_error_message_"+error_id)
+  debugger;
   if (val == 'true') {
-      error.innerHTML = '<div class="alert alert-warning" role="alert">'+ '<%=I18n.t('spree.resource_limit_exceeds')%>' +'</div>';
+      error.innerHTML = '<div class="alert alert-warning alert-dismissible fade show" role="alert">'+ '<%=I18n.t('spree.resource_limit_exceeds')%>' +'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
       event.preventDefault();
       event.stopImmediatePropagation();
       return false;

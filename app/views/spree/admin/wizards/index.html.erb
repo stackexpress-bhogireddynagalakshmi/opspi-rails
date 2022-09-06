@@ -12,14 +12,14 @@
       new_admin_wizard_path,
       class: "btn btn-primary lift",
         icon: 'add.svg',
-        id: 'admin_wizard', data: resource_limit_exceeded("domain"), onclick: "checkResourceLimit(this);" %>
+        id: 'admin_wizard', data: resource_limit_exceeded("domain"), error_id: "wizard", onclick: "checkResourceLimit(this);" %>
       </div>
     </div>
 
   </div>
 </div>
 <%#= alert(resource_alert("domain"),"warning")%>
-<span id="res_limit_error_message"></span>
+<span id="res_limit_error_message_wizard"></span>
 
 <h4>List of Wizard jobs</h4>
 <div class="card">

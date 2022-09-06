@@ -5,6 +5,7 @@ module Spree
     module Mail
       # Mail Domain controller
       class MailingListsController < Spree::Admin::BaseController
+        include ResourceLimitHelper
         before_action :ensure_hosting_panel_access
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :destroy]
         before_action :set_mailing_list, only: %i[edit update destroy]
@@ -26,6 +27,7 @@ module Spree
         def edit; end
 
         def create
+          return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} if resource_limit_exceeded("mailing_list")
           @response = mailing_list_api.create(mailing_list_params.merge({ domain: @user_domain.domain }), user_domain: @user_domain)
 
           if @response[:success]

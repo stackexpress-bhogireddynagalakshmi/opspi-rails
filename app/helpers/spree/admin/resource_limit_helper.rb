@@ -19,18 +19,30 @@ module Spree::Admin::ResourceLimitHelper
     def current_plan_mail_box_limit
       get_linux_resource_limit.limit_mailbox
     end
+
+    def current_plan_mailing_list_limit
+      get_linux_resource_limit.limit_mailmailinglist
+    end
   
     def resource_limit_exceeded(resource)
       if resource == 'domain'
         current_spree_user.user_domains.count >= current_plan_domain_limit.to_i ? true : false
       elsif resource == 'mail_box'
         mail_box_limit >= current_plan_mail_box_limit.to_i ? true : false
+      elsif resource == 'mailing_list'
+        mailing_list_limit >= current_plan_mailing_list_limit.to_i ? true : false
       end    
     end
   
     def mail_box_limit
       current_spree_user.user_domains.collect do |u|
         UserMailbox.where(user_domain_id: u.id)
+      end.flatten.compact.count
+    end
+
+    def mailing_list_limit
+      current_spree_user.user_domains.collect do |u|
+        UserMailingList.where(user_domain_id: u.id)
       end.flatten.compact.count
     end
   

@@ -67,12 +67,12 @@
         new_admin_user_domain_path,
         class: "btn btn-primary lift",
           icon: 'add.svg',
-          id: 'admin_new_dns_zone', data: resource_limit_exceeded("domain"), onclick: "checkResourceLimit(this);" %>
+          id: 'admin_new_dns_zone', data: resource_limit_exceeded("domain"), error_id: "domain", onclick: "checkResourceLimit(this);" %>
       <% end  %>
       </div>
     </div>
     </div>
-<span id="res_limit_error_message"></span>
+<span id="res_limit_error_message_domain"></span>
 
 <%= flash_messages %>
 <% if @user_domains.any? %>
