@@ -40,7 +40,7 @@ module ResetPasswordConcern
 
     render template: '/spree/admin/shared/spree/admin/password/reset_password.js.erb'
     rescue => e
-      Rails.logger.error { e.message }
+      Rails.logger.error { e.backtrace }
       puts e.backtrace
       @response = {success: false, error: "something went wrong. Please try after sometime."}
     end
