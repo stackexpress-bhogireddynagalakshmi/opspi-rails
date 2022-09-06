@@ -4,7 +4,7 @@ module Spree
   module Gateway::AuthorizeNetCimDecorator
    
     def custom_name
-      "Authorize.net"
+      I18n.t("spree.authorize_dot_net")
     end
     
   end

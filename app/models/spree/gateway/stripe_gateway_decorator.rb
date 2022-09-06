@@ -4,7 +4,7 @@ module Spree
   module Gateway::StripeGatewayDecorator
    
     def custom_name
-      "Stripe Gateway"
+      I18n.t("spree.stripe_gateway")
     end
 
   end

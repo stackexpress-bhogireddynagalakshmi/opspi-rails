@@ -4,7 +4,7 @@ module Spree
   module PaymentMethod::CheckDecorator
    
     def custom_name
-      "Check"
+       I18n.t("spree.check")
     end
 
   end

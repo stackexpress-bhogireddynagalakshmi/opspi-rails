@@ -4,7 +4,7 @@ module Spree
   module Gateway::PayPalExpressDecorator
    
     def custom_name
-      "PayPal"
+      I18n.t("spree.paypal_express")
     end
 
   end
