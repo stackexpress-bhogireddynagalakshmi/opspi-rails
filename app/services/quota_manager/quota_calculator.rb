@@ -25,10 +25,41 @@ module QuotaManager
             @web_traffic       = get_web_traffic
             @ftp_traffic       = get_ftp_traffic
             ## mail
-          end
-          if user.isp_config_id.present? || user.solid_cp_id.present?
-            if @domain_response[:success] && @mail_response[:success] && @database_response[:success]
+          # end
+          # if user.isp_config_id.present?
+            if @domain_response[:success] && @mail_response[:success] && @database_response[:success] && @domain_list[:success] && @web_traffic[:success] && @ftp_traffic[:success]
 
+
+              if user.solid_cp_id.present?
+                return if user.packages.first.try(:solid_cp_package_id).nil?
+    
+                # context = get_solid_cp_package_context
+                
+                solid_cp_quota_dspace = get_solid_cp_used_space
+                solid_cp_quota_bwidth = get_solid_cp_used_bandwidth
+
+                quota_array = solid_cp_quota_dspace.body[:get_package_diskspace_response][:get_package_diskspace_result][:diffgram]
+                
+                bandwidth_quota = solid_cp_quota_bwidth.body[:get_package_bandwidth_response][:get_package_bandwidth_result][:diffgram]
+                
+                if bandwidth_quota[:new_data_set].present?
+                  @table_recs = bandwidth_quota[:new_data_set][:table]
+                  @table_recs = [@table_recs] if @table_recs.is_a?(Hash)
+                  @web_bandwidth = @table_recs.collect{|x| x[:bytes_total] if x[:group_name] == 'Web'}.compact.first
+                  # @ftp_bandwidth = @table_recs.collect{|x| x[:bytes_total] if x[:group_name] == 'FTP'}.compact.first
+                end
+
+                if quota_array[:new_data_set].present?
+                  @disk_space = quota_array[:new_data_set][:table]
+                  @disk_space = [@disk_space] if @disk_space.is_a?(Hash)
+                  # @file_disk_space = @disk_space.collect {|x| x[:diskspace_bytes] if x[:group_name] == 'OS'}.compact.first
+                  @web_disk_space = @disk_space.collect {|x| x[:diskspace_bytes] if x[:group_name] == 'Web'}.compact.first
+                  @ms_db_disk_space =  @disk_space.collect {|x| x[:diskspace_bytes] if x[:group_name] == 'MsSQL2019'}.compact.first
+                end
+                # @disk_space = quota_array.collect{ |x| x[:quota_used_value] if x[:quota_name] == 'OS.Diskspace'}
+                # @bandwidth = quota_array.collect{ |x| x[:quota_used_value] if x[:quota_name] == 'OS.Bandwidth'}
+              end
+           
               domain    = get_quota_info(@domain_response[:response])
               mail      = get_quota_info(@mail_response[:response])
               database  = get_quota_info(@database_response[:response])
@@ -46,12 +77,15 @@ module QuotaManager
               total_usage = {
                 disk_space:{
                   web_linux: number_to_human_size(domain_space.inject(0, :+)),
+                  web_windows: number_to_human_size(@web_disk_space),
                   mail: number_to_human_size(mail[:space].inject(0, :+)),
-                  database_mysql: number_to_human_size(database_space.inject(0, :+))
+                  database_mysql: number_to_human_size(database_space.inject(0, :+)),
+                  database_mssql: number_to_human_size(@ms_db_disk_space)
                 },
                 bandwidth:{
                   ftp: number_to_human_size(ftp_traffic_bytes),
                   web_linux: number_to_human_size(wb_traffic_bytes),
+                  web_windows:number_to_human_size(@web_bandwidth),
                   mail: 0
                 }
               }
@@ -59,8 +93,6 @@ module QuotaManager
               domain_list = @domain_list[:response].response.collect{|x| x[:origin]}
               website_quota = @domain_response[:response].collect{|x| [x[:domain],x[:used]]}
               @all_domains = []
-              # web_bandwidth = @web_traffic[:response].to_a.collect{|x| x if x.last[:this_year].present?}
-              
               
               domain_list.each do |domain|
                 web_disk = @domain_response[:response].collect{|x| x[:used] if x[:domain] == sanitize_domain(domain)}.compact.first
@@ -136,6 +168,10 @@ module QuotaManager
         mailbox_quota.collect{|x| x if x.first.split('@')[1] == domain_name}.compact.to_h
       end
 
+      def get_solid_cp_package_context
+        SolidCp::Package.new(user).get_package_context
+      end
+
       def get_solid_cp_used_space
         SolidCp::Package.new(user).get_package_diskspace
       end
@@ -148,18 +184,6 @@ module QuotaManager
         QuotaUsage.where(user_id: user.id,product_id: product_id).first
       end
 
-      def convert_to_json(resource ={})
-        quota_hash = {
-          ispconfig: {
-            disk_space: {web: resource[:isp_disk][:web], mail: resource[:isp_disk][:mail], database: resource[:isp_disk][:database]},
-            bandwidth: resource[:isp_bandwidth]
-          },
-          solidcp: {
-            disk_space: {web: resource[:solid_disk][:web], file: resource[:solid_disk][:file], database: resource[:solid_disk][:database]},
-            bandwidth: {web: resource[:solid_band][:web],ftp: resource[:solid_band][:ftp]}
-          }
-        }
-      end
 
       def mailbox_quota
         @mail_response[:response].collect{|x| [x[:email],x[:used]]}
