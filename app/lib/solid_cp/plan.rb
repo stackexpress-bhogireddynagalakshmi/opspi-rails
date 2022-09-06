@@ -115,7 +115,7 @@ module SolidCp
       response = begin
         super(message: { plan_id: plan_id })
       rescue StandardError => e
-        Rails.logger.error { e.message }
+        Rails.logger.error { e.backtrace }
         []
       end
     end
@@ -134,7 +134,7 @@ module SolidCp
 
       plans.collect { |x| [x[:plan_name], x[:plan_id]] }
     rescue Exception => e
-      Rails.logger.error { e.message }
+      Rails.logger.error { e.backtrace }
       plans = []
     end
   end
