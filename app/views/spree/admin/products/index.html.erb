@@ -67,7 +67,9 @@
         <th scope="col" colspan="2"><%= sort_link @search,:name, Spree.t(:name), { default_order: "desc" }, {title: 'admin_products_listing_name_title'} %></th>
         <th scope="col"><%= Spree.t(:sku) %></th>
         <th scope="col"><%= Spree.t(:plan_type) %></th>
-        <!--<th scope="col"><%#= Spree.t(:store) %></th> -->
+        <%if current_spree_user.admin? %>
+        <th scope="col"><%= Spree.t(:store) %></th>
+        <%end%>
         <th scope="col"><%= Spree.t(:status) %></th>
         <th scope="col" class="text-center">
           <%= sort_link @search, :master_default_price_amount, Spree.t(:master_price), {}, {title: 'admin_products_listing_price_title'} %>
@@ -88,11 +90,13 @@
           <td class="sku"><%= product.sku rescue '' %></td>
           <td class="plan_type"><%= product.server_type rescue '' %></td>
 <!--            <td><%# Spree::Store.find_by(account_id: product.account_id).try(:store_id) %></td>-->
-         <!-- <td class="store">
+          <%if current_spree_user.admin? %>
+          <td class="store">
             <span data-ransack-field="q_store_id_in" data-ransack-value="<%= Spree::Store.find_by(account_id: product.account_id).try(:store_id) %>">
-            <%#= Spree::Store.find_by(account_id: product.account_id).try(:name) %>
+            <%= Spree::Store.find_by(account_id: product.account_id).try(:name) %>
             </span>
-          </td> -->
+          </td>
+          <%end%>
           <td class="status"><%= active_badge(available_status == Spree.t(:available), label: available_status) %></td>
           <td class="text-center"><%= display_price(product) %></td>
           <td class="actions " data-hook="admin_products_index_row_actions">

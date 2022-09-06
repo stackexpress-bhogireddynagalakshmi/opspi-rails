@@ -35,7 +35,7 @@ module ApplicationHelper
     plans = []
     
     if user.have_reseller_plan? && user.isp_config_id.present? && user.solid_cp_id.present?
-      plans = [['Windows Hosting Plan', 'windows'], ['Linux Hosting Plan', 'linux']]
+      plans = [['Windows Hosting', 'windows'], ['Linux Hosting', 'linux']]
     end
 
     plans << ['Hsphere Plan', 'hsphere'] if get_purchased_plans.include?('hsphere')
@@ -197,12 +197,23 @@ module ApplicationHelper
     get_linux_resource_limit.limit_dns_zone
   end
 
+  def current_plan_mail_box_limit
+    get_linux_resource_limit.limit_mailbox
+  end
+
   def resource_limit_exceeded(resource)
     if resource == 'domain'
       current_spree_user.user_domains.count >= current_plan_domain_limit.to_i ? true : false
-    end
+    elsif resource == 'mail_box'
+      mail_box_limit >= current_plan_mail_box_limit.to_i ? true : false
+    end    
   end
-  # alias resource_limit_exceeded? resource_limit_exceeded
+
+  def mail_box_limit
+    current_spree_user.user_domains.collect do |u|
+      UserMailbox.where(user_domain_id: u.id)
+    end.flatten.compact.count
+  end
 
   def resource_alert(res)
    if resource_limit_exceeded(res)

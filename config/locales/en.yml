@@ -46,7 +46,12 @@ en:
   account_does_not_exist: Account does not exists
   hosting_space_exists: Hosting space exists
   hosting_space_does_exists: Hosting Space does not exists
+
   spree:
+    check: "Check"
+    authorize_dot_net: "Authorize.net"
+    paypal_express: "PayPal"
+    stripe_gateway: "Stripe Gateway"
     products: 'Services'
     hosting_controls: Hosting Control
     opsbot: OpsBot
