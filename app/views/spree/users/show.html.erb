@@ -62,11 +62,9 @@
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
        <h3 class="text-uppercase spree-mb-medium spree-mt-medium spree-header"><%= Spree.t(:dashboard) %></h3>
-       
-       <%if (current_spree_user.store_admin? && TenantManager::TenantHelper.current_admin_tenant?) || current_spree_user.admin? %>
+       <%#= current_spree_user.confirmed? %>
+       <%if !current_spree_user.confirmed?%>
        <div class="alert alert-info"><%= Spree.t(:without_confirm) %></div>
-     <%elsif current_spree_user.end_user? && !(current_spree_user.isp_config_id.present? || current_spree_user.solid_cp_id.present?) %>
-     <div class="alert alert-info"><%= Spree.t(:without_confirm) %></div>
      <%end%>
      
         <div class="row justify-content-center">

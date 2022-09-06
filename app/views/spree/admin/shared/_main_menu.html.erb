@@ -15,6 +15,7 @@
     <%= tab 'Dashboard', url: admin_dashboard_path,  icon: 'report.svg'%>
   </ul>
 
+  <%if current_spree_user.confirmed? %>
   <% if can? :admin, Spree::Order %>
     <ul class="nav nav-sidebar border-bottom" id="sidebarOrder">
         <%= tab 'Customer Orders', url: "/admin/orders", icon: 'report.svg' %>
@@ -94,5 +95,7 @@
    <ul class="nav nav-sidebar border-bottom" id="sidebarDiagnostics">
       <%= tab 'Diagnostic Page', url: "/admin/diagnostics", icon: 'settings.svg' %>
     </ul>
+
+<%end%>
 
 </nav>
