@@ -5,6 +5,7 @@ module Spree
     class WizardsController < Spree::Admin::BaseController
       include ApisHelper
       include ResetPasswordConcern
+      include ResourceLimitHelper
       
       before_action :set_batch_jobs, only: %i[index show]
       before_action :ensure_hosting_panel_access
@@ -16,6 +17,11 @@ module Spree
         @domain      = wizard_params[:domain]
         @server_type = wizard_params[:server_type]
 
+        if resource_limit_exceeded("domain")
+          @error = I18n.t('spree.resource_limit_exceeds')
+          render 'new'
+          return
+        end
         if valid_domain?(@domain)
           create_user_domain
           @tasks = []
