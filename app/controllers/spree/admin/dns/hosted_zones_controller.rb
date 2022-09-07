@@ -218,9 +218,8 @@ module Spree
           end
           
           ## mail forward
-          @mail_forward_records = current_spree_user.isp_config.mail_forward.all[:response].response
-          @mail_forwards = @mail_forward_records.collect{|x| x if x.source.split('@')[1] == @zone_name}.compact
-          @mail_forward_count = @mail_forwards.present? ? @mail_forwards.size : 0
+          @mail_forwards = @user_domain.user_mail_forwards
+
 
           # user mailing list
           @mailing_lists = @user_domain.user_mailing_lists

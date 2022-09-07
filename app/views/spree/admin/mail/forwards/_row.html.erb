@@ -1,0 +1,17 @@
+<tr id="mail_forward_id_<%=mail_forward.id%>" >
+  <td><%=mail_forward.source%></td>
+  <td><%=mail_forward.destination%></td>
+  <td> <%= html_boolean(mail_forward.active)%></td>
+  <td>
+  <span class="d-flex justify-content-end">
+
+    <%= link_to  admin_mail_forward_path(id: mail_forward.id, user_domain_id: @user_domain.id),type: 'button',data: {confirm: t('general.delete')}, class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete, remote: true do %>
+      <%=render :partial=> 'spree/admin/shared/icons/delete'%>
+    <%end%>
+
+    <%= link_to  edit_admin_mail_forward_path(id: mail_forward.id,  user_domain_id: @user_domain.id),type: 'button', class: 'btn btn-outline-success btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Edit',style:"margin-right:5px", remote: true do %>
+        <%= render :partial=> 'spree/admin/shared/icons/edit'%>
+    <% end %>
+  </span>
+  </td>  
+</tr>

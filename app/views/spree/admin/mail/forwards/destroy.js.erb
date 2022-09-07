@@ -1,0 +1,6 @@
+<% if @response[:success] == true %>
+  $("#myModal").modal('hide')
+  $('#mail_forward_table #mail_forward_id<%=@mail_forward.id%>').remove();
+<% else %>
+  $('#error_div').html("<%=j @response[:message].html_safe%>");
+<% end %>
