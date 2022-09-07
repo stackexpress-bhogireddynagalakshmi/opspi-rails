@@ -13,11 +13,11 @@ module Spree::Admin::ResourceLimitHelper
     end
   
     def current_plan_domain_limit
-      get_linux_resource_limit.limit_dns_zone
+      get_linux_resource_limit&.limit_dns_zone
     end
   
     def current_plan_mail_box_limit
-      get_linux_resource_limit.limit_mailbox
+      get_linux_resource_limit&.limit_mailbox
     end
   
     def resource_limit_exceeded(resource)

@@ -118,10 +118,11 @@
             </div>
             <div class="col-auto">
                <%= button_link_to "Add New",
-                  "#",
+                  new_admin_mail_forward_path(user_domain_id: params[:user_domain_id]),
                   class: "btn btn-primary lift admin_mail_forward1",
                     icon: 'add.svg',
-                    id: 'admin_new_forward' %>
+                    id: 'admin_new_forward',
+                    remote: true %>
             </div>
          </div>
          <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
