@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_31_071116) do
+ActiveRecord::Schema.define(version: 2022_09_07_041413) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -1613,6 +1613,18 @@ ActiveRecord::Schema.define(version: 2022_08_31_071116) do
   create_table "user_mail_domains", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_domain_id"
     t.integer "remote_mail_domain_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_mail_forwards", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_domain_id"
+    t.integer "remote_mail_forward_id"
+    t.string "source"
+    t.text "destination"
+    t.boolean "active"
+    t.boolean "allow_send_as"
+    t.boolean "greylisting"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
