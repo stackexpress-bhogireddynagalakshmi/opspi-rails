@@ -57,11 +57,11 @@
                   new_admin_mail_mail_box_path(user_domain_id: params[:user_domain_id]), 
                   class: "btn btn-primary lift",
                     icon: 'add.svg',
-                    id: 'new_admin_mailbox', data: resource_limit_exceeded("mail_box"), onclick: "checkResourceLimit(this);",
+                    id: 'new_admin_mailbox', data: resource_limit_exceeded("mail_box"), error_id: "mail_box", onclick: "checkResourceLimit(this);",
                     remote: true %>
             </div>
          </div>
-         <span id="res_limit_error_message"></span>
+         <span id="res_limit_error_message_mail_box"></span>
          <%= render partial: 'spree/admin/dns/hosted_zones/mail_index' %>
          <div class="row align-items-center mb-2">
             <div class="col">
@@ -74,10 +74,12 @@
                   new_admin_mail_mailing_list_path(user_domain_id: params[:user_domain_id]),
                   class: "btn btn-primary lift",
                   icon: 'add.svg',
+                  data: resource_limit_exceeded("mailing_list"), error_id: "mailing_list", onclick: "checkResourceLimit(this);",
                   remote: true 
                     %>
             </div>
          </div>
+         <span id="res_limit_error_message_mailing_list"></span>
          <%= render partial: 'spree/admin/dns/hosted_zones/mailing_list_index' %>
 
 
