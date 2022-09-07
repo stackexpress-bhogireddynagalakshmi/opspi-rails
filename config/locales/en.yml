@@ -106,6 +106,9 @@ en:
     subscription_canceled: 'Subscription canceled successfully.'
     sub_date: 'Sub Date'
     
+    dns_zones: 'DNS Zones'
+    new_dns_zone: 'New DNS Zone'
+
     list_of_solid_cp_users: 'List of SolidCP users'
     ist_of_solid_cp_plans: 'List of SolidCP plans'
     solid_cp_plan: 'SolidCP Hosting Plan'
@@ -121,6 +124,10 @@ en:
     subdomain: 'Subdomain'
     marketplace_url: 'Your current marketplace url is'
     custom_marketplace_url: 'Custom Domain'
+
+    signed_up: "Signed in successfully."
+    send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
+    without_confirm: "User will not be able to create any resources if they dont confirm there email."
 
     user_mailer:
       reset_button_does_not_work: "If the above button does not work then please click on the below link to reset your password"
