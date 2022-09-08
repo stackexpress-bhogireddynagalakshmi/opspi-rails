@@ -1,12 +1,17 @@
 class ProductConfig < ApplicationRecord
   belongs_to :product, class_name: 'Spree::Product', foreign_key: 'product_id'
-  attr_reader :product
+  attr_reader :product, :linux_limits, :windows_limits
 
-  # def initialize(product)
+  # def initialize(product,linux_limits ={},windows_limits={})
+  #   super
   #   @product = product
-  #   # @linux_limits = linux_limits
-  #   # @windows_limits = windows_limits
+  #   @linux_limits = linux_limits
+  #   @windows_limits = windows_limits
   # end
+
+  def self.call(product,linux_limits ={},windows_limits={})
+    create(product,linux_limits,windows_limits)
+  end
 
   # def product_config
   #   {
@@ -88,15 +93,14 @@ class ProductConfig < ApplicationRecord
   #   }
   # end
 
-  def create
-    product_type = (product.server_type == 'reseller_plan') ? 'reseller_shared_hosting_plan' : 'enduser_shared_hosting_plan'
-    @product_config = ProductConfig.new({
-                                        name: product.name,
-                                        configs: nil,
-                                        product_type: product_type,
-                                        status: 'active',
-                                        store_id: product.account.store_id
-                                        })
+  def create(product,linux_limits,windows_limits)
+    product_type = (product["server_type"] == 'reseller_plan') ? 'reseller_shared_hosting_plan' : 'enduser_shared_hosting_plan'
+    @product_config = self.new({
+                                name: product["name"],
+                                configs: nil,
+                                product_type: product_type,
+                                status: 'active'
+                                })
     @product_config.save!
   end
 end

@@ -111,7 +111,11 @@ end
 
 ::Spree::Product.prepend Spree::ProductDecorator if ::Spree::Product.included_modules.exclude?(Spree::ProductDecorator)
 
+<<<<<<< HEAD
 [:plan_type, :server_type, :solid_cp_master_plan_id, :isp_config_master_template_id, :subscribable, :reseller_product, :no_of_website, :storage, :ssl_support, :domain, :subdomain, :parked_domain, :mailbox, :auto_daily_malware_scan, :email_order_confirmation, :frequency, :visible,
+=======
+[:plan_type, :server_type, :solid_cp_master_plan_id, :isp_config_master_template_id, :subscribable, :reseller_product, :no_of_website, :storage, :ssl_support, :domain, :subdomain, :parked_domain, :mailbox, :auto_daily_malware_scan, :email_order_confirmation, :frequency, :validity, :description, :visible,
+>>>>>>> changes
  { isp_config_limit_attributes: IspConfigLimit.get_fields_name,
    plan_quota_groups_atrributes: [:group_name, :product_id, :solid_cp_quota_group_id, :calculate_diskspace, :calculate_bandwidth, :enabled, :id,
                                   { plan_quotas_attributes: %i[quota_name plan_quota_group_id solid_cp_quota_group_id solid_cp_quota_id quota_value unlimited enabled parent_quota_value id quota_type_id] }] }].each do |field|
