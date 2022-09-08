@@ -36,12 +36,16 @@ module Spree
         hsphere: 3,
         reseller_plan: 4
       }
-
+      base.has_one :product_config
+      base.after_create :create_product_config
       base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on account_id]
     end
 
     def set_validity
       self.validity = 1
+    end
+    def create_product_config
+      ProductConfig.new(self,isp_config_limit,plan_quotas).call
     end
     
     def ensure_plan_id_or_template_id
