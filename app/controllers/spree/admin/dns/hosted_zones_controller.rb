@@ -154,13 +154,13 @@ module Spree
           @database_count = @user_databases.present? ? @user_databases.size : 0
 
           ############
-          @win_resources = begin
-            @response2 = current_spree_user.solid_cp.sql_server.all || []
-            convert_to_mash(@response2.body[:get_sql_databases_response][:get_sql_databases_result][:sql_database])
-          rescue StandardError
-            []
-          end
-          @resources_win = [@win_resources].to_a.flatten
+          # @win_resources = begin
+          #   @response2 = current_spree_user.solid_cp.sql_server.all || []
+          #   convert_to_mash(@response2.body[:get_sql_databases_response][:get_sql_databases_result][:sql_database])
+          # rescue StandardError
+          #   []
+          # end
+          # @resources_win = [@win_resources].to_a.flatten
 
           #### windows ftp
           @win_user = begin
@@ -218,7 +218,7 @@ module Spree
           @mailing_lists = @user_domain.user_mailing_lists
           
 
-          @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
+          # @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
           
           list_arr4 = []
           @web_domain.each do |el|
@@ -234,17 +234,17 @@ module Spree
           end
 
           # domains = current_spree_user.isp_config.mail_domain.all[:response].response
-          list_arr5 = []
-          @mail_domain_response.each do |elm|
-            if elm.domain == @zone_name
-              list_arr5 << elm
-            #  @websites = list_arr4
-              @domains = list_arr5.collect { |x| [x.domain, x.domain] }
-             break
-            else
-              @domains = @mail_domain_response.collect { |x| [x.domain, x.domain] }
-            end
-          end
+          # list_arr5 = []
+          # @mail_domain_response.each do |elm|
+          #   if elm.domain == @zone_name
+          #     list_arr5 << elm
+          #   #  @websites = list_arr4
+          #     @domains = list_arr5.collect { |x| [x.domain, x.domain] }
+          #    break
+          #   else
+          #     @domains = @mail_domain_response.collect { |x| [x.domain, x.domain] }
+          #   end
+          # end
 
           get_active
           
