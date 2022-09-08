@@ -17,11 +17,11 @@ module Spree
         @domain      = wizard_params[:domain]
         @server_type = wizard_params[:server_type]
 
-        if resource_limit_exceeded("domain")
-          @error = I18n.t('spree.resource_limit_exceeds')
-          render 'new'
-          return
-        end
+        # if resource_limit_exceeded("domain")
+        #   @error = I18n.t('spree.resource_limit_exceeds')
+        #   render 'new'
+        #   return
+        # end
         if valid_domain?(@domain)
           create_user_domain
           @tasks = []
