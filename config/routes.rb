@@ -75,8 +75,10 @@ Rails.application.routes.draw do
           end
         end
         resources :mailing_lists  
+        resources :spam_filters
         resources :spam_filter_blacklists
         resources :spam_filter_whitelists
+
         resources :statistics do
           collection do
             get :mailbox_quota

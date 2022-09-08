@@ -1,0 +1,26 @@
+
+<div class="card mt-4">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="width:100%">
+  <thead>
+    <tr>
+    <th>Email</th>
+    <th style="text-align: center;">Active</th>
+    <th style="text-align: center;">Priority</th>
+    <th style="text-align: end">Actions</th>
+    </tr>
+  </thead>
+  <tbody class="fsbase">
+  <% if @spam_filter_black.present? %>
+  <% spam_filters.each do |resource| %>
+    <%= render :partial=>'row', locals: {resource: resource}%>
+  <% end %>
+  <% else %>
+    <tr>
+      <td><label class="form-label table_row_label"> No Spamfilter found.</label> </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+</div>

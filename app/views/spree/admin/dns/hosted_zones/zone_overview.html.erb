@@ -92,12 +92,15 @@
             </div>
             <div class="col-auto">
                <%= button_link_to "Add New",
-                  new_admin_mail_spam_filter_blacklist_path,
+                  new_admin_mail_spam_filter_path(wb: 'B', user_domain_id: params[:user_domain_id]),
                   class: "btn btn-primary lift admin_spam_black1",
-                    icon: 'add.svg' %>
+                    icon: 'add.svg',
+                    remote: true %>
             </div>
          </div>
-         <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_blacklist_index' %>
+         <%= render partial: 'spree/admin/mail/spam_filters/index',  locals: { spam_filters: @spam_filters.black_lists }  %>
+
+
          <div class="row align-items-center mb-2">
             <div class="col">
                <h1 class="header-title">
@@ -106,12 +109,14 @@
             </div>
             <div class="col-auto">
                <%= button_link_to "Add New",
-                  "#",
+                  new_admin_mail_spam_filter_path(wb: 'W', user_domain_id: params[:user_domain_id]),
                   class: "btn btn-primary lift admin_spam_white1",
-                    icon: 'add.svg' %>
+                    icon: 'add.svg',
+                    remote: true %>
             </div>
          </div>
-         <%= render partial: 'spree/admin/dns/hosted_zones/spamfilter_whitelist_index' %>
+         <%= render partial: 'spree/admin/mail/spam_filters/index', locals: { spam_filters: @spam_filters.white_lists } %>
+
          <div class="row align-items-center mb-2">
             <div class="col">
                <h1 class="header-title">

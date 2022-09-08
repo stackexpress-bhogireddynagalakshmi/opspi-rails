@@ -34,7 +34,6 @@ module Spree
             @mailing_list = @user_domain.user_mailing_lists.where(listname: mailing_list_params[:listname]).last 
           end
         end
-        
 
         def update
           @response = mailing_list_api.update(@mailing_list.id, mailing_list_params)
@@ -47,14 +46,6 @@ module Spree
 
         private
 
-        def set_flash
-          if @response[:success]
-            flash[:success] = @response[:message]
-          else
-            flash.now[:error] = @response[:message]
-          end
-        end
-
         def mailing_list_params
           params.require("mailinglist").permit(:listname, :email, :password)
         end
@@ -66,7 +57,7 @@ module Spree
         def set_mailing_list
           @mailing_list = @user_domain.user_mailing_lists.find(params[:id])
 
-          redirect_to admin_mail_mailing_lists_path, notice: 'Not Authorized' if @mailing_list .blank?
+          redirect_to admin_dashboard_path, notice: 'Not Authorized' if @mailing_list .blank?
         end
 
       end
