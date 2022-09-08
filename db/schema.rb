@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_07_041413) do
+ActiveRecord::Schema.define(version: 2022_09_08_073930) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -323,6 +323,17 @@ ActiveRecord::Schema.define(version: 2022_09_07_041413) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "quota_type_id"
+  end
+
+  create_table "product_configs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name"
+    t.integer "product_id"
+    t.json "configs"
+    t.string "product_type"
+    t.string "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "store_id"
   end
 
   create_table "protected_folder_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -1653,6 +1664,17 @@ ActiveRecord::Schema.define(version: 2022_09_07_041413) do
     t.string "listname"
     t.string "email"
     t.integer "remote_mailing_list_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_spam_filters", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_domain_id"
+    t.integer "remote_spam_filter_id"
+    t.string "wb"
+    t.string "email"
+    t.integer "priority"
+    t.boolean "active"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
