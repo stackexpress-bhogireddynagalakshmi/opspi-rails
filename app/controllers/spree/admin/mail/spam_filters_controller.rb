@@ -21,8 +21,10 @@ module Spree
 
         def create
           @response = isp_config_api.create(spam_filter_params, user_domain: @user_domain)
+
+          byebug
           if @response[:success]
-            @spam_filter = @user_domain.user_spam_filters.by_wb_scope(params[:wb]).where(email: spam_filter_params[:email]).last
+            @spam_filter = @user_domain.user_spam_filters.by_wb_scope(spam_filter_params[:wb]).where(email: spam_filter_params[:email]).last
           end
         end
 
@@ -32,7 +34,7 @@ module Spree
         end
 
         def destroy
-          @response = isp_config_api.destroy(@spam_filter.isp_config_spam_filter_id)
+          @response = isp_config_api.destroy(@spam_filter.id)
         end
 
         private

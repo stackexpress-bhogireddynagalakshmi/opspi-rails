@@ -5,15 +5,15 @@
   <thead>
     <tr>
     <th>Email</th>
-    <th style="text-align: center;">Active</th>
-    <th style="text-align: center;">Priority</th>
-    <th style="text-align: end">Actions</th>
+    <th>Active</th>
+    <th>Priority</th>
+    <th>Actions</th>
     </tr>
   </thead>
-  <tbody class="fsbase">
-  <% if @spam_filter_black.present? %>
-  <% spam_filters.each do |resource| %>
-    <%= render :partial=>'row', locals: {resource: resource}%>
+  <tbody class="fsbase" id="spam_filter_<%=wb%>_table">
+  <% if @spam_filters.present? %>
+  <% spam_filters.each do |spam_filter| %>
+    <%= render :partial=>'spree/admin/mail/spam_filters/row', locals: { spam_filter: spam_filter }%>
   <% end %>
   <% else %>
     <tr>
