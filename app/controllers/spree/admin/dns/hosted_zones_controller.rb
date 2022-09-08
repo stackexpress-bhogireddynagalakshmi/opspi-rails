@@ -207,19 +207,12 @@ module Spree
             @win_count = 0
           end
 
-          get_spam_filter
 
-          @spam_filter_black = spamfilter_api.spam_filter_blacklist.all[:response].response
-          
-          if @spam_filter_black.present?
-            @spam_filter_black_count = @spam_filter_black.size
-          else
-            @spam_filter_black_count = 0
-          end
-          
+          ## Spam Filters
+          @spam_filters = @user_domain.user_spam_filters
+        
           ## mail forward
           @mail_forwards = @user_domain.user_mail_forwards
-
 
           # user mailing list
           @mailing_lists = @user_domain.user_mailing_lists
@@ -263,16 +256,7 @@ module Spree
           @phpmyAdminUrl= "#{ul}phpmyadmin/"
         end
 
-        def get_spam_filter
-          spam = IspConfig::Mail::SpamFilterWhitelist.new(current_spree_user)
-          @spam_filter_white = spam.all[:response].response
-          
-          if @spam_filter_white.present?
-            @spam_filter_white_count = @spam_filter_white.size
-          else
-            @spam_filter_white_count = 0
-          end
-        end
+       
 
         def get_config_details
           web_domain = get_web_domain_id(params[:website][:origin])

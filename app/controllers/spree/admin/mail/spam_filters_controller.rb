@@ -6,70 +6,58 @@ module Spree
       # Mail Domain controller
       class SpamFiltersController < Spree::Admin::BaseController
         before_action :ensure_hosting_panel_access
+        before_action :set_user_domain, only: [:new, :create, :update, :edit, :destroy]
         before_action :set_resource, only: %i[edit update destroy]
 
         def index
-          response = isp_config_api.all || []
-          @resources = if response[:success]
-                         response[:response].response
-                       else
-                         []
-                       end
+         @user_domain.user_spam_filters
         end
 
-        def new; end
-
-        def edit
-          @response = isp_config_api.find(@spam_filter.isp_config_spam_filter_id)
-          @filter = @response[:response].response if @response[:success].present?
+        def new
+          @spam_filter = @user_domain.user_spam_filters.build({wb: params[:wb]})
         end
+
+        def edit;end
 
         def create
-          @response = isp_config_api.create(spam_filter_params)
-          set_flash
+          @response = isp_config_api.create(spam_filter_params, user_domain: @user_domain)
+
+          byebug
           if @response[:success]
-            redirect_to request.referrer
-          else
-            render :new
+            @spam_filter = @user_domain.user_spam_filters.by_wb_scope(spam_filter_params[:wb]).where(email: spam_filter_params[:email]).last
           end
         end
 
         def update
-          @response = isp_config_api.update(@spam_filter.isp_config_spam_filter_id, spam_filter_params)
-          set_flash
-          if @response[:success]
-            resource_index_path
-          else
-            render :edit
-          end
+          @response = isp_config_api.update(@spam_filter.id, spam_filter_params)
+          @spam_filter.reload
         end
 
         def destroy
-          @response = isp_config_api.destroy(@spam_filter.isp_config_spam_filter_id)
-          set_flash
-          # resource_index_path
-          redirect_to request.referrer
+          @response = isp_config_api.destroy(@spam_filter.id)
         end
 
         private
 
-        def set_flash
-          if @response[:success]
-            flash[:success] = @response[:message]
+
+        def isp_config_api
+          if @spam_filter&.persisted? && @spam_filter.wb == 'B' || spam_filter_params[:wb] == 'B'
+            current_spree_user.isp_config.spam_filter_blacklist
           else
-            flash.now[:error] = @response[:message]
+            current_spree_user.isp_config.spam_filter_whitelist
           end
+
         end
 
         def spam_filter_params
-          params.require("spamfilter").permit(:email, :priority, :active)
-                .merge(filter_type_params)
+          params.require("spamfilter").permit(:email, :priority, :active, :wb)
+                
         end
 
         def set_resource
-          @spam_filter = current_spree_user.spam_filters.find_by_isp_config_spam_filter_id(params[:id])
+          @spam_filter = @user_domain.user_spam_filters.find(params[:id])
 
-          redirect_to resource_index_path, notice: 'Not Authorized' if @spam_filter.blank?
+          redirect_to admin_dashboard_path, notice: 'Not Authorized' if @spam_filter.blank?
         end
       end
     end

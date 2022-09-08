@@ -7,6 +7,7 @@ class UserDomain < ApplicationRecord
   has_many :user_mailboxes
   has_many :user_mailing_lists
   has_many :user_mail_forwards
+  has_many :user_spam_filters
   has_one :hosted_zone
 
   validates :domain, presence: true
