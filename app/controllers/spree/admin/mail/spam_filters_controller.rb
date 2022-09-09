@@ -22,7 +22,6 @@ module Spree
         def create
           @response = isp_config_api.create(spam_filter_params, user_domain: @user_domain)
 
-          byebug
           if @response[:success]
             @spam_filter = @user_domain.user_spam_filters.by_wb_scope(spam_filter_params[:wb]).where(email: spam_filter_params[:email]).last
           end

@@ -17,9 +17,8 @@
     <div class="form-group">
       <label class="form-label">Source</label>
       <div class="input-group mb-3">
-        <%=f.text_field 'source', value: @mail_forward.try(:source).try(:split, '@').try(:first), class: 'form-control',style:"width: 65%;"%>
+        <%=f.text_field 'source', value: @mail_forward.try(:source).try(:split, '@').try(:first), class: 'form-control',style:"width: 45%;"%>
         <span class="input-group-text" id='at-sign'>@ <%=@user_domain.domain%></span>
-        
       </div>
     </div>
 

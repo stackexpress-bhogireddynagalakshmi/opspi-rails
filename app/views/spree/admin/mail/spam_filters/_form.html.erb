@@ -29,7 +29,7 @@
         <%=f.select 'active',options_for_select([['Yes','y'],['No','n']], @spam_filter.try(:active)),{}, class: 'form-select'%>
       </div>
 
-      <%=submit_tag "#{@spam_filter.persisted? ? 'Update' : 'Add'} Spamspam_filter",class: 'btn btn-primary lift'%>
+      <%=submit_tag "#{@spam_filter.persisted? ? 'Update' : 'Add'} Spamfilter",class: 'btn btn-primary lift'%>
     </fieldset>
   <%end%>
 </div>
