@@ -205,7 +205,7 @@ display: block;
   <%=form_tag admin_dns_hosted_zone_hosted_zone_records_path(@hosted_zone), class:"collapse form_1", id: "collapseEX2", method: "post" do %>
     <fieldset>
     <div class="grid-container">
-
+      <%=hidden_field_tag :user_domain_id, @user_domain.id%>
        <div class="grid-small_1">
           <div class="form-group">
             <label for="type" class="form-label">Type</label>
