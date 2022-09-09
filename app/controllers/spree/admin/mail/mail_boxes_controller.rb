@@ -38,6 +38,7 @@ module Spree
         end
 
         def destroy
+          set_mail_box #TODO; before action is not triggered somehow calling manually
           @response = mail_user_api.destroy(@mailbox.id)
         end
 
@@ -68,7 +69,7 @@ module Spree
         def set_mail_box
           @mailbox = @user_domain.user_mailboxes.find(params[:id])
 
-          redirect_to admin_mail_mail_boxes_path, notice: 'Not Authorized' if @mailbox .blank?
+          redirect_to admin_dashboard_path, notice: 'Not Authorized' if @mailbox .blank?
         end
 
         def formatted_email
