@@ -36,7 +36,10 @@
 
     <div class="form-group">
       <label class="form-label">Password</label>
-      <%=f.password_field 'password', class: 'form-control'%>
+      <%=f.password_field 'password', class: 'form-control', value: @mailing_list.persisted? ? 'dummypass' : ''%>
+      <%if  @mailing_list.persisted?%>
+        <p class="text-muted"> <%=t("isp_config.mailing_lists.reset_password")%></p>
+      <%end%>
     </div>
     <%=submit_tag "#{@mailing_list.persisted? ? 'Update' : 'Add'} Mailing List",class: 'btn btn-primary lift'%>
 <%end%>

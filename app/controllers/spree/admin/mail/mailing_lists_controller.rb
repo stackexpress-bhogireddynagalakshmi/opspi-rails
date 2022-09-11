@@ -36,7 +36,10 @@ module Spree
         end
 
         def update
-          @response = mailing_list_api.update(@mailing_list.id, mailing_list_params)
+          list_params  = mailing_list_params
+          list_params.delete(:password) if list_params[:password] == 'dummypass'
+          
+          @response = mailing_list_api.update(@mailing_list.id, list_params)
           @mailing_list.reload
         end
 
