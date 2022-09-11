@@ -3,6 +3,12 @@
 module Spree
   module Admin
     module UsersControllerDecorator
+      include ApplicationHelper
+
+      def self.prepended(base)
+        base.before_action :ensure_user_confirmed, only: [:create, :update]
+      end
+
       def collection
         super
         @collection = @collection.where(account_id: current_spree_user.account_id) if current_spree_user.store_admin?

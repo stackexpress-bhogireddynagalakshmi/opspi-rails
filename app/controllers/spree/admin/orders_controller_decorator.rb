@@ -3,6 +3,12 @@
 module Spree
   module Admin
     module OrdersControllerDecorator
+      include ApplicationHelper
+
+      def self.prepended(base)
+        base.before_action :ensure_user_confirmed, only: [:create]
+      end
+      
       def index
         super
         

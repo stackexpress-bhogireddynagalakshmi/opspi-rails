@@ -3,6 +3,13 @@
 module Spree
   module Admin
     module ProductsControllerDecorator
+      include ApplicationHelper
+
+      def self.prepended(base)
+        base.before_action :ensure_user_confirmed, only: [:create]
+      end
+
+
       def collection
         @collection = super
         @collection = @collection.where(account_id: current_spree_user.account_id) rescue []

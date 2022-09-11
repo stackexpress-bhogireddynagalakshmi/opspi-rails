@@ -2,7 +2,7 @@
 <h1 class="contextual-title px-0 mb-0 col" style="margin-top: -2rem;">Dashboard</h1>
 <hr>
      <%if !current_spree_user.confirmed?%>
-       <div class="alert alert-info"><%= Spree.t(:without_confirm) %></div>
+       <div class="alert alert-info"><%= Spree.t(:confirmation_error) %></div>
      <%end%>
 
 <%else%>
@@ -25,6 +25,6 @@
 </div>
 
 <%if !current_spree_user.confirmed?%>
-<div class="alert alert-info"><%= Spree.t(:without_confirm) %></div>
+<div class="alert alert-info"><%= Spree.t(:confirmation_error) %></div>
 <%end%>
 <%end%> 

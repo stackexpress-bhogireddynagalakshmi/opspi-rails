@@ -102,6 +102,12 @@ en:
     
     dns_zones: 'DNS Zones'
     new_dns_zone: 'New DNS Zone'
+    sign_in_count: 'Sign in Count'
+    current_sign_in_at: 'Current Sign in Time'
+    last_sign_in_at: 'Last Sign in'
+    current_sign_in_ip: 'Current Sign in IP'
+    last_sign_in_ip: 'Last Sign in IP'
+    confirmation_error: 'Email is not confirmed yet. Please check your inbox and click the confirmation link.'
 
     list_of_solid_cp_users: 'List of SolidCP users'
     ist_of_solid_cp_plans: 'List of SolidCP plans'

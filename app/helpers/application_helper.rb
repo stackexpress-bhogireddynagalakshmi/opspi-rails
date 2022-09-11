@@ -9,6 +9,18 @@ module ApplicationHelper
     end
   end
 
+
+  def ensure_user_confirmed
+    byebug
+    if current_spree_user.confirmed?
+      return nil
+    else
+      flash[:warning] = Spree.t(:confirmation_error)
+      redirect_to admin_dashboard_path
+      return false
+    end
+  end
+
   def current_admin_tenant?
     current_store.account.admin_tenant?
   end
