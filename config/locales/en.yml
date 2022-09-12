@@ -171,6 +171,7 @@ en:
       update: Mailbox updated successfully.
       delete: Mailbox deleted successfully.
     mailing_lists:
+      reset_password: Enter new password above to reset your existing mailing list password
       create: Mailing List created successfully.
       update: Mailing List updated successfully.
       delete: Mailing List deleted successfully.
