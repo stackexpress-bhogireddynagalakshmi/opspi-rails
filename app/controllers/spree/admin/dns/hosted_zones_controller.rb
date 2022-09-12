@@ -148,6 +148,8 @@ module Spree
           end
           #### 
 
+          @ftp_users = @user_domain.user_ftp_users
+
           #### database
           @user_databases = current_spree_user.user_databases.where(user_domain_id: @user_domain.id, status: "success")
 

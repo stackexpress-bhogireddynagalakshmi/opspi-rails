@@ -12,11 +12,9 @@ module ResetPasswordConcern
         @response = mail_user_api.update(mailbox.mailuser_id, { password: @password })
 
       when 'create_ftp_account'
-        if params[:server_type] == 'linux'
-          ftp_users = ftp_user_api.all
-          ftp_users = ftp_users[:response].response
-          ftp_user  = ftp_users.detect { |x| x.username == params[:email] }
-          @response = ftp_user_api.update(ftp_user.ftp_user_id, { password: @password })
+        if @user_domain.linux?
+          ftp_user  = @user_domain.user_ftp_users.find(params[:id])
+          @response = ftp_user_api.update(ftp_user.id, { password: @password })
         else
           ftp_users = ftp_user_api.all
           ftp_users = ftp_users.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account]  || [] rescue []
@@ -38,10 +36,9 @@ module ResetPasswordConcern
         end
       end
 
-    render template: '/spree/admin/shared/spree/admin/password/reset_password.js.erb'
+    render template: '/spree/admin/shared/spree/admin/password/reset_password'
     rescue => e
-      Rails.logger.error { e.backtrace }
-      puts e.backtrace
+      ErrorLogger.log_exception(e)
       @response = {success: false, error: "something went wrong. Please try after sometime."}
     end
 

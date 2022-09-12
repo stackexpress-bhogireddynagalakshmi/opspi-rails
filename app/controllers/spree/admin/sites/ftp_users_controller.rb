@@ -5,7 +5,7 @@ module Spree
     module Sites
       class FtpUsersController < Spree::Admin::BaseController
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :index, :destroy,:configurations]
-        before_action :set_ftp_user, only: %i[destroy update]
+        before_action :set_ftp_user, only: %i[destroy update configurations]
         # before_action :get_websites, only: [:new]
 
         include ResetPasswordConcern
@@ -36,6 +36,8 @@ module Spree
           @ftp_user.reload
         end
 
+        def configurations; end
+
         private
 
         def resource_params
@@ -61,7 +63,7 @@ module Spree
 
           if website.present?
             data = data.merge(
-              response[:response][:response].slice(:parent_domain_id,:uid,:dir,:gid)
+              website[:response][:response].slice(:parent_domain_id,:uid,:dir,:gid)
             )
           end
 

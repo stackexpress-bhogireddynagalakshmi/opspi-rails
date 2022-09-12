@@ -42,9 +42,7 @@ module Spree
           @response = mail_user_api.destroy(@mailbox.id)
         end
 
-        def configurations
-
-        end
+        def configurations; end
 
         private
 

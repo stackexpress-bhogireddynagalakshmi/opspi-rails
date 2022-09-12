@@ -1,20 +1,20 @@
-<tr class=" ftp_user_<%=ftp_user.ftp_user_id%>" id="ftp_user_id_<%=ftp_user.id%>">
+<tr class=" ftp_user_<%=ftp_user.id%>" id="ftp_user_id_<%=ftp_user.id%>">
   <td><%=ftp_user.username%></td>
   <td><%=ftp_user.dir%></td>
+  <td class="password-text"> </td>
   <td>
     <span class="d-flex justify-content-end">
-      <%= link_to  admin_sites_ftp_user_path(ftp_user.ftp_user_id, user_domain_id: @user_domain.id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px", method: :delete do %>
+      <%= link_to  admin_sites_ftp_user_path(ftp_user.id, user_domain_id: @user_domain.id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px",data: {confirm: 'Are you sure you want to delete?'}, method: :delete do %>
          <%=render :partial=> 'spree/admin/shared/icons/delete'%>
       <% end %>
-      
-      <%=link_to reset_password_admin_sites_ftp_users_path(ftp_user.id, user_domain_id: @user_domain.id), div_class: "ftp_user_#{ftp_user.ftp_user_id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
-      <%= render partial: '/spree/admin/shared/icons/reset_password' %>
+
+      <%=link_to reset_password_admin_sites_ftp_user_path(ftp_user.id, user_domain_id: @user_domain.id,type: 'create_ftp_account', div_class: "ftp_user_id_#{ftp_user.id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
+        <%= render partial: '/spree/admin/shared/icons/reset_password' %>
       <% end %>
 
-      <%= link_to 'javascript:void(0);', data: {username: ftp_user.username, password: ftp_user.password, host: ENV['FTP_SERVER_LINUX_HOSTNAME'], port: ENV['FTP_SERVER_LINUX_PORT'], pwd_div_id: "ftp_user_#{ftp_user.ftp_user_id}_pwd_text", server_type: @current_user_website, email: ftp_user.username, id: ftp_user.ftp_user_id}, class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
-      <%= render partial: '/spree/admin/shared/icons/gear' %>
+      <%= link_to configurations_admin_sites_ftp_user_path(id: ftp_user.id, user_domain_id: @user_domain.id), class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details', remote: true do  %>
+         <%= render partial: '/spree/admin/shared/icons/gear' %>
       <% end %>
     </span>
-    <div class='mt-3 password-text' id="ftp_user_<%=ftp_user.ftp_user_id%>_pwd_text"></div>
 </td>
 </tr>

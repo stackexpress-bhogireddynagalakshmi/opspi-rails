@@ -7,6 +7,7 @@
 <div class="modal-body">
  <% url =  @ftp_user.persisted? ?   admin_sites_ftp_user_path(@ftp_user.id) : admin_sites_ftp_users_path%>
   <%=form_for "ftp_user", url: url, html: { method: @ftp_user.persisted? ? :put : :post, remote: true } do |f|%> 
+  <div id="error_div" style="color: red;"></div>
 
   <%=hidden_field_tag :user_domain_id, @user_domain.id%>
   <%=f.hidden_field :domain, value: @user_domain.domain%>

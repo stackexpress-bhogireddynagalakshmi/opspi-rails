@@ -4,12 +4,19 @@ class UserFtpUser < ApplicationRecord
   belongs_to :user_domain
   delegate :user , to: :user_domain
 
-
-  def hostname
+  def host
     if user_domain.windows?
-      config_value_for(user.panel_config["web_windows"], 'FTP_SERVER_WINDOWS_HOSTNAME')
-    else ms_sql2019?
-      config_value_for(user.panel_config["web_linux"], 'FTP_SERVER_LINUX_HOSTNAME')
+      config_value_for(user.panel_config["web_windows"], 'FTP_SERVER_HOSTNAME')
+    else
+      config_value_for(user.panel_config["web_linux"], 'FTP_SERVER_HOSTNAME')
+    end
+  end
+
+  def port
+      if user_domain.windows?
+      config_value_for(user.panel_config["web_windows"], 'FTP_SERVER_PORT')
+    else 
+      config_value_for(user.panel_config["web_linux"], 'FTP_SERVER_PORT')
     end
   end
 

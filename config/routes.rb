@@ -91,8 +91,9 @@ Rails.application.routes.draw do
       namespace :sites do
         resources :websites
         resources :ftp_users do
-          collection do
+          member do
             get :reset_password
+             get :configurations
           end
         end
         resources :sub_domains

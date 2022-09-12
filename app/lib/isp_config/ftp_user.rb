@@ -44,7 +44,7 @@ module IspConfig
     end
 
     def update(id, params = {})
-      ftp_user = UserFTtpUser.find(id)
+      ftp_user = UserFtpUser.find(id)
       response = query({
                          endpoint: '/json.php?sites_ftp_user_update',
                          method: :POST,
@@ -64,7 +64,7 @@ module IspConfig
     end
 
     def destroy(id)
-      ftp_user = UserFTtpUser.find(id)
+      ftp_user = UserFtpUser.find(id)
       response = query({
                          endpoint: '/json.php?sites_ftp_user_delete',
                          method: :DELETE,
@@ -126,7 +126,7 @@ module IspConfig
     def ftp_user_params(params)
       {
         username: params[:username],
-        dir: params[:dir]
+        dir: params[:dir],
         active: params[:active] == 'y'
       }
 
