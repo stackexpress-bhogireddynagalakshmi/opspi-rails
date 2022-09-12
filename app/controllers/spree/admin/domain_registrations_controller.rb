@@ -79,8 +79,8 @@ module Spree
 
       def setup_reseller_club
         if request.post?
-          spree_current_user.update(user_params)
-          flash.now[:success] = "ResellerClub credentials saved successfully"
+            spree_current_user.update(user_params)
+            flash.now[:success] = "ResellerClub credentials saved successfully"
         end
 
         if current_spree_user.store_admin? || current_spree_user&.superadmin?
