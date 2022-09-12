@@ -23,7 +23,6 @@ module SolidCp
 
 
    
-
     # Creates Hosting Space on SolidCP for a user
 
     def  add_package(plan_id = 10)
@@ -55,6 +54,23 @@ module SolidCp
         package_id: user.packages.first.try(:solid_cp_package_id)
       })
     end
+
+    def get_package_diskspace
+      response = super(message: {
+        package_id: user.packages.first.try(:solid_cp_package_id)
+      })
+    end
+
+    def get_package_bandwidth
+      response = super(message: {
+        package_id: user.packages.first.try(:solid_cp_package_id),
+        start_date: today.to_date.beginning_of_month,
+        end_date: today.to_date.end_of_month
+      })
+    end
     
+    def today
+      DateTime.now
+    end
   end
 end

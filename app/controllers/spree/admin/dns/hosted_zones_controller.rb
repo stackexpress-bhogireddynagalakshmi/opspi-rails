@@ -6,6 +6,8 @@ module Spree
       class HostedZonesController < Spree::Admin::BaseController
         include ApisHelper
         include PanelConfiguration
+
+        before_action :set_user_domain, only: [:zone_overview]
         before_action :ensure_hosting_panel_access
         before_action :set_zone_list, only: %i[edit update destroy dns zone_overview]
         
@@ -88,6 +90,7 @@ module Spree
         end
 
         def zone_overview
+
           @zone_name = params[:zone_name]
           @dns_id = params[:dns_id]
 
@@ -105,10 +108,7 @@ module Spree
           end
 
           ### mail boxes/user
-          @mail_user = mail_user_api.all[:response].response
-          @mailboxes = @mail_user.collect{|x| x if x.login.split('@')[1] == @zone_name}.compact
-          @mailbox_count = @mailboxes.present? ? @mailboxes.size : 0
-          
+            @mailboxes = @user_domain.user_mailboxes
           ######
 
           ##### user domain details
@@ -154,13 +154,13 @@ module Spree
           @database_count = @user_databases.present? ? @user_databases.size : 0
 
           ############
-          @win_resources = begin
-            @response2 = current_spree_user.solid_cp.sql_server.all || []
-            convert_to_mash(@response2.body[:get_sql_databases_response][:get_sql_databases_result][:sql_database])
-          rescue StandardError
-            []
-          end
-          @resources_win = [@win_resources].to_a.flatten
+          # @win_resources = begin
+          #   @response2 = current_spree_user.solid_cp.sql_server.all || []
+          #   convert_to_mash(@response2.body[:get_sql_databases_response][:get_sql_databases_result][:sql_database])
+          # rescue StandardError
+          #   []
+          # end
+          # @resources_win = [@win_resources].to_a.flatten
 
           #### windows ftp
           @win_user = begin
@@ -207,46 +207,19 @@ module Spree
             @win_count = 0
           end
 
-          get_spam_filter
 
-          @spam_filter_black = spamfilter_api.spam_filter_blacklist.all[:response].response
-          
-          if @spam_filter_black.present?
-            @spam_filter_black_count = @spam_filter_black.size
-          else
-            @spam_filter_black_count = 0
-          end
-          
+          ## Spam Filters
+          @spam_filters = @user_domain.user_spam_filters
+        
           ## mail forward
-          @mail_forward_records = current_spree_user.isp_config.mail_forward.all[:response].response
-          @mail_forwards = @mail_forward_records.collect{|x| x if x.source.split('@')[1] == @zone_name}.compact
-          @mail_forward_count = @mail_forwards.present? ? @mail_forwards.size : 0
+          @mail_forwards = @user_domain.user_mail_forwards
 
-          #####
-
-          ### mailing list
-          @mailing_list_response = mailing_list_api.all[:response].response
-          @mailing_lists = @mailing_list_response.collect{|x| x if x.domain == @zone_name}.compact
-          @mailing_list_count = @mailing_lists.present? ? @mailing_lists.size : 0
+          # user mailing list
+          @mailing_lists = @user_domain.user_mailing_lists
           
-          ######
 
-          @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
-          # list_arr3 = []
-          # @mail_domain_response.each do |ele|
-          #   if ele.domain == @zone_name
-          #     list_arr3 << ele
-          #    @mail_domain = list_arr3  
-          #   end
-          # end
-
-          # if @mail_domain.present?
-          # @mail_domain_count = @mail_domain.size
-          # else
-          #   @mail_domain_count = 0
-          # end
-
-          # @websites_response = current_spree_user.isp_config.website.all[:response].response
+          # @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
+          
           list_arr4 = []
           @web_domain.each do |el|
             if el.domain == @zone_name
@@ -261,17 +234,17 @@ module Spree
           end
 
           # domains = current_spree_user.isp_config.mail_domain.all[:response].response
-          list_arr5 = []
-          @mail_domain_response.each do |elm|
-            if elm.domain == @zone_name
-              list_arr5 << elm
-            #  @websites = list_arr4
-              @domains = list_arr5.collect { |x| [x.domain, x.domain] }
-             break
-            else
-              @domains = @mail_domain_response.collect { |x| [x.domain, x.domain] }
-            end
-          end
+          # list_arr5 = []
+          # @mail_domain_response.each do |elm|
+          #   if elm.domain == @zone_name
+          #     list_arr5 << elm
+          #   #  @websites = list_arr4
+          #     @domains = list_arr5.collect { |x| [x.domain, x.domain] }
+          #    break
+          #   else
+          #     @domains = @mail_domain_response.collect { |x| [x.domain, x.domain] }
+          #   end
+          # end
 
           get_active
           
@@ -283,16 +256,7 @@ module Spree
           @phpmyAdminUrl= "#{ul}phpmyadmin/"
         end
 
-        def get_spam_filter
-          spam = IspConfig::Mail::SpamFilterWhitelist.new(current_spree_user)
-          @spam_filter_white = spam.all[:response].response
-          
-          if @spam_filter_white.present?
-            @spam_filter_white_count = @spam_filter_white.size
-          else
-            @spam_filter_white_count = 0
-          end
-        end
+       
 
         def get_config_details
           web_domain = get_web_domain_id(params[:website][:origin])

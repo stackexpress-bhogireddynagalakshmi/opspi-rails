@@ -1,0 +1,28 @@
+<tr id="mailbox_id_<%=mailbox.id%>">
+    <td> <%= mailbox.name%></td>
+    <td> <%= mailbox.email%></td>
+   <!--  <td> <%#= html_boolean(mailbox.autoresponder)%></td> -->
+    <td> <%= html_boolean(mailbox.postfix)%> </td>
+    <td> <%= html_boolean(mailbox.disablesmtp, reverse: true)%></td>
+    <td> <%= html_boolean(mailbox.disabledeliver, reverse: true)%> </td>
+    <td> <%= html_boolean(mailbox.disableimap, reverse: true)%></td>
+    <td> <%= html_boolean(mailbox.disablepop3, reverse: true)%></td>
+    <td>
+      <span class="d-flex justify-content-end">
+      <%= link_to  admin_mail_mail_box_path(id: mailbox.id, user_domain_id: @user_domain.id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete, remote: true, data: {confrim: 'Are you sure you want to delete?'} do %>
+
+         <%=render :partial=> 'spree/admin/shared/icons/delete'%>
+      <%end%>
+      <%= link_to  edit_admin_mail_mail_box_path(id: mailbox.id, user_domain_id: @user_domain.id),type: 'button', class: 'btn btn-outline-success btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Edit',style:"margin-right:5px", remote: true do %>
+        <%= render :partial=> 'spree/admin/shared/icons/edit'%>
+      <% end %>
+      <%= link_to  get_web_mail_client_url, target: '_blank',type: 'button', class: 'btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Webmail',style:"margin-right:5px" do %>
+       <%=render :partial=> 'spree/admin/shared/icons/mail'%>
+       
+      <% end %> 
+         <%= link_to configurations_admin_mail_mail_box_path(id: mailbox.id, user_domain_id: @user_domain.id), remote: true, class: 'configure-mailbox-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
+            <%= render partial: '/spree/admin/shared/icons/gear' %>
+          <% end %>
+      </span>
+    </td>  
+  </tr>

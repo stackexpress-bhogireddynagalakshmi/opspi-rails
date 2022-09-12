@@ -13,3 +13,7 @@ ISPCONFIG_MAIL_SERVER_01,qa.ispconfig.opspi.com,1
 ISPCONFIG_MAIL_SERVER_02,qa.ispconfig.opspi.com,1
 MYSQL_SERVER_HOSTNAME,173.0.137.83,1
 MYSQL_SERVER_PORT,3306,1
+MAIL_SERVER_SMTP_URL,smtp.opspi.com,1
+MAIL_SERVER_POP_URL,pop.opspi.com,1
+MAIL_SERVER_IMAP_URL,imap.opspi.com,1
+WEBMAIL_URL,https://qa.ispconfig.opspi.com:8080/webmail/,1

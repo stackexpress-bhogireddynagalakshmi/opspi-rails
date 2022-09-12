@@ -5,49 +5,45 @@ module Spree
     module Mail
       # Mail Domain controller
       class MailBoxesController < Spree::Admin::BaseController
+        include ResourceLimitHelper
         before_action :ensure_hosting_panel_access
-        before_action :set_mail_box, only: %i[edit update destroy]
+        before_action :set_user_domain, only: [:new, :create, :update, :edit, :index, :destroy,:configurations]
+        before_action :set_mail_box, only: %i[edit update destroy, configurations]
 
         def index
-          response = mail_user_api.all || []
-          @mailboxes = if response[:success]
-                         response[:response].response
-                       else
-                         []
-                       end
+          @mailboxes = @user_domain.user_mailboxes.order("created_at desc")
         end
 
-        def new; end
-
-        def edit
-          @response = mail_user_api.find(@user.isp_config_mailuser_id)
-          @mail_user = @response[:response].response if @response[:success].present?
+        def new
+          @mailbox = UserMailbox.new
         end
+
+        def edit; end
 
         def create
+          # return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} if resource_limit_exceeded("mail_box")
           mail_user_param = mail_user_params.merge({ email: formatted_email })
+          
+          @response = mail_user_api.create(mail_user_param, user_domain: @user_domain)
 
-          @response = mail_user_api.create(mail_user_param)
-          set_flash
-          redirect_to request.referrer
+          if @response[:success]
+            @mailbox = @user_domain.user_mailboxes.where(email: mail_user_param[:email]).last 
+          end
         end
 
         def update
           mail_user_param = mail_user_params.merge({ email: formatted_email })
-          @response = mail_user_api.update(@user.isp_config_mailuser_id, mail_user_param)
-          set_flash
-          if @response[:success]
-            redirect_to admin_mail_mail_boxes_path
-          else
-            render :edit
-          end
+          @response = mail_user_api.update(@mailbox.id, mail_user_param)
+          @mailbox.reload
         end
 
         def destroy
-          @response = mail_user_api.destroy(@user.isp_config_mailuser_id)
-          set_flash
-          # redirect_to admin_mail_mail_boxes_path
-          redirect_to request.referrer
+          set_mail_box #TODO; before action is not triggered somehow calling manually
+          @response = mail_user_api.destroy(@mailbox.id)
+        end
+
+        def configurations
+
         end
 
         private
@@ -71,14 +67,16 @@ module Spree
         end
 
         def set_mail_box
-          @user = current_spree_user.mail_users.find_by_isp_config_mailuser_id(params[:id])
+          @mailbox = @user_domain.user_mailboxes.find(params[:id])
 
-          redirect_to admin_mail_mail_boxes_path, notice: 'Not Authorized' if @user.blank?
+          redirect_to admin_dashboard_path, notice: 'Not Authorized' if @mailbox .blank?
         end
 
         def formatted_email
-          email = mail_user_params[:email].gsub("@", '')
-          "#{email}@#{params[:mailuser][:mail_domain]}"
+          email  = mail_user_params[:email].gsub("@", '')
+          domain = @user_domain.domain
+
+          "#{email}@#{domain}"
         end
       end
     end

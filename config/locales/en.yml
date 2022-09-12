@@ -46,7 +46,12 @@ en:
   account_does_not_exist: Account does not exists
   hosting_space_exists: Hosting space exists
   hosting_space_does_exists: Hosting Space does not exists
+
   spree:
+    check: "Check"
+    authorize_dot_net: "Authorize.net"
+    paypal_express: "PayPal"
+    stripe_gateway: "Stripe Gateway"
     products: 'Services'
     hosting_controls: Hosting Control
     opsbot: OpsBot
@@ -71,6 +76,7 @@ en:
     domain_registration: Domain Registrations
     pending_invoices: "You have pending invoices. You can make a payment by using the “Pay Now” button on the “My Billing” tab."
     payment_not_confirmed: "The payment is not confirmed yet."
+    resource_limit_exceeds: "Your limit reached.Please update plan to create new resource"
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout
@@ -127,7 +133,7 @@ en:
 
     signed_up: "Signed in successfully."
     send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
-    without_confirm: "User will not be able to create any resources if they dont confirm there email."
+    without_confirm: "Please check your inbox and confirm your email to start using the services."
 
     user_mailer:
       reset_button_does_not_work: "If the above button does not work then please click on the below link to reset your password"
@@ -171,6 +177,7 @@ en:
       update: Mailbox updated successfully.
       delete: Mailbox deleted successfully.
     mailing_lists:
+      reset_password: Enter new password above to reset your existing mailing list password
       create: Mailing List created successfully.
       update: Mailing List updated successfully.
       delete: Mailing List deleted successfully.
@@ -204,6 +211,7 @@ en:
     deactivate_domain: "Are you sure to Deactivate this Domain?, This will affect your other services and delete your ftp accounts"
     install_ssl: 'Are you sure to Install ssl certificate?'
     delete_ssl: 'Are you sure to Delete ssl certificate?'
+    user_delete: 'Database user deleted successfully.'
     database: 
       create: 'Database created successfully'
       delete: 'Database deleted successfully'
@@ -215,6 +223,7 @@ en:
     enable_web_service_alert: Confirming this will create web domain and all the unmatched A records will be deleted.
     disable_web_service_alert: Confirming this will disable web service.
     enable_db_service_help: MySQL Database would be created
+    enable_db_service_help1: MsSQL Database would be created
     enable_ftp_service_help: FTP Account would be created
     enable_mail_service_help: Mailboxes would be created. You would get to choose password on next screen
     enable_mail_service_alert: Confirming this will create Mail domain and all the unmatched MX records will be deleted.

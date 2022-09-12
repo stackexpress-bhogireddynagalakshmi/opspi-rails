@@ -92,9 +92,9 @@ module Spree
             ftp_user.compact
           else
             res = current_spree_user.solid_cp.ftp_account.all
-            win_user = res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account]
-            
-            win_user = [win_user].to_a.flatten
+            response_body = res.body[:get_ftp_accounts_response][:get_ftp_accounts_result]
+            win_user = response_body.nil? ? [] : response_body[:ftp_account]
+            win_user = [win_user] if win_user.is_a?(Hash)
             ftp_user = win_user.collect{|x| x[:id] if x[:name] == "#{website_id}_site_builder" }.compact
           end
         end

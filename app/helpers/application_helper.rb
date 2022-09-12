@@ -36,7 +36,7 @@ module ApplicationHelper
     plans = []
     
     if user.have_reseller_plan? && user.isp_config_id.present? && user.solid_cp_id.present?
-      plans = [['Windows Hosting Plan', 'windows'], ['Linux Hosting Plan', 'linux']]
+      plans = [['Windows Hosting', 'windows'], ['Linux Hosting', 'linux']]
     end
 
     plans << ['Hsphere Plan', 'hsphere'] if get_purchased_plans.include?('hsphere')
@@ -285,5 +285,21 @@ module ApplicationHelper
 
     types
   end
-  
+
+
+  def html_boolean(boolean, opts={})
+    if opts[:reverse] == true
+      if boolean == true
+         '<i class="fe fe-x-circle red"></i>'.html_safe
+      else
+        '<i class="fe fe-check-circle green"></i>'.html_safe
+      end
+    else
+      if boolean == true
+        '<i class="fe fe-check-circle green"></i>'.html_safe
+      else
+        '<i class="fe fe-x-circle red"></i>'.html_safe
+      end
+    end
+  end
 end

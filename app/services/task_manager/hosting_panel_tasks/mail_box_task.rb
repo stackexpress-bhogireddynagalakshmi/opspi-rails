@@ -14,7 +14,7 @@ module TaskManager
       private
 
       def create_mail_box
-        @response = mail_user_api.create(resource_params)
+        @response = mail_user_api.create(resource_params, user_domain: @user_domain)
       end
 
       def mail_user_api

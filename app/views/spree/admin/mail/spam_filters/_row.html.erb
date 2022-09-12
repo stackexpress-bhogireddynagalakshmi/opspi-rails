@@ -1,0 +1,16 @@
+ <tr id="spam_filter_id_<%=spam_filter.id%>">
+  <td><%=spam_filter.email%></td>
+  <td> <%= html_boolean(spam_filter.active) %></td>
+  <td><%=spam_filter.priority%></td>
+  <td>
+  <span class="d-flex justify-content-end">
+    <%= link_to  admin_mail_spam_filter_path(id: spam_filter.id, user_domain_id: @user_domain.id),type: 'button',data: {confirm: t('general.delete')} , class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete, remote: true do %>
+         <%=render :partial=> 'spree/admin/shared/icons/delete'%>  
+    <%end%>
+    
+    <%= link_to  edit_admin_mail_spam_filter_path(id: spam_filter.id, user_domain_id: @user_domain.id),type: 'button', class: 'btn btn-outline-success btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Edit',style:"margin-right:5px", remote: true do %>
+      <%= render :partial=> 'spree/admin/shared/icons/edit'%>
+    <% end %>
+  </span>
+  </td>  
+</tr>

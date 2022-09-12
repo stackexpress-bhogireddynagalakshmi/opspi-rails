@@ -69,10 +69,16 @@ Rails.application.routes.draw do
 
       namespace :mail do
         resources :domains    
-        resources :mail_boxes  
+        resources :mail_boxes do
+          member do
+            get :configurations
+          end
+        end
         resources :mailing_lists  
+        resources :spam_filters
         resources :spam_filter_blacklists
         resources :spam_filter_whitelists
+
         resources :statistics do
           collection do
             get :mailbox_quota

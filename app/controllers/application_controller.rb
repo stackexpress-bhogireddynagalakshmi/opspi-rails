@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
     flash[:warning] = Spree.t(:confirmation_error)
     redirect_to admin_dashboard_path and return
   end
+  
+  def set_user_domain
+    @user_domain = current_spree_user.user_domains.find(params[:user_domain_id])
+  end
 
   def ensure_hosting_panel_access
 

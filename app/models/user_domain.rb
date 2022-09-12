@@ -4,6 +4,10 @@ class UserDomain < ApplicationRecord
   belongs_to :user, class_name: 'Spree::User',foreign_key: 'user_id'
   has_one :user_website, class_name: 'UserWebsite'
   has_one :user_mail_domain
+  has_many :user_mailboxes
+  has_many :user_mailing_lists
+  has_many :user_mail_forwards
+  has_many :user_spam_filters
   has_one :hosted_zone
 
   validates :domain, presence: true
@@ -21,6 +25,14 @@ class UserDomain < ApplicationRecord
 
   def nameserver2
    config_value_for(user.panel_config["dns"], 'ISPCONFIG_DNS_SERVER_NS2')
+  end
+
+  def remote_folder_path
+    if windows?
+      "\\#{domain}\\wwwroot"
+    else
+      # TODO: Yet to be implemented
+    end
   end
 
   private

@@ -22,7 +22,7 @@
         <td><b>Password:</b></td>
 
         <td class="password-text">
-           <%=link_to 'Reset Password', reset_password_admin_sites_isp_database_path(@database.id), remote: true%>         
+           <%=link_to 'Reset Password', reset_password_admin_sites_isp_database_path(@database.id, server_type: (@database.database_type == 'my_sql') ? 'linux' : 'windows'), remote: true%>         
         </td>
       </tr>
       <tr>

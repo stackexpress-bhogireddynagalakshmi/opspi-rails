@@ -17,13 +17,13 @@
         new_admin_wizard_path,
         class: "btn btn-primary lift",
           icon: 'add.svg',
-          id: 'admin_wizard' %>
+          id: 'admin_wizard', data: resource_limit_exceeded("domain"), error_id: "wizard_show" %>
       </div>
     </div>
 
   </div>
 </div>
-
+<span id="res_limit_error_message_wizard_show"></span>
 
 
 <div data-nav-x-wrapper>

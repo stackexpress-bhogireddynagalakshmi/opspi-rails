@@ -115,7 +115,7 @@ module SolidCp
       response = begin
         super(message: { plan_id: plan_id })
       rescue StandardError => e
-        Rails.logger.error { e.message }
+        ErrorLogger.log_exception(e)
         []
       end
     end
@@ -132,10 +132,18 @@ module SolidCp
       response = SolidCp::Plan.get_hosting_plans
       plans = response.body[:get_hosting_plans_response][:get_hosting_plans_result][:diffgram][:new_data_set][:table]
 
-      plans.collect { |x| [x[:plan_name], x[:plan_id]] }
+      if plans.kind_of?(Array)
+        plans.collect { |x| [x[:plan_name], x[:plan_id]] }
+      elsif plans.kind_of?(Hash)
+        [[plans[:plan_name], plans[:plan_id]]]
+      end
+
+      
     rescue Exception => e
-      Rails.logger.error { e.message }
+      ErrorLogger.log_exception(e)
+  
       plans = []
     end
   end
 end
+

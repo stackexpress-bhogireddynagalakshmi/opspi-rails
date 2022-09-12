@@ -1,0 +1,6 @@
+<%if @response[:success] == true%>
+  $("#myModal").modal('hide')
+  $('#spam_filter_<%=@spam_filter.wb%>_table').append("<%=j render partial: 'spree/admin/mail/spam_filters/row', locals: { spam_filter: @spam_filter}%>")
+<%else%>
+  $('#error_div').html("<%=j @response[:message].html_safe%>");
+<%end%>
