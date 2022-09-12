@@ -1,0 +1,6 @@
+<% if @response[:success] == true %>
+  $("#myModal").modal('hide')
+  $('#ftp_users_table #ftp_user_id_<%=@ftp_user.id%>').remove();
+<% else %>
+  $('#error_div').html("<%=j @response[:message].html_safe%>");
+<% end %>

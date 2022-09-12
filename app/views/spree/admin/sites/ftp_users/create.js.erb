@@ -1,0 +1,6 @@
+<%if @response[:success] == true%>
+  $("#myModal").modal('hide')
+  $('#ftp_users_table').append("<%=j render partial: 'spree/admin/sites/ftp_users/row', locals: { ftp_user: @ftp_user}%>")
+<%else%>
+  $('#error_div').html("<%=j @response[:message].html_safe%>");
+<%end%>
