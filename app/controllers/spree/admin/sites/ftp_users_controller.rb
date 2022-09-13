@@ -31,7 +31,7 @@ module Spree
         end
 
         def update
-          @response = ftp_user_api.update(@user_domain.id, resource_params)
+          @response = ftp_user_api.update(@ftp_user.id, resource_params)
           
           @ftp_user.reload
         end

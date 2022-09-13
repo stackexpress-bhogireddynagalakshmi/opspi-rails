@@ -4,14 +4,16 @@ module ResetPasswordConcern
     def reset_password
       @password = SecureRandom.urlsafe_base64
 
-      @user_domain = current_spree_user.user_domains.find(params[:user_domain_id])
+
+      @user_domain = current_spree_user.user_domains.find(params[:user_domain_id]) 
 
       if params[:type].include?('mail_box')
-        @mailbox  = @user_domain.user_mailboxes.find(params[:id])
-        @response = mail_user_api.update(@mailbox.id, { password: @password })
+        @mailbox  = @user_domain.user_mailboxes.find_by_id(params[:id]) ||  @user_domain.user_mailboxes.where(email: params[:email]).last
 
+        byebug
+        @response = mail_user_api.update(@mailbox.id, { password: @password })
       elsif params[:type].include?('ftp_account')
-        @ftp_user  = @user_domain.user_ftp_users.find(params[:id])
+        @ftp_user  = @user_domain.user_ftp_users.find_by_id(params[:id]) ||  @user_domain.user_ftp_users.where(username: params[:email]).last
 
         if @user_domain.linux?
           @response = ftp_user_api.update(@ftp_user.id, { password: @password })
@@ -21,7 +23,8 @@ module ResetPasswordConcern
           @ftp_user = @user_domain.user_ftp_users.where(username: @ftp_user.username).last
         end
       elsif params[:type].include?('database')
-        @database = @user_domain.user_databases.find(params[:id])
+        byebug
+        @database = @user_domain.user_databases.find_by_id(params[:id]) ||  @user_domain.user_databases.where(database_name: params[:email]).last
 
         if @database.my_sql?
           reset_linux_db_password(@database)
@@ -55,7 +58,7 @@ module ResetPasswordConcern
         @response = current_spree_user.solid_cp.sql_server.delete_sql_user(db_user[:id]) if db_user.present?
       end
 
-      @response = current_spree_user.solid_cp.sql_server.add_sql_user({database_username: db_user_name,database_name:database_name,  database_password: @password})
+      @response = current_spree_user.solid_cp.sql_server.add_sql_user({database_username: database.database_user,database_name:database.database_name,  database_password: @password})
       @database = @user_domain.user_databases.where(database_user: @database.database_user).last
       return { success: false,  error: "something went wrong. Please try after sometime."} if @response.nil?
     end
