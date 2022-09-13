@@ -110,7 +110,7 @@ module SolidCp
 
     def error_message(error)
       if error.include?("password policy requirements")
-        error = I18n.t("windows.password_hint_message")
+        error = I18n.t("windows.ftp_account.password_hint_message")
       else
         error
       end
