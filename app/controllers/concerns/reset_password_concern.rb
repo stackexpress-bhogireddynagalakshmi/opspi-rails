@@ -56,8 +56,8 @@ module ResetPasswordConcern
         @response = current_spree_user.solid_cp.sql_server.delete_sql_user(db_user[:id]) if db_user.present?
       end
       
-      @response = current_spree_user.solid_cp.sql_server.add_sql_user({database_username: database.database_user,database_name:database.database_name,  database_password: @password})
-
+      @response = current_spree_user.solid_cp.sql_server.add_sql_user({database_username: database.id, database_name: database.database_name,  database_password: @password})
+      
       @database = @user_domain.user_databases.where(database_user: @database.database_user).last
       return { success: false,  error: "something went wrong. Please try after sometime."} if @response.nil?
     end
