@@ -236,7 +236,7 @@ class OrdersPdf
         pdf.text "#{@current_spree_user.account.orgainization_name}", size: 12, align: :right, style: :bold
         unless @current_spree_user.addresses.first.nil?
           pdf.text "#{@current_spree_user.addresses.first.address1}, #{@current_spree_user.addresses.first.address2}", size: 10, align: :right
-          pdf.text "#{@current_spree_user.addresses.first.city}, #{@current_spree_user.addresses.first.state.abbr} #{@current_spree_user.addresses.first.zipcode}", size: 10, align: :right
+          pdf.text "#{@current_spree_user.addresses.first.city}, #{@current_spree_user.addresses.first&.state&.abbr} #{@current_spree_user.addresses&.first&.zipcode}", size: 10, align: :right
         end
       end
     end
