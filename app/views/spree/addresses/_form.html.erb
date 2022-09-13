@@ -63,18 +63,6 @@ $(document).ready(function(){
     });
 })
 
-$(document).ready(function(){
-    $('#address_address1').keypress(function(e) {
-        max_length_address(e);
-    });
-})
-
-$(document).ready(function(){
-    $('#address_address2').keypress(function(e) {
-        max_length_address2(e);
-    });
-})
-
 
 $(document).ready(function(){
     $('#address_city').keypress(function(e) {
@@ -94,22 +82,8 @@ var myInput = document.getElementById("address_phone");
 if(myInput.value.length >= 10){
 e.preventDefault();
 }
-
 }
 
-function max_length_address(e){
-    var myInput = document.getElementById("address_address1");
-    if(myInput.value.length >= 35){
-    e.preventDefault();
-    }  
-}
-
-function max_length_address2(e){
-    var myInput2 = document.getElementById("address_address2");
-    if(myInput2.value.length >= 35){
-        e.preventDefault();
-    } 
-}
 
 
 
