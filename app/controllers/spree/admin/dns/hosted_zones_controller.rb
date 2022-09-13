@@ -107,17 +107,9 @@ module Spree
             @hosted_zone_records_count = 0
           end
 
-          ### mail boxes/user
-            @mailboxes = @user_domain.user_mailboxes
-          ######
-
-          ##### user domain details
-          @current_user_website = current_spree_user.user_domains.collect{|x| x.web_hosting_type if x.domain == @zone_name}.compact.last
-
-          #######
 
           #### website windows
-          if (current_spree_user.have_windows_access?) && (@current_user_website == 'windows')
+          if current_spree_user.have_windows_access? && @user_domain.windows?
             @windows_resource = current_spree_user.solid_cp.web_domain.all || [] 
             @windows_resources = @windows_resource.body[:get_domains_response][:get_domains_result][:domain_info] rescue []
             @windows_websites = @windows_resources.collect{|x| x if x[:domain_name].include?(@zone_name)}.compact
@@ -135,69 +127,27 @@ module Spree
           ######
 
           #### website linux
-          @web_domain = current_spree_user.isp_config.website.all[:response].response
-          if (current_spree_user.have_linux_access?) && (@current_user_website == 'linux')
-            @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}.compact
-            for el in @web_domain
-              if el.domain == @zone_name
-              @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
-                
-              @ftp_user1 = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
-              end 
-            end
-          end
-          #### 
+          # @web_domain = current_spree_user.isp_config.website.all[:response].response
 
+          # if current_spree_user.have_linux_access? && @user_domain.linux?
+          #   @user_website = current_spree_user.isp_config.website.find()
+          # end
+          
+          user_remote_website_response = if @user_domain.windows?
+                                  current_spree_user.solid_cp.website.find(@user_domain.user_website.try(:remote_website_id))
+                                elsif @user_domain.linux?
+                                  current_spree_user.isp_config.website.find(@user_domain.user_website.try(:remote_website_id))
+                                end
+          @user_remote_website = user_remote_website_response[:response][:response]
+
+          # User Mail boxes
+          @mailboxes = @user_domain.user_mailboxes
+          
+          # User database
+          @user_databases = current_spree_user.user_databases.where(user_domain_id: @user_domain.id)
+
+          # FTP Users
           @ftp_users = @user_domain.user_ftp_users
-
-          #### database
-          @user_databases = current_spree_user.user_databases.where(user_domain_id: @user_domain.id, status: "success")
-
-
-          #### windows ftp
-          @win_user = begin
-            @res = current_spree_user.solid_cp.ftp_account.all
-            convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
-            rescue StandardError
-              []
-            end
-
-            @win_user = [@win_user].to_a.flatten
-            @win_users = @win_user.collect{|x| x if x.folder.split('\\')[1] == @zone_name}.compact
-          ##########
-
-          @win_user = begin
-                @res = current_spree_user.solid_cp.ftp_account.all
-                convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
-            rescue StandardError
-              []
-            end
-            @win_user = [@win_user].to_a.flatten
-            list_arr6 = []
-            for elem1 in @win_user
-              if elem1.folder.split('\\')[1] == @zone_name
-                list_arr6 << elem1
-                @win_ftp = list_arr6
-              end
-            end
-
-
-            if @ftp_user1.present? && @win_users.present?
-              @ftp_count = @ftp_user1.size + @win_users.compact.size 
-            elsif @win_users.present?
-              @ftp_count = @win_users.compact.size
-            elsif @ftp_user1.present?
-              @ftp_count = @ftp_user1.size
-            else
-              @ftp_count = 0
-            end
-
-          if @win_users.present?
-            @win_count = @win_users.size
-          else
-            @win_count = 0
-          end
-
 
           ## Spam Filters
           @spam_filters = @user_domain.user_spam_filters
@@ -207,24 +157,7 @@ module Spree
 
           # user mailing list
           @mailing_lists = @user_domain.user_mailing_lists
-          
 
-          # @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
-          
-          list_arr4 = []
-          @web_domain.each do |el|
-            if el.domain == @zone_name
-              list_arr4 << el
-            # @websites_remain = list_arr4
-             @websites = list_arr4.collect { |x| [x.domain, x.domain_id] }
-             @web_id = el.domain_id
-             break
-            else
-              @websites = @web_domain.collect { |x| [x.domain, x.domain_id] }
-            end
-          end
-
-        
 
           get_active
           
