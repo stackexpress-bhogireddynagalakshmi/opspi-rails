@@ -26,18 +26,14 @@
       <label class="form-label">Destination Email</label>
       <%=f.text_area 'destination', value: @mail_forward.try(:destination), class: 'form-control', rows: 10, cols: 40%>
     </div>
-    <div class="form-group">
-      <label class="form-label">Active</label>
-      <%=f.select 'active',options_for_select([['Yes','y'], ['No','n']], @mail_forward.try(:active)),{}, class: 'form-select'%>
-    </div>
-
+  
           
     <div class="form-check mb-3">
       <div class="row">
         <div class="col-12">
            <%= f.check_box :allow_send_as, {checked: @mail_forward.try(:allow_send_as), class:"form-check-input list-checkbox"}, 'y', 'n' %>
           <label class="form-check-label mr-3">Send as</label>
-          <small style="color: grey">Allow target to send mail using this address as origin (if target is internal)</small>
+          <small style="color: grey"><br/>Allow target to send mail using this address as origin (if target is internal)</small>
         </div>
        
       </div>
@@ -51,6 +47,11 @@
         </div>
         
       </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Active</label>
+      <%=f.select 'active',options_for_select([['Yes','y'], ['No','n']], @mail_forward.try(:active)),{}, class: 'form-select'%>
     </div>
 
 
