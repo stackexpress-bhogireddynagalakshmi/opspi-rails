@@ -4,90 +4,79 @@ module Spree
   module Admin
     module Sites
       class FtpUsersController < Spree::Admin::BaseController
-        before_action :set_ftp_user, only: %i[destroy update]
-        before_action :get_websites, only: [:new]
+        before_action :set_user_domain, only: [:new, :create, :update, :edit, :index, :destroy,:configurations]
+        before_action :set_ftp_user, only: %i[destroy update configurations]
+        # before_action :get_websites, only: [:new]
 
         include ResetPasswordConcern
 
         def index
-          response = ftp_user_api.all || []
-          @ftp_users = if response[:success]
-                         response[:response].response
-                       else
-                         []
-                       end
-
-          @windows_resources = begin
-            @response = windows_api.all || []
-            convert_to_mash(@response.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
-          rescue StandardError
-            []
-          end
-          @windows_resources = [@windows_resources].to_a.flatten
+          @ftp_users = @user_domain.user_ftp_users
         end
 
-        def new; end
+        def new
+          @ftp_user = @user_domain.user_ftp_users.build
+        end
 
         def create
-          @response = ftp_user_api.create(resource_params)
-          set_flash
-          redirect_to request.referrer
+          @response = ftp_user_api.create(resource_params, user_domain: @user_domain)
+
+         if @response[:success]
+            @ftp_user = @user_domain.user_ftp_users.where(username: resource_params[:username]).last 
+          end
         end
 
         def destroy
-          @response = ftp_user_api.destroy(ftp_user_id)
-          set_flash
-          redirect_to request.referrer
+          @response = ftp_user_api.destroy(@ftp_user.id)
         end
 
         def update
-          @response = ftp_user_api.update(ftp_user_id, resource_params)
-          set_flash
-          redirect_to admin_sites_ftp_users_path
+          @response = ftp_user_api.update(@ftp_user.id, resource_params)
+          
+          @ftp_user.reload
         end
+
+        def configurations; end
 
         private
 
-        def ftp_user_id
-          if windows?
-            params[:id]
-          else
-            @ftp_user.isp_config_ftp_user_id
-          end
-        end
-
-        def set_flash
-          if @response[:success]
-            flash[:success] = @response[:message]
-          else
-            flash[:error] = @response[:message]
-          end
-        end
-
         def resource_params
-          if params[:server_type] == "windows"
+          if windows?
             windows_resource_params
-          elsif params[:server_type] == "linux"
+          elsif @user_domain.linux?
             linux_resource_params
           end
-          
-        end
-
-        def get_folder_path
-          { can_read: true, can_write: true, folder: "\\#{params[:ftp_user][:domain]}\\wwwroot" }
         end
 
         def linux_resource_params 
-          params.require("ftp_user").permit(:parent_domain_id, :username, :password, :uid, :gid,
-          :dir).merge(linux_extra_params)
+          params.require("ftp_user").permit(:username, :password).merge(linux_extra_params)
         end
 
         def linux_extra_params
-          {quota_size: '-1',active: 'y'}
+          remote_ftp_user_id = @user_domain.user_website&.remote_website_id
+          website = ftp_user_api.find(remote_ftp_user_id) rescue nil
+         
+          data = { 
+            quota_size: '-1',
+            active: 'y',            
+          }
+
+          if website.present?
+            data = data.merge(
+              website[:response][:response].slice(:parent_domain_id,:uid,:dir,:gid)
+            )
+          end
+
+          data         
         end
 
         def windows_resource_params 
           params.require("ftp_user").permit(:username, :password).merge(get_folder_path)
+        end
+
+
+        def get_folder_path
+          { can_read: true, can_write: true, folder: "\\#{params[:ftp_user][:domain]}\\wwwroot" }
         end
 
         def ftp_user_api
@@ -102,50 +91,16 @@ module Spree
           current_spree_user.solid_cp.ftp_account
         end
 
-        def get_websites
-          response = current_spree_user.isp_config.website.all || []
-          @websites = if response[:success]
-                        response[:response].response
-                      else
-                        []
-                      end
-          
-          @windows_sites = begin
-            @windows_sites = current_spree_user.solid_cp.web_domain.all || []
-            convert_to_mash(@windows_sites.body[:get_domains_response][:get_domains_result][:domain_info])
-          rescue StandardError
-            []
-          end
-        end
-
         def set_ftp_user
-          if windows?
-            # TODO: check if the ftp user id package id is belongs to current loged in user
-            @ftp_user = windows_api.find(params[:id])
+          @ftp_user = @user_domain.user_ftp_users.find(params[:id])
 
-            # TODO: implement Decorator Pattern to decorate the ftp_user or any other resource
-            @ftp_user = convert_to_mash(@ftp_user.body[:get_ftp_account_response][:get_ftp_account_result])
-          else
-            @ftp_user = current_spree_user.ftp_users.find_by_isp_config_ftp_user_id(params[:id])
-          end
-
-          redirect_to admin_sites_ftp_users_path, notice: 'Not Authorized' if @ftp_user.blank?
+          redirect_to admin_dashboard_path, notice: 'Not Authorized' if @ftp_user.blank?
         end
 
         def windows?
-          params[:server_type].present? && params[:server_type] == 'windows'
+          @user_domain.windows?
         end
 
-        def convert_to_mash(data)
-          case data
-          when Hash
-            Hashie::Mash.new(data)
-          when Array
-            data.map { |d| Hashie::Mash.new(d) }
-          else
-            data
-          end
-        end
       end
     end
   end

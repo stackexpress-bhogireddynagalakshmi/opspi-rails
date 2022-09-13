@@ -244,17 +244,16 @@
           <% unless @current_user_website.nil? %>
             <div class="row align-items-center">
                 <div class="col">
-                  <h2>
-                      FTP Users
-                  </h2>
+                  <h2> FTP Users </h2>
                 </div>
                 
                 <div class="col-auto">
                   <%= button_link_to "Add New",
-                      "#",
+                      new_admin_sites_ftp_user_path(user_domain_id: params[:user_domain_id]),
                       class: "btn btn-primary lift admin_new_ftp_user1",
                         icon: 'add.svg',
-                        id: 'admin_new_ftp_user' %>
+                        id: 'admin_new_ftp_user',
+                        remote: true %>
                 </div>
             </div>
             <%= render partial: 'spree/admin/dns/hosted_zones/ftp_index' %>

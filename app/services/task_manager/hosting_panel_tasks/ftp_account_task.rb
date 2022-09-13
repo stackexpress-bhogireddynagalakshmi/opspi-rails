@@ -14,7 +14,7 @@ module TaskManager
       private
 
       def create_ftp_account
-        @response = ftp_user_api.create(resource_params)
+        @response = ftp_user_api.create(resource_params, user_domain: @user_domain)
       end
 
       def ftp_user_api

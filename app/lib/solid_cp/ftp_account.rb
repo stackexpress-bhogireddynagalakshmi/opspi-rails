@@ -38,22 +38,24 @@ module SolidCp
     #   <Enabled>boolean</Enabled>
     # </item>
 
-    def add_ftp_account(params)
+    def add_ftp_account(params, opts={})
       response = super(message: {
-        item: {
-          "PackageId" => user.packages.first.try(:solid_cp_package_id),
-          "CanRead" => params[:can_read] || true,
-          "CanWrite" => params[:can_write] || true,
-          "Folder" => params[:folder],
-          "Name" => params[:username],
-          "Password" => params[:password],
-          "Enabled" => params[:enabled] || true
+          item: {
+            "PackageId" => user.packages.first.try(:solid_cp_package_id),
+            "CanRead" => params[:can_read] || true,
+            "CanWrite" => params[:can_write] || true,
+            "Folder" => params[:folder],
+            "Name" => params[:username],
+            "Password" => params[:password],
+            "Enabled" => params[:enabled] || true
+          }
         }
-      }
       )
       code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
       error = SolidCp::ErrorCodes.get_by_code(code)
       if response.success? && code > 0
+        user_domain = opts[:user_domain]
+        user_domain.user_ftp_users.create(ftp_user_params(params).merge({ remote_ftp_user_id: code })) if user_domain.present?
         { success: true, message: 'Ftp Account created successfully', response: response }
       else
         { success: false, message: error[:msg], response: response }
@@ -92,9 +94,13 @@ module SolidCp
     alias update update_ftp_account
 
     def delete_ftp_account(id)
-      response = super(message: { itemId: id })
+      ftp_user = UserFtpUser.find_by_id(id)
+
+      response = super(message: { itemId: ftp_user.remote_ftp_user_id })
 
       if response.success?
+        ftp_user.try(:destroy)
+
         { success: true, message: 'Ftp User deleted successfully', response: response }
       else
         { success: false, message: 'Something went wrong. Please try again.', response: response }
@@ -108,6 +114,15 @@ module SolidCp
       else
         error
       end
+    end
+
+    def ftp_user_params(params)
+      {
+        username: params[:username],
+        dir: params[:folder],
+        active: true
+      }
+
     end
   end
 end

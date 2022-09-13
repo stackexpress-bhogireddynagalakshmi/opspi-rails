@@ -1,0 +1,40 @@
+<% content_for :modal_header do %>
+  <h3><%= header%></h3>
+<% end %>
+
+<% content_for :modal_body_and_footer do %>
+
+<div class="modal-body">     
+
+   <table>
+    <tbody>
+      
+      <tr>
+        <td><b>Username:</b></td>
+        <td><%=@ftp_user.username%></td>
+      </tr>
+
+      <tr>
+        <td><b>Host:</b></td>
+        <td><%=@ftp_user.host%></td>
+      </tr>
+
+       <tr>
+        <td><b>Port:</b></td>
+        <td><%=@ftp_user.port%></td>
+      </tr>
+<!-- 
+       <tr>
+        <td><b>Password:</b></td>
+        <td id="modal-reset-passowrd-<%=@ftp_user.id%>"> <span class="password-text"> <%#=link_to reset_password_admin_sites_ftp_user_path(@ftp_user.id, user_domain_id: @user_domain.id,type: 'create_ftp_account', div_class: "modal-reset-passowrd-#{@ftp_user.id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
+            <%#= render partial: '/spree/admin/shared/icons/reset_password' %>
+          <%# end %>
+        </span></td>
+      </tr>
+ -->
+    </tbody>
+    </table>
+  </div>
+<% end %>
+
+<%= render :partial=>'spree/admin/shared/modal', locals: {modal_width: '40%'} %>

@@ -148,19 +148,11 @@ module Spree
           end
           #### 
 
-          #### database
-          user_domain_id = current_spree_user.user_domains.collect{|x| x.id if x.domain == @zone_name}.compact.last
-          @user_databases = current_spree_user.user_databases.where(user_domain_id: user_domain_id, status: "success")
-          @database_count = @user_databases.present? ? @user_databases.size : 0
+          @ftp_users = @user_domain.user_ftp_users
 
-          ############
-          # @win_resources = begin
-          #   @response2 = current_spree_user.solid_cp.sql_server.all || []
-          #   convert_to_mash(@response2.body[:get_sql_databases_response][:get_sql_databases_result][:sql_database])
-          # rescue StandardError
-          #   []
-          # end
-          # @resources_win = [@win_resources].to_a.flatten
+          #### database
+          @user_databases = current_spree_user.user_databases.where(user_domain_id: @user_domain.id, status: "success")
+
 
           #### windows ftp
           @win_user = begin
@@ -186,7 +178,6 @@ module Spree
               if elem1.folder.split('\\')[1] == @zone_name
                 list_arr6 << elem1
                 @win_ftp = list_arr6
-                
               end
             end
 
@@ -233,18 +224,7 @@ module Spree
             end
           end
 
-          # domains = current_spree_user.isp_config.mail_domain.all[:response].response
-          # list_arr5 = []
-          # @mail_domain_response.each do |elm|
-          #   if elm.domain == @zone_name
-          #     list_arr5 << elm
-          #   #  @websites = list_arr4
-          #     @domains = list_arr5.collect { |x| [x.domain, x.domain] }
-          #    break
-          #   else
-          #     @domains = @mail_domain_response.collect { |x| [x.domain, x.domain] }
-          #   end
-          # end
+        
 
           get_active
           

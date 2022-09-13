@@ -55,28 +55,28 @@ module Spree
           @database = current_spree_user.user_databases.find(params[:id])
         end
 
-        def reset_password
-          @database = current_spree_user.user_databases.find(params[:id])
-          if @database.database_type == 'my_sql'
-            @response = database_api.find(@database.database_id)
-            if @response[:success]
-              db_user_id = @response[:response].response.database_user_id
-              @password = SecureRandom.hex
-              @response = database_api.reset_password(db_user_id, { database_password: @password })
-            end
-          else
-            @response = database_api.all_db_users
-            db_users = @response.body[:get_sql_users_response][:get_sql_users_result][:sql_user] || [] 
-            db_users = [db_users] if db_users.is_a?(Hash)
-            if db_users.any?
-              db_user   = db_users.detect { |x| x[:name] == @database.database_user }
-              @password = SecureRandom.hex
-              @response = database_api.update_database_user_password(
-                db_user[:id], { database_password: @password, database_name: @database.database_name }
-                )
-            end
-          end
-        end
+        # def reset_password
+        #   @database = current_spree_user.user_databases.find(params[:id])
+        #   if @database.database_type == 'my_sql'
+        #     @response = database_api.find(@database.database_id)
+        #     if @response[:success]
+        #       db_user_id = @response[:response].response.database_user_id
+        #       @password = SecureRandom.hex
+        #       @response = database_api.reset_password(db_user_id, { database_password: @password })
+        #     end
+        #   else
+        #     @response = database_api.all_db_users
+        #     db_users = @response.body[:get_sql_users_response][:get_sql_users_result][:sql_user] || [] 
+        #     db_users = [db_users] if db_users.is_a?(Hash)
+        #     if db_users.any?
+        #       db_user   = db_users.detect { |x| x[:name] == @database.database_user }
+        #       @password = SecureRandom.hex
+        #       @response = database_api.update_database_user_password(
+        #         db_user[:id], { database_password: @password, database_name: @database.database_name }
+        #         )
+        #     end
+        #   end
+        # end
 
         private
 
