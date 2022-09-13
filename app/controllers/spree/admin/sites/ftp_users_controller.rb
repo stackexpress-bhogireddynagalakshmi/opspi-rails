@@ -27,7 +27,7 @@ module Spree
         end
 
         def destroy
-          @response = ftp_user_api.destroy(@user_domain.id)
+          @response = ftp_user_api.destroy(@ftp_user.id)
         end
 
         def update

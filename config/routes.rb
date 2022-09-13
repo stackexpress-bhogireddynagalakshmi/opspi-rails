@@ -72,6 +72,7 @@ Rails.application.routes.draw do
         resources :mail_boxes do
           member do
             get :configurations
+            get :reset_password
           end
         end
         resources :mailing_lists  

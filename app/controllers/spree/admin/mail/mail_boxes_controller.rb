@@ -6,6 +6,7 @@ module Spree
       # Mail Domain controller
       class MailBoxesController < Spree::Admin::BaseController
         include ResourceLimitHelper
+        include ResetPasswordConcern
         before_action :ensure_hosting_panel_access
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :index, :destroy,:configurations]
         before_action :set_mail_box, only: %i[edit update destroy, configurations]

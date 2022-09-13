@@ -152,7 +152,7 @@ module IspConfig
           greylisting:       boolean(params[:greylisting]),
           disableimap:       boolean(params[:disableimap]),
           disablepop3:       boolean(params[:disablepop3])
-        }
+        }.reject{|k, v| v.blank?}
       end
 
       def boolean(val)

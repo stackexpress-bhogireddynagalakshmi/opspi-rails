@@ -22,8 +22,6 @@ module IspConfig
     end
 
     def create(params = {}, opts={})
-      
-
       response = query({
                          endpoint: '/json.php?sites_ftp_user_add',
                          method: :POST,
@@ -75,9 +73,10 @@ module IspConfig
                        })
 
       if response.code == "ok"
-        user.ftp_users.find_by_isp_config_ftp_user_id(primary_id).destroy 
+        user.ftp_users.find_by_isp_config_ftp_user_id(ftp_user.remote_ftp_user_id).destroy 
         ftp_user.destroy
       end
+
       formatted_response(response, 'delete')
     end
 

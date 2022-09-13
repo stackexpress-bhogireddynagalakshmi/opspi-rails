@@ -1,20 +1,21 @@
-<tr class=" ftp_user_<%=ftp_user.id%>" id="ftp_user_id_<%=ftp_user.id%>">
+<tr id="ftp_user_id_<%=ftp_user.id%>">
   <td><%=ftp_user.username%></td>
   <td><%=ftp_user.dir%></td>
   <td class="password-text"> </td>
   <td>
     <span class="d-flex justify-content-end">
-      <%= link_to  admin_sites_ftp_user_path(ftp_user.id, user_domain_id: @user_domain.id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px",data: {confirm: 'Are you sure you want to delete?'}, method: :delete do %>
+      <%= link_to  admin_sites_ftp_user_path(ftp_user.id, user_domain_id: @user_domain.id),type: 'button', class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete', style: "margin-right:5px",data: {confirm: 'Are you sure you want to delete?'}, method: :delete, remote: true do %>
          <%=render :partial=> 'spree/admin/shared/icons/delete'%>
       <% end %>
 
-      <%=link_to reset_password_admin_sites_ftp_user_path(ftp_user.id, user_domain_id: @user_domain.id,type: 'create_ftp_account', div_class: "ftp_user_id_#{ftp_user.id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
+      <%=link_to reset_password_admin_sites_ftp_user_path(ftp_user.id, user_domain_id: @user_domain.id,type: 'ftp_account', div_class: "ftp_user_id_#{ftp_user.id}", replace: true), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
         <%= render partial: '/spree/admin/shared/icons/reset_password' %>
       <% end %>
 
       <%= link_to configurations_admin_sites_ftp_user_path(id: ftp_user.id, user_domain_id: @user_domain.id), class: 'configure-modal-link btn btn-outline-primary btn-size','data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details', remote: true do  %>
          <%= render partial: '/spree/admin/shared/icons/gear' %>
       <% end %>
+
     </span>
 </td>
 </tr>
