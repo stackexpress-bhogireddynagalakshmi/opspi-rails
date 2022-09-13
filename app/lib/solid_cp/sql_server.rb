@@ -166,7 +166,7 @@ module SolidCp
     end
 
     def formatted_database_user_name(database_username)
-      return "du_#{database_username.to_s.rjust(8, padstr = '0')}" if database_username[0..2].join != 'du_'
+      return "du_#{database_username.to_s.rjust(8, padstr = '0')}"
 
       return database_username
     end
