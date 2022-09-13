@@ -17,7 +17,7 @@ Wizard status for <%=batch_job.first[:domain]%>
       </thead>
       <tbody class="fsbase">
         <% batch_job.each do |job|%>
-          <tr class="<%=job[:sidekiq_job_id]%>">
+          <tr id="<%=job[:sidekiq_job_id]%>">
             <td> <%=job[:type]%></td>
             <td> <%=get_data_for_task(job)%> </td>
             <%status = get_task_status(job)%>
