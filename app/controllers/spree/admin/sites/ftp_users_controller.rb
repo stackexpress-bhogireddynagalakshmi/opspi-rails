@@ -53,8 +53,9 @@ module Spree
         end
 
         def linux_extra_params
-          remote_ftp_user_id = @user_domain.user_website&.remote_website_id
-          website = ftp_user_api.find(remote_ftp_user_id) rescue nil
+          remote_website_id = @user_domain.user_website&.remote_website_id
+          website = current_spree_user.isp_config.website.find(remote_website_id) rescue nil
+          website = website[:response][:response] rescue nil
          
           data = { 
             quota_size: '-1',
@@ -63,7 +64,10 @@ module Spree
 
           if website.present?
             data = data.merge(
-              website[:response][:response].slice(:parent_domain_id,:uid,:dir,:gid)
+              parent_domain_id: remote_website_id,
+              dir: website.document_root,
+              gid: website.system_group,
+              uid: website.system_user
             )
           end
 
