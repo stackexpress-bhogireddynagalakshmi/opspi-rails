@@ -1,21 +1,22 @@
 class ProductConfig < ApplicationRecord
   belongs_to :product, class_name: 'Spree::Product', foreign_key: 'product_id'
-  attr_reader :product, :linux_limits, :windows_limits
+  attr_accessor :product,:linux_limits,:windows_limits
 
-  # def initialize(product,linux_limits ={},windows_limits={})
-  #   super
-  #   @product = product
-  #   @linux_limits = linux_limits
-  #   @windows_limits = windows_limits
-  # end
+  def after_initialize(product,linux_limits,windows_limits)
+    @product = product
+    @linux_limits = linux_limits
+    @windows_limits = windows_limits
+    # byebug
+    # super()
+  end
 
-  def self.call(product,linux_limits ={},windows_limits={})
-    create(product,linux_limits,windows_limits)
+  def call
+    create
   end
 
   # def product_config
   #   {
-  #     name: "plan01",
+  #     name: product["name"],
   #     services: {
   #       domain:{
   #         domain_count_limit: @linux_limits.limit_dns_zone
@@ -53,7 +54,7 @@ class ProductConfig < ApplicationRecord
   #         database_quota_size_quota: 5000    
   #       },
   #       database_mssql: {
-  #         enabled: true,
+  #         enabled: product["server_type"] == 'windows' ? true : false,
   #         database_count_limit: 5    
   #       },
   #       web_linux: {
@@ -84,7 +85,7 @@ class ProductConfig < ApplicationRecord
   #         min_delay_between_executions_count_limit: 10
   #       },    
   #       web_windows: {
-  #         enabled: true,
+  #         enabled: product["server_type"] == 'windows' ? true : false,
   #         web_domains_count_limit: 10, #copy from domain_count_limit (default)
   #         ssl_allowed: true,
   #         disk_size_limit: 5000    
@@ -93,14 +94,17 @@ class ProductConfig < ApplicationRecord
   #   }
   # end
 
-  def create(product,linux_limits,windows_limits)
+  # def limit_dns_zone
+  #   product["server_type"] == 'linux' ? linux_limits.limit_dns_zone : windows_limits.limit_dns_zone
+  # end
+
+  def create
     product_type = (product["server_type"] == 'reseller_plan') ? 'reseller_shared_hosting_plan' : 'enduser_shared_hosting_plan'
-    @product_config = self.new({
+    @product_config = ProductConfig.create!({
                                 name: product["name"],
                                 configs: nil,
                                 product_type: product_type,
                                 status: 'active'
                                 })
-    @product_config.save!
   end
 end
