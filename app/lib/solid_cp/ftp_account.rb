@@ -52,6 +52,8 @@ module SolidCp
         }
       )
 
+      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
+
       if response.success? && code > 0
         user_domain = opts[:user_domain]
         user_domain.user_ftp_users.create(ftp_user_params(params).merge({ remote_ftp_user_id: code })) if user_domain.present?
@@ -79,6 +81,7 @@ module SolidCp
         }
       }
       )
+      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
       
       if response.success? && code > 0
         { success: true, message: 'Ftp User updated successfully', response: response }
