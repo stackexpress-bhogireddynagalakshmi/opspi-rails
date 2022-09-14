@@ -5,6 +5,7 @@ module Spree
     module Mail
       # Mail blacklist Controller
       class SpamFilterBlacklistsController < SpamFiltersController
+        
         def resource_index_path
           redirect_to admin_mail_spam_filter_blacklists_path
         end

@@ -72,11 +72,14 @@ Rails.application.routes.draw do
         resources :mail_boxes do
           member do
             get :configurations
+            get :reset_password
           end
         end
         resources :mailing_lists  
+        resources :spam_filters
         resources :spam_filter_blacklists
         resources :spam_filter_whitelists
+
         resources :statistics do
           collection do
             get :mailbox_quota
@@ -89,8 +92,9 @@ Rails.application.routes.draw do
       namespace :sites do
         resources :websites
         resources :ftp_users do
-          collection do
+          member do
             get :reset_password
+             get :configurations
           end
         end
         resources :sub_domains

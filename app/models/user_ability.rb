@@ -12,6 +12,7 @@ class UserAbility
     can :manage, :domains
     can :manage, :mail_boxes
     can :manage, :mailing_lists
+    can :manage, :spam_filters
     can :manage, :spam_filter_blacklists
     can :manage, :spam_filter_whitelists
     can :manage, :hosted_zones

@@ -10,7 +10,7 @@ module Spree
         before_action :set_user_domain, only: [:zone_overview]
         before_action :ensure_hosting_panel_access
         before_action :set_zone_list, only: %i[edit update destroy dns zone_overview]
-        
+
         def index
           @user_domains = current_spree_user.user_domains
         end
@@ -30,9 +30,9 @@ module Spree
           @type = params["website"]["type"]
 
           @tasks = []
-          
+
           build_tasks
-          
+
           flash[:success] = I18n.t('wizards.wizard_started')
 
           TaskManager::TaskProcessor.new(current_spree_user, @tasks).call
@@ -41,16 +41,12 @@ module Spree
         end
 
         def disable_dns_services
-          if params["website"]["type"] == 'web'
-            @response = isp_website_api.destroy(params["website"]["origin"])
-          end
-          if params["website"]["type"] == 'mail'
-            @response = mail_domain_api.destroy(params["website"]["origin"])
-          end
+          @response = isp_website_api.destroy(params["website"]["origin"]) if params["website"]["type"] == 'web'
+          @response = mail_domain_api.destroy(params["website"]["origin"]) if params["website"]["type"] == 'mail'
           set_flash
           respond_to do |format|
             format.js { render inline: "location.reload();" }
-            format.html { redirect_to  admin_dns_hosted_zones_path}
+            format.html { redirect_to  admin_dns_hosted_zones_path }
           end
         end
 
@@ -78,7 +74,7 @@ module Spree
           set_flash
           respond_to do |format|
             format.js { render inline: "location.reload();" }
-            format.html { redirect_to  admin_dns_hosted_zones_path}
+            format.html { redirect_to  admin_dns_hosted_zones_path }
           end
         end
 
@@ -90,7 +86,6 @@ module Spree
         end
 
         def zone_overview
-
           @zone_name = params[:zone_name]
           @dns_id = params[:dns_id]
 
@@ -100,178 +95,72 @@ module Spree
           @hosted_zone_records_reponse = host_zone_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
           @hosted_zone_records = @hosted_zone_records_reponse[:response][:response]
 
-
-          if @hosted_zone_records.present?
-            @hosted_zone_records_count = @hosted_zone_records.size
-          else
-            @hosted_zone_records_count = 0
-          end
-
-          ### mail boxes/user
-            @mailboxes = @user_domain.user_mailboxes
-          ######
-
-          ##### user domain details
-          @current_user_website = current_spree_user.user_domains.collect{|x| x.web_hosting_type if x.domain == @zone_name}.compact.last
-
-          #######
+          @hosted_zone_records_count = if @hosted_zone_records.present?
+                                         @hosted_zone_records.size
+                                       else
+                                         0
+                                       end
 
           #### website windows
-          if (current_spree_user.have_windows_access?) && (@current_user_website == 'windows')
-            @windows_resource = current_spree_user.solid_cp.web_domain.all || [] 
-            @windows_resources = @windows_resource.body[:get_domains_response][:get_domains_result][:domain_info] rescue []
-            @windows_websites = @windows_resources.collect{|x| x if x[:domain_name].include?(@zone_name)}.compact
-            website_array = @windows_websites.collect{|c| c[:web_site_id] if c[:web_site_id].to_i > 0}.compact
+          if current_spree_user.have_windows_access? && @user_domain.windows?
+            @windows_resource = current_spree_user.solid_cp.web_domain.all || []
+            @windows_resources = begin
+              @windows_resource.body[:get_domains_response][:get_domains_result][:domain_info]
+            rescue StandardError
+              []
+            end
+            @windows_websites = @windows_resources.collect { |x| x if x[:domain_name].include?(@zone_name) }.compact
+            website_array = @windows_websites.collect { |c| c[:web_site_id] if c[:web_site_id].to_i.positive? }.compact
 
-            @website_list = @windows_websites.collect{|c| c[:domain_name] if c[:web_site_id].to_i == 0}.compact
+            @website_list = @windows_websites.collect { |c| c[:domain_name] if c[:web_site_id].to_i.zero? }.compact
 
             if website_array.any?
-            website_id = current_spree_user.solid_cp.website.get_certificates_for_site({web_site_id: website_array.first})
-            @website_certificate_id = website_id.body[:get_certificates_for_site_response][:get_certificates_for_site_result][:ssl_certificate] rescue []
-            @website_certificate_id = [@website_certificate_id] if @website_certificate_id.is_a?(Hash)
-            @website_certificate_id = @website_certificate_id.first 
-            end
-          end
-          ######
-
-          #### website linux
-          @web_domain = current_spree_user.isp_config.website.all[:response].response
-          if (current_spree_user.have_linux_access?) && (@current_user_website == 'linux')
-            @isp_websites = @web_domain.collect{|x| x if x.domain == @zone_name}.compact
-            for el in @web_domain
-              if el.domain == @zone_name
-              @resources = isp_config_api.find(parent_domain_id: el.domain_id)[:response].response
-                
-              @ftp_user1 = ftp_user_api.find(parent_domain_id: el.domain_id)[:response].response
-              end 
-            end
-          end
-          #### 
-
-          #### database
-          user_domain_id = current_spree_user.user_domains.collect{|x| x.id if x.domain == @zone_name}.compact.last
-          @user_databases = current_spree_user.user_databases.where(user_domain_id: user_domain_id, status: "success")
-          @database_count = @user_databases.present? ? @user_databases.size : 0
-
-          ############
-          @win_resources = begin
-            @response2 = current_spree_user.solid_cp.sql_server.all || []
-            convert_to_mash(@response2.body[:get_sql_databases_response][:get_sql_databases_result][:sql_database])
-          rescue StandardError
-            []
-          end
-          @resources_win = [@win_resources].to_a.flatten
-
-          #### windows ftp
-          @win_user = begin
-            @res = current_spree_user.solid_cp.ftp_account.all
-            convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
-            rescue StandardError
-              []
-            end
-
-            @win_user = [@win_user].to_a.flatten
-            @win_users = @win_user.collect{|x| x if x.folder.split('\\')[1] == @zone_name}.compact
-          ##########
-
-          @win_user = begin
-                @res = current_spree_user.solid_cp.ftp_account.all
-                convert_to_mash(@res.body[:get_ftp_accounts_response][:get_ftp_accounts_result][:ftp_account])
-            rescue StandardError
-              []
-            end
-            @win_user = [@win_user].to_a.flatten
-            list_arr6 = []
-            for elem1 in @win_user
-              if elem1.folder.split('\\')[1] == @zone_name
-                list_arr6 << elem1
-                @win_ftp = list_arr6
-                
+              website_id = current_spree_user.solid_cp.website.get_certificates_for_site({ web_site_id: website_array.first })
+              @website_certificate_id = begin
+                website_id.body[:get_certificates_for_site_response][:get_certificates_for_site_result][:ssl_certificate]
+              rescue StandardError
+                []
               end
+              @website_certificate_id = [@website_certificate_id] if @website_certificate_id.is_a?(Hash)
+              @website_certificate_id = @website_certificate_id.first
             end
-
-
-            if @ftp_user1.present? && @win_users.present?
-              @ftp_count = @ftp_user1.size + @win_users.compact.size 
-            elsif @win_users.present?
-              @ftp_count = @win_users.compact.size
-            elsif @ftp_user1.present?
-              @ftp_count = @ftp_user1.size
-            else
-              @ftp_count = 0
-            end
-
-          if @win_users.present?
-            @win_count = @win_users.size
-          else
-            @win_count = 0
           end
 
-          get_spam_filter
+          if @user_domain.windows?
+            #TODO: Yet to implement/refactor
 
-          @spam_filter_black = spamfilter_api.spam_filter_blacklist.all[:response].response
+           elsif @user_domain.linux?
+            user_remote_website_response =  current_spree_user.isp_config.website.find(@user_domain.user_website.try(:remote_website_id))
+            @user_remote_website = user_remote_website_response[:response][:response] 
+
+           end
           
-          if @spam_filter_black.present?
-            @spam_filter_black_count = @spam_filter_black.size
-          else
-            @spam_filter_black_count = 0
-          end
-          
+          # User Mail boxes
+          @mailboxes = @user_domain.user_mailboxes
+
+          # User database
+          @user_databases = current_spree_user.user_databases.where(user_domain_id: @user_domain.id)
+
+          # FTP Users
+          @ftp_users = @user_domain.user_ftp_users
+
+          ## Spam Filters
+          @spam_filters = @user_domain.user_spam_filters
+
           ## mail forward
           @mail_forwards = @user_domain.user_mail_forwards
 
-
           # user mailing list
           @mailing_lists = @user_domain.user_mailing_lists
-          
-
-          @mail_domain_response = current_spree_user.isp_config.mail_domain.all[:response].response
-          
-          list_arr4 = []
-          @web_domain.each do |el|
-            if el.domain == @zone_name
-              list_arr4 << el
-            # @websites_remain = list_arr4
-             @websites = list_arr4.collect { |x| [x.domain, x.domain_id] }
-             @web_id = el.domain_id
-             break
-            else
-              @websites = @web_domain.collect { |x| [x.domain, x.domain_id] }
-            end
-          end
-
-          # domains = current_spree_user.isp_config.mail_domain.all[:response].response
-          list_arr5 = []
-          @mail_domain_response.each do |elm|
-            if elm.domain == @zone_name
-              list_arr5 << elm
-            #  @websites = list_arr4
-              @domains = list_arr5.collect { |x| [x.domain, x.domain] }
-             break
-            else
-              @domains = @mail_domain_response.collect { |x| [x.domain, x.domain] }
-            end
-          end
 
           get_active
-          
-          get_phpadmin_client_url
-        end 
 
-        def get_phpadmin_client_url
-          ul= IspConfig::Config.user_url
-          @phpmyAdminUrl= "#{ul}phpmyadmin/"
+          get_phpadmin_client_url
         end
 
-        def get_spam_filter
-          spam = IspConfig::Mail::SpamFilterWhitelist.new(current_spree_user)
-          @spam_filter_white = spam.all[:response].response
-          
-          if @spam_filter_white.present?
-            @spam_filter_white_count = @spam_filter_white.size
-          else
-            @spam_filter_white_count = 0
-          end
+        def get_phpadmin_client_url
+          ul = IspConfig::Config.user_url
+          @phpmyAdminUrl = "#{ul}phpmyadmin/"
         end
 
         def get_config_details
@@ -280,7 +169,7 @@ module Spree
           mail_domain = get_mail_domain_id(params[:website][:origin])
 
           respond_to do |format|
-            format.js { render json: {web: web_domain,mail: mail_domain}}
+            format.js { render json: { web: web_domain, mail: mail_domain } }
           end
         end
 
@@ -296,7 +185,7 @@ module Spree
             prepare_mail_domain_task
             prepare_mx_record_task
           end
-  
+
           @tasks = @tasks.flatten
         end
 
@@ -324,9 +213,9 @@ module Spree
 
         def prepare_a_record_task
           dns_response = host_zone_api.all_zones
-          dns_domain = dns_response[:response].response.map{|k| k.id if k[:origin] == "#{@domain}."}
+          dns_domain = dns_response[:response].response.map { |k| k.id if k[:origin] == "#{@domain}." }
           dns_record_response = host_zone_api.get_all_hosted_zone_records(dns_domain.compact.first)
-          dns_a_recs = dns_record_response[:response].response.map{|k| k.id if k[:type] == "A"}
+          dns_a_recs = dns_record_response[:response].response.map { |k| k.id if k[:type] == "A" }
           task_data = {
             id: 2,
             type: "create_dns_record",
@@ -342,14 +231,12 @@ module Spree
             sidekiq_job_id: nil
           }
           unless dns_a_recs.compact.first.blank?
-            dns_a_recs.compact.each do |a_record| 
-              host_zone_record_api.destroy({type: "A",id: a_record})
+            dns_a_recs.compact.each do |a_record|
+              host_zone_record_api.destroy({ type: "A", id: a_record })
             end
-            @tasks << task_data
-              
-          else
-            @tasks << task_data
+
           end
+          @tasks << task_data
         end
 
         def prepare_mail_domain_task
@@ -369,9 +256,9 @@ module Spree
 
         def prepare_mx_record_task
           dns_response = host_zone_api.all_zones
-          dns_domain = dns_response[:response].response.map{|k| k.id if k[:origin] == "#{@domain}."}
+          dns_domain = dns_response[:response].response.map { |k| k.id if k[:origin] == "#{@domain}." }
           dns_record_response = host_zone_api.get_all_hosted_zone_records(dns_domain.compact.first)
-          dns_mx_recs = dns_record_response[:response].response.map{|k| k.id if k[:type] == "MX"}
+          dns_mx_recs = dns_record_response[:response].response.map { |k| k.id if k[:type] == "MX" }
           task_data = {
             id: 2,
             type: "create_dns_record",
@@ -388,13 +275,11 @@ module Spree
             sidekiq_job_id: nil
           }
           unless dns_mx_recs.compact.first.blank?
-            dns_mx_recs.compact.each do |mx_record| 
-              host_zone_record_api.destroy({type: "MX",id: mx_record})
+            dns_mx_recs.compact.each do |mx_record|
+              host_zone_record_api.destroy({ type: "MX", id: mx_record })
             end
-            @tasks << task_data             
-          else
-            @tasks << task_data     
           end
+          @tasks << task_data
         end
 
         def get_web_domain_id(origin)
@@ -434,7 +319,7 @@ module Spree
         end
 
         def ftp_user_api
-            current_spree_user.isp_config.ftp_user
+          current_spree_user.isp_config.ftp_user
         end
 
         def mail_user_api
@@ -464,7 +349,6 @@ module Spree
             data
           end
         end
-
       end
     end
   end

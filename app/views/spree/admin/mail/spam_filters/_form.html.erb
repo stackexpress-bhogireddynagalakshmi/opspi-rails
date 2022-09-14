@@ -1,42 +1,37 @@
-<style type="text/css">
-  .formSuccess{
-    color: green;
-  }
-</style>
+<% content_for :modal_header do %>
+  <h3><%= header%></h3>
+<% end %>
 
+<% content_for :modal_body_and_footer do %>
 
-<% url =  action_path %>
+<div class="modal-body">   
 
- <%=form_for "spamfilter", url: url, html: {method: @filter.present? ? :put : :post} do |f|%> 
+  <% url =  @spam_filter.persisted? ?   admin_mail_spam_filter_path(@spam_filter.id) : admin_mail_spam_filters_path%>
 
-  <fieldset>
-    <div class="form-group">
-      <label class="form-label">Email</label>
-      <%=f.email_field 'email', value: @filter.try(:email), class: 'form-control'%>
-    </div>
+ <%=form_for "spamfilter", url: url, html: { method: @spam_filter.persisted? ? :put : :post }, remote: true do |f|%> 
+  <%=hidden_field_tag :user_domain_id, @user_domain.id%>
+  <%=f.hidden_field :wb, value: @spam_filter.wb || params[:wb]%>
 
-     <div class="form-group">
-      <label class="form-label">Priority</label>
-      <%=f.select 'priority',options_for_select(get_priority_dropdown, @filter.try(:priority)),{}, class: 'form-select'%>
-    </div>
-          
-    <div class="form-group">
-      <label class="form-label">Active</label>
-      <%=f.select 'active',options_for_select([['Yes','y'],['No','n']],@filter.try(:active)),{}, class: 'form-select'%>
-    </div>
-    <%=submit_tag "#{@filter.present? ? 'Update' : 'Add'} Spamfilter",class: 'btn btn-primary lift'%>
+   <div id="error_div" style="color: red;"></div>
+    <fieldset>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <%=f.email_field 'email', value: @spam_filter.try(:email), class: 'form-control'%>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Priority</label>
+        <%=f.select 'priority',options_for_select(get_priority_dropdown, @spam_filter.try(:priority)),{}, class: 'form-select'%>
+      </div>
+    
+      <div class="form-group">
+        <label class="form-label">Active</label>
+        <%=f.select 'active',options_for_select([['Yes','y'],['No','n']], @spam_filter.try(:active)),{}, class: 'form-select'%>
+      </div>
 
-  </fieldset>
-<%end%>
-<div>
- 
-  <%if @response && @response["status"]=='ERROR'%>
-    <div style="color: red;" class="mt-3"><%=@response["message"]%></</div> 
+      <%=submit_tag "#{@spam_filter.persisted? ? 'Update' : 'Add'} Spamfilter",class: 'btn btn-primary lift'%>
+    </fieldset>
   <%end%>
 </div>
-
-<script type="text/javascript">
-  $(document).ready(function (argument) {
-    $('#FlashAlertsContainer').removeClass('d-none');
-  });
-</script>
+<% end %>
+<%= render :partial=>'spree/admin/shared/modal', locals: {modal_width: '40%'} %>

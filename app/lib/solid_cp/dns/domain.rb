@@ -77,7 +77,8 @@ module SolidCp
 
           { success: true, message: 'Domain created successfully', response: response }
         else
-          { success: false, message: 'Something went wrong. Please try again.', response: response }
+
+          { success: false, message:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
         end
       end
 
@@ -141,7 +142,7 @@ module SolidCp
         if response.success?
           { success: true, message: 'Domain deleted successfully', response: response }
         else
-          { success: false, message: 'Something went wrong. Please try again.', response: response }
+          { success: false, message:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
         end
       end
       alias destroy delete_domain
@@ -197,7 +198,8 @@ module SolidCp
 
           { success: true, message: 'Domain created successfully', response: response }
         else
-          { success: false, message: 'Something went wrong. Please try again.', response: response }
+          
+          { success: false, message: SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
         end
       end
       alias create add_domain_with_provisioning

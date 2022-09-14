@@ -24,7 +24,7 @@
       <label class="form-label">Email</label>
 
       <div class="input-group">
-         <%=f.text_field 'email', value: @mailbox.try(:email).try(:split,'@').try(:first), class: 'form-control', required: true, style:"width: 65%;"%>
+         <%=f.text_field 'email', value: @mailbox.try(:email).try(:split,'@').try(:first), class: 'form-control', required: true, style:"width: 45%;"%>
         <span class="input-group-text">@<%=@user_domain.domain%></span>
       </div>
     </div>

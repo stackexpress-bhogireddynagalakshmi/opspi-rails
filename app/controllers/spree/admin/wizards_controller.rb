@@ -17,11 +17,11 @@ module Spree
         @domain      = wizard_params[:domain]
         @server_type = wizard_params[:server_type]
 
-        if resource_limit_exceeded("domain")
-          @error = I18n.t('spree.resource_limit_exceeds')
-          render 'new'
-          return
-        end
+        # if resource_limit_exceeded("domain")
+        #   @error = I18n.t('spree.resource_limit_exceeds')
+        #   render 'new'
+        #   return
+        # end
         if valid_domain?(@domain)
           create_user_domain
           @tasks = []
@@ -80,6 +80,7 @@ module Spree
               id: 1,
               type: "create_dns_domain",
               domain: @domain,
+              user_domain_id: @user_domain.id,
               data:
                   {
                     name: @domain,
@@ -171,6 +172,7 @@ module Spree
             id: 2,
             type: "create_web_domain",
             domain: @domain,
+            user_domain_id: @user_domain.id,
             data: {
               server_type: @server_type,
               ip_address: '',
@@ -193,6 +195,7 @@ module Spree
             id: 3,
             type: "create_mail_domain",
             domain: @domain,
+            user_domain_id: @user_domain.id,
             data: {
               domain: @domain,
               active: 'y'
@@ -229,15 +232,16 @@ module Spree
               id: SecureRandom.hex,
               type: "create_mail_box",
               domain: @domain,
+              user_domain_id: @user_domain.id,
               actions: true,
               data: {
                 domain_name: @domain,
                 mail_domain: @domain,
                 email: "#{email}@#{@domain}",
                 password: SecureRandom.hex,
-                name: 'Test',
+                name: '',
                 quota: '0',
-                cc: "user2@#{@domain}",
+                cc: "",
                 forward_in_lda: '0',
                 policy: '5',
                 postfix: 'y',
@@ -259,6 +263,7 @@ module Spree
             id: SecureRandom.hex,
             type: "create_ftp_account",
             domain: @domain,
+            user_domain_id: @user_domain.id,
             actions: true,
             data: {
               server_type: @server_type,
@@ -283,6 +288,7 @@ module Spree
             id: SecureRandom.hex,
             type: "create_database",
             domain: @domain,
+            user_domain_id: @user_domain.id,
             actions: true,
             data: {
               server_type: @server_type,
@@ -290,7 +296,7 @@ module Spree
               database_name: get_database_name(@domain),
               database_username: get_database_user_name(@domain),
               database_password: SecureRandom.hex,
-              user_domain_id: @user_domain.id
+              user_domain_id: @user_domain.id #TODO: To be removed
             },
             depends_on: 2,
             sidekiq_job_id: nil

@@ -27,17 +27,19 @@ module Spree
         def edit; end
 
         def create
-          return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} if resource_limit_exceeded("mailing_list")
+          # return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} if resource_limit_exceeded("mailing_list")
           @response = mailing_list_api.create(mailing_list_params.merge({ domain: @user_domain.domain }), user_domain: @user_domain)
 
           if @response[:success]
             @mailing_list = @user_domain.user_mailing_lists.where(listname: mailing_list_params[:listname]).last 
           end
         end
-        
 
         def update
-          @response = mailing_list_api.update(@mailing_list.id, mailing_list_params)
+          list_params  = mailing_list_params
+          list_params.delete(:password) if list_params[:password] == 'dummypass'
+          
+          @response = mailing_list_api.update(@mailing_list.id, list_params)
           @mailing_list.reload
         end
 
@@ -46,14 +48,6 @@ module Spree
         end
 
         private
-
-        def set_flash
-          if @response[:success]
-            flash[:success] = @response[:message]
-          else
-            flash.now[:error] = @response[:message]
-          end
-        end
 
         def mailing_list_params
           params.require("mailinglist").permit(:listname, :email, :password)
@@ -66,7 +60,7 @@ module Spree
         def set_mailing_list
           @mailing_list = @user_domain.user_mailing_lists.find(params[:id])
 
-          redirect_to admin_mail_mailing_lists_path, notice: 'Not Authorized' if @mailing_list .blank?
+          redirect_to admin_dashboard_path, notice: 'Not Authorized' if @mailing_list .blank?
         end
 
       end
