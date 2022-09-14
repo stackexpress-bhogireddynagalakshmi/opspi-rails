@@ -42,7 +42,7 @@ module SolidCp
                                  solid_cp_master_plan_id: plan_id })
           { success: true, message: 'SolidCP Package created successfully', response: response }
         else
-          { success: true, message: 'Something went wrong. Please try again.', response: response }
+          { success: true, message:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
         end
       else
         { success: true, message: 'SolidCP Package already exists' }
