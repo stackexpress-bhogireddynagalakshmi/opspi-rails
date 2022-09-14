@@ -53,7 +53,9 @@ module SolidCp
 
       }
       )
-     
+      
+      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
+
       if response.success? && code.positive?
         { success: true, message: I18n.t(:'windows.database.create'), response: response }
       else
@@ -128,6 +130,7 @@ module SolidCp
 
       code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
       error = SolidCp::ErrorCodes.get_by_code(code)
+
       if response.success? && code.positive?
         { success: true, message: I18n.t(:'windows.database.create'), response: response }
       else

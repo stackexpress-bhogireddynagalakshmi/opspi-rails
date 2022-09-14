@@ -185,7 +185,9 @@ module SolidCp
 
         response = super(message: hash_params)
 
-        if response.success? && response.body[:add_domain_with_provisioning_response][:add_domain_with_provisioning_result].to_i.positive?
+        code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
+        
+        if response.success? && code.positive?
           create_a_record(params)
           user_domain = user.user_domains.where(domain: sanitze_domain(params[:domain_name]), web_hosting_type: nil).last
           user_domain.update(web_hosting_type: 0)
