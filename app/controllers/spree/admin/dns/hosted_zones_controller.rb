@@ -125,22 +125,16 @@ module Spree
               @website_certificate_id = @website_certificate_id.first
             end
           end
-          ######
 
-          #### website linux
-          # @web_domain = current_spree_user.isp_config.website.all[:response].response
+          if @user_domain.windows?
+            #TODO: Yet to implement/refactor
 
-          # if current_spree_user.have_linux_access? && @user_domain.linux?
-          #   @user_website = current_spree_user.isp_config.website.find()
-          # end
+           elsif @user_domain.linux?
+            user_remote_website_response =  current_spree_user.isp_config.website.find(@user_domain.user_website.try(:remote_website_id))
+            @user_remote_website = user_remote_website_response[:response][:response] 
 
-          user_remote_website_response = if @user_domain.windows?
-                                           current_spree_user.solid_cp.website.find(@user_domain.user_website.try(:remote_website_id))
-                                         elsif @user_domain.linux?
-                                           current_spree_user.isp_config.website.find(@user_domain.user_website.try(:remote_website_id))
-                                         end
-          @user_remote_website = user_remote_website_response[:response][:response]
-
+           end
+          
           # User Mail boxes
           @mailboxes = @user_domain.user_mailboxes
 

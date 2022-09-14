@@ -38,6 +38,7 @@ module SolidCp
         def get_web_site(params)
           response = super(message: { site_item_id: params[:web_site_id] })
         end
+        alias :find :get_web_site
 
         #<siteItemId>int</siteItemId>
         def get_web_site_pointers(params)
