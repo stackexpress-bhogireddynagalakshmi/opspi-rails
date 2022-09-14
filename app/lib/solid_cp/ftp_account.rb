@@ -51,14 +51,13 @@ module SolidCp
           }
         }
       )
-      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
-      error = SolidCp::ErrorCodes.get_by_code(code)
+
       if response.success? && code > 0
         user_domain = opts[:user_domain]
         user_domain.user_ftp_users.create(ftp_user_params(params).merge({ remote_ftp_user_id: code })) if user_domain.present?
         { success: true, message: 'Ftp Account created successfully', response: response }
       else
-        { success: false, message: error[:msg], response: response }
+        { success: false, message:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
       end
     rescue => e
       { success: false, message: error_message(e.message), response: response }
@@ -80,13 +79,11 @@ module SolidCp
         }
       }
       )
-      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
-      error = SolidCp::ErrorCodes.get_by_code(code)
-
+      
       if response.success? && code > 0
         { success: true, message: 'Ftp User updated successfully', response: response }
       else
-        { success: false, message:  error[:msg], response: response }
+        { success: false, message:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
       end
      rescue => e
       { success: false, message: e.message, response: response }
@@ -103,7 +100,7 @@ module SolidCp
 
         { success: true, message: 'Ftp User deleted successfully', response: response }
       else
-        { success: false, message: 'Something went wrong. Please try again.', response: response }
+        { success: false, message:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
       end
     end
     alias destroy delete_ftp_account

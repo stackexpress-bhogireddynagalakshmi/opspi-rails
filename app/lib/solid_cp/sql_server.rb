@@ -53,13 +53,11 @@ module SolidCp
 
       }
       )
-      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
-      error = SolidCp::ErrorCodes.get_by_code(code)
-
+     
       if response.success? && code.positive?
         { success: true, message: I18n.t(:'windows.database.create'), response: response }
       else
-        { success: false, message: I18n.t(:panel_error, msg: error[:msg]), response: response }
+        { success: false, message: I18n.t(:panel_error, msg:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__)), response: response }
       end
     end
     alias update_database_user_password update_sql_user
@@ -142,26 +140,21 @@ module SolidCp
     def delete_sql_database(id)
       response = super(message: { itemId: id })
 
-      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
-      error = SolidCp::ErrorCodes.get_by_code(code)
-
       if response.success?
         { success: true, message: I18n.t(:'windows.database.delete'), response: response }
       else
-        { success: false, message: I18n.t(:panel_error, msg: e.message), response: response }
+        { success: false, message: I18n.t(:panel_error, msg: SolidCp::ErrorHelper.log_solid_cp_error(response, __method__) ), response: response }
       end
     end
     alias destroy delete_sql_database
 
     def delete_sql_user(id)
       response = super(message: { itemId: id })
-      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
-      error = SolidCp::ErrorCodes.get_by_code(code)
-
+     
       if response.success?
         { success: true, message: I18n.t(:'windows.database.user_delete'), response: response }
       else
-        { success: false, message: I18n.t(:panel_error, msg: e.message), response: response }
+        { success: false, message: I18n.t(:panel_error, msg: SolidCp::ErrorHelper.log_solid_cp_error(response, __method__)), response: response }
       end
     end
 
