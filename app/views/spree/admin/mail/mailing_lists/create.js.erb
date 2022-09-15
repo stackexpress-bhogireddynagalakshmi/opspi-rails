@@ -2,5 +2,5 @@
   $("#myModal").modal('hide')
   $('#mailing_list_table').append("<%=j render partial: 'spree/admin/mail/mailing_lists/row', locals: { mailing_list: @mailing_list}%>")
 <%else%>
-  $('#error_div').html("<%=j @response[:message].html_safe%>");
+  $('#error_div').html("<%=j map_isp_config_error_msg(@response[:message].html_safe) %>");
 <%end%>
