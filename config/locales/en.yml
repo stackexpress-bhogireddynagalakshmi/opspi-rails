@@ -196,6 +196,8 @@ en:
       create: 'Ftp User created successfully'
       delete: 'Ftp User deleted successfully'
       update: 'Ftp User updated successfully'
+    errors:
+      email_error_isemail: "Please enter valid email"
 
   windows:
     ftp_account:
