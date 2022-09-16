@@ -193,7 +193,7 @@
     var html = '';
     html += '<div id="inputUsernameField">';
     html += '<div class="input-group mb-3">';
-    html += '<input type="text" name="wizard[emails][]" required="required" class="form-control m-input" pattern=MAILBOX_REGEX title="Invalid input" placeholder="Enter Email" autocomplete="off" "data-input-count" = '+inputCount+'>';
+    html += '<input type="text" name="wizard[emails][]" required="required" class="form-control m-input" pattern=<%= MAILBOX_REGEX %> title="Invalid input" placeholder="Enter Email" autocomplete="off" "data-input-count" = '+inputCount+'>';
     
     html += '<div class="input-group-text">';
     html += '<span id="selected_domain_button">@'+domain+'</span>';
