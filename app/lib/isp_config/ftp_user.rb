@@ -127,7 +127,7 @@ module IspConfig
         username: params[:username],
         dir: params[:dir],
         active: params[:active] == 'y'
-      }
+      }.reject{|k, v| v.blank?}
 
     end
   end
