@@ -190,7 +190,13 @@ module IspConfig
     end
 
     def formatted_database_name(database_username)
-      "du_#{database_username.to_s.rjust(8, padstr='0')}"
+      if Rails.env == 'development'
+        "du_dev_#{database_username.to_s.rjust(8, padstr='0')}"
+      elsif Rails.env == 'qa'
+        "du_qa_#{database_username.to_s.rjust(8, padstr='0')}"
+      else
+        "du_#{database_username.to_s.rjust(8, padstr='0')}"
+      end
     end
   end
 end
