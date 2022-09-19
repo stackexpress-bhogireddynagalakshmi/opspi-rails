@@ -24,7 +24,7 @@ module IspConfig
     end
 
     def create(create_params)
-      database_user = user.user_databases.create(
+      database_user = user.user_databases.find_or_create_by(
         {
           database_name: create_params[:database_name],
           database_type: create_params[:database_type],
@@ -35,7 +35,7 @@ module IspConfig
       db_user_response = create_database_user(create_params.merge(database_username: database_user.id))
       unless db_user_response[:success]
         return { success: false, message: I18n.t('isp_config.something_went_wrong', message: db_user_response[:message]),
-                 response: db_user_response }
+           response: db_user_response }
       end
 
       database_hash = database_hash(create_params.merge(db_username: db_user_response[:response][:response]))
@@ -50,6 +50,8 @@ module IspConfig
       else
         database_user.update(database_user: formatted_database_name(database_user.id),status: 0)
       end
+
+
 
       formatted_response(response, 'create')
     end
