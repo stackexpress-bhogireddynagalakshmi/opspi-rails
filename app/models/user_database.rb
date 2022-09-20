@@ -6,6 +6,8 @@ class UserDatabase < ApplicationRecord
   validates :database_name, presence: true
   # validates :database_user, presence: true
 
+  after_create_commit :update_status
+
   enum database_type: {
     my_sql: 1,
     ms_sql2019: 2
@@ -32,6 +34,10 @@ class UserDatabase < ApplicationRecord
     elsif ms_sql2019?
      config_value_for(user.panel_config["database_mssql"], 'MSSQL_SERVER_PORT')
     end    
+  end
+
+  def update_status
+    self.update(status: 'in_progress')
   end
 
 end

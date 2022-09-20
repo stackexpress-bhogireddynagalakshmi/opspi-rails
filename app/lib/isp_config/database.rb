@@ -61,9 +61,9 @@ module IspConfig
                        })
       if response.code == "ok"
         user.isp_databases.create({ isp_config_database_id: response["response"] }) 
-        database_user.update(database_user: formatted_database_name(database_user.id),database_id: response.response, status: 1)
+        database_user.update(database_user: formatted_database_name(database_user.id),database_id: response.response, status: "active")
       else
-        database_user.update(database_user: formatted_database_name(database_user.id),status: 0)
+        database_user.update(database_user: formatted_database_name(database_user.id), status: "failed")
       end
 
 
