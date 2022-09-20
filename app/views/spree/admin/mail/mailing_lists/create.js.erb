@@ -1,6 +1,7 @@
 <%if @response[:success] == true%>
   $("#myModal").modal('hide')
   $('#mailing_list_table').append("<%=j render partial: 'spree/admin/mail/mailing_lists/row', locals: { mailing_list: @mailing_list}%>")
+  $("#mailing_list_no_data").hide()
 <%else%>
   $('#error_div').html("<%=j map_isp_config_error_msg(@response[:message].html_safe) %>");
 <%end%>
