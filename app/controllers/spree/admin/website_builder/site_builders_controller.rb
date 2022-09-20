@@ -9,7 +9,7 @@ module Spree
 
         def create
           user_domain = UserDomain.where(id: params[:user_domain_id]).last
-          opts ={user_domain: user_domain}
+          opts = {user_domain: user_domain}
 
           if params[:server_type] == 'linux'
               website  = UserWebsite.where(user_domain_id: params[:user_domain_id]).last
@@ -58,7 +58,7 @@ module Spree
                   @new_domain_ftp_response = get_window_ftp(ftp_acc)
                 end
               else
-                @new_domain_ftp_response = create_win_web_domain(website.remote_website_id, opts) 
+                @new_domain_ftp_response = create_win_web_domain(opts) 
               end
 
             if @new_domain_ftp_response.present? && @new_domain_ftp_response[:id].present?
@@ -80,18 +80,18 @@ module Spree
 
 
 
-        # def get_web_domain_id
-        #   if params[:server_type] == "linux"
-        #     web_response  = current_spree_user.isp_config.website.all
-        #     web_domain_id = web_response[:response].response.map{|k| k.domain_id if k[:domain] == site_builder_params[:dns_domain_name]}
-        #     web_domain_id.compact
-        #   else
-        #     windows_resource = current_spree_user.solid_cp.website.all || [] 
-        #     @windows_resources = windows_resource.body[:get_web_sites_response][:get_web_sites_result][:web_site] rescue []
-        #     @windows_resources = [@windows_resources] if @windows_resources.is_a?(Hash)
-        #     web_domain_id = @windows_resources.collect{|x| x[:id] if x[:name] == site_builder_params[:dns_domain_name]}.compact.first
-        #   end
-        # end
+        def get_web_domain_id
+          # if params[:server_type] == "linux"
+          #   web_response  = current_spree_user.isp_config.website.all
+          #   web_domain_id = web_response[:response].response.map{|k| k.domain_id if k[:domain] == site_builder_params[:dns_domain_name]}
+          #   web_domain_id.compact
+          # else
+            windows_resource = current_spree_user.solid_cp.website.all || [] 
+            @windows_resources = windows_resource.body[:get_web_sites_response][:get_web_sites_result][:web_site] rescue []
+            @windows_resources = [@windows_resources] if @windows_resources.is_a?(Hash)
+            web_domain_id = @windows_resources.collect{|x| x[:id] if x[:name] == site_builder_params[:dns_domain_name]}.compact.first
+          # end
+        end
 
         # def get_ftp_user(website_id)
         #   if params[:server_type] == "linux"
@@ -124,10 +124,10 @@ module Spree
           response.body[:get_ftp_account_response][:get_ftp_account_result] rescue []
         end 
 
-        def create_win_web_domain(website_id, user_domain)
-          # web_response = current_spree_user.solid_cp.web_domain.create({domain_name: site_builder_params[:dns_domain_name]})
-          # website = get_web_domain_id("windows")
-          ftp_acc = create_ftp_account(website_id, user_domain)
+        def create_win_web_domain(user_domain)
+          web_response = current_spree_user.solid_cp.web_domain.create({domain_name: site_builder_params[:dns_domain_name]})
+          website = get_web_domain_id
+          ftp_acc = create_ftp_account(website, user_domain)
           get_window_ftp(ftp_acc)
         end
 
