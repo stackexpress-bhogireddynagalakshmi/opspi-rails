@@ -24,13 +24,28 @@ module IspConfig
     end
 
     def create(create_params)
-      database_user = user.user_databases.find_or_create_by(
+      database_user = user.user_databases.find_by(
         {
           database_name: create_params[:database_name],
           database_type: create_params[:database_type],
           user_domain_id: create_params[:user_domain_id]
         }
       )
+
+      if database_user.blank? || database_user.failed?
+
+        database_user = user.user_databases.create(
+            {
+              database_name: create_params[:database_name],
+              database_type: create_params[:database_type],
+              user_domain_id: create_params[:user_domain_id]
+            }
+        )
+
+      else
+        raise "Database already exist with name #{create_params[:database_name]}"
+      end
+
       ## create db user
       db_user_response = create_database_user(create_params.merge(database_username: database_user.id))
       unless db_user_response[:success]
