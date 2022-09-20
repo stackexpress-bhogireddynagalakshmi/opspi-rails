@@ -6,7 +6,9 @@ module Spree
       include ApisHelper
       include ResetPasswordConcern
       include ResourceLimitHelper
+      include ApplicationHelper
       
+      before_action :ensure_user_confirmed, only: [:create]
       before_action :set_batch_jobs, only: %i[index show]
       before_action :ensure_hosting_panel_access
 
