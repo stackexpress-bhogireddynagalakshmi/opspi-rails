@@ -55,6 +55,8 @@ class Subscription < ApplicationRecord
                               validity:     validity
                             })
 
+      update_order_payment_on_auto_debit(opts[:order]) if payment_complete(opts[:order])
+
       payment_captured =  if opts[:order].present?
                             opts[:order].payment_state == 'paid'
                           else
@@ -67,6 +69,14 @@ class Subscription < ApplicationRecord
 
   def active?
     status
+  end
+
+  def self.payment_complete(order)
+    order.payments.last&.state == 'completed'
+  end
+
+  def self.update_order_payment_on_auto_debit(order)
+    order.update_column(:payment_state, "paid")
   end
 
   def billing_interval
