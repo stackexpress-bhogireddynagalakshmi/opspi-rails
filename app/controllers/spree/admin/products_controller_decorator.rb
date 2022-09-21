@@ -6,7 +6,7 @@ module Spree
       include ApplicationHelper
 
       def self.prepended(base)
-        base.before_action :ensure_user_confirmed, only: [:create]
+        base.before_action :ensure_user_confirmed, only: [:create, :update]
       end
 
 
