@@ -136,22 +136,22 @@ module Spree
            end
           
           # User Mail boxes
-          @mailboxes = @user_domain.user_mailboxes
+          @mailboxes = @user_domain.user_mailboxes.order("created_at desc")
 
           # User database
-          @user_databases = current_spree_user.user_databases.where(user_domain_id: @user_domain.id)
+          @user_databases = current_spree_user.user_databases.where(user_domain_id: @user_domain.id).order("created_at desc")
 
           # FTP Users
-          @ftp_users = @user_domain.user_ftp_users
+          @ftp_users = @user_domain.user_ftp_users.order("created_at desc")
 
           ## Spam Filters
-          @spam_filters = @user_domain.user_spam_filters
+          @spam_filters = @user_domain.user_spam_filters.order("created_at desc")
 
           ## mail forward
-          @mail_forwards = @user_domain.user_mail_forwards
+          @mail_forwards = @user_domain.user_mail_forwards.order("created_at desc")
 
           # user mailing list
-          @mailing_lists = @user_domain.user_mailing_lists
+          @mailing_lists = @user_domain.user_mailing_lists.order("created_at desc")
 
           get_active
 
