@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   def ensure_user_confirmed
     return nil if current_spree_user.confirmed?
     
-    flash[:warning] = Spree.t(:confirmation_error)
+    # flash[:warning] = Spree.t(:confirmation_error)
     redirect_to admin_dashboard_path and return
   end
   
