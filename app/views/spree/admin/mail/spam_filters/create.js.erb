@@ -2,5 +2,9 @@
   $("#myModal").modal('hide')
   $('#spam_filter_<%=@spam_filter.wb%>_table').append("<%=j render partial: 'spree/admin/mail/spam_filters/row', locals: { spam_filter: @spam_filter}%>")
 <%else%>
+<%if @response[:message].include?('email_error_notempty')%>
+$('#error_div').html("<%= Spree.t(:email_error_notempty) %>"); 
+<%else%>
   $('#error_div').html("<%=j @response[:message].html_safe%>");
+<%end%>
 <%end%>

@@ -128,6 +128,7 @@ en:
     signed_up: "Signed in successfully."
     send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
     without_confirm: "Please check your inbox and confirm your email to start using the services."
+    email_error_notempty: "Error: Email should not be empty."
 
     user_mailer:
       reset_button_does_not_work: "If the above button does not work then please click on the below link to reset your password"
