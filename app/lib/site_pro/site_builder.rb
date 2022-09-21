@@ -42,7 +42,7 @@ module SitePro
       else
         {
           success: false,
-          message: I18n.t('isp_config.something_went_wrong', message: response.error.message),
+          message: I18n.t('isp_config.something_went_wrong', message: response),
           response: response
         }
       end

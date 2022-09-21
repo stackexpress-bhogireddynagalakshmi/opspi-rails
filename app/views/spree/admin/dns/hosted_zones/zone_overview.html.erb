@@ -230,6 +230,7 @@
                       <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
                         <%= hidden_field_tag "dns_domain_name", params[:zone_name] %>
                         <%= hidden_field_tag "server_type", @user_domain.web_hosting_type %>
+                        <%= hidden_field_tag "user_domain_id", @user_domain.id %>
                         <div>
                           <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
                         </div>
