@@ -342,6 +342,7 @@ display: block;
             <td colspan="5"> 
             <%=form_tag   "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}",  class:"form_2", id: "edit-form-clear-field", value: hosted_zone_record.id, method: "put" do %>
              <%=hidden_field_tag(:hosted_zone_name, params[:zone_name])%>
+             <%=hidden_field_tag :user_domain_id, @user_domain.id%>
               <fieldset>
                 <div class="grid-container-edit">
                   <div class="grp1">
@@ -440,7 +441,7 @@ display: block;
                   
                   <div>
 
-                    <%= link_to_delete "Delete", url: "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}"  ,class:'form-control' ,method: :delete, style:"margin-top:10px"%>
+                    <%= link_to_delete "Delete", url: "/admin/dns/hosted_zones/#{@hosted_zone.id}/hosted_zone_records/#{hosted_zone_record.id}?type=#{hosted_zone_record.type}&user_domain_id=#{@user_domain.id}"  ,class:'form-control' ,method: :delete, style:"margin-top:10px"%>
                     
                     <%=hidden_field_tag(:primary_id, hosted_zone_record.id)%>
                     <%=hidden_field_tag(:type, hosted_zone_record.type)%>
