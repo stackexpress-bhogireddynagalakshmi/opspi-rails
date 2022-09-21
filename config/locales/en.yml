@@ -192,6 +192,7 @@ en:
       create: 'Database created successfully'
       delete: 'Database deleted successfully'
       update: 'Database updated successfully'
+      already_exist: "There is already a database with that name on the same server."
     ftp_user: 
       create: 'Ftp User created successfully'
       delete: 'Ftp User deleted successfully'

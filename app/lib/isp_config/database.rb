@@ -26,7 +26,7 @@ module IspConfig
     def create(create_params)
       database_user = user.user_databases.find_by(
         {
-          database_name: create_params[:database_name],
+          database_name: formatted_db_name(create_params[:database_name]),
           database_type: create_params[:database_type],
           user_domain_id: create_params[:user_domain_id]
         }
@@ -36,16 +36,19 @@ module IspConfig
 
         database_user = user.user_databases.create(
             {
-              database_name: create_params[:database_name],
+              database_name: formatted_db_name(create_params[:database_name]),
               database_type: create_params[:database_type],
               user_domain_id: create_params[:user_domain_id]
             }
         )
 
       else
-        raise "Database already exist with name #{create_params[:database_name]}"
+        raise StandardError.new I18n.t('isp_config.database.already_exist')
+
       end
 
+
+      
       ## create db user
       db_user_response = create_database_user(create_params.merge(database_username: database_user.id))
       unless db_user_response[:success]
@@ -61,14 +64,24 @@ module IspConfig
                        })
       if response.code == "ok"
         user.isp_databases.create({ isp_config_database_id: response["response"] }) 
-        database_user.update(database_user: formatted_database_name(database_user.id),database_id: response.response, status: "active")
+        database_user.update(database_user: formatted_db_user_name(database_user.id),database_id: response.response, status: "active")
       else
-        database_user.update(database_user: formatted_database_name(database_user.id), status: "failed")
+        database_user.update(database_user: formatted_db_user_name(database_user.id), status: "failed")
       end
 
 
 
       formatted_response(response, 'create')
+
+
+      rescue => e
+
+        return  {
+          success: false,
+          message:  e.message,
+          response: {}
+        }
+
     end
 
     def create_database_user(params)
@@ -76,7 +89,7 @@ module IspConfig
         client_id: user.isp_config_id,
         params: {
           server_id: IspConfig::Config.api_web_server_id(user),
-          database_user: formatted_database_name(params[:database_username]),
+          database_user: formatted_db_user_name(params[:database_username]),
           database_password: params[:database_password]
         }
       }
@@ -192,7 +205,7 @@ module IspConfig
           server_id: IspConfig::Config.api_web_server_id(user),
           type: "mysql",
           parent_domain_id: database_params[:web_domain_id],
-          database_name: "c#{user.isp_config_id}_#{database_params[:database_name]}",
+          database_name: database_params[:database_name],
           database_user_id: database_params[:db_username],
           database_quota: "-1",
           database_ro_user_id: "0",
@@ -206,7 +219,7 @@ module IspConfig
       }
     end
 
-    def formatted_database_name(database_username)
+    def formatted_db_user_name(database_username)
       if Rails.env == 'development'
         "du_dev_#{database_username.to_s.rjust(8, padstr='0')}"
       elsif Rails.env == 'qa'
@@ -214,6 +227,10 @@ module IspConfig
       else
         "du_#{database_username.to_s.rjust(8, padstr='0')}"
       end
+    end
+    
+    def formatted_db_name(database_name)
+      "c#{user.isp_config_id}_#{database_name}"
     end
   end
 end
