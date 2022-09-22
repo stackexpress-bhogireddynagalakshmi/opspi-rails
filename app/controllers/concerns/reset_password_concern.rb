@@ -21,7 +21,7 @@ module ResetPasswordConcern
           @ftp_user = @user_domain.user_ftp_users.where(username: @ftp_user.username).last
         end
       elsif params[:type].include?('database')
-        @database = @user_domain.user_databases.find_by_id(params[:id]) ||  @user_domain.user_databases.where(database_name: params[:email]).last
+        @database = @user_domain.user_databases.find_by_id(params[:id]) ||  @user_domain.user_databases.where("database_name like ? ","%#{params[:email]}").last
 
         if @database.my_sql?
           reset_linux_db_password(@database)

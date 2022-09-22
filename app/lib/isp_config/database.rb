@@ -3,6 +3,7 @@
 module IspConfig
   class Database < Base
     attr_accessor :user
+    include DatabaseConcern
 
     def initialize(user)
       @user = user
@@ -219,18 +220,8 @@ module IspConfig
       }
     end
 
-    def formatted_db_user_name(database_username)
-      if Rails.env == 'development'
-        "du_dev_#{database_username.to_s.rjust(8, padstr='0')}"
-      elsif Rails.env == 'qa'
-        "du_qa_#{database_username.to_s.rjust(8, padstr='0')}"
-      else
-        "du_#{database_username.to_s.rjust(8, padstr='0')}"
-      end
-    end
-    
-    def formatted_db_name(database_name)
-      "c#{user.isp_config_id}_#{database_name}"
+    def remote_client_id
+      user.isp_config_id
     end
   end
 end

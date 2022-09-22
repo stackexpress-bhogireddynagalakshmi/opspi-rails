@@ -3,6 +3,7 @@
 module SolidCp
   class SqlServer < Base
     attr_reader :user
+    include DatabaseConcern
 
     def initialize(user)
       @user = user
@@ -81,18 +82,35 @@ module SolidCp
     # <groupName>string</groupName>
 
     def add_sql_database(params = {})
-      database_user = user.user_databases.create(
+
+      database = user.user_databases.find_by(
         {
-          database_name: params[:database_name],
+          database_name: formatted_db_name(params[:database_name]),
           database_type: params[:database_type],
           user_domain_id: params[:user_domain_id]
         }
       )
+
+       if database.blank? || database.failed?
+
+          database = user.user_databases.create(
+              {
+                database_name: formatted_db_name(params[:database_name]),
+                database_type: params[:database_type],
+                user_domain_id: params[:user_domain_id]
+              }
+          )
+
+      else
+        raise StandardError.new I18n.t('solidcp.database.already_exist')
+      end
+
+
       response = super(message: {
         item: {
-          "Name" => params[:database_name],
+          "Name" => formatted_db_name(params[:database_name]),
           "PackageId" => user.packages.first.try(:solid_cp_package_id)
-          # "Users" =>  {"string" => ["syed002"]},
+          # "Users" =>  {"string" => ["test01"]},
         },
         group_name: "MsSQL2019"
       }
@@ -102,13 +120,14 @@ module SolidCp
       error = SolidCp::ErrorCodes.get_by_code(code)
 
       if response.success? && code.positive?
-        user_response = add_sql_user(params.merge(database_username: database_user.id))
-        database_user.update(database_user: formatted_database_user_name(database_user.id),
-                             database_id: response.body[:add_sql_database_response][:add_sql_database_result], status: 1)
+        user_response = add_sql_user(params.merge(database_username: database.id, database_name: formatted_db_name(params[:database_name])))
+       
+        database.update(database_user: formatted_db_user_name(database.id),
+                             database_id: response.body[:add_sql_database_response][:add_sql_database_result], status: 'active')
 
         user_response
       else
-        database_user.update(database_user: formatted_database_user_name(database_user.id), status: 0)
+        database.update(database_user: formatted_db_user_name(database.id), status: 'failed')
         { success: false, message: error_message(error[:msg]), response: response }
       end
     rescue StandardError => e
@@ -121,7 +140,7 @@ module SolidCp
         item: {
           "Databases" => { "string" => [params[:database_name]] },
           "PackageId" => user.packages.first.try(:solid_cp_package_id),
-          "Name" => formatted_database_user_name(params[:database_username]),
+          "Name" => formatted_db_user_name(params[:database_username]),
           "Password" => params[:database_password]
         },
         group_name: "MsSQL2019"
@@ -161,18 +180,16 @@ module SolidCp
       end
     end
 
-    def formatted_database_user_name(database_username)
-      return "du_#{database_username.to_s.rjust(8, padstr = '0')}"
-
-      return database_username
-    end
-
     def error_message(error)
       if error.include?('package item exists')
         error = "Error: Database already exists"
       else
         error.humanize
       end
+    end
+
+    def remote_client_id
+      user.solid_cp_id
     end
   end
 end
