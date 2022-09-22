@@ -134,9 +134,7 @@ module Spree
           else
             "c#{current_spree_user.isp_config_id}_#{database_name}"
           end
-        end
-
-        
+        end        
       end
     end
   end
