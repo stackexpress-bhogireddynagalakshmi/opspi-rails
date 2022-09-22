@@ -1,5 +1,13 @@
-<tr id="database_id_<%=database.id%>">
-  <td><%=database.database_name%></td>
+<tr>
+  <td><%if database.status == 'active'%>
+  <i class="fe fe-check-circle" style="color: green;"></i>&nbsp
+  <%elsif database.status == 'failed'%>
+  <i class="fe fe-alert-triangle" style="color: red;"></i>
+  <%else%>
+  <i class="fe fe-loader" style="color: yellow;"></i>
+  <%end%>
+  <%=database.database_name%>
+  </td>
   <td><%=database.database_user%></td>
   <td><%=database.database_type.try(:upcase)%></td>
   <td class="password-text"></td>
