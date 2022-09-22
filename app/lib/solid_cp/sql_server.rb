@@ -102,7 +102,7 @@ module SolidCp
           )
 
       else
-        raise StandardError.new I18n.t('solidcp.database.already_exist')
+        raise StandardError.new I18n.t('isp_config.database.already_exist')
       end
 
 
