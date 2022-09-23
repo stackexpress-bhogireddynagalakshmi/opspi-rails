@@ -190,7 +190,7 @@ deploy-staging:
     - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER_STAG@$APP_SERVER_SSH_HOST_STAG -p $APP_SERVER_SSH_PORT_STAG "bash -c ' cd /srv/docker-apps/opspi-stag && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
   only:
     - master
-  when: manual
+  # when: manual
   tags:
     - opspi
 
