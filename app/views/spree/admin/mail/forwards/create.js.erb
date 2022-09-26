@@ -1,6 +1,7 @@
 <%if @response[:success] == true%>
   $("#myModal").modal('hide')
   $('#mail_forward_table').append("<%=j render partial: 'spree/admin/mail/forwards/row', locals: { mail_forward: @mail_forward}%>")
+  $("#mail_forward_no_data").hide()
 <%else%>
   $('#error_div').html("<%=j @response[:message].html_safe%>");
 <%end%>
