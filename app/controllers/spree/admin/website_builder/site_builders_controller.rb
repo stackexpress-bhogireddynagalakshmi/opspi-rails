@@ -38,7 +38,7 @@ module Spree
             else
               
               Rails.logger.debug{@new_domain_ftp_response.inspect}
-              flash[:error] = "Something went wrong"
+              flash[:error] = @new_domain_ftp_response[:ftp_user_response][:message]
               redirect_to request.referrer
             end
           else
