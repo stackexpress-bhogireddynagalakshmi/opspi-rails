@@ -393,7 +393,7 @@ module AppManager
                               product_type: product_type,
                               status: 'active',
                               product_id: product.id,
-                              store_id: product.account.store_id
+                              store_id: product&.account&.store_id
                               })
     end
 
