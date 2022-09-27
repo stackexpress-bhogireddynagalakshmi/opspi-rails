@@ -46,7 +46,7 @@ module Spree
     end
 
     def create_product_config
-      AppManager::ProductConfigCreator.new(self.as_json,isp_config_limit.as_json,plan_quotas.as_json).call
+      AppManager::ProductConfigCreator.new(self,isp_config_limit.as_json,plan_quotas.as_json).call
     end
     
     def ensure_plan_id_or_template_id

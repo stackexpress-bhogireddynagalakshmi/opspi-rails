@@ -388,11 +388,12 @@ module AppManager
     def create
     product_type = (product["server_type"] == 'reseller_plan') ? 'reseller_shared_hosting_plan' : 'enduser_shared_hosting_plan'
     @product_config = ProductConfig.create!({
-                              name: product["name"],
+                              name: product.name,
                               configs: product_config,
                               product_type: product_type,
                               status: 'active',
-                              product_id: product["id"]
+                              product_id: product.id,
+                              store_id: product.account.store_id
                               })
     end
 
