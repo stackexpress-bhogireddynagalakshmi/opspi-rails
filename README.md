@@ -11,6 +11,10 @@
 ### SolidCP API
 
 - http://solidcpent.myhsphere.biz:9002/esDatabaseServers.asmx
+- http://solidcpent.myhsphere.biz:9002/esUsers.asmx
+- http://solidcpent.myhsphere.biz:9002/esPackages.asmx
+- http://solidcpent.myhsphere.biz:9002/esServers.asmx
+- http://solidcpent.myhsphere.biz:9002/esWebServers.asmx
 
 ## site pro
 
