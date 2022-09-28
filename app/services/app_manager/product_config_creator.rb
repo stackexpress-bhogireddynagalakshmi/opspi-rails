@@ -19,24 +19,24 @@ module AppManager
         name: product["name"],
         services: {
           domain:{
-            domain_count_limit: linux? ? linux_limits["limit_dns_zone"] : windows_domain_limit
+            domain_count_limit: linux? ? linux_limits["limit_dns_zone"] : windows_attributes("OS.Domains", "quota_value")
           },
           dns: {
             enabled: true,
-            dns_zones_count_limit: linux? ? linux_limits["limit_dns_zone"] : windows_domain_limit,  ##copy from domain_count_limit (default)
+            dns_zones_count_limit: linux? ? linux_limits["limit_dns_zone"] : windows_attributes("OS.Domains", "quota_value"),  ##copy from domain_count_limit (default)
             default_secondary_dns_server: linux? ? linux_limits["default_slave_dnsserver"] : nil,
-            secondary_dns_zones_count_limit: linux? ? linux_limits["limit_dns_slave_zone"] : windows_sub_domain_limit,
+            secondary_dns_zones_count_limit: linux? ? linux_limits["limit_dns_slave_zone"] : windows_attributes("OS.SubDomains", "quota_value"),
             dns_records_count_limit: linux? ? linux_limits["limit_dns_record"] : nil,
             # min_ttl_allowed: 300
           },
           mail: {
             enabled: true,
-            mail_domains_count_limit: linux? ? linux_limits["limit_dns_zone"] : windows_domain_limit,  #copy from domain_count_limit (default)
-            mailbox_count_limit: linux? ? linux_limits["limit_mailbox"] : windows_mailbox_count_limit,
+            mail_domains_count_limit: linux? ? linux_limits["limit_dns_zone"] : windows_attributes("OS.Domains", "quota_value"),  #copy from domain_count_limit (default)
+            mailbox_count_limit: linux? ? linux_limits["limit_mailbox"] : windows_attributes("Mail.MaxBoxSize", "quota_value"),
             email_aliases_count_limit: linux? ? linux_limits["limit_mailalias"] : nil,
             domain_aliases_count_limit: linux? ? linux_limits["limit_mailaliasdomain"] : nil,
-            mailing_list_count_limit: linux? ? linux_limits["limit_mailmailinglist"] : windows_maillist_count_limit,
-            email_forwarders_count_limit: linux? ? linux_limits["limit_mailforward"] : windows_mailforward_count_limit,
+            mailing_list_count_limit: linux? ? linux_limits["limit_mailmailinglist"] : windows_attributes("Mail.Lists", "quota_value"),
+            email_forwarders_count_limit: linux? ? linux_limits["limit_mailforward"] : windows_attributes("Mail.Forwardings", "quota_value"),
             email_catchall_accounts_count_limit: linux? ? linux_limits["limit_mailcatchall"] : nil,
             email_routes_count_limit: linux? ? linux_limits["limit_mailrouting"] : nil,
             email_filters_count_limit: linux? ? linux_limits["limit_mailfilter"] : nil,
@@ -45,22 +45,22 @@ module AppManager
             spamfilter_white_blacklist_filters_count_limit: linux? ? linux_limits["limit_spamfilter_wblist"] : nil,
             spamfilter_users_count_limit: linux? ? linux_limits["limit_spamfilter_user"] : nil,
             spamfilter_policies_count_limit: linux? ? linux_limits["limit_spamfilter_policy"] : nil,
-            groups: linux? ? nil : windows_mail_group_count_limit,
-            max_group_members: linux? ? nil : windows_mail_max_group_mem_count_limit,
-            max_list_members: linux? ? nil : windows_mail_max_list_mem_count_limit
+            groups: linux? ? nil : windows_attributes("Mail.Groups", "quota_value"),
+            max_group_members: linux? ? nil : windows_attributes("Mail.MaxGroupMembers", "quota_value"),
+            max_list_members: linux? ? nil : windows_attributes("Mail.MaxListMembers", "quota_value")
           },
           database_mysql: {
             enabled: true,
-            database_count_limit: linux? ? linux_limits["limit_database"] : windows_mysql_count_limit,
-            database_users_count_limit: linux? ? linux_limits["limit_database_user"] : windows_mysql_user_count_limit,
-            database_quota_size_quota: linux? ? linux_limits["limit_database_quota"] : windows_mysql_db_quota_limit
+            database_count_limit: linux? ? linux_limits["limit_database"] : windows_attributes("MySQL8.Databases", "quota_value"),
+            database_users_count_limit: linux? ? linux_limits["limit_database_user"] : windows_attributes("MySQL8.Users", "quota_value"),
+            database_quota_size_quota: linux? ? linux_limits["limit_database_quota"] : windows_attributes("MySQL8.MaxDatabaseSize", "quota_value")
           },
           database_mssql: {
             enabled: windows?,
-            database_count_limit: windows? ? windows_mssql_count_limit : nil ,
-            database_users_count_limit: windows? ? windows_mssql_user_count_limit : nil,
-            database_quota_size_quota: windows? ? windows_mssql_db_quota_limit : nil,
-            database_max_log_size: windows? ? windows_mssql_log_quota_limit : nil
+            database_count_limit: windows? ? windows_attributes("MsSQL2019.Databases", "quota_value") : nil ,
+            database_users_count_limit: windows? ? windows_attributes("MsSQL2019.Users", "quota_value") : nil,
+            database_quota_size_quota: windows? ? windows_attributes("MsSQL2019.MaxDatabaseSize", "quota_value") : nil,
+            database_max_log_size: windows? ? windows_attributes("MsSQL2019.MaxLogSize", "quota_value") : nil
 
           },
           web_linux: {
@@ -93,289 +93,50 @@ module AppManager
           },
           web_windows: {
             enabled: windows?,
-            web_domains_count_limit: windows? ? windows_website_count_limit : nil, #copy from domain_count_limit (default)
-            web_app_gallery: windows? ? windows_web_app_gallery : nil,
-            asp: windows? ? windows_web_asp : nil,
-            asp_net_11: windows? ? windows_web_asp_11 : nil,
-            asp_net_40: windows? ? windows_web_asp_40 : nil,
-            asp_net_20: windows? ? windows_web_asp_20 : nil,
-            php_4: windows? ? windows_web_php_4 : nil,
-            php_5: windows? ? windows_web_php_5 : nil,
-            perl_available: windows? ? windows_web_perl : nil ,
-            python_available: windows? ? windows_web_python : nil,
-            cgi_available: windows? ? windows_web_cgi : nil,
-            secured_folders: windows? ? windows_web_secured_folders : nil,
-            shared_ssl: windows? ? windows_web_shared_ssl : nil,
-            redirections: windows? ? windows_web_redirections : nil,
-            home_folders: windows? ? windows_web_home_folders : nil,
-            virtual_dirs: windows? ? windows_web_vir_dir : nil,
-            htaccess: windows? ? windows_web_htaccess : nil,
-            front_page: windows? ? windows_web_front_page : nil,
-            security: windows? ? windows_web_security : nil,
-            default_docs: windows? ? windows_web_default_docs : nil,
-            app_pools: windows? ? windows_web_app_pools : nil,
-            app_pools_restart: windows? ? windows_web_app_pools_restart : nil,
-            headers: windows? ? windows_web_headers : nil,
-            errors: windows? ? windows_web_error : nil,
-            mime: windows? ? windows_web_mime : nil,
-            cold_fusion: windows? ? windows_web_cold_fusion : nil,
-            cf_virtual_directories: windows? ? windows_web_cf_virtual_dirs : nil,
-            ip_addresses: windows? ? windows_web_ip_addresses : nil,
-            remote_management: windows? ? windows_web_remote_management : nil,
-            ssl_allowed: windows? ? windows_web_ssl : nil,
-            allow_ip_address_mode_switch: windows? ? windows_web_allow_ip_address : nil,
-            enable_host_name_support: windows? ? windows_web_home_folders : nil,
-            ftp_users_count_limit: windows? ? windows_ftp_acc_count_limit : nil
+            web_domains_count_limit: windows? ? windows_attributes("OS.Domains", "quota_value") : nil, #copy from domain_count_limit (default)
+            web_app_gallery: windows? ? windows_attributes("Web.WebAppGallery", "enabled") : nil,
+            asp: windows? ? windows_attributes("Web.Asp", "enabled") : nil,
+            asp_net_11: windows? ? windows_attributes("Web.AspNet11", "enabled") : nil,
+            asp_net_40: windows? ? windows_attributes("Web.AspNet20", "enabled") : nil,
+            asp_net_20: windows? ? windows_attributes("Web.AspNet40", "enabled") : nil,
+            php_4: windows? ? windows_attributes("Web.Php4", "enabled") : nil,
+            php_5: windows? ? windows_attributes("Web.Php5", "enabled") : nil,
+            perl_available: windows? ? windows_attributes("Web.Perl", "enabled") : nil ,
+            python_available: windows? ? windows_attributes("Web.Python", "enabled") : nil,
+            cgi_available: windows? ? windows_attributes("Web.CgiBin", "enabled") : nil,
+            secured_folders: windows? ? windows_attributes("Web.SecuredFolders", "enabled") : nil,
+            shared_ssl: windows? ? windows_attributes("Web.SharedSSL", "quota_value") : nil,
+            redirections: windows? ? windows_attributes("Web.Redirections", "enabled") : nil,
+            home_folders: windows? ? windows_attributes("Web.HomeFolders", "enabled") : nil,
+            virtual_dirs: windows? ? windows_attributes("Web.VirtualDirs", "enabled") : nil,
+            htaccess: windows? ? windows_attributes("Web.Htaccess", "enabled") : nil,
+            front_page: windows? ? windows_attributes("Web.FrontPage", "enabled") : nil,
+            security: windows? ? windows_attributes("Web.Security", "enabled") : nil,
+            default_docs: windows? ? windows_attributes("Web.DefaultDocs", "enabled") : nil,
+            app_pools: windows? ? windows_attributes("Web.AppPools", "enabled") : nil,
+            app_pools_restart: windows? ? windows_attributes("Web.AppPoolsRestart", "enabled") : nil,
+            headers: windows? ? windows_attributes("Web.Headers", "enabled") : nil,
+            errors: windows? ? windows_attributes("Web.Errors", "enabled") : nil,
+            mime: windows? ? windows_attributes("Web.Mime", "enabled") : nil,
+            cold_fusion: windows? ? windows_attributes("Web.ColdFusion", "enabled") : nil,
+            cf_virtual_directories: windows? ? windows_attributes("Web.CFVirtualDirectories", "enabled") : nil,
+            ip_addresses: windows? ? windows_attributes("Web.IPAddresses", "quota_value") : nil,
+            remote_management: windows? ? windows_attributes("Web.RemoteManagement", "enabled") : nil,
+            ssl_allowed: windows? ? windows_attributes("Web.SSL", "enabled") : nil,
+            allow_ip_address_mode_switch: windows? ? windows_attributes("Web.AllowIPAddressModeSwitch", "enabled") : nil,
+            enable_host_name_support: windows? ? windows_attributes("Web.EnableHostNameSupport", "enabled") : nil,
+            ftp_users_count_limit: windows? ? windows_attributes("FTP.Accounts", "quota_value") : nil
           }
         }
       }
     end
 
-    def windows_website_count_limit
+
+    def windows_attributes(name, value)
       return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "Web.Sites"}.compact.first
+
+      windows_limits.collect{|x| x["#{value}"] if x["quota_name"] == name}.compact.first
     end
-
-    def windows_web_app_gallery
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.WebAppGallery"}.compact.first
-    end
-
-    def windows_web_asp
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Asp"}.compact.first
-    end
-
-    def windows_web_asp_11
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.AspNet11"}.compact.first
-    end
-
-    def windows_web_asp_20
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.AspNet20"}.compact.first
-    end
-
-    def windows_web_asp_40
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.AspNet40"}.compact.first
-    end
-
-    def windows_web_php_4
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Php4"}.compact.first
-    end
-
-    def windows_web_php_5
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Php5"}.compact.first
-    end
-
-    def windows_web_perl
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Perl"}.compact.first
-    end
-
-    def windows_web_python
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Python"}.compact.first
-    end
-
-    def windows_web_cgi
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.CgiBin"}.compact.first
-    end
-
-    def windows_web_secured_folders
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.SecuredFolders"}.compact.first
-    end
-
-    def windows_web_secured_folders
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.SecuredFolders"}.compact.first
-    end
-
-    def windows_web_shared_ssl
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "Web.SharedSSL"}.compact.first
-    end
-
-    def windows_web_redirections
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Redirections"}.compact.first
-    end
-
-    def windows_web_home_folders
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.HomeFolders"}.compact.first
-    end
-
-    def windows_web_vir_dir
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.VirtualDirs"}.compact.first
-    end
-
-    def windows_web_htaccess
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Htaccess"}.compact.first
-    end
-
-    def windows_web_front_page
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.FrontPage"}.compact.first
-    end
-
-    def windows_web_security
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Security"}.compact.first
-    end
-
-    def windows_web_default_docs
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.DefaultDocs"}.compact.first
-    end
-
-    def windows_web_app_pools
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.AppPools"}.compact.first
-    end
-
-    def windows_web_app_pools_restart
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.AppPoolsRestart"}.compact.first
-    end
-
-    def windows_web_headers
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Headers"}.compact.first
-    end
-
-    def windows_web_error
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Errors"}.compact.first
-    end
-
-    def windows_web_mime
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.Mime"}.compact.first
-    end
-
-    def windows_web_cold_fusion
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.ColdFusion"}.compact.first
-    end
-
-    def windows_web_cf_virtual_dirs
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.CFVirtualDirectories"}.compact.first
-    end
-
-    def windows_web_remote_management
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.RemoteManagement"}.compact.first
-    end
-
-    def windows_web_ip_addresses
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "Web.IPAddresses"}.compact.first
-    end
-
-    def windows_web_ssl
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.SSL"}.compact.first
-    end
-
-    def windows_web_allow_ip_address
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.AllowIPAddressModeSwitch"}.compact.first
-    end
-
-    def windows_web_enable_hostname
-      return nil if linux?
-      windows_limits.collect{|x| x["enabled"] if x["quota_name"] == "Web.EnableHostNameSupport"}.compact.first
-    end
-
-    def windows_ftp_acc_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "FTP.Accounts"}.compact.first
-    end
-
-    def windows_mail_group_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "Mail.Groups"}.compact.first
-    end
-
-    def windows_mail_max_group_mem_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "Mail.MaxGroupMembers"}.compact.first
-    end
-
-    def windows_mail_max_list_mem_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "Mail.MaxListMembers"}.compact.first
-    end
-
-    def windows_mailbox_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "Mail.MaxBoxSize"}.compact.first
-    end
-
-    def windows_maillist_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "Mail.Lists"}.compact.first
-    end
-
-    def windows_mailforward_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "Mail.Forwardings"}.compact.first
-    end
-
-    def windows_mysql_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "MySQL8.Databases"}.compact.first
-    end
-
-    def windows_mysql_user_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "MySQL8.Users"}.compact.first
-    end
-
-    def windows_mysql_db_quota_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "MySQL8.MaxDatabaseSize"}.compact.first
-    end
-
-    def windows_mssql_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "MsSQL2019.Databases"}.compact.first
-    end
-
-    def windows_mssql_user_count_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "MsSQL2019.Users"}.compact.first
-    end
-
-    def windows_mssql_db_quota_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "MsSQL2019.MaxDatabaseSize"}.compact.first
-    end
-
-    def windows_mssql_log_quota_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "MsSQL2019.MaxLogSize"}.compact.first
-    end
-
-    def windows_domain_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "OS.Domains"}.compact.first
-    end 
-
-    def windows_sub_domain_limit
-      return nil if linux?
-      windows_limits.collect{|x| x["quota_value"] if x["quota_name"] == "OS.SubDomains"}.compact.first
-    end
-
 
     def linux?
       product["server_type"] == 'linux'
