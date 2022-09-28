@@ -5,8 +5,8 @@ module Spree
     # POST /resource/sign_up
     def create
     
-
     @user = build_resource(spree_user_params)
+    params['spree_user']['sign_up_ip'] = request.remote_ip
     resource_saved = resource.save
 
     # yield resource if block_given?
