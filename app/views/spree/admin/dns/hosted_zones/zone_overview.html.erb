@@ -283,14 +283,11 @@
       <div class="tab-pane fade" id="backup" role="tabpanel" aria-labelledby="backup-tab">
        <div class="row mb-5">
         <div class="col-md-12">
-           <%=form_for(@user_domain.user_website, url: admin_sites_backup_path(@user_domain.user_website), remote: true) do |form|%>
-
-            <%=form.submit "Enable Backup", class: 'btn btn-primary'%>
-
-            <%end%>
-          
+          <%=form_for(@user_domain.user_website, url: admin_sites_backup_path(@user_domain.user_website), remote: true) do |form|%>
+            <%= form.hidden_field :user_domain_id, value: @user_domain.id%>
+            <%=form.submit "Start Backup", class: 'btn btn-primary'%>
+          <%end%>
         </div>
-         
        </div>
 
         <div class="row align-items-center mb-2">
