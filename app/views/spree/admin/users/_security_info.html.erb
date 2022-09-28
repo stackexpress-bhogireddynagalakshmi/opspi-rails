@@ -33,6 +33,12 @@
             <div><%= Spree::User.where(id: params[:id]).first.last_sign_in_ip %></div>
         </td>
       </tr>
+      <tr>
+      <td><%= Spree.t(:sign_up_ip) %>:</td>
+      <td>
+          <div><%= Spree::User.where(id: params[:id]).first.sign_up_ip %></div>
+      </td>
+    </tr>
       
     </table>
   </div>

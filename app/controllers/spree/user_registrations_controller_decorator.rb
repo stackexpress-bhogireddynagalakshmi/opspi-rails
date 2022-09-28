@@ -4,9 +4,7 @@ module Spree
   module UserRegistrationsControllerDecorator
     # POST /resource/sign_up
     def create
-    
-    @user = build_resource(spree_user_params)
-    params['spree_user']['sign_up_ip'] = request.remote_ip
+    @user = build_resource(user_sign_up_params)
     resource_saved = resource.save
 
     # yield resource if block_given?
@@ -36,6 +34,9 @@ module Spree
       
   end
 
+  def user_sign_up_params
+    spree_user_params.merge sign_up_ip: request.ip
+   end
 
 
   end
