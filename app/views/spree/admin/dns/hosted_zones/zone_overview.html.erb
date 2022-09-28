@@ -32,6 +32,10 @@
                      <%end%>
                      </a>
                   </li>
+
+                   <li class="nav-item">
+                     <a class="nav-link" id="backup-tab" data-bs-toggle="tab" href="#backup" role="tab" aria-controls="backup" aria-selected="false">Backup</a>
+                  </li>
                </ul>
             </div>
          </div>
@@ -275,6 +279,60 @@
             </div>
          </div>
          <%= render partial: 'spree/admin/dns/hosted_zones/database_index' %>
+      </div>
+      <div class="tab-pane fade" id="backup" role="tabpanel" aria-labelledby="backup-tab">
+       <div class="row mb-5">
+        <div class="col-md-12">
+           <%=form_for(@user_domain.user_website, url: admin_sites_backup_path(@user_domain.user_website), remote: true) do |form|%>
+
+            <%=form.submit "Enable Backup", class: 'btn btn-primary'%>
+
+            <%end%>
+          
+        </div>
+         
+       </div>
+
+        <div class="row align-items-center mb-2">
+            <div class="col">
+               <h2 class="header-title">
+                 Existing Backup
+               </h2>
+            </div>
+            <div class="col-auto">
+            
+            </div>
+         </div>
+         <div class="card mt-4">
+            <div class="table-responsive">
+              <table class="table table-sm card-table" style="width:100%">
+                 <thead>
+                   <tr>
+                     <th> Date </th>
+                     <th> Type </th>
+                     <th> Format </th>
+                     <th> Scheduler </th>
+                     <th> Encrypted </th>
+                     <th> File</th>
+
+
+                   </tr>
+                 </thead>
+                 <tbody>
+                   <tr>
+                     <td></td>
+                     <td></td>
+                     <td></td>
+                     <td></td>
+                     <td></td>
+                     <td></td>
+                   </tr>
+                 </tbody>
+              </table>
+            </div>
+            </div>
+         
+
       </div>
    </div>
 </div>
