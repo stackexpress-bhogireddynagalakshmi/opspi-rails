@@ -242,6 +242,11 @@ en:
 
     delete: 'Are you sure you want to delete?'
     access_denied: 'Hosting control not available at the moment because your payment is still pending. Please contact support for further updates.'
+  backup:
+    enable_site_backup: Website and Database would be backed up
+    start:  'Site Backup is Started'
+    stop:   'Site Backup is stopped'
+    list:   'List of Site Backup'
 
   devise:
     user_passwords:

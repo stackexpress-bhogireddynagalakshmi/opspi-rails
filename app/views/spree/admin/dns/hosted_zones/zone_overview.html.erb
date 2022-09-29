@@ -281,11 +281,29 @@
          <%= render partial: 'spree/admin/dns/hosted_zones/database_index' %>
       </div>
       <div class="tab-pane fade" id="backup" role="tabpanel" aria-labelledby="backup-tab">
-       <div class="row mb-5">
-        <div class="col-md-12">
+       <div class="card mb-5">
+        <div class="card-body">
           <%=form_for(@user_domain.user_website, url: admin_sites_backup_path(@user_domain.user_website), remote: true) do |form|%>
-            <%= form.hidden_field :user_domain_id, value: @user_domain.id%>
-            <%=form.submit "Start Backup", class: 'btn btn-primary'%>
+            <%= hidden_field_tag :user_domain_id, @user_domain.id%>
+
+            <div class="flex-container mb-2">
+               <div class="flex-child">
+                <label class="mr-3">Enable Backup</label> 
+               </div>
+                <div class="form-check form-switch flex-child">
+                  <%= form.check_box :enable_backup, class: "form-check-input" %> <br/>
+
+                </div>       
+                <br/> 
+                  
+            </div>
+            <p class="text-muted"><%=t('backup.enable_site_backup')%></p> 
+           
+            <div class="row">
+              <div class="col-md-12">
+                  <%=form.submit "Start Backup", class: 'btn btn-primary'%>
+              </div>
+            </div>
           <%end%>
         </div>
        </div>
@@ -308,22 +326,14 @@
                      <th> Date </th>
                      <th> Type </th>
                      <th> Format </th>
-                     <th> Scheduler </th>
-                     <th> Encrypted </th>
-                     <th> File</th>
+                     <th> File Size </th>
+                     <th> Filename </th>
 
 
                    </tr>
                  </thead>
-                 <tbody>
-                   <tr>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                     <td></td>
-                   </tr>
+                 <tbody id="site_backup_list">
+                   
                  </tbody>
               </table>
             </div>
@@ -336,6 +346,16 @@
 
 <%= render partial: '/spree/admin/shared/spinner/spinner' %>
 <script type="text/javascript">
+
+$(document).ready(function(){
+
+  $('#backup-tab').on('click', function(){
+    $.get("<%=admin_sites_backup_index_path(user_domain_id: @user_domain.id)%>", function(data){
+      $('#site_backup_list').html(data)
+    })
+  });
+});
+
 var body = document.body;
 
 function spinner(){
