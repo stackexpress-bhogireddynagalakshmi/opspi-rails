@@ -1,0 +1,5 @@
+<%if  params[:user_website][:enable_backup] == '1' %>
+  infoModal("<%= t('backup.start')%>")
+<%else%>
+   infoModal("<%= t('backup.stop')%>")
+<%end%>

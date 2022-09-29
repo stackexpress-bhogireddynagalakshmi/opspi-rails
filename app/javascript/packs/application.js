@@ -13,8 +13,27 @@ Turbolinks.start()
 ActiveStorage.start()
 
 
+
+
 // Theme
 import '../theme/theme'
 import '../theme/address_valid'
 import '../theme/alertflash'
 import '../theme/delete_address_popup'
+
+
+
+window.infoModal = function(message, okCallback) {
+  $('#infoModalTitle').html(message);
+  $('#infoModal').modal('show');
+  $('#btnok').html("Close");
+  $('#btnok').off('click');
+  $('#btnok').click(function() {
+  $('#info_modal_alert_title h3').html("Alert");
+
+    if(okCallback)
+      okCallback();
+  $('#infoModal').modal('hide');
+  });
+}
+
