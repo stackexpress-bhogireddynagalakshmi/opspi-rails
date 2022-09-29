@@ -204,6 +204,11 @@ module IspConfig
       @site_builder ||= SitePro::SiteBuilder.new(user)
     end
 
+     # Backup API
+    def site_backup
+      @site_backup ||= IspConfig::SiteBackup.new(user)
+    end
+
     private
 
     def user_hash

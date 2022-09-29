@@ -91,6 +91,7 @@ Rails.application.routes.draw do
 
       namespace :sites do
         resources :websites
+        resources :backup, only: [:index, :update]
         resources :ftp_users do
           member do
             get :reset_password
