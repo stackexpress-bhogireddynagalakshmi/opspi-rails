@@ -160,7 +160,7 @@ en:
     invalid_zone_name: "Invalid Domain Name"
     website:
       create: Web Domain created successfully.
-      update: Web Domain updated successfully.
+      update: Certificate Installed successfully.
       delete: Web Domain deleted successfully.
     mail_domain:
       create: Mail Domain created successfully.
