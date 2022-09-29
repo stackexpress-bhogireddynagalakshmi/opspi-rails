@@ -3,56 +3,37 @@ module Spree::Admin::ResourceLimitHelper
   def current_user_product
       TenantManager::TenantHelper.unscoped_query do
         current_spree_user.orders.collect do |o|
-          o.products.find_by_server_type("linux")
+          o.products
         end.flatten
-      end.compact.map(&:id).first
+      end.compact
     end
   
-    def get_linux_resource_limit
-      IspConfigLimit.where(product_id: current_user_product).last
-    end
-  
-    def current_plan_domain_limit
-      get_linux_resource_limit&.limit_dns_zone
-    end
-  
-    def current_plan_mail_box_limit
-      get_linux_resource_limit&.limit_mailbox
+    def domain_check(server_type)
+      product = get_product(server_type)
+      product_config = ProductConfig.where(product_id: product.id).last
+      resource_limit = product_config.configs["services"]
+      
+      domain_limit_exceed_check(resource_limit, server_type)
     end
 
-    def current_plan_mailing_list_limit
-      get_linux_resource_limit&.limit_mailmailinglist
+    def get_product(server_type)
+      current_user_product.collect{|p| p if p.server_type == server_type }.compact.first
     end
   
-    def resource_limit_exceeded(resource)
-      if resource == 'domain'
-        return false if  current_plan_domain_limit.to_i == -1
-        current_spree_user.user_domains.count >= current_plan_domain_limit.to_i ? true : false
-      elsif resource == 'mail_box'
-        return false if  current_plan_mail_box_limit.to_i == -1
-        mail_box_limit >= current_plan_mail_box_limit.to_i ? true : false
-      elsif resource == 'mailing_list'
-        return false if  current_plan_mailing_list_limit.to_i == -1
-        mailing_list_limit >= current_plan_mailing_list_limit.to_i ? true : false
-      end    
-    end
-  
-    def mail_box_limit
-      current_spree_user.user_domains.collect do |u|
-        UserMailbox.where(user_domain_id: u.id)
-      end.flatten.compact.count
-    end
+    def domain_limit_exceed_check(resource_limit, server_type)
+      limit = resource_limit["domain"]["domain_count_limit"].to_i
+      used_count = current_spree_user.user_domains.collect{|x| x if x.web_hosting_type == server_type}.compact.count
 
-    def mailing_list_limit
-      current_spree_user.user_domains.collect do |u|
-        UserMailingList.where(user_domain_id: u.id)
-      end.flatten.compact.count
-    end
-  
-    def resource_alert(res)
-      if resource_limit_exceeded(res)
-      I18n.t('spree.resource_limit_exceeds')
+      if limit_exceeded(used_count, limit) 
+        return true 
+      else
+        flash[:warning] = I18n.t('spree.resource_limit_exceeds')
+        return false
       end
     end
-  
+
+    def limit_exceeded(current_value, limit)
+      return true if limit == -1
+      current_value >= limit ? false : true
+    end  
 end
