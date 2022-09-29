@@ -16,7 +16,7 @@ module IspConfig
                          endpoint: '/json.php?sites_web_domain_backup_list',
                          method: :GET,
                          body: {
-                           primary_id: user_website.remote_website_id
+                           site_id: user_website.remote_website_id
                          }
                        })
 
