@@ -24,12 +24,14 @@ module IspConfig
       formatted_response(response, 'list')
     end
 
-    def create(create_params)
+    def create(params)
+      params[:database_name] = formatted_db_name(params[:database_name])
+
       database_user = user.user_databases.find_by(
         {
-          database_name: formatted_db_name(create_params[:database_name]),
-          database_type: create_params[:database_type],
-          user_domain_id: create_params[:user_domain_id]
+          database_name:  params[:database_name],
+          database_type:  params[:database_type],
+          user_domain_id: params[:user_domain_id]
         }
       )
 
@@ -37,27 +39,26 @@ module IspConfig
 
         database_user = user.user_databases.create(
             {
-              database_name: formatted_db_name(create_params[:database_name]),
-              database_type: create_params[:database_type],
-              user_domain_id: create_params[:user_domain_id]
+              database_name:  params[:database_name],
+              database_type:  params[:database_type],
+              user_domain_id: params[:user_domain_id]
             }
         )
 
       else
         raise StandardError.new I18n.t('isp_config.database.already_exist')
-
       end
 
 
-      
+  
       ## create db user
-      db_user_response = create_database_user(create_params.merge(database_username: database_user.id))
+      db_user_response = create_database_user(params.merge(database_username: database_user.id))
       unless db_user_response[:success]
         return { success: false, message: I18n.t('isp_config.something_went_wrong', message: db_user_response[:message]),
            response: db_user_response }
       end
 
-      database_hash = database_hash(create_params.merge(db_username: db_user_response[:response][:response]))
+      database_hash = database_hash(params.merge(db_username: db_user_response[:response][:response]))
       response = query({
                          endpoint: '/json.php?sites_database_add',
                          method: :POST,
