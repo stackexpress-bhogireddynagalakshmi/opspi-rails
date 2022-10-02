@@ -137,6 +137,18 @@ module Spree
           end
         end
 
+        def set_flash
+          if @response[:success]
+            if @response[:message].include?('Web Domain updated successfully.')
+              flash[:success] = Spree.t(:certificate_installed)
+            else
+              flash[:success] = @response[:message]
+            end
+          else
+            flash[:error] = @response[:message]
+          end
+        end
+
         def request_params
           params.require("website").permit(:ip_address, :ipv6_address, :domain, :hd_quota, :traffic_quota, :subdomain, :php, :active)
         end
