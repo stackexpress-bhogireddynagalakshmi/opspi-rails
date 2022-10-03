@@ -129,7 +129,7 @@ module Spree
         end
 
         def formatted_db_name(database_name)
-          "c#{current_spree_user.id}_#{database_name}"
+          "#{UserDatabase.database_name_prefix(current_spree_user)}#{database_name}"
         end        
       end
     end

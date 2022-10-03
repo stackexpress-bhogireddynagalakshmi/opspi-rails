@@ -221,7 +221,7 @@ module IspConfig
       }
     end
 
-    def remote_client_id
+    def user_id
       user.id
     end
   end

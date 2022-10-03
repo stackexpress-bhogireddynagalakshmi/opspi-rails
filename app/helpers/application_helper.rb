@@ -311,6 +311,6 @@ module ApplicationHelper
   end
 
   def get_db_name_prefix(user)
-    "c#{user.id}_"
+    UserDatabase.database_name_prefix(user)
   end
 end
