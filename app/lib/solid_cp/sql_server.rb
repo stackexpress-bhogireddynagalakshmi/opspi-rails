@@ -189,7 +189,7 @@ module SolidCp
     end
 
     def remote_client_id
-      user.solid_cp_id
+      user.id
     end
   end
 end
