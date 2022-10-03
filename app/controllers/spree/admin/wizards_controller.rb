@@ -18,7 +18,7 @@ module Spree
         @domain      = wizard_params[:domain]
         @server_type = wizard_params[:server_type]
 
-        unless domain_check(wizard_params[:server_type])
+        unless resource_limit_check(wizard_params[:server_type], I18n.t('domain'))
           @error = I18n.t('spree.resource_limit_exceeds')
           render 'new'
           return

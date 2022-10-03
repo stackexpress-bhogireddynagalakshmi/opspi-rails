@@ -8,22 +8,40 @@ module Spree::Admin::ResourceLimitHelper
       end.compact
     end
   
-    def domain_check(server_type)
+    def resource_limit_check(server_type, domain_type)
       product = get_product(server_type)
-      product_config = ProductConfig.where(product_id: product.id).last
-      resource_limit = product_config.configs["services"]
+      resource_limit = get_resource_limit(product)
       
-      domain_limit_exceed_check(resource_limit, server_type)
+      domain_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('domain')
+      # mail_box_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('mail_box')
     end
 
     def get_product(server_type)
       current_user_product.collect{|p| p if p.server_type == server_type }.compact.first
+    end
+
+    def get_resource_limit(product)
+      product_config = ProductConfig.where(product_id: product.id).last
+      product_config.configs["services"]
     end
   
     def domain_limit_exceed_check(resource_limit, server_type)
       limit = resource_limit["domain"]["domain_count_limit"].to_i
       used_count = current_spree_user.user_domains.collect{|x| x if x.web_hosting_type == server_type}.compact.count
 
+      limit_count_check(used_count, limit)
+    end
+
+    # def mail_box_limit_exceed_check(resource_limit, server_type)
+    #   limit = resource_limit["mail"]["mailbox_count_limit"].to_i
+
+    #   user_domain = current_spree_user.user_domains.find_by_id(params[:user_domain_id])
+    #   used_count = UserMailbox.where(user_domain_id: user_domain.id).compact.count
+
+    #   limit_count_check(used_count, limit)
+    # end
+
+    def limit_count_check(used_count, limit)
       if limit_exceeded(used_count, limit) 
         return true 
       else
