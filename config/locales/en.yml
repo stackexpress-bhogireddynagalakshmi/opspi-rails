@@ -108,6 +108,7 @@ en:
     
     dns_zones: 'DNS Zones'
     new_dns_zone: 'New DNS Zone'
+    certificate_installed: 'Certificate Installed successfully.'
 
     list_of_solid_cp_users: 'List of SolidCP users'
     ist_of_solid_cp_plans: 'List of SolidCP plans'
