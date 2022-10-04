@@ -61,7 +61,7 @@
                   new_admin_mail_mail_box_path(user_domain_id: params[:user_domain_id]), 
                   class: "btn btn-primary lift",
                     icon: 'add.svg',
-                    id: 'new_admin_mailbox', data: resource_limit_exceeded("mail_box"), error_id: "mail_box",
+                    id: 'new_admin_mailbox', error_id: "mail_box",
                     remote: true %>
             </div>
          </div>
@@ -78,7 +78,7 @@
                   new_admin_mail_mailing_list_path(user_domain_id: params[:user_domain_id]),
                   class: "btn btn-primary lift",
                   icon: 'add.svg',
-                  data: resource_limit_exceeded("mailing_list"), error_id: "mailing_list",
+                  error_id: "mailing_list",
                   remote: true 
                     %>
             </div>
