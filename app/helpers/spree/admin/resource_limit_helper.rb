@@ -11,7 +11,8 @@ module Spree::Admin::ResourceLimitHelper
     def resource_limit_check(server_type, domain_type)
       product = get_product(server_type)
       resource_limit = get_resource_limit(product)
-      return true unless resource_limit
+
+      return true if resource_limit.nil?
 
       domain_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('domain')
       mail_box_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('mail_box')
@@ -23,7 +24,7 @@ module Spree::Admin::ResourceLimitHelper
 
     def get_resource_limit(product)
       product_config = ProductConfig.where(product_id: product.id).last
-      product_config&.configs&["services"]
+      product_config&.configs.try(:[],"services")
     end
   
     def domain_limit_exceed_check(resource_limit, server_type)
