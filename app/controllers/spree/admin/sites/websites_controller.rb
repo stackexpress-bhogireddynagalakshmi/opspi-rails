@@ -51,7 +51,11 @@ module Spree
           end
           
           @response = current_spree_user.isp_config.website.update(params[:web_site_id],{domain: params[:website][:domain],ssl: params[:website][:ssl], ssl_letsencrypt: params[:website][:ssl]})
-          set_flash
+          if @response[:success]
+              flash[:success] = Spree.t(:certificate_installed)
+          else
+            flash[:error] = @response[:message]
+          end
           redirect_to request.referrer
         end
 
@@ -136,6 +140,8 @@ module Spree
             request_params.merge(extra_isp_params)
           end
         end
+
+       
 
         def request_params
           params.require("website").permit(:ip_address, :ipv6_address, :domain, :hd_quota, :traffic_quota, :subdomain, :php, :active)

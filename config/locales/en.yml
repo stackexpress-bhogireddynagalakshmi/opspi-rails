@@ -114,6 +114,7 @@ en:
     current_sign_in_ip: 'Current Sign in IP'
     last_sign_in_ip: 'Last Sign in IP'
     sign_up_ip: 'Sign up IP'
+    certificate_installed: 'Certificate Installed successfully.'
 
     list_of_solid_cp_users: 'List of SolidCP users'
     ist_of_solid_cp_plans: 'List of SolidCP plans'
@@ -248,6 +249,11 @@ en:
 
     delete: 'Are you sure you want to delete?'
     access_denied: 'Hosting control not available at the moment because your payment is still pending. Please contact support for further updates.'
+  backup:
+    enable_site_backup: Website and Database would be backed up
+    start:  'Site Backup is started'
+    stop:   'Site Backup is stopped'
+    list:   'List of Site Backup'
 
   devise:
     user_passwords:

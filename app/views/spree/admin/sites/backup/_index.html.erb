@@ -1,0 +1,10 @@
+<%backups.each do |backup|%>
+  <tr>
+    <td><%=Time.at(backup.tstamp.to_i)%></td>
+    <td><%= backup.backup_type%></td>
+    <td><%= backup.backup_format%></td>
+    <td><%= backup.filesize.to_i/1024%>KB</td>
+    <td><%= backup.filename%></td>
+    <td></td>
+  </tr>
+<%end%>

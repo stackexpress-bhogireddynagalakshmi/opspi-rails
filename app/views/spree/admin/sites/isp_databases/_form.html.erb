@@ -13,18 +13,23 @@
       </div>
       <div class="form-group">
           <label class="form-label">Database Type</label>
-          <%=f.select :database_type, options_for_select(get_database_types(current_spree_user)), {prompt: '--select--'}, class: 'form-select' %>
+          <%=f.select :database_type, options_for_select(get_database_types(current_spree_user)), {prompt: '--select--'}, class: 'form-select', data: {panel_1: linux_db_prefix(current_spree_user), panel_2: windows_db_prefix(current_spree_user)} %>
           <%=f.hidden_field :domain_name,value: params[:domain_name]%>
           <%=f.hidden_field :dns_id, value: params[:dns_id]%>
           <%=hidden_field_tag :server_type,"", id: 'create_database_server_type_id'%>
-          <%#=f.select 'web_domain_id', options_for_select(@websites,@web_id), {}, class: 'form-select', html: {selected: true} %>
       </div>
 
       <div class="form-group">
-          <label class="form-label">Database Name:</label>
+      <label class="form-label">
+          Database Name:
+        </label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+              <span class="input-group-text" id="database-prifix-value">c</span>
+          </div>
           <%=f.text_field :database_name, class: 'form-control', required: true %>
+        </div>
       </div>
-      
       <div class="form-group">
         <label class="form-label">Database Password:</label>
         <%=f.text_field :database_password, type: "password", class: 'form-control', required: true %>
@@ -37,3 +42,23 @@
 <% end %>
 
 <%= render :partial=>'spree/admin/shared/modal', locals: {modal_width: '40%'} %>
+
+
+<script type="text/javascript">
+  $(document).ready(function (argument) {
+    $('#database_database_type').on('change', function(){
+      var val = $(this).val();
+      var prefix;
+      if (val == "my_sql"){
+       prefix = $('#database_database_type').data("panel-1")
+      }
+      else if (val == "ms_sql2019"){
+        prefix = $('#database_database_type').data("panel-2")
+      }
+      else {
+      }
+
+      $('#database-prifix-value').html(prefix);
+    })
+  });
+</script>
