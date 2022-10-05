@@ -180,6 +180,31 @@ module SolidCp
       end
     end
 
+    # <itemId>int</itemId>
+    # <backupName>string</backupName>
+    # <zipBackup>boolean</zipBackup>
+    # <download>boolean</download>
+    # <folderName>string</folderName>
+    
+    def backup_sql_database(id)
+      user_database = UserDatabase.find(id)
+
+      response = super(message: { 
+        itemId: user_database.database_id,
+        backupName: "#{user_database.database_name}_backup",
+        zipBackup: true,
+        download: true
+        #folderName: ""
+        }
+       )
+      if response.success?
+        { success: true, message: "Database backup started.", response: response }
+      else
+        { success: false, message: I18n.t(:panel_error, msg: SolidCp::ErrorHelper.log_solid_cp_error(response, __method__)), response: response }
+      end
+    end
+    alias start_backup backup_sql_database
+
     def error_message(error)
       if error.include?('package item exists')
         error = "Error: Database already exists"
