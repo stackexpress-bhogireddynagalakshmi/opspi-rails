@@ -22,8 +22,7 @@ module Spree
         def edit; end
 
         def create
-          server_type = UserDomain.find_by_id(params[:user_domain_id]).web_hosting_type
-          return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} unless resource_limit_check(server_type,I18n.t('mail_box'))
+          return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} unless resource_limit_check(@user_domain.web_hosting_type,I18n.t('mail_box'))
 
           mail_user_param = mail_user_params.merge({ email: formatted_email })
           
