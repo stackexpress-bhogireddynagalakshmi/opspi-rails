@@ -5,6 +5,7 @@ module Spree
     module Mail
       # Mail Forwards controller
       class ForwardsController <  Spree::Admin::BaseController
+        include ResourceLimitHelper
         before_action :ensure_hosting_panel_access
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :destroy]
         before_action :assemble_source_and_domain, only: %i[create update]
@@ -14,7 +15,9 @@ module Spree
          @mail_forward = @user_domain.user_mail_forwards.build
         end
 
-        def create          
+        def create 
+          return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} unless resource_limit_check(@user_domain.web_hosting_type,I18n.t('mail_forward'))  
+
           @response = isp_config_api.create(resource_params, user_domain: @user_domain)
 
           if @response[:success]
