@@ -38,7 +38,7 @@ module SolidCp
         PackageId: user.packages.first.try(:solid_cp_package_id),
         #serviceId: "",
         storeServerFolder: "\\backup\\",
-        backupFileName: "MYSpaceBackup-azure_hosting_space_1300-05102022.scpak",
+        backupFileName: "HostingSpace-#{user.packages.first.package_name}-#{DateTime.now.to_s}",
         # deleteTempBackup: false,
         }
        )
