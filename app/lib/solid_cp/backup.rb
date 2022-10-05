@@ -38,7 +38,7 @@ module SolidCp
         PackageId: user.packages.first.try(:solid_cp_package_id),
         #serviceId: "",
         storeServerFolder: "\\backup\\",
-        backupFileName: "HostingSpace-#{user.packages.first.package_name}-#{DateTime.now.to_s}",
+        backupFileName: "HostingSpace-#{user.packages.first.solid_cp_package_id}-#{DateTime.now.to_s}",
         # deleteTempBackup: false,
         }
        )
