@@ -302,4 +302,20 @@ module ApplicationHelper
       end
     end
   end
+
+  def map_isp_config_error_msg(msg)
+    if msg.include?("email_error_isemail")
+      I18n.t("isp_config.errors.email_error_isemail")
+    else
+      msg
+    end
+  end
+
+  def linux_db_prefix(user)
+    "c#{user.isp_config_id}"
+  end
+
+  def windows_db_prefix(user)
+    "c#{user.solid_cp_id}"
+  end
 end

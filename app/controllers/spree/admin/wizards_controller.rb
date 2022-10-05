@@ -11,6 +11,7 @@ module Spree
       before_action :ensure_user_confirmed, only: [:create]
       before_action :set_batch_jobs, only: %i[index show]
       before_action :ensure_hosting_panel_access
+      # before_action :redirect_to_index, only: %i[new]
 
       def index; end
       def new; end
@@ -19,11 +20,11 @@ module Spree
         @domain      = wizard_params[:domain]
         @server_type = wizard_params[:server_type]
 
-        # if resource_limit_exceeded("domain")
-        #   @error = I18n.t('spree.resource_limit_exceeds')
-        #   render 'new'
-        #   return
-        # end
+        unless resource_limit_check(wizard_params[:server_type], I18n.t('domain'))
+          @error = I18n.t('spree.resource_limit_exceeds')
+          render 'new'
+          return
+        end
         if valid_domain?(@domain)
           create_user_domain
           @tasks = []
@@ -241,9 +242,9 @@ module Spree
                 mail_domain: @domain,
                 email: "#{email}@#{@domain}",
                 password: SecureRandom.hex,
-                name: 'Test',
+                name: '',
                 quota: '0',
-                cc: "user2@#{@domain}",
+                cc: "",
                 forward_in_lda: '0',
                 policy: '5',
                 postfix: 'y',
@@ -374,6 +375,12 @@ module Spree
 
         return valid
       end
+
+      # def redirect_to_index
+      #   unless domain_limit_exceed_check
+      #     redirect_to admin_wizards_path
+      #   end
+      # end
 
     end
   end

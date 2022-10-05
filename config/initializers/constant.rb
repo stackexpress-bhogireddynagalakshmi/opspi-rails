@@ -6,3 +6,4 @@ DOMAIN_REGEX = '^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$'
 VALID_DOMAIN_REGEX= /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,6}$/
 MAILBOX_REGEX= '^(?!_)[a-zA-Z0-9_]*(?<!_)$'
 ZIPCODE_REGEX= "^[a-zA-Z0-9-]*$"
+DUMMY_PASS="dummypass"

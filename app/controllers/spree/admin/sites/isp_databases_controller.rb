@@ -31,8 +31,9 @@ module Spree
           user_database_params = resource_params.reject { |k, _v| k == "database_password" }
 
           if @response[:success]
-            @database = current_spree_user.user_databases.where(database_name: user_database_params[:database_name], status: 'success').last 
+            @database = current_spree_user.user_databases.where(database_name: formatted_db_name(user_database_params[:database_name]), status: 'active').last             
           end
+
           render "create"
         end
 
@@ -55,28 +56,6 @@ module Spree
           @database = current_spree_user.user_databases.find(params[:id])
         end
 
-        def reset_password
-          @database = current_spree_user.user_databases.find(params[:id])
-          if @database.database_type == 'my_sql'
-            @response = database_api.find(@database.database_id)
-            if @response[:success]
-              db_user_id = @response[:response].response.database_user_id
-              @password = SecureRandom.hex
-              @response = database_api.reset_password(db_user_id, { database_password: @password })
-            end
-          else
-            @response = database_api.all_db_users
-            db_users = @response.body[:get_sql_users_response][:get_sql_users_result][:sql_user] || [] 
-            db_users = [db_users] if db_users.is_a?(Hash)
-            if db_users.any?
-              db_user   = db_users.detect { |x| x[:name] == @database.database_user }
-              @password = SecureRandom.hex
-              @response = database_api.update_database_user_password(
-                db_user[:id], { database_password: @password, database_name: @database.database_name }
-                )
-            end
-          end
-        end
 
         private
 
@@ -91,7 +70,7 @@ module Spree
         def resource_params
           if windows?
             win_params = params.require("database").permit(:database_name, :database_password, :database_type)
-            win_params = win_params.merge({ database_username: database_username(win_params[:database_name]), user_domain_id: user_domain_id })
+            win_params = win_params.merge({user_domain_id: user_domain_id })
           else
             isp_database_params
           end
@@ -99,7 +78,7 @@ module Spree
 
         def isp_database_params
           lin_params = params.require("database").permit(:web_domain_id, :database_name, :database_password, :database_type)
-          lin_params = lin_params.merge({ database_username: database_username(lin_params[:database_name]), user_domain_id: user_domain_id })
+          lin_params = lin_params.merge({ user_domain_id: user_domain_id })
         end
 
         def resource_index_path
@@ -149,13 +128,13 @@ module Spree
           current_spree_user.user_domains.collect{|x| x.id if x.domain == params[:database][:domain_name] }.compact.last
         end
 
-        def database_username(database_name)
+        def formatted_db_name(database_name)
           if windows?
             "c#{current_spree_user.solid_cp_id}_#{database_name}"
           else
             "c#{current_spree_user.isp_config_id}_#{database_name}"
           end
-        end
+        end        
       end
     end
   end

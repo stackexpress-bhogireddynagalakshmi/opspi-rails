@@ -20,10 +20,18 @@
         <td><b>Email:</b></td>
         <td><%=@mailbox.email%></td>
       </tr>
-      <tr>
+        
+       <tr>
         <td><b>Password:</b></td>
-        <td class="password-text">
-           <%#=link_to 'Reset Password', reset_password_admin_mail_mailboxes_path(@mailbox.id), remote: true%>         
+        <td id="modal-reset-mailbox-passowrd-<%=@mailbox.id%>"> 
+          <span class="password-text">
+         <%=link_to reset_password_admin_mail_mail_box_path(@mailbox.id, user_domain_id: @user_domain.id,type: 'mail_box', div_class: "modal-reset-mailbox-passowrd-#{@mailbox.id}"), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
+            <%= render partial: '/spree/admin/shared/icons/reset_password' %>
+          <%end %>
+          </span>
+        </td>
+      </tr>
+   
         </td>
       </tr>
       <tr>

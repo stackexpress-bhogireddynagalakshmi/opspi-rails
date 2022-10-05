@@ -15,7 +15,7 @@
 
   <fieldset>
     <div class="form-group">
-      <label class="form-label">Source</label>
+      <label class="form-label">Source Email</label>
       <div class="input-group mb-3">
         <%=f.text_field 'source', value: @mail_forward.try(:source).try(:split, '@').try(:first), class: 'form-control',style:"width: 45%;"%>
         <span class="input-group-text" id='at-sign'>@ <%=@user_domain.domain%></span>
@@ -23,37 +23,38 @@
     </div>
 
     <div class="form-group">
-      <label class="form-label">Destination</label>
+      <label class="form-label">Destination Email</label>
       <%=f.text_area 'destination', value: @mail_forward.try(:destination), class: 'form-control', rows: 10, cols: 40%>
     </div>
+  
           
-    <div class="form-group">
-      <label class="form-label">Active</label>
-      <%=f.select 'active',options_for_select([['Yes','y'], ['No','n']], @mail_forward.try(:active)),{}, class: 'form-select'%>
-    </div>
-
-    <div class="form-check">
+    <div class="form-check mb-3">
       <div class="row">
-        <div class="col-2">
-          <label class="form-check-label">Send as</label>
+        <div class="col-12">
+           <%= f.check_box :allow_send_as, {checked: @mail_forward.try(:allow_send_as), class:"form-check-input list-checkbox"}, 'y', 'n' %>
+          <label class="form-check-label mr-3">Send as</label>
+          <small style="color: grey"><br/>Allow target to send mail using this address as origin (if target is internal)</small>
         </div>
-        <div class="col-10">
-          <%= f.check_box :allow_send_as, {checked: @mail_forward.try(:allow_send_as), class:"form-check-input list-checkbox"}, 'y', 'n' %>
-          <small>Allow target to send mail using this address as origin (if target is internal)</small>
-        </div>
+       
       </div>
     </div>
 
     <div class="form-check mb-4">
       <div class="row">
-        <div class="col-2">
+        <div class="col-4">
+          <%= f.check_box :greylisting, {checked: @mail_forward.try(:greylisting)  , class:"form-check-input list-checkbox"}, 'y', 'n' %>
           <label class="form-check-label">Enable greylisting</label>
         </div>
-        <div class="col-10">
-          <%= f.check_box :greylisting, {checked: @mail_forward.try(:greylisting)  , class:"form-check-input list-checkbox"}, 'y', 'n' %>
-        </div>
+        
       </div>
     </div>
+
+    <div class="form-group">
+      <label class="form-label">Active</label>
+      <%=f.select 'active',options_for_select([['Yes','y'], ['No','n']], @mail_forward.try(:active)),{}, class: 'form-select'%>
+    </div>
+
+
 
     <%=submit_tag "#{@mail_forward.persisted? ? 'Update' : 'Add'} Mail Forward", class: 'btn btn-primary lift mb-4'%>
 

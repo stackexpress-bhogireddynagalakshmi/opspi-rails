@@ -38,7 +38,7 @@ module SolidCp
       if response.success?
         { success: true, message: 'SolidCP User status changed successfully', response: response }
       else
-        { success: false, message: 'Something went wrong.', response: response }
+        { success: false, message:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
       end
     end
 
@@ -54,7 +54,7 @@ module SolidCp
       if response.success?
         { success: true, message: 'SolidCP User created successfully', response: response, new_password: new_password }
       else
-        { success: false, message: 'Something went wrong.', response: response }
+        { success: false, message:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
       end
     end
 
@@ -91,8 +91,7 @@ module SolidCp
           user.save
           { success: true, message: 'SolidCP User created successfully', response: response }
         else
-          msg = "Something went wrong while creating user account. SolidCP ErrorCode: #{response.body[:add_user_response][:add_user_result]}"
-          { success: false, message: msg, response: response }
+          { success: false, message:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
 
         end
       else
@@ -156,6 +155,11 @@ module SolidCp
     # Sql Server API interface for the  user/Reseller
     def sql_server
       @sql_server ||= SolidCp::SqlServer.new(user)
+    end
+
+    # Sql Server API interface for the  user/Reseller
+    def site_backup
+      @site_backup ||= SolidCp::SiteBackup.new(user)
     end
 
     # Helper  method to render full_name

@@ -7,13 +7,21 @@ module Spree
           else
             is_required = Spree::Address.required_fields.include?(method)
             method_name = I18n.t("activerecord.attributes.spree/address.#{method}")
+            if method_name == 'First Name' || method_name == 'Last Name'
+              is_preventNum =  true
+            else
+              is_preventNum =  false
+            end
+            is_phone = method_name.include?('Phone')
             required = Spree.t(:required)
             form.label(method_name,
                         is_required ? "#{method_name} #{required}" : method_name,
                         class: 'text-uppercase form-label')+
             form.text_field(method,
                             class: ['form-control'].compact,
-                            required: is_required,
+                            required: is_required, 
+                            maxlength: is_phone ? "10" : "35",
+                            onkeypress: is_preventNum ? "preventNumberInput(event)" : "",
                             placeholder: is_required ? "#{method_name} #{required}" : method_name,
                             aria: { label: method_name }) 
           end

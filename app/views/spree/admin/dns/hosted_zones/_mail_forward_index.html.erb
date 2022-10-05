@@ -15,7 +15,7 @@
         <%= render :partial=> 'spree/admin/mail/forwards/row', locals: {mail_forward: mail_forward}%>
     <% end %>
   <% else %>
-    <tr>
+    <tr id="mail_forward_no_data">
     <td><label class="form-label table_row_label"> No Mail Forwards found.</label></td>
     </tr>
   <% end %>

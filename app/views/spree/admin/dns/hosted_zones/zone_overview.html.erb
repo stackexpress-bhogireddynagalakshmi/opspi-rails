@@ -25,12 +25,16 @@
                   </li>
                   <li class="nav-item">
                      <a class="nav-link" id="website-tab" data-bs-toggle="tab" href="#website" role="tab" aria-controls="website" aria-selected="false">Website
-                     <%if @current_user_website.nil?%>
+                     <%if @user_domain.user_website.blank?%>
                      <span class="badge bg-secondary-soft">No Website</span>
                      <%else%>
-                     <span class="badge bg-success-soft"><%= @current_user_website%></span>
+                     <span class="badge bg-success-soft"><%= @user_domain.web_hosting_type%></span>
                      <%end%>
                      </a>
+                  </li>
+
+                   <li class="nav-item">
+                     <a class="nav-link" id="backup-tab" data-bs-toggle="tab" href="#backup" role="tab" aria-controls="backup" aria-selected="false">Backup</a>
                   </li>
                </ul>
             </div>
@@ -57,7 +61,7 @@
                   new_admin_mail_mail_box_path(user_domain_id: params[:user_domain_id]), 
                   class: "btn btn-primary lift",
                     icon: 'add.svg',
-                    id: 'new_admin_mailbox', data: resource_limit_exceeded("mail_box"), error_id: "mail_box",
+                    id: 'new_admin_mailbox', error_id: "mail_box",
                     remote: true %>
             </div>
          </div>
@@ -74,7 +78,7 @@
                   new_admin_mail_mailing_list_path(user_domain_id: params[:user_domain_id]),
                   class: "btn btn-primary lift",
                   icon: 'add.svg',
-                  data: resource_limit_exceeded("mailing_list"), error_id: "mailing_list",
+                  error_id: "mailing_list",
                   remote: true 
                     %>
             </div>
@@ -115,7 +119,7 @@
                     remote: true %>
             </div>
          </div>
-         <%= render partial: 'spree/admin/mail/spam_filters/index', locals: { spam_filters: @spam_filters.white_lists, wb: 'W' } %>
+         <%= render partial: 'spree/admin/mail/spam_filters/index1', locals: { spam_filters: @spam_filters.white_lists, wb: 'W' } %>
 
          <div class="row align-items-center mb-2">
             <div class="col">
@@ -135,7 +139,7 @@
          <%= render partial: 'spree/admin/dns/hosted_zones/mail_forward_index' %>
       </div>
       <div class="tab-pane fade" id="website" role="tabpanel" aria-labelledby="website-tab">
-        <% if @current_user_website.nil? %>
+        <% if @user_domain.user_website.blank?%>
           <%if current_spree_user.have_linux_access? && current_spree_user.have_windows_access?%>
             <div class="card">
                 <div class="card-body">
@@ -173,21 +177,20 @@
               </div>
             <%end%>
           <%end%>
+
+
  
          <!-- web control -->
-          <% unless @current_user_website.nil? %>
-            <%if (@current_user_website == 'linux') || (@current_user_website == 'windows') %>
-              <div class="row align-items-center">
+          <% if @user_domain.user_website.present? %>
+            <div class="row align-items-center">
                 <div class="col">
-                  <h2>
-                      Web Controls
-                  </h2>
+                  <h2>Web Controls</h2>
                 </div>
               </div>
               <div class="card">
                 <div class="card-body" style="margin-bottom: -15px;">
                   <div class="align-items-center mb-4">
-                    <%if @current_user_website == 'windows'%>
+                    <%if @user_domain.windows?%>
                     <% @web_domain_id = "0" %>
                     <% @web_site_id = "0" %>
                     <% @web_domain_name = nil %>
@@ -204,21 +207,22 @@
                       <%end%> 
                     <%end%>
 
-                    <%if @current_user_website == 'linux'%>
-                      <% @isp_web_id = @isp_websites.any? ? @isp_websites.first.domain_id : "0" %>
-                      <% @isp_ssl = @isp_websites.any? ? @isp_websites.first[:ssl_letsencrypt] : "0"%>
+                    <%if @user_domain.linux?%>
+                      <% @isp_web_id = @user_remote_website.present? ? @user_remote_website.domain_id : "0" %>
+                      <% @isp_ssl = @user_remote_website.present?  ? @user_remote_website[:ssl_letsencrypt] : "0"%>
                     <%end%>
+
                     <div class="col-3">
                       <div class="flex-container">
                         <div class="flex-child">
                           <label class="form-check-label">SSL</label>
                         </div>
-                        <%if @current_user_website == 'windows' %>
+                        <%if @user_domain.windows?%>
                           <div class="form-check form-switch flex-child">
                             <%= check_box_tag 'win_ssl', @website_certificate_id.nil? ? 0 : @website_certificate_id[:id], @website_certificate_id.present? ? true : false, data_web_site_id: @web_site_id, data_web_domain: @web_domain_name, data_web_domain_id: @web_domain_id, data_dns_id: params[:dns_id],  onclick: "getSSL(this);", class: "form-check-input" %>
                           </div>
                         <%end%>
-                        <% if @current_user_website == 'linux' %>
+                        <% if @user_domain.linux? %>
                           <div class="form-check form-switch flex-child">
                             <%= check_box_tag 'isp_ssl', @isp_ssl, (@isp_ssl == 'y') ? true : false, data_web_site_id: @isp_web_id, data_web_site: params[:zone_name], onclick: "updateIspSSL(this);", data_dns_id: params[:dns_id], class: "form-check-input" %>
                           </div>
@@ -229,7 +233,8 @@
                     <div class="col mt-4">
                       <%=form_for "site_builders", url: admin_site_builder_create_path, html: {method: :post} do |f|%> 
                         <%= hidden_field_tag "dns_domain_name", params[:zone_name] %>
-                        <%= hidden_field_tag "server_type", @current_user_website  %>
+                        <%= hidden_field_tag "server_type", @user_domain.web_hosting_type %>
+                        <%= hidden_field_tag "user_domain_id", @user_domain.id %>
                         <div>
                           <%=submit_tag 'Start Website Builder',class: 'btn btn-primary lift', :formtarget => "_blank" %>
                         </div>
@@ -239,26 +244,27 @@
                   </div>
                 </div>
               </div>
-            <%end%> 
-          <%end%>
-          <% unless @current_user_website.nil? %>
+
             <div class="row align-items-center">
-                <div class="col">
-                  <h2>
-                      FTP Users
-                  </h2>
-                </div>
-                
-                <div class="col-auto">
-                  <%= button_link_to "Add New",
-                      "#",
-                      class: "btn btn-primary lift admin_new_ftp_user1",
-                        icon: 'add.svg',
-                        id: 'admin_new_ftp_user' %>
-                </div>
-            </div>
-            <%= render partial: 'spree/admin/dns/hosted_zones/ftp_index' %>
-         <%end%>
+                  <div class="col">
+                    <h2> FTP Users </h2>
+                  </div>
+                  
+                  <div class="col-auto">
+                    <%= button_link_to "Add New",
+                        new_admin_sites_ftp_user_path(user_domain_id: params[:user_domain_id]),
+                        class: "btn btn-primary lift admin_new_ftp_user1",
+                          icon: 'add.svg',
+                          id: 'admin_new_ftp_user',
+                          remote: true %>
+                  </div>
+              </div>
+              <%= render partial: 'spree/admin/dns/hosted_zones/ftp_index' %>
+
+
+          <%end%>
+
+
          <div class="row align-items-center">
             <div class="col">
                <h2> Databases </h2>
@@ -274,11 +280,77 @@
          </div>
          <%= render partial: 'spree/admin/dns/hosted_zones/database_index' %>
       </div>
+      <div class="tab-pane fade" id="backup" role="tabpanel" aria-labelledby="backup-tab">
+       <div class="card mb-5">
+        <div class="card-body">
+          <%=form_for(@user_domain.user_website, url: admin_sites_backup_path(@user_domain.user_website), remote: true) do |form|%>
+            <%= hidden_field_tag :user_domain_id, @user_domain.id%>
+
+            <div class="flex-container mb-2">
+               <div class="flex-child">
+                <label class="mr-3">Enable Backup</label> 
+               </div>
+                <div class="form-check form-switch flex-child">
+                  <%= form.check_box :enable_backup, class: "form-check-input" %> <br/>
+
+                </div>       
+                <br/> 
+                  
+            </div>
+            <p class="text-muted"><%=t('backup.enable_site_backup')%></p> 
+           
+            <div class="row">
+              <div class="col-md-12">
+                  <%=form.submit "Start Backup", class: 'btn btn-primary'%>
+              </div>
+            </div>
+          <%end%>
+        </div>
+       </div>
+
+        <div class="row align-items-center mb-2">
+            <div class="col">
+               <h2 class="header-title">
+                 Existing Backup
+               </h2>
+            </div>
+            <div class="col-auto">
+            
+            </div>
+         </div>
+         <div class="card mt-4">
+            <div class="table-responsive">
+              <table class="table table-sm card-table" style="width:100%">
+                 <thead>
+                   <tr>
+                     <th> Date </th>
+                     <th> Type </th>
+                     <th> Format </th>
+                     <th> File Size </th>
+                     <th> Filename </th>
+                   </tr>
+                 </thead>
+                 <tbody id="site_backup_list">
+                 </tbody>
+              </table>
+            </div>
+          </div>
+      </div>
    </div>
 </div>
 
 <%= render partial: '/spree/admin/shared/spinner/spinner' %>
 <script type="text/javascript">
+
+$(document).ready(function(){
+
+  $('#backup-tab').on('click', function(){
+    $.get("<%=admin_sites_backup_index_path(user_domain_id: @user_domain.id)%>", function(data){
+      $('#site_backup_list').html(data)
+    })
+  });
+});
+
 var body = document.body;
 
 function spinner(){

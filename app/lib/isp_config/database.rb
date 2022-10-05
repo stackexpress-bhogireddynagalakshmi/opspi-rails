@@ -3,6 +3,7 @@
 module IspConfig
   class Database < Base
     attr_accessor :user
+    include DatabaseConcern
 
     def initialize(user)
       @user = user
@@ -23,22 +24,41 @@ module IspConfig
       formatted_response(response, 'list')
     end
 
-    def create(create_params)
-      database_user = user.user_databases.create(
+    def create(params)
+      params[:database_name] = formatted_db_name(params[:database_name])
+
+      database_user = user.user_databases.find_by(
         {
-          database_name: create_params[:database_name],
-          database_type: create_params[:database_type],
-          user_domain_id: create_params[:user_domain_id]
+          database_name:  params[:database_name],
+          database_type:  params[:database_type],
+          user_domain_id: params[:user_domain_id]
         }
       )
-      ## create db user
-      db_user_response = create_database_user(create_params.merge(database_username: database_user.id))
-      unless db_user_response[:success]
-        return { success: false, message: I18n.t('isp_config.something_went_wrong', message: db_user_response[:message]),
-                 response: db_user_response }
+
+      if database_user.blank? || database_user.failed?
+
+        database_user = user.user_databases.create(
+            {
+              database_name:  params[:database_name],
+              database_type:  params[:database_type],
+              user_domain_id: params[:user_domain_id]
+            }
+        )
+
+      else
+        raise StandardError.new I18n.t('isp_config.database.already_exist')
       end
 
-      database_hash = database_hash(create_params.merge(db_username: db_user_response[:response][:response]))
+
+  
+      ## create db user
+      db_user_response = create_database_user(params.merge(database_username: database_user.id))
+      unless db_user_response[:success]
+        return { success: false, message: I18n.t('isp_config.something_went_wrong', message: db_user_response[:message]),
+           response: db_user_response }
+      end
+
+      database_hash = database_hash(params.merge(db_username: db_user_response[:response][:response]))
       response = query({
                          endpoint: '/json.php?sites_database_add',
                          method: :POST,
@@ -46,12 +66,24 @@ module IspConfig
                        })
       if response.code == "ok"
         user.isp_databases.create({ isp_config_database_id: response["response"] }) 
-        database_user.update(database_user: formatted_database_name(database_user.id),database_id: response.response, status: 1)
+        database_user.update(database_user: formatted_db_user_name(database_user.id),database_id: response.response, status: "active")
       else
-        database_user.update(database_user: formatted_database_name(database_user.id),status: 0)
+        database_user.update(database_user: formatted_db_user_name(database_user.id), status: "failed")
       end
 
+
+
       formatted_response(response, 'create')
+
+
+      rescue => e
+
+        return  {
+          success: false,
+          message:  e.message,
+          response: {}
+        }
+
     end
 
     def create_database_user(params)
@@ -59,7 +91,7 @@ module IspConfig
         client_id: user.isp_config_id,
         params: {
           server_id: IspConfig::Config.api_web_server_id(user),
-          database_user: formatted_database_name(params[:database_username]),
+          database_user: formatted_db_user_name(params[:database_username]),
           database_password: params[:database_password]
         }
       }
@@ -175,7 +207,7 @@ module IspConfig
           server_id: IspConfig::Config.api_web_server_id(user),
           type: "mysql",
           parent_domain_id: database_params[:web_domain_id],
-          database_name: "c#{user.isp_config_id}_#{database_params[:database_name]}",
+          database_name: database_params[:database_name],
           database_user_id: database_params[:db_username],
           database_quota: "-1",
           database_ro_user_id: "0",
@@ -189,8 +221,8 @@ module IspConfig
       }
     end
 
-    def formatted_database_name(database_username)
-      "du_#{database_username.to_s.rjust(8, padstr='0')}"
+    def remote_client_id
+      user.isp_config_id
     end
   end
 end

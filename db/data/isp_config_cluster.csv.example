@@ -17,3 +17,5 @@ MAIL_SERVER_SMTP_URL,smtp.opspi.com,1
 MAIL_SERVER_POP_URL,pop.opspi.com,1
 MAIL_SERVER_IMAP_URL,imap.opspi.com,1
 WEBMAIL_URL,https://qa.ispconfig.opspi.com:8080/webmail/,1
+FTP_SERVER_HOSTNAME, https://qa.ispconfig.opspi.com:8080,1
+FTP_SERVER_PORT,21,1

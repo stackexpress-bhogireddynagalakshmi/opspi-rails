@@ -1,0 +1,26 @@
+
+<div class="card mt-4">
+<div class="table-responsive">
+<table class="table table-sm card-table" style="width:100%">
+  <thead>
+    <tr>
+    <th>Email</th>
+    <th>Active</th>
+    <th>Priority</th>
+    <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody class="fsbase" id="spam_filter_<%=wb%>_table">
+  <% if @spam_filters.present? %>
+  <% spam_filters.each do |spam_filter| %>
+    <%= render :partial=>'spree/admin/mail/spam_filters/row', locals: { spam_filter: spam_filter }%>
+  <% end %>
+  <% else %>
+    <tr id="spamfilter_no_data_w">
+      <td><label class="form-label table_row_label"> No Spamfilter found.</label> </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+</div>
+</div>

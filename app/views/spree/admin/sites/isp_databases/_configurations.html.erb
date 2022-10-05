@@ -18,11 +18,11 @@
         <td><b>Username:</b></td>
         <td><%=@database.database_user%></td>
       </tr>
-      <tr id="db_<%=@database.id%>">
+      <tr id="modal-db-reset-passowrd-<%=@database.id%>">
         <td><b>Password:</b></td>
 
         <td class="password-text">
-           <%=link_to 'Reset Password', reset_password_admin_sites_isp_database_path(@database.id, server_type: (@database.database_type == 'my_sql') ? 'linux' : 'windows'), remote: true%>         
+           <%=link_to 'Reset Password', reset_password_admin_sites_isp_database_path(@database.id, type: 'database', user_domain_id: @database.user_domain_id, div_class: "modal-db-reset-passowrd-#{@database.id}"), remote: true%>         
         </td>
       </tr>
       <tr>
@@ -33,8 +33,6 @@
         <td><b>Port:</b></td>
         <td><%=@database.database_port%></td>
       </tr>
-
-
     </tbody>
     </table>
   </div>

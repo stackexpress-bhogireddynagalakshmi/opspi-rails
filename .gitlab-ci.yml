@@ -9,9 +9,23 @@ variables:
   # App Specific Variables
   APP_NAME: "opspi"
   APP_URL_PATH: ""
+  DOCKER_DRIVER: overlay2
+  # DOCKER_TLS_CERTDIR: "/certs"
+  DOCKER_TLS_CERTDIR: ""
+  # DOCKER_TLS_VERIFY: 1
+  # DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  # DOCKER_HOST: tcp://docker:2375
+  DOCKER_HOST: tcp://127.0.0.1:2375/
+
 
 #Base CI/CD Run image
-image: ubuntu:20.04
+#image: ubuntu:20.04
+image: docker:20-dind
+
+services:
+  - name: docker:20-dind
+    command: ['--tls=false', '--mtu=1240']
+
 
 stages:
   - build
@@ -39,26 +53,29 @@ sonarqube-check:
     - test
     #- master
     #- dev
+  tags:
+    - opspi
 
 
 docker-build-production:
   # Official docker image.
-  image: docker:stable
+  # image: docker:stable
   stage: build
   environment:
     name: production
-  services:
-    - docker:dind
+  # services:
+  #   - docker:dind
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
-    - docker push "$CI_REGISTRY_IMAGE"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
   only:
     - master
+  tags:
+    - opspi
 
 docker-build-qa:
   # Official docker image.
@@ -66,8 +83,8 @@ docker-build-qa:
   stage: build
   environment:
     name: qa
-  services:
-    - docker:dind
+  # services:
+  #   - docker:dind
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
@@ -80,6 +97,41 @@ docker-build-qa:
     - ci
   except:
     - master
+  tags:
+    - opspi
+
+
+
+run_tests:
+  # Official docker image.
+  # image: docker:dind
+  # image: docker:20.10.16
+  stage: test
+  environment:
+    name: qa
+  variables:
+    RAILS_ENV: test
+    DB_HOST: ${DB_HOST_TEST}
+    DB_NAME: ${DB_NAME_TEST}
+    DB_USERNAME: ${DB_USERNAME_TEST}
+    DB_PASSWORD: ${DB_PASSWORD_TEST}
+    DB_PORT: ${DB_PORT_TEST}
+  before_script:
+    - docker info
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+  script:
+    # - docker run -e DB_HOST=$DB_HOST -e DB_NAME:$DB_NAME -e DB_USERNAME:$DB_USERNAME -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT:$DB_PORT "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" rspec
+    - docker run -e RAILS_ENV=test -e DB_HOST=$DB_HOST -e TEST_DB_NAME:$DB_NAME -e DB_USERNAME:$DB_USERNAME -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT:$DB_PORT "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" rspec
+  only:
+    # - merge_requests
+    # - dev
+    # - ci
+    - test
+  except:
+    - master
+  tags:
+    - opspi
+
 
 deploy-qa:
   stage: deploy
@@ -107,6 +159,8 @@ deploy-qa:
     - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT "bash -c ' cd /srv/docker-apps/opspi && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
   only:
     - dev
+  tags:
+    - opspi
 
 
 deploy-staging:
@@ -136,5 +190,7 @@ deploy-staging:
     - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER_STAG@$APP_SERVER_SSH_HOST_STAG -p $APP_SERVER_SSH_PORT_STAG "bash -c ' cd /srv/docker-apps/opspi-stag && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
   only:
     - master
-  when: manual
+  # when: manual
+  tags:
+    - opspi
 

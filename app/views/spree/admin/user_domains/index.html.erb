@@ -67,14 +67,14 @@
         new_admin_user_domain_path,
         class: "btn btn-primary lift",
           icon: 'add.svg',
-          id: 'admin_new_dns_zone', data: resource_limit_exceeded("domain"), error_id: "domain" %>
+          id: 'admin_new_dns_zone', error_id: "domain" %>
       <% end  %>
       </div>
     </div>
     </div>
 <span id="res_limit_error_message_domain"></span>
 
-<%= flash_messages %>
+<%#= flash_messages %>
 <% if @user_domains.any? %>
 <div class="container mt-4 mb-4">
 <%= render partial: '/spree/admin/dns/hosted_zones/rows', locals: {user_domains: @user_domains} %>

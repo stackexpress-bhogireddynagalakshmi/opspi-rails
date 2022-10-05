@@ -72,6 +72,7 @@ Rails.application.routes.draw do
         resources :mail_boxes do
           member do
             get :configurations
+            get :reset_password
           end
         end
         resources :mailing_lists  
@@ -90,9 +91,11 @@ Rails.application.routes.draw do
 
       namespace :sites do
         resources :websites
+        resources :backup, only: [:index, :update]
         resources :ftp_users do
-          collection do
+          member do
             get :reset_password
+             get :configurations
           end
         end
         resources :sub_domains

@@ -46,6 +46,8 @@ en:
   account_does_not_exist: Account does not exists
   hosting_space_exists: Hosting space exists
   hosting_space_does_exists: Hosting Space does not exists
+  domain: domain
+  mail_box: mail_box
 
   spree:
     check: "Check"
@@ -114,6 +116,7 @@ en:
     current_sign_in_ip: 'Current Sign in IP'
     last_sign_in_ip: 'Last Sign in IP'
     confirmation_error: 'Email is not confirmed yet. Please check your inbox and click the confirmation link.'
+    certificate_installed: 'Certificate Installed successfully.'
 
     list_of_solid_cp_users: 'List of SolidCP users'
     ist_of_solid_cp_plans: 'List of SolidCP plans'
@@ -134,6 +137,7 @@ en:
     signed_up: "Signed in successfully."
     send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
     without_confirm: "Please check your inbox and confirm your email to start using the services."
+    email_error_notempty: "Error: Email should not be empty."
 
     user_mailer:
       reset_button_does_not_work: "If the above button does not work then please click on the below link to reset your password"
@@ -198,10 +202,13 @@ en:
       create: 'Database created successfully'
       delete: 'Database deleted successfully'
       update: 'Database updated successfully'
+      already_exist: "There is already a database with that name on the same server."
     ftp_user: 
       create: 'Ftp User created successfully'
       delete: 'Ftp User deleted successfully'
       update: 'Ftp User updated successfully'
+    errors:
+      email_error_isemail: "Please enter valid email"
 
   windows:
     ftp_account:
@@ -244,6 +251,11 @@ en:
 
     delete: 'Are you sure you want to delete?'
     access_denied: 'Hosting control not available at the moment because your payment is still pending. Please contact support for further updates.'
+  backup:
+    enable_site_backup: Website and Database would be backed up
+    start:  'Site Backup is started'
+    stop:   'Site Backup is stopped'
+    list:   'List of Site Backup'
 
   devise:
     user_passwords:

@@ -16,7 +16,7 @@
     <%= render :partial=>'spree/admin/mail/spam_filters/row', locals: { spam_filter: spam_filter }%>
   <% end %>
   <% else %>
-    <tr>
+    <tr id="spamfilter_no_data_b">
       <td><label class="form-label table_row_label"> No Spamfilter found.</label> </td>
     </tr>
   <% end %>
