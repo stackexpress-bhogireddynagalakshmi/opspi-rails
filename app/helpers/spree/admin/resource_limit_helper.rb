@@ -13,7 +13,6 @@ module Spree::Admin::ResourceLimitHelper
       resource_limit = get_resource_limit(product)
       
       return domain_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('domain')
-      # mail_box_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('mail_box')
       return mail_forward_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('mail_forward')
     end
 
