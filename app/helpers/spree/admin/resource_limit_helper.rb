@@ -12,9 +12,8 @@ module Spree::Admin::ResourceLimitHelper
       product = get_product(server_type)
       resource_limit = get_resource_limit(product)
       
-      domain_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('domain')
-      # mail_box_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('mail_box')
-      mail_list_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('mailing_list')
+      return domain_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('domain')
+      return mail_list_limit_exceed_check(resource_limit, server_type) if domain_type == I18n.t('mailing_list')
     end
 
     def get_product(server_type)
@@ -33,15 +32,6 @@ module Spree::Admin::ResourceLimitHelper
       limit_count_check(used_count, limit)
     end
 
-    # def mail_box_limit_exceed_check(resource_limit, server_type)
-    #   limit = resource_limit["mail"]["mailbox_count_limit"].to_i
-
-    #   user_domain = current_spree_user.user_domains.find_by_id(params[:user_domain_id])
-    #   used_count = UserMailbox.where(user_domain_id: user_domain.id).compact.count
-
-    #   limit_count_check(used_count, limit)
-    # end
-
     def mail_list_limit_exceed_check(resource_limit, server_type)
       @used_count = 0
       limit = resource_limit["mail"]["mailing_list_count_limit"].to_i
@@ -51,7 +41,7 @@ module Spree::Admin::ResourceLimitHelper
         used_count = UserMailingList.where(user_domain_id: user_domain).compact.count
         @used_count += used_count
       end
-      # byebug
+
       limit_count_check(@used_count, limit)
     end
 

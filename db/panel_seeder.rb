@@ -66,23 +66,6 @@ class PanelSeeder
     end
   end
 
-  def seed_default_panel_config
-    begin
-      data = CSV.read("#{Rails.root}/db/data/default_panel_configs.csv")
-
-      data.each do |row|
-        next if row[0] == 'key'
-
-        panel_config = PanelConfig.where(panel_id: row[2], key: row[0]).first_or_create
-        # byebug
-        panel_config.value = row[1]
-        panel_config.save
-      end
-    rescue Errno::ENOENT => e
-       Rails.logger.error {"#{Rails.root}/db/data/default_panel_configs.csv does not exists. Skipping seed for default panel."}
-    end
-  end
-
   def seed_active_panel 
     service_hash = {
       dns: linux_panel.id,
