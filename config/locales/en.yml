@@ -48,6 +48,7 @@ en:
   hosting_space_does_exists: Hosting Space does not exists
   domain: domain
   mail_box: mail_box
+  mailing_list: mailing_list
 
   spree:
     check: "Check"

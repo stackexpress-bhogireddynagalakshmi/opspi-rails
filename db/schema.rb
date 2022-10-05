@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_12_041315) do
+ActiveRecord::Schema.define(version: 2022_09_29_031842) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -1695,6 +1695,7 @@ ActiveRecord::Schema.define(version: 2022_09_12_041315) do
     t.datetime "updated_at", precision: 6, null: false
     t.integer "remote_website_id"
     t.integer "hosting_type"
+    t.boolean "enable_backup", default: false, null: false
   end
 
   create_table "websites", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

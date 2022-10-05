@@ -1,0 +1,2 @@
+key,value,cluster_id
+DEFAULT_HOSTING_PLAN_CONFIGS,{name: default,services: {domain:{domain_count_limit: -1},dns: {enabled: false,dns_zones_count_limit: -1,default_secondary_dns_server: -1,secondary_dns_zones_count_limit: -1,dns_records_count_limit: -1}},0
