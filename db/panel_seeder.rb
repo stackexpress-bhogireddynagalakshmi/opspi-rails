@@ -13,7 +13,6 @@ class PanelSeeder
     seed_solid_variables
     seed_active_panel
     seed_user_panel_config
-    seed_default_panel_config
     puts "Panel Seeding Completed"
   end
 
