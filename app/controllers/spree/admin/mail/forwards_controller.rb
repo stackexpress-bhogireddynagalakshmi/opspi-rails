@@ -10,13 +10,14 @@ module Spree
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :destroy]
         before_action :assemble_source_and_domain, only: %i[create update]
         before_action :set_mail_forward, only: %i[edit update destroy]
+        before_action -> { resource_limit_check(@user_domain.web_hosting_type,'mail_forward') }, except: [:update, :destroy, :new]
 
         def new
          @mail_forward = @user_domain.user_mail_forwards.build
         end
 
         def create 
-          return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} unless resource_limit_check(@user_domain.web_hosting_type,I18n.t('mail_forward'))  
+          return @response = @limit_exceed unless @limit_exceed[:success]
 
           @response = isp_config_api.create(resource_params, user_domain: @user_domain)
 
