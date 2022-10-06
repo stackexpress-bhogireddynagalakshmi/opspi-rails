@@ -40,4 +40,8 @@ class UserDatabase < ApplicationRecord
     self.update(status: 'in_progress')
   end
 
+  def self.database_name_prefix(user)
+    "c#{user.id}_"
+  end
+
 end
