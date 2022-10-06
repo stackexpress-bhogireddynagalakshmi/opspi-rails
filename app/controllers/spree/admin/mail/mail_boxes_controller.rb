@@ -10,6 +10,9 @@ module Spree
         before_action :ensure_hosting_panel_access
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :index, :destroy,:configurations]
         before_action :set_mail_box, only: %i[edit update destroy, configurations]
+        before_action only: [:create] do |c|
+          c.send(:resource_limit_check, @user_domain.web_hosting_type,'mail_box')
+        end
 
         def index
           @mailboxes = @user_domain.user_mailboxes.order("created_at desc")
@@ -22,7 +25,7 @@ module Spree
         def edit; end
 
         def create
-          return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} unless resource_limit_check(@user_domain.web_hosting_type,'mail_box')
+          return @response = @limit_exceed unless @limit_exceed[:success]
 
           mail_user_param = mail_user_params.merge({ email: formatted_email })
           
