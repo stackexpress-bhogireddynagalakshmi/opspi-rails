@@ -13,7 +13,6 @@ class PanelSeeder
     seed_solid_variables
     seed_active_panel
     seed_user_panel_config
-    seed_default_panel_config
     puts "Panel Seeding Completed"
   end
 
@@ -44,23 +43,6 @@ class PanelSeeder
         panel_config.value = row[1]
         panel_config.save
       end
-
-    rescue Errno::ENOENT => e
-      Rails.logger.error {"#{Rails.root}/db/data/isp_config_cluster.csv does not exists. Skipping seed for ispconfig."}
-    end
-  end
-
-  def seed_default_panel_config
-    begin
-      # data = CSV.read("#{Rails.root}/db/data/isp_config_cluster.csv")
-      CSV.foreach("#{Rails.root}/db/data/isp_config_cluster.csv", :headers => true, :quote_char => '"') { |r| puts r.to_hash }
-      # data.each do |row|
-      #   next if row[0] == 'key'
-
-      #   panel_config = PanelConfig.where(panel_id: row[2], key: row[0]).first_or_create
-      #   panel_config.value = row[1]
-      #   panel_config.save
-      # end
 
     rescue Errno::ENOENT => e
       Rails.logger.error {"#{Rails.root}/db/data/isp_config_cluster.csv does not exists. Skipping seed for ispconfig."}

@@ -42,6 +42,13 @@ module Spree::Admin::ResourceLimitHelper
       limit_count_check(used_count, limit)
     end
 
+    def ftp_limit_exceed_check(resource_limit, server_type)
+      limit = resource_limit["web_linux"]["enabled"] ? resource_limit["web_linux"]["ftp_users_count_limit"].to_i : resource_limit["web_windows"]["ftp_users_count_limit"].to_i
+      used_count =current_spree_user.user_domains.where(web_hosting_type: server_type).collect{|x| x.user_ftp_users.count}.compact.inject(0, :+)
+
+      limit_count_check(used_count, limit)
+    end
+
     def limit_count_check(used_count, limit)
       if limit_exceeded(used_count, limit) 
         return {success: true} 
