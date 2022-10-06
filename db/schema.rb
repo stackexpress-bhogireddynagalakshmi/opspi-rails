@@ -1503,6 +1503,7 @@ ActiveRecord::Schema.define(version: 2022_09_29_031842) do
     t.integer "hsphere_account_id"
     t.integer "hsphere_cluster_id"
     t.json "panel_config"
+    t.string "sign_up_ip"
     t.index ["bill_address_id"], name: "index_spree_users_on_bill_address_id"
     t.index ["deleted_at"], name: "index_spree_users_on_deleted_at"
     t.index ["email"], name: "email_idx_unique", unique: true
