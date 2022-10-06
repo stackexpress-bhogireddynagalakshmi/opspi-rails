@@ -7,6 +7,7 @@ module Spree
         include ResourceLimitHelper
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :index, :destroy,:configurations]
         before_action :set_ftp_user, only: %i[destroy update configurations]
+        before_action -> { resource_limit_check(@user_domain.web_hosting_type,'ftp_user') }, except: [:index, :new, :update, :edit, :destroy,:configurations] 
         # before_action :get_websites, only: [:new]
 
         include ResetPasswordConcern
@@ -20,7 +21,7 @@ module Spree
         end
 
         def create
-          return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} unless resource_limit_check(@user_domain.web_hosting_type,I18n.t('ftp_user'))
+          return @response = @limit_exceed unless @limit_exceed[:success]
           @response = ftp_user_api.create(resource_params, user_domain: @user_domain)
 
          if @response[:success]
