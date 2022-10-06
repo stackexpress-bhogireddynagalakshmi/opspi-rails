@@ -9,7 +9,9 @@ module Spree
       
       before_action :set_batch_jobs, only: %i[index show]
       before_action :ensure_hosting_panel_access
-      # before_action :redirect_to_index, only: %i[new]
+      before_action only: [:create] do |c|
+        c.send(:resource_limit_check, wizard_params[:server_type],'domain')
+      end
 
       def index; end
       def new; end
@@ -18,8 +20,8 @@ module Spree
         @domain      = wizard_params[:domain]
         @server_type = wizard_params[:server_type]
 
-        unless resource_limit_check(wizard_params[:server_type],'domain')
-          @error = I18n.t('spree.resource_limit_exceeds')
+        unless @limit_exceed[:success]
+          @error = @limit_exceed[:message]
           render 'new'
           return
         end
