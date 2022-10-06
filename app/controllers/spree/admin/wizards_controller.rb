@@ -9,9 +9,7 @@ module Spree
       
       before_action :set_batch_jobs, only: %i[index show]
       before_action :ensure_hosting_panel_access
-      before_action only: [:create] do |c|
-        c.send(:resource_limit_check, wizard_params[:server_type],'domain')
-      end
+      before_action -> { resource_limit_check(wizard_params[:server_type],'domain') }, except: [:show, :index, :new]
 
       def index; end
       def new; end
