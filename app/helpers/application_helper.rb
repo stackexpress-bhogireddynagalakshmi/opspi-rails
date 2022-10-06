@@ -310,11 +310,7 @@ module ApplicationHelper
     end
   end
 
-  def linux_db_prefix(user)
-    "c#{user.isp_config_id}"
-  end
-
-  def windows_db_prefix(user)
-    "c#{user.solid_cp_id}"
+  def get_db_name_prefix(user)
+    UserDatabase.database_name_prefix(user)
   end
 end

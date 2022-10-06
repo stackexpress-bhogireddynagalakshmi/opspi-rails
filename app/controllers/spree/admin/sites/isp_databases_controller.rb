@@ -129,11 +129,7 @@ module Spree
         end
 
         def formatted_db_name(database_name)
-          if windows?
-            "c#{current_spree_user.solid_cp_id}_#{database_name}"
-          else
-            "c#{current_spree_user.isp_config_id}_#{database_name}"
-          end
+          "#{UserDatabase.database_name_prefix(current_spree_user)}#{database_name}"
         end        
       end
     end
