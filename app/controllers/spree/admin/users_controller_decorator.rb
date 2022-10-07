@@ -3,6 +3,10 @@
 module Spree
   module Admin
     module UsersControllerDecorator
+      def self.prepended(base)
+        base.before_action :user_data_by_id, except: %i[create,addresses]
+      end
+      
       def collection
         super
         @collection = @collection.where(account_id: current_spree_user.account_id) if current_spree_user.store_admin?
@@ -32,6 +36,10 @@ module Spree
           
           params.key?(:done) ? (redirect_to admin_users_path)  : (render :addresses)
         end
+      end
+
+      def user_data_by_id
+        @security_info = Spree::User.find_by(id: params[:id])
       end
     end
   end
