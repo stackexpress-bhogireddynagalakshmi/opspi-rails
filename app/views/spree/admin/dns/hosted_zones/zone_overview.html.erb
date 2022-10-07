@@ -271,7 +271,7 @@
             </div>
             <div class="col-auto">
                <%= button_link_to "Add New",
-                  new_admin_sites_isp_database_path(domain_name: params[:zone_name]), 
+                  new_admin_sites_isp_database_path(domain_name: params[:zone_name],user_domain_id: params[:user_domain_id]), 
                   class: "btn btn-primary lift",
                     icon: 'add.svg',
                     id: 'new_admin_database',

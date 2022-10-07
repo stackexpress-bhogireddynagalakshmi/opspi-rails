@@ -7,6 +7,9 @@ module Spree
       class IspDatabasesController < Spree::Admin::BaseController
         include ResetPasswordConcern
         include ApisHelper
+        include ResourceLimitHelper
+        before_action :set_user_domain, only: [:new, :create, :index, :destroy,:configurations]
+        before_action -> { resource_limit_check(@user_domain.web_hosting_type,'database',{:db_type => resource_params[:database_type]}) }, except: [:new, :show, :index, :destroy,:configurations] 
 
         def index
           response = database_api.all || []
@@ -26,6 +29,8 @@ module Spree
         end
 
         def create
+          return @response = @limit_exceed unless @limit_exceed[:success]
+
           @response = database_api.create(resource_params)
 
           user_database_params = resource_params.reject { |k, _v| k == "database_password" }
