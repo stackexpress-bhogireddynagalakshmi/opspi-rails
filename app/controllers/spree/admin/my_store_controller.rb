@@ -7,7 +7,7 @@ module Spree
       require 'store_domain_validator'
       include ApplicationHelper
 
-      before_action :ensure_user_confirmed, only: [:update]
+      before_action :ensure_user_confirmed, except: [:show, :index, :new, :create]
 
       def index
         @store = current_store

@@ -7,7 +7,7 @@ module Spree
       include Spree::Admin::DomainRegistrationsHelper
       include ApplicationHelper
 
-      before_action :ensure_user_confirmed, only: [:create, :setup_reseller_club]
+      before_action :ensure_user_confirmed, except: [:show, :index, :new]
       before_action :set_tld_pricing, only: [:new]
       before_action :ensure_reseller_club_configured, except: [:setup_reseller_club]
       
