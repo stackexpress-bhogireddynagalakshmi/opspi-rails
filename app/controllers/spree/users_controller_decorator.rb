@@ -8,6 +8,10 @@ module Spree
       base.before_action :load_object
     end
 
+    def user_data_by_id(id)
+      Spree::User.find_by(id: id)
+    end
+
     def show
       super
       @orders = TenantManager::TenantHelper.unscoped_query { @user.orders.order('created_at desc') }

@@ -285,9 +285,7 @@ module ApplicationHelper
     types
   end
 
-  def user_data_by_id(id)
-    Spree::User.where(id: id).first
-  end
+
 
 
   def html_boolean(boolean, opts={})
