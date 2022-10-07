@@ -14,9 +14,14 @@ class ApplicationController < ActionController::Base
   def ensure_user_confirmed
     return nil if current_spree_user.confirmed?
     
-     flash[:warning] = Spree.t(:confirmation_error)
-    head :forbidden
-    # redirect_to 'spree/shared/access_denied' and return
+    respond_to do |format|
+      format.json { head :forbidden, content_type: 'text/html' }
+      format.html do 
+          
+        render 'spree/shared/not_confirmed'
+       end
+      format.js { head :forbidden, content_type: 'text/js' }
+    end
   end
   
   def set_user_domain
