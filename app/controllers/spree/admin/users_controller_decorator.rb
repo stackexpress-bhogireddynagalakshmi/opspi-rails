@@ -3,6 +3,13 @@
 module Spree
   module Admin
     module UsersControllerDecorator
+      include UserAuthorizationConcern
+
+      def self.prepended(base)
+        base.before_action :ensure_user_authorization!, except: [:index]
+      end
+
+
       def collection
         super
         @collection = @collection.where(account_id: current_spree_user.account_id) if current_spree_user.store_admin?
@@ -32,6 +39,10 @@ module Spree
           
           params.key?(:done) ? (redirect_to admin_users_path)  : (render :addresses)
         end
+      end
+
+      def primary_key
+        params[:id]
       end
     end
   end
