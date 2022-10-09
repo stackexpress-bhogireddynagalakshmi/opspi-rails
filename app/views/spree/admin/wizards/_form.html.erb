@@ -95,7 +95,7 @@
       <div class="col-lg-6">
         <div class="form-group field">
           <div class="form-check">
-            <%= check_box_tag('wizard[enable_mail_service]', 'n', ('checked'), class: "form-check-input list-checkbox", id: "wizard_mail_service", onclick: "checkServiceStatus(this)", disabled: true ) %>
+            <%= check_box_tag('wizard[enable_mail_service]', 'n', ('checked' if false), class: "form-check-input list-checkbox", id: "wizard_mail_service", onclick: "checkServiceStatus(this)", disabled: false ) %>
             <label class="form-check-label" for="wizard_mail_service">Enable Mail Service</label>
             <div class="text-muted"><%=t('wizards.enable_mail_service_help')%></div>
           </div>
@@ -103,7 +103,7 @@
       </div>
     </div>
 
-    <div> <!-- id="wizard_mail" -->
+    <div id="wizard_mail" >
       <div class="row">
         <div class="col-lg-6">
           <div class="form-group field">
