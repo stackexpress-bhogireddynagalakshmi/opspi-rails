@@ -215,12 +215,16 @@
       $("#div3").html('<%=t('wizards.enable_db_service_help1')%>');
       var domain = $('#wizard_domain').val();
       var domain = domain.replace("www.", "");
-     $("#selected_domain_button").html('@'+ domain);
+      if (domain != "") {
+        $("#selected_domain_button").html('@'+ domain);
+      }
     } else {
       $("#div3").html('<%=t('wizards.enable_db_service_help')%>');
       var domain = $('#wizard_domain').val();
       var domain = domain.replace("www.", "");
-     $("#selected_domain_button").html('@'+ domain);
+      if (domain != "") {
+        $("#selected_domain_button").html('@'+ domain);
+      }
     }
 });
 
