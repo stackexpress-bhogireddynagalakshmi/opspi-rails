@@ -7,9 +7,10 @@ module Spree
 
       def self.prepended(base)
         base.before_action :ensure_user_authorization!, except: [:index]
+        base.before_action :user_data_by_id, except: %i[create,addresses]
       end
 
-
+      
       def collection
         super
         @collection = @collection.where(account_id: current_spree_user.account_id) if current_spree_user.store_admin?
@@ -43,7 +44,10 @@ module Spree
 
       def primary_key
         params[:id]
-      end
+    end
+    
+    def user_data_by_id
+      @security_info = Spree::User.find_by(id: params[:id])
     end
   end
 end
