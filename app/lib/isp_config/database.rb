@@ -214,8 +214,8 @@ module IspConfig
           database_charset: "",
           remote_access: "y",
           remote_ips: "",
-          backup_interval: "none",
-          backup_copies: 1,
+          backup_interval: "daily",
+          backup_copies: 5,
           active: 'y'
         }
       }
