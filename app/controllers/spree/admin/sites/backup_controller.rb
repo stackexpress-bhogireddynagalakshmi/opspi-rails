@@ -4,7 +4,7 @@ class Spree::Admin::Sites::BackupController < ApplicationController
   def update
     @website = @user_domain.user_website
     if params[:user_website][:enable_backup] == '1' 
-      backup_api.start_backup(@website.id)
+      # backup_api.start_backup(@website.id)
     else
       backup_api.stop_backup(@website.id)
     end
