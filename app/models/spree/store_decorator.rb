@@ -37,9 +37,12 @@ module Spree
         ::TenantManager::StoreTenantUpdater.new(self, account.id).call
 
         store_admin = StoreManager::StoreAdminCreator.new(self, account: account).call
+        
+        store_id = store_admin.account_id == 1 ? 0 : store_admin.account_id
+        chat = ChatwootUser.where(store_account_id: store_id).last
 
         unless store_admin.account_id.blank?
-          StoreManager::ChatWootResourceCreator.new(self).call
+          chat.present? ? nil : StoreManager::ChatWootResourceCreator.new(self).call 
         end
 
         if TenantManager::TenantHelper.current_tenant.blank? || store_admin.account_id.blank?

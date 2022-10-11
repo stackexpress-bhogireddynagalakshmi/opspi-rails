@@ -20,6 +20,8 @@ module ChatWoot
                            }
                          })
 
+        ChatwootUser.create(store_account_id: account.id, agent_id: response.id) if response.present?
+
         formatted_response(response, 'create')
       end
   
