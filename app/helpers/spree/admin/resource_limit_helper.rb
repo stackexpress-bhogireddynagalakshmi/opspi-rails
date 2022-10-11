@@ -37,7 +37,7 @@ module Spree::Admin::ResourceLimitHelper
 
     def mail_forward_limit_exceed_check(resource_limit, server_type)
       limit = resource_limit["mail"]["email_forwarders_count_limit"].to_i
-      used_count =current_spree_user.user_domains.where(web_hosting_type: server_type).collect{|x| x.user_mail_forwards.count}.compact.inject(0, :+)
+      used_count = UserMailForward.mail_forward_count(current_spree_user,server_type)
 
       limit_count_check(used_count, limit)
     end
