@@ -167,6 +167,7 @@
     $("#selected_domain_button").html('@'+ domain);
   });
 
+
   var checkServiceStatus = function(element){
     var serviceStatus = element.value;
     var id = element.id;
@@ -212,8 +213,18 @@
    
     if(e.currentTarget.value == "windows"){
       $("#div3").html('<%=t('wizards.enable_db_service_help1')%>');
+      var domain = $('#wizard_domain').val();
+      var domain = domain.replace("www.", "");
+      if (domain != "") {
+        $("#selected_domain_button").html('@'+ domain);
+      }
     } else {
       $("#div3").html('<%=t('wizards.enable_db_service_help')%>');
+      var domain = $('#wizard_domain').val();
+      var domain = domain.replace("www.", "");
+      if (domain != "") {
+        $("#selected_domain_button").html('@'+ domain);
+      }
     }
 });
 
