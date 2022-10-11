@@ -9,7 +9,7 @@ module Spree
         include ApisHelper
         include ResourceLimitHelper
         before_action :set_user_domain, only: [:new, :create, :index, :destroy,:configurations]
-        before_action -> { resource_limit_check(@user_domain.web_hosting_type,'database',{:db_type => resource_params[:database_type]}) }, except: [:new, :show, :index, :destroy,:configurations] 
+        before_action -> { resource_limit_check(@user_domain.web_hosting_type,'database',{:db_type => resource_params[:database_type]}) }, except: [:new, :show, :index, :destroy,:configurations, :reset_password] 
 
         def index
           response = database_api.all || []

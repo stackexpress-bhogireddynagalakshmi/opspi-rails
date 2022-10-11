@@ -68,9 +68,7 @@ module Spree::Admin::ResourceLimitHelper
 
     def database_limit_exceed_check(resource_limit, server_type, opts)
       limit = (opts[:db_type] == 'my_sql') ? resource_limit["database_mysql"]["database_count_limit"].to_i : resource_limit["database_mssql"]["database_count_limit"].to_i
-      
-      active = current_spree_user.user_domains.where(web_hosting_type: server_type).collect{|x| x.user_databases.select(&:active?)}
-      used_count = active.flatten.select{|s| s if s.database_type == opts[:db_type]}.count
+      used_count = UserDatabase.database_count(current_spree_user,server_type, opts[:db_type])
 
       limit_count_check(used_count, limit)
     end
