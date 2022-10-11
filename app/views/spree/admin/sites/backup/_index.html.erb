@@ -1,10 +1,54 @@
-<%backups.each do |backup|%>
-  <tr>
-    <td><%=Time.at(backup.tstamp.to_i)%></td>
-    <td><%= backup.backup_type%></td>
-    <td><%= backup.backup_format%></td>
-    <td><%= backup.filesize.to_i/1024%>KB</td>
-    <td><%= backup.filename%></td>
-    <td></td>
-  </tr>
-<%end%>
+<%if @user_domain.windows?%>
+<table class="table table-sm card-table" style="width:100%">
+  <tbody>
+    <%@array_of_string.each do |key|%>
+    <%value = key[:string]%>
+     <tr>
+      <td><%= value[0] %></td>
+       <%if value[0] == "WebSite"%>
+         <td> <%= value[1].split(",") & [@user_domain.domain]%></td>
+       <%elsif value[0] == "FTPAccount" %>
+         <td>  <%= value[1].split(",") & @user_domain.user_ftp_users.pluck(:username)%></td>
+       <%elsif value[0] == "MsSQL2019Database" %>
+          <td><%= value[1].split(",") &  @user_domain.user_databases.pluck(:database_name)%></td>
+       <%elsif value[0] == "MsSQL2019User" %>
+          <td><%= value[1].split(",") & @user_domain.user_databases.pluck(:database_user)%></td>
+       <%else%>
+         <td><%= value[1] %></td>
+        <%end%>
+     </tr>
+
+
+    <%end%>
+
+  </tbody>
+
+</table>
+
+
+
+<%else%>
+<table class="table table-sm card-table" style="width:100%">
+ <thead>
+   <tr>
+     <th> Date </th>
+     <th> Type </th>
+     <th> Format </th>
+     <th> File Size </th>
+     <th> Filename </th>
+   </tr>
+ </thead>
+ <tbody>
+    <%backups.each do |backup|%>
+        <tr>
+          <td><%=Time.at(backup.tstamp.to_i)%></td>
+          <td><%= backup.backup_type%></td>
+          <td><%= backup.backup_format%></td>
+          <td><%= backup.filesize.to_i/1024%>KB</td>
+          <td><%= backup.filename%></td>
+          <td></td>
+        </tr>
+      <%end%>
+    <%end%>
+ </tbody>
+</table>
