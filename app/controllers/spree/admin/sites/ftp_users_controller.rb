@@ -7,7 +7,7 @@ module Spree
         include ResourceLimitHelper
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :index, :destroy,:configurations]
         before_action :set_ftp_user, only: %i[destroy update configurations]
-        before_action -> { resource_limit_check(@user_domain.web_hosting_type,'ftp_user') }, except: [:index, :new, :update, :edit, :destroy,:configurations] 
+        before_action -> { resource_limit_check(@user_domain.web_hosting_type,'ftp_user') }, except: [:index, :new, :update, :edit, :destroy,:configurations, :reset_password] 
         # before_action :get_websites, only: [:new]
 
         include ResetPasswordConcern
