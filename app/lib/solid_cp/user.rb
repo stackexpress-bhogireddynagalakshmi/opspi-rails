@@ -159,7 +159,7 @@ module SolidCp
 
     # Sql Server API interface for the  user/Reseller
     def site_backup
-      @site_backup ||= SolidCp::SiteBackup.new(user)
+      @site_backup ||= SolidCp::Backup.new(user)
     end
 
     # Helper  method to render full_name

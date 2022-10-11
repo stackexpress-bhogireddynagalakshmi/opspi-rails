@@ -11,6 +11,7 @@ module SolidCp
     SOAP_WEB_SERVER_WSDL  = "esWebServers.asmx?wsdl"
     SOAP_FTP_WSDL         = "esFtpServers.asmx?wsdl"
     SOAP_SQL_WSDL         = "esDatabaseServers.asmx?wsdl"
+    SOAP_BACKUP_WSDL      = "esBackup.asmx?wsdl"
 
     def initialize(user)
       @user = user

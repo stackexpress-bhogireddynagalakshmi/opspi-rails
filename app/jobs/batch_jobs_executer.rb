@@ -101,6 +101,12 @@ class BatchJobsExecuter < ApplicationJob
       TaskManager::HostingPanelTasks::FtpAccountTask
     when 'create_database'
       TaskManager::HostingPanelTasks::DatabaseTask
+    when 'create_chat_agent'
+      TaskManager::ChatWootTasks::AgentTask
+    when 'create_chat_inbox'
+      TaskManager::ChatWootTasks::InboxTask
+    when 'create_chat_agent_with_inbox'
+      TaskManager::ChatWootTasks::AgentWithInboxTask
     else
       raise StandardError, "Unknown task type"
     end
