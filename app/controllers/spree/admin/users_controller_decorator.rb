@@ -42,7 +42,7 @@ module Spree
         end
       end
 
-      def primary_key
+    def primary_key
         params[:id]
     end
     
@@ -50,6 +50,7 @@ module Spree
       @security_info = Spree::User.find_by(id: params[:id])
     end
   end
+end
 end
 
 if ::Spree::Admin::UsersController.included_modules.exclude?(Spree::Admin::UsersControllerDecorator)
