@@ -11,7 +11,7 @@ module Spree
       before_action :ensure_user_confirmed,  except: [:show, :index, :new]
       before_action :set_batch_jobs, only: %i[index show]
       before_action :ensure_hosting_panel_access
-      before_action -> { resource_limit_check(wizard_params[:server_type],'domain') }, except: [:show, :index, :new]
+      before_action -> { resource_limit_check(wizard_params[:server_type],'domain') }, except: [:show, :index, :new, :reset_password]
 
       def index; end
       def new; end

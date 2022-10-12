@@ -15,6 +15,9 @@
 - http://solidcpent.myhsphere.biz:9002/esPackages.asmx
 - http://solidcpent.myhsphere.biz:9002/esServers.asmx
 - http://solidcpent.myhsphere.biz:9002/esWebServers.asmx
+- http://solidcpent.myhsphere.biz:9002/esBackup.asmx
+- http://solidcpent.myhsphere.biz:9002/esTasks.asmx
+- http://solidcpent.myhsphere.biz:9002/esScheduler.asmx
 
 ## site pro
 
@@ -23,4 +26,6 @@
 ## chatwoot
 
 - https://www.chatwoot.com/developers/api/
+
+
 

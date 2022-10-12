@@ -4,10 +4,13 @@ module Spree
   module Admin
     module UsersControllerDecorator
       include ApplicationHelper
+      include UserAuthorizationConcern
 
       def self.prepended(base)
+        base.before_action :ensure_user_authorization!, except: [:index]
         base.before_action :ensure_user_confirmed, except: [:show, :index, :new]
       end
+
 
       def collection
         super
@@ -38,6 +41,10 @@ module Spree
           
           params.key?(:done) ? (redirect_to admin_users_path)  : (render :addresses)
         end
+      end
+
+      def primary_key
+        params[:id]
       end
     end
   end

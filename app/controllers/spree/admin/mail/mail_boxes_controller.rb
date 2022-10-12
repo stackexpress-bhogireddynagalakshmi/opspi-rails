@@ -10,7 +10,7 @@ module Spree
         before_action :ensure_hosting_panel_access
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :index, :destroy,:configurations]
         before_action :set_mail_box, only: %i[edit update destroy, configurations]
-        before_action -> { resource_limit_check(@user_domain.web_hosting_type,'mail_box') }, except: [:show, :index, :new, :update, :edit, :destroy,:configurations] 
+        before_action -> { resource_limit_check(@user_domain.web_hosting_type,'mail_box') }, except: [:show, :index, :new, :update, :edit, :destroy,:configurations, :reset_password] 
 
         def index
           @mailboxes = @user_domain.user_mailboxes.order("created_at desc")

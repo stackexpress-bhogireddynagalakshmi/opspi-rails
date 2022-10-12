@@ -4,7 +4,7 @@ module ChatWoot
 
     def initialize(account, options = {})
       @account = account
-      @agent_id = options[:agent_id]
+      # @agent_id = options[:agent_id]
     end
 
     def create
@@ -21,7 +21,10 @@ module ChatWoot
                           }
                          }
                        })
-
+      if response.present?
+        chat_woot_user = ChatwootUser.find_by(store_account_id: account.id)
+        chat_woot_user.update(inbox_id: response.id, website_token: response.website_token)
+      end
       formatted_response(response, 'create')
     end
 
@@ -32,7 +35,7 @@ module ChatWoot
                          header: authorization_user_header,
                          body: {
                           inbox_id: account.inbox_id,
-                          user_ids: [ @agent_id ]
+                          user_ids: [ account.agent_id ]
                          }
                        })
 
