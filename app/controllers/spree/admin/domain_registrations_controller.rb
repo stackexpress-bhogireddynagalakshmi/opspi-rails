@@ -37,7 +37,6 @@ module Spree
         @product = TenantManager::TenantHelper.unscoped_query { Spree::Product.domain.first }
         @variant = @product.master
         if params[:domian_names].present?
-          if current_spree_user.confirmed?
             domains = params[:domian_names].split(",")
             tlds    = params[:tlds] || ["com"]
 
@@ -46,9 +45,6 @@ module Spree
 
             @suggestions = ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds,
                                                                "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10", 'email' => current_spree_user.email)[:response]
-          else
-            flash[:warning] = Spree.t(:confirmation_error)
-          end
         end
 
       end
