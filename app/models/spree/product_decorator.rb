@@ -11,16 +11,13 @@ module Spree
       base.validate :ensure_server_type_do_not_change, on: [:update]
       base.after_initialize :set_available_date, :set_validity
       base.acts_as_tenant :account, class_name: '::Account'
-
       base.has_many :plan_quota_groups, class_name: 'PlanQuotaGroup', dependent: :destroy, extend: FirstOrBuild
-
       base.has_many :plan_quotas, through: :plan_quota_groups, dependent: :destroy
       base.has_one :isp_config_limit, inverse_of: :product, autosave: true, dependent: :destroy
       base.after_commit :ensure_plan_id_or_template_id, on: [:create]
       base.after_commit :add_to_tenant, on: %i[create update]
       base.after_commit :update_solid_cp_plan, on: [:update]
       base.after_commit :update_stock_availibility, on: [:create]
-
       base.accepts_nested_attributes_for :plan_quota_groups, reject_if: :reject_if_not_windows, allow_destroy: true
       base.accepts_nested_attributes_for :isp_config_limit, reject_if: :reject_if_not_linux
 
@@ -87,7 +84,7 @@ module Spree
     end
 
     def reject_if_not_linux(_attrs)
-      !linux?
+      !(linux? || reseller_plan?)
     end
 
     def ensure_server_type_do_not_change
