@@ -5,6 +5,7 @@ module AppManager
     attr_accessor :product, :resource
 
     def initialize(product, resource)
+      byebug
       @product = product
       @resource = resource
     end
@@ -51,11 +52,11 @@ module AppManager
             database_quota_size_quota: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_database_quota"] : windows_attributes("MySQL8.MaxDatabaseSize", "quota_value")
           },
           database_mssql: {
-            enabled: windows?,
-            database_count_limit: windows? ? windows_attributes("MsSQL2019.Databases", "quota_value") : nil ,
-            database_users_count_limit: windows? ? windows_attributes("MsSQL2019.Users", "quota_value") : nil,
-            database_quota_size_quota: windows? ? windows_attributes("MsSQL2019.MaxDatabaseSize", "quota_value") : nil,
-            database_max_log_size: windows? ? windows_attributes("MsSQL2019.MaxLogSize", "quota_value") : nil
+            enabled: windows_or_reseller?,
+            database_count_limit: windows_or_reseller? ? windows_attributes("MsSQL2019.Databases", "quota_value") : nil ,
+            database_users_count_limit: windows_or_reseller? ? windows_attributes("MsSQL2019.Users", "quota_value") : nil,
+            database_quota_size_quota: windows_or_reseller? ? windows_attributes("MsSQL2019.MaxDatabaseSize", "quota_value") : nil,
+            database_max_log_size: windows_or_reseller? ? windows_attributes("MsSQL2019.MaxLogSize", "quota_value") : nil
 
           },
           web_linux: {
@@ -85,6 +86,42 @@ module AppManager
             cron_jobs_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_cron"] : nil,
             type_of_cron_jobs_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_cron_type"] : nil,
             min_delay_between_executions_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_cron_frequency"] : nil
+          },
+          web_windows: {
+            enabled: windows_or_reseller?,
+            web_domains_count_limit: windows_or_reseller? ? windows_attributes("OS.Domains", "quota_value") : nil, #copy from domain_count_limit (default)
+            web_app_gallery: windows_or_reseller? ? windows_attributes("Web.WebAppGallery", "enabled") : nil,
+            asp: windows_or_reseller? ? windows_attributes("Web.Asp", "enabled") : nil,
+            asp_net_11: windows_or_reseller? ? windows_attributes("Web.AspNet11", "enabled") : nil,
+            asp_net_40: windows_or_reseller? ? windows_attributes("Web.AspNet20", "enabled") : nil,
+            asp_net_20: windows_or_reseller? ? windows_attributes("Web.AspNet40", "enabled") : nil,
+            php_4: windows_or_reseller? ? windows_attributes("Web.Php4", "enabled") : nil,
+            php_5: windows_or_reseller? ? windows_attributes("Web.Php5", "enabled") : nil,
+            perl_available: windows_or_reseller? ? windows_attributes("Web.Perl", "enabled") : nil ,
+            python_available: windows_or_reseller? ? windows_attributes("Web.Python", "enabled") : nil,
+            cgi_available: windows_or_reseller? ? windows_attributes("Web.CgiBin", "enabled") : nil,
+            secured_folders: windows_or_reseller? ? windows_attributes("Web.SecuredFolders", "enabled") : nil,
+            shared_ssl: windows_or_reseller? ? windows_attributes("Web.SharedSSL", "quota_value") : nil,
+            redirections: windows_or_reseller? ? windows_attributes("Web.Redirections", "enabled") : nil,
+            home_folders: windows_or_reseller? ? windows_attributes("Web.HomeFolders", "enabled") : nil,
+            virtual_dirs: windows_or_reseller? ? windows_attributes("Web.VirtualDirs", "enabled") : nil,
+            htaccess: windows_or_reseller? ? windows_attributes("Web.Htaccess", "enabled") : nil,
+            front_page: windows_or_reseller? ? windows_attributes("Web.FrontPage", "enabled") : nil,
+            security: windows_or_reseller? ? windows_attributes("Web.Security", "enabled") : nil,
+            default_docs: windows_or_reseller? ? windows_attributes("Web.DefaultDocs", "enabled") : nil,
+            app_pools: windows_or_reseller? ? windows_attributes("Web.AppPools", "enabled") : nil,
+            app_pools_restart: windows_or_reseller? ? windows_attributes("Web.AppPoolsRestart", "enabled") : nil,
+            headers: windows_or_reseller? ? windows_attributes("Web.Headers", "enabled") : nil,
+            errors: windows_or_reseller? ? windows_attributes("Web.Errors", "enabled") : nil,
+            mime: windows_or_reseller? ? windows_attributes("Web.Mime", "enabled") : nil,
+            cold_fusion: windows_or_reseller? ? windows_attributes("Web.ColdFusion", "enabled") : nil,
+            cf_virtual_directories: windows_or_reseller? ? windows_attributes("Web.CFVirtualDirectories", "enabled") : nil,
+            ip_addresses: windows_or_reseller? ? windows_attributes("Web.IPAddresses", "quota_value") : nil,
+            remote_management: windows_or_reseller? ? windows_attributes("Web.RemoteManagement", "enabled") : nil,
+            ssl_allowed: windows_or_reseller? ? windows_attributes("Web.SSL", "enabled") : nil,
+            allow_ip_address_mode_switch: windows_or_reseller? ? windows_attributes("Web.AllowIPAddressModeSwitch", "enabled") : nil,
+            enable_host_name_support: windows_or_reseller? ? windows_attributes("Web.EnableHostNameSupport", "enabled") : nil,
+            ftp_users_count_limit: windows_or_reseller? ? windows_attributes("FTP.Accounts", "quota_value") : nil
           }
         }
       }
@@ -94,7 +131,7 @@ module AppManager
     def windows_attributes(name, value)
       return nil if linux?
       nil
-      # windows_limits.collect{|x| x["#{value}"] if x["quota_name"] == name}.compact.first
+      # resource["product"]["plan_quota_groups_attributes"][""]["plan_quotas_attributes"]["2"]["quota_value"]
     end
 
     def linux?
@@ -111,6 +148,10 @@ module AppManager
 
     def linux_or_reseller?
       linux? || reseller_plan?
+    end
+
+    def windows_or_reseller?
+      windows? || reseller_plan?
     end
 
     def create
