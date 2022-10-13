@@ -5,7 +5,6 @@ module AppManager
     attr_accessor :product, :resource
 
     def initialize(product, resource)
-      byebug
       @product = product
       @resource = resource
     end
@@ -19,23 +18,23 @@ module AppManager
         name: product.name,
         services: {
           domain:{
-            domain_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_zone"] : windows_attributes("OS.Domains", "quota_value")
+            domain_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_zone"] : windows_os_attributes("OS.Domains", "quota_value")
           },
           dns: {
             enabled: true,
-            dns_zones_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_zone"] : windows_attributes("OS.Domains", "quota_value"),  ##copy from domain_count_limit (default)
+            dns_zones_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_zone"] : windows_os_attributes("OS.Domains", "quota_value"),  ##copy from domain_count_limit (default)
             default_secondary_dns_server: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["default_slave_dnsserver"] : nil,
-            secondary_dns_zones_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_slave_zone"] : windows_attributes("OS.SubDomains", "quota_value"),
+            secondary_dns_zones_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_slave_zone"] : windows_os_attributes("OS.SubDomains", "quota_value"),
             dns_records_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_record"] : nil
           },
           mail: {
             enabled: true,
-            mail_domains_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_zone"] : windows_attributes("OS.Domains", "quota_value"),  #copy from domain_count_limit (default)
-            mailbox_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailbox"] : windows_attributes("Mail.MaxBoxSize", "quota_value"),
+            mail_domains_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_zone"] : windows_os_attributes("OS.Domains", "quota_value"),  #copy from domain_count_limit (default)
+            mailbox_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailbox"] : windows_mail_attributes("Mail.MaxBoxSize", "quota_value"),
             email_aliases_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailalias"] : nil,
             domain_aliases_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailaliasdomain"] : nil,
-            mailing_list_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailmailinglist"] : windows_attributes("Mail.Lists", "quota_value"),
-            email_forwarders_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailforward"] : windows_attributes("Mail.Forwardings", "quota_value"),
+            mailing_list_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailmailinglist"] : windows_mail_attributes("Mail.Lists", "quota_value"),
+            email_forwarders_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailforward"] : windows_mail_attributes("Mail.Forwardings", "quota_value"),
             email_catchall_accounts_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailcatchall"] : nil,
             email_routes_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailrouting"] : nil,
             email_filters_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailfilter"] : nil,
@@ -47,16 +46,16 @@ module AppManager
           },
           database_mysql: {
             enabled: true,
-            database_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_database"] : windows_attributes("MySQL8.Databases", "quota_value"),
-            database_users_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_database_user"] : windows_attributes("MySQL8.Users", "quota_value"),
-            database_quota_size_quota: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_database_quota"] : windows_attributes("MySQL8.MaxDatabaseSize", "quota_value")
+            database_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_database"] : windows_mysql_attributes("MySQL8.Databases", "quota_value"),
+            database_users_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_database_user"] : windows_mysql_attributes("MySQL8.Users", "quota_value"),
+            database_quota_size_quota: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_database_quota"] : windows_mysql_attributes("MySQL8.MaxDatabaseSize", "quota_value")
           },
           database_mssql: {
-            enabled: windows_or_reseller?,
-            database_count_limit: windows_or_reseller? ? windows_attributes("MsSQL2019.Databases", "quota_value") : nil ,
-            database_users_count_limit: windows_or_reseller? ? windows_attributes("MsSQL2019.Users", "quota_value") : nil,
-            database_quota_size_quota: windows_or_reseller? ? windows_attributes("MsSQL2019.MaxDatabaseSize", "quota_value") : nil,
-            database_max_log_size: windows_or_reseller? ? windows_attributes("MsSQL2019.MaxLogSize", "quota_value") : nil
+            enabled: windows?,
+            database_count_limit: windows? ? windows_mssql_attributes("MsSQL2019.Databases", "quota_value") : nil ,
+            database_users_count_limit: windows? ? windows_mssql_attributes("MsSQL2019.Users", "quota_value") : nil,
+            database_quota_size_quota: windows? ? windows_mssql_attributes("MsSQL2019.MaxDatabaseSize", "quota_value") : nil,
+            database_max_log_size: windows? ? windows_mssql_attributes("MsSQL2019.MaxLogSize", "quota_value") : nil
 
           },
           web_linux: {
@@ -88,50 +87,92 @@ module AppManager
             min_delay_between_executions_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_cron_frequency"] : nil
           },
           web_windows: {
-            enabled: windows_or_reseller?,
-            web_domains_count_limit: windows_or_reseller? ? windows_attributes("OS.Domains", "quota_value") : nil, #copy from domain_count_limit (default)
-            web_app_gallery: windows_or_reseller? ? windows_attributes("Web.WebAppGallery", "enabled") : nil,
-            asp: windows_or_reseller? ? windows_attributes("Web.Asp", "enabled") : nil,
-            asp_net_11: windows_or_reseller? ? windows_attributes("Web.AspNet11", "enabled") : nil,
-            asp_net_40: windows_or_reseller? ? windows_attributes("Web.AspNet20", "enabled") : nil,
-            asp_net_20: windows_or_reseller? ? windows_attributes("Web.AspNet40", "enabled") : nil,
-            php_4: windows_or_reseller? ? windows_attributes("Web.Php4", "enabled") : nil,
-            php_5: windows_or_reseller? ? windows_attributes("Web.Php5", "enabled") : nil,
-            perl_available: windows_or_reseller? ? windows_attributes("Web.Perl", "enabled") : nil ,
-            python_available: windows_or_reseller? ? windows_attributes("Web.Python", "enabled") : nil,
-            cgi_available: windows_or_reseller? ? windows_attributes("Web.CgiBin", "enabled") : nil,
-            secured_folders: windows_or_reseller? ? windows_attributes("Web.SecuredFolders", "enabled") : nil,
-            shared_ssl: windows_or_reseller? ? windows_attributes("Web.SharedSSL", "quota_value") : nil,
-            redirections: windows_or_reseller? ? windows_attributes("Web.Redirections", "enabled") : nil,
-            home_folders: windows_or_reseller? ? windows_attributes("Web.HomeFolders", "enabled") : nil,
-            virtual_dirs: windows_or_reseller? ? windows_attributes("Web.VirtualDirs", "enabled") : nil,
-            htaccess: windows_or_reseller? ? windows_attributes("Web.Htaccess", "enabled") : nil,
-            front_page: windows_or_reseller? ? windows_attributes("Web.FrontPage", "enabled") : nil,
-            security: windows_or_reseller? ? windows_attributes("Web.Security", "enabled") : nil,
-            default_docs: windows_or_reseller? ? windows_attributes("Web.DefaultDocs", "enabled") : nil,
-            app_pools: windows_or_reseller? ? windows_attributes("Web.AppPools", "enabled") : nil,
-            app_pools_restart: windows_or_reseller? ? windows_attributes("Web.AppPoolsRestart", "enabled") : nil,
-            headers: windows_or_reseller? ? windows_attributes("Web.Headers", "enabled") : nil,
-            errors: windows_or_reseller? ? windows_attributes("Web.Errors", "enabled") : nil,
-            mime: windows_or_reseller? ? windows_attributes("Web.Mime", "enabled") : nil,
-            cold_fusion: windows_or_reseller? ? windows_attributes("Web.ColdFusion", "enabled") : nil,
-            cf_virtual_directories: windows_or_reseller? ? windows_attributes("Web.CFVirtualDirectories", "enabled") : nil,
-            ip_addresses: windows_or_reseller? ? windows_attributes("Web.IPAddresses", "quota_value") : nil,
-            remote_management: windows_or_reseller? ? windows_attributes("Web.RemoteManagement", "enabled") : nil,
-            ssl_allowed: windows_or_reseller? ? windows_attributes("Web.SSL", "enabled") : nil,
-            allow_ip_address_mode_switch: windows_or_reseller? ? windows_attributes("Web.AllowIPAddressModeSwitch", "enabled") : nil,
-            enable_host_name_support: windows_or_reseller? ? windows_attributes("Web.EnableHostNameSupport", "enabled") : nil,
-            ftp_users_count_limit: windows_or_reseller? ? windows_attributes("FTP.Accounts", "quota_value") : nil
+            enabled: windows?,
+            web_domains_count_limit: windows? ? windows_os_attributes("OS.Domains", "quota_value") : nil, #copy from domain_count_limit (default)
+            web_app_gallery: windows? ? windows_web_attributes("Web.WebAppGallery", "enabled") : nil,
+            asp: windows? ? windows_web_attributes("Web.Asp", "enabled") : nil,
+            asp_net_11: windows? ? windows_web_attributes("Web.AspNet11", "enabled") : nil,
+            asp_net_40: windows? ? windows_web_attributes("Web.AspNet20", "enabled") : nil,
+            asp_net_20: windows? ? windows_web_attributes("Web.AspNet40", "enabled") : nil,
+            php_4: windows? ? windows_web_attributes("Web.Php4", "enabled") : nil,
+            php_5: windows? ? windows_web_attributes("Web.Php5", "enabled") : nil,
+            perl_available: windows? ? windows_web_attributes("Web.Perl", "enabled") : nil ,
+            python_available: windows? ? windows_web_attributes("Web.Python", "enabled") : nil,
+            cgi_available: windows? ? windows_web_attributes("Web.CgiBin", "enabled") : nil,
+            secured_folders: windows? ? windows_web_attributes("Web.SecuredFolders", "enabled") : nil,
+            shared_ssl: windows? ? windows_web_attributes("Web.SharedSSL", "quota_value") : nil,
+            redirections: windows? ? windows_web_attributes("Web.Redirections", "enabled") : nil,
+            home_folders: windows? ? windows_web_attributes("Web.HomeFolders", "enabled") : nil,
+            virtual_dirs: windows? ? windows_web_attributes("Web.VirtualDirs", "enabled") : nil,
+            htaccess: windows? ? windows_web_attributes("Web.Htaccess", "enabled") : nil,
+            front_page: windows? ? windows_web_attributes("Web.FrontPage", "enabled") : nil,
+            security: windows? ? windows_web_attributes("Web.Security", "enabled") : nil,
+            default_docs: windows? ? windows_web_attributes("Web.DefaultDocs", "enabled") : nil,
+            app_pools: windows? ? windows_web_attributes("Web.AppPools", "enabled") : nil,
+            app_pools_restart: windows? ? windows_web_attributes("Web.AppPoolsRestart", "enabled") : nil,
+            headers: windows? ? windows_web_attributes("Web.Headers", "enabled") : nil,
+            errors: windows? ? windows_web_attributes("Web.Errors", "enabled") : nil,
+            mime: windows? ? windows_web_attributes("Web.Mime", "enabled") : nil,
+            cold_fusion: windows? ? windows_web_attributes("Web.ColdFusion", "enabled") : nil,
+            cf_virtual_directories: windows? ? windows_web_attributes("Web.CFVirtualDirectories", "enabled") : nil,
+            ip_addresses: windows? ? windows_web_attributes("Web.IPAddresses", "quota_value") : nil,
+            remote_management: windows? ? windows_web_attributes("Web.RemoteManagement", "enabled") : nil,
+            ssl_allowed: windows? ? windows_web_attributes("Web.SSL", "enabled") : nil,
+            allow_ip_address_mode_switch: windows? ? windows_web_attributes("Web.AllowIPAddressModeSwitch", "enabled") : nil,
+            enable_host_name_support: windows? ? windows_web_attributes("Web.EnableHostNameSupport", "enabled") : nil,
+            ftp_users_count_limit: windows? ? windows_ftp_attributes("FTP.Accounts", "quota_value") : nil
           }
         }
       }
     end
 
 
-    def windows_attributes(name, value)
-      return nil if linux?
-      nil
-      # resource["product"]["plan_quota_groups_attributes"][""]["plan_quotas_attributes"]["2"]["quota_value"]
+    def windows_os_attributes(name, value_type)
+      return nil if linux_or_reseller?
+
+      type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'OS'}
+      value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
+      value.dig(value.keys.first, value_type)
+    end
+
+    def windows_mail_attributes(name, value_type)
+      return nil if linux_or_reseller?
+
+      type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'Mail'}
+      value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
+      value.dig(value.keys.first, value_type)
+    end
+
+    def windows_mysql_attributes(name, value_type)
+      return nil if linux_or_reseller?
+
+      type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'MySQL8'}
+      value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
+      value.dig(value.keys.first, value_type)
+    end
+
+    def windows_mssql_attributes(name, value_type)
+      return nil if linux_or_reseller?
+
+      type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'MsSQL2019'}
+      value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
+      value.dig(value.keys.first, value_type)
+    end
+
+    def windows_web_attributes(name, value_type)
+      return nil if linux_or_reseller?
+
+      type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'Web'}
+      value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
+      value.dig(value.keys.first, value_type)
+    end
+
+    def windows_ftp_attributes(name, value_type)
+      return nil if linux_or_reseller?
+
+      type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'FTP'}
+      value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
+      value.dig(value.keys.first, value_type)
     end
 
     def linux?
