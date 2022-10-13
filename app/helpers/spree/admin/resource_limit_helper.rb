@@ -16,6 +16,7 @@ module Spree::Admin::ResourceLimitHelper
 
       return @limit_exceed = domain_limit_exceed_check(resource_limit, server_type) if domain_type == 'domain'
       return @limit_exceed = mail_box_limit_exceed_check(resource_limit, server_type) if domain_type == 'mail_box'
+      return @limit_exceed = ftp_limit_exceed_check(resource_limit, server_type) if domain_type == 'ftp_user'
       return @limit_exceed = mail_forward_limit_exceed_check(resource_limit, server_type) if domain_type == 'mail_forward'
       return @limit_exceed = mail_list_limit_exceed_check(resource_limit, server_type) if domain_type == 'mailing_list'
     end
@@ -53,6 +54,13 @@ module Spree::Admin::ResourceLimitHelper
     def mail_box_limit_exceed_check(resource_limit, server_type)
       limit = resource_limit["mail"]["mailbox_count_limit"].to_i
       used_count = UserMailbox.mail_box_count(current_spree_user,server_type)
+
+      limit_count_check(used_count, limit)
+    end
+
+    def ftp_limit_exceed_check(resource_limit, server_type)
+      limit = resource_limit["web_linux"]["enabled"] ? resource_limit["web_linux"]["ftp_users_count_limit"].to_i : resource_limit["web_windows"]["ftp_users_count_limit"].to_i
+      used_count = UserFtpUser.ftp_user_count(current_spree_user,server_type)
 
       limit_count_check(used_count, limit)
     end
