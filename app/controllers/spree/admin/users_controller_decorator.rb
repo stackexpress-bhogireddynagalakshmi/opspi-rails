@@ -47,7 +47,12 @@ module Spree
     end
     
     def user_data_by_id
-      @security_info = Spree::User.find_by(id: params[:id])
+      if current_user.superadmin?
+        @security_info = Spree::User.find_by(id: params[:id])
+      else
+        @security_info = current_store.account.users.find_by(id: params[:id])
+      end
+      
     end
   end
 end
