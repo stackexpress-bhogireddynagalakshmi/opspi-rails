@@ -2,7 +2,7 @@ require 'rails_helper'
 
 
 RSpec.describe Spree::UsersController, type: :controller do
-  let(:admin_user) { create(:spree_user) }
+  let(:user) { create(:spree_user) }
   let(:admin_store) {create(:spree_store)}
   before(:each) { @routes = Spree::Core::Engine.routes }
   
@@ -11,7 +11,7 @@ RSpec.describe Spree::UsersController, type: :controller do
     @request.host = admin_store.url
   end
 
-  before { allow(controller).to receive(:spree_current_user) { user } }
+  before { allow(controller).to receive(:spree_current_user) { nil } }
 
 
   context '#load_object' do
