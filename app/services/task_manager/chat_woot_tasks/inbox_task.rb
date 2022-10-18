@@ -12,7 +12,7 @@ module TaskManager
       private
 
       def create_inbox
-        @response = ChatWoot::Inbox.new(resource_params).create
+        @response = ChatWoot::Inbox.new(@store).create
       end
     end
   end
