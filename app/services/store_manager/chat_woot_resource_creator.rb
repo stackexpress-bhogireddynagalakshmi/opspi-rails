@@ -31,7 +31,7 @@ module StoreManager
           id: 1,
           type: "create_chat_agent",
           data: {
-            store: store
+            store_id: store.id
           },
           depends_on: nil,
           sidekiq_job_id: nil
@@ -44,7 +44,7 @@ module StoreManager
           id: 2,
           type: "create_chat_inbox",
           data: {
-            store: store
+            store_id: store.id
           },
           depends_on: 1,
           sidekiq_job_id: nil
@@ -57,7 +57,7 @@ module StoreManager
           id: 3,
           type: "create_chat_agent_with_inbox",
           data: {
-            store: store
+            store_id: store.id
           },
           depends_on: 2,
           sidekiq_job_id: nil

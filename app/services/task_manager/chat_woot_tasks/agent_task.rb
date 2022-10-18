@@ -14,7 +14,7 @@ module TaskManager
       private
 
       def create_agent
-        @response = ChatWoot::Agent.new(resource_params).create
+        @response = ChatWoot::Agent.new(@store).create
       end
     end
   end

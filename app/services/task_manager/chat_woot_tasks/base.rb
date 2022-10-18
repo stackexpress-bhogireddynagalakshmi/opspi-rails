@@ -7,6 +7,7 @@ module TaskManager
         @task = task
         @data = @task[:data]
         @success = false
+        @store = Spree::Store.find(@task[:data][:store_id])
       end
       
       def success?
@@ -14,7 +15,7 @@ module TaskManager
       end
 
       def resource_params
-        @data[:store]
+        @store
       end
     end
   end
