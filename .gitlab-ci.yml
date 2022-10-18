@@ -197,5 +197,5 @@ deploy-staging:
     - master
   # when: manual
   tags:
-    - opspi
+    - opspi-prod-k8s01
 
