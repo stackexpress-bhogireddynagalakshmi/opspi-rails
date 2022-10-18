@@ -161,10 +161,11 @@ deploy-qa:
     - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT docker version
     - scp -r -P $APP_SERVER_SSH_PORT docker-compose.yml $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST:/srv/docker-apps/opspi/
     - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT "bash -c ' cd /srv/docker-apps/opspi && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
+    
   only:
     - dev
   tags:
-    - opspi
+    - opspi-prod-k8s01
 
 
 deploy-staging:
