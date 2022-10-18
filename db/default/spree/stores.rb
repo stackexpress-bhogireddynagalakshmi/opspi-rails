@@ -30,7 +30,7 @@ store_params = {
     default_locale: I18n.locale,
     seo_title: 'OpsPi Demo Shop',
     meta_description: 'This is the new OpsPi UX DEMO | CONTACT',
-    admin_email: 'admin@opspi.com',
+    admin_email: ENV['ADMIN_EMAIL'],
     admin_password: ENV['ADMIN_PASSWORD']
   }
 
