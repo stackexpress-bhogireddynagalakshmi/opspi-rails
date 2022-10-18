@@ -17,7 +17,7 @@ module TaskManager
                       ::BatchJobsExecuter.perform_later(user.id, parent_job_id, current_task)
                     end
 
-      puts "scheduled #{current_task[:id]} -- #{current_task[:type]}:#{current_job.job_id} || parent_job: #{parent_job_id || 'nil'}"
+      Rails.logger.info { "scheduled #{current_task[:id]} -- #{current_task[:type]}:#{current_job.job_id} || parent_job: #{parent_job_id || 'nil'}" }
 
       current_job
     end
