@@ -145,7 +145,7 @@ module Spree
     end
 
     def reject_if_key_blank(attrs)
-      attrs['reseller_club_account_key_enc'].blank?
+      attrs['reseller_club_account_key_enc'].blank? && attrs['reseller_club_account_id'].blank?
     end
 
     def have_linux_access?
