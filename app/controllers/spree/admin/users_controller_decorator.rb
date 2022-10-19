@@ -6,7 +6,7 @@ module Spree
       include UserAuthorizationConcern
 
       def self.prepended(base)
-        base.before_action :ensure_user_authorization!, except: [:index]
+        base.before_action :ensure_user_authorization!, except: [:index, :new, :create]
       end
 
 
