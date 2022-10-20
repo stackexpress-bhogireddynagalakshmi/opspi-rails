@@ -56,7 +56,7 @@ RSpec.describe Spree::UserSessionsController, type: :controller do
       context "and html format is used" do
         it "store admin of another store can not login to different store" do
           post :create, params: { spree_user: { email: store_admin2.email, password: 'opspi@123' }}
-          expect(flash[:alert]).to eq("Invalid Username or Password") # check userDecorator devise active for authentication
+          expect(flash[:alert]).to eq(I18n.t("spree.invalid_tenant")) # check userDecorator devise active for authentication
         end          
       end
     end

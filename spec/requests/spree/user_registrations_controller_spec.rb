@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Spree::UserRegistrationsController, type: :controller do
-  let(:admin_user) { create(:spree_user,:with_super_admin_role,password: 'opspi@123') }
+  let(:admin_user) { create(:spree_user,:with_super_admin_role, password: 'pass@123') }
   let(:admin_store) {create(:spree_store,url: 'example.com')}
 
-  let(:store_admin) { create(:spree_user,:with_store_admin_role,password: 'opspi@123') }
+  let(:store_admin) { create(:spree_user,:with_store_admin_role,password: 'pass@123') }
   let(:reseller_store){create(:spree_store,url: 'reseller1.example.com',admin_email: store_admin.email)}
   
 
@@ -20,14 +20,15 @@ RSpec.describe Spree::UserRegistrationsController, type: :controller do
     context "Valid Registration details" do
       context "and html format is used" do
         it "redirect if success" do
+
+
           store_admin_email = "reseller1@exapmple.com"# 
          
-          post :create, params: { spree_user: { business_name: "store01", subdomain: "store01",email: store_admin_email,password: "opspi@123",password_confirmation: "opspi@123",
+          post :create, params: { spree_user: { business_name: "store01", subdomain: "store01",email: store_admin_email,password: "pass@123",password_confirmation: "pass@123",
             reseller_signup: true }}
-          
          
           #Signed up flash message should be displayed on successfully signing up
-          expect(flash[:notice]).to eq(I18n.t('devise.user_registrations.signed_up'))
+           expect(flash[:success]).to eq(Spree.t(:send_instructions))
           
 
           store_admin = Spree::User.find_by_email(store_admin_email)
@@ -60,7 +61,7 @@ RSpec.describe Spree::UserRegistrationsController, type: :controller do
           post :create, params: { spree_user: {email: customer_email,password: "opspi@123",password_confirmation: "opspi@123" }}
 
            #Signed up flash message should be displayed on successfully signing up
-          expect(flash[:notice]).to eq(I18n.t('devise.user_registrations.signed_up'))
+          expect(flash[:success]).to eq(Spree.t(:send_instructions))
 
           customer = Spree::User.find_by_email(customer_email)
 

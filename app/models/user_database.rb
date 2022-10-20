@@ -20,6 +20,10 @@ class UserDatabase < ApplicationRecord
     suspended: 4
   }
 
+  def self.database_count(user,server_type, db_type)
+    self.where(user_domain_id: UserDomain.where(user_id: user.id,web_hosting_type: server_type),status: "active", database_type: db_type).count
+  end
+
   def database_host
     if my_sql?
       config_value_for(user.panel_config["database_mysql"], 'MYSQL_SERVER_HOSTNAME')

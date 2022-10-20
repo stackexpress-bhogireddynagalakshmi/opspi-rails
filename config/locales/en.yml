@@ -42,6 +42,7 @@ en:
   reseller_club_configuration_error: "Please configure ResellerClub credentials before using Domain Resgistration service"
   reseller_club_not_configured: "Reseller club credentials is not configured"
   reseller_club_configured: "Reseller club credentials is configured"
+  reseller_club_credentials_saved: "ResellerClub credentials saved successfully"
   account_exist: Account exists
   account_does_not_exist: Account does not exists
   hosting_space_exists: Hosting space exists
@@ -76,7 +77,7 @@ en:
     domain_registration: Domain Registrations
     pending_invoices: "You have pending invoices. You can make a payment by using the “Pay Now” button on the “My Billing” tab."
     payment_not_confirmed: "The payment is not confirmed yet."
-    resource_limit_exceeds: "Your limit reached.Please update plan to create new resource"
+    resource_limit_exceeds: "You have used plan resources. To add more, please upgrade the plan."
     payment_states:
       balance_due: Approval Awaited
       checkout: checkout

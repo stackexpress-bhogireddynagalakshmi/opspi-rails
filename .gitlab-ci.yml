@@ -50,9 +50,10 @@ sonarqube-check:
     - sonar-scanner
   allow_failure: true
   only:
-    - test
+    # - test
     #- master
     #- dev
+    - test/sonar
   tags:
     - opspi
 
@@ -68,7 +69,7 @@ docker-build-production:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - docker build -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 
@@ -88,13 +89,14 @@ docker-build-qa:
   before_script:
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - docker build -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
   only:
     - merge_requests
     - dev
     - ci
+    - test
   except:
     - master
   tags:
@@ -108,7 +110,7 @@ run_tests:
   # image: docker:20.10.16
   stage: test
   environment:
-    name: qa
+    name: test
   variables:
     RAILS_ENV: test
     DB_HOST: ${DB_HOST_TEST}
@@ -116,21 +118,23 @@ run_tests:
     DB_USERNAME: ${DB_USERNAME_TEST}
     DB_PASSWORD: ${DB_PASSWORD_TEST}
     DB_PORT: ${DB_PORT_TEST}
+    REDIS_URL: ${REDIS_URL}  
   before_script:
     - docker info
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
     # - docker run -e DB_HOST=$DB_HOST -e DB_NAME:$DB_NAME -e DB_USERNAME:$DB_USERNAME -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT:$DB_PORT "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" rspec
-    - docker run -e RAILS_ENV=test -e DB_HOST=$DB_HOST -e TEST_DB_NAME:$DB_NAME -e DB_USERNAME:$DB_USERNAME -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT:$DB_PORT "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" rspec
+    # - echo "docker run -e RAILS_ENV=test -e DB_HOST=$DB_HOST -e TEST_DB_NAME=$DB_NAME -e DB_USERNAME=$DB_USERNAME -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT=$DB_PORT $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA rspec"
+    - docker run -e RAILS_ENV=test -e DB_HOST=$DB_HOST -e TEST_DB_NAME=$DB_NAME -e DB_USERNAME=$DB_USERNAME -e DB_PASSWORD=$DB_PASSWORD -e DB_PORT=$DB_PORT -e REDIS_URL=$REDIS_URL "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" rspec
   only:
-    # - merge_requests
-    # - dev
-    # - ci
+    - merge_requests
+    - dev
     - test
   except:
     - master
   tags:
-    - opspi
+    # - opspi
+    - opspi-prod-k8s01
 
 
 deploy-qa:
@@ -157,10 +161,11 @@ deploy-qa:
     - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT docker version
     - scp -r -P $APP_SERVER_SSH_PORT docker-compose.yml $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST:/srv/docker-apps/opspi/
     - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT "bash -c ' cd /srv/docker-apps/opspi && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
+    
   only:
     - dev
   tags:
-    - opspi
+    - opspi-prod-k8s01
 
 
 deploy-staging:
@@ -192,5 +197,5 @@ deploy-staging:
     - master
   # when: manual
   tags:
-    - opspi
+    - opspi-prod-k8s01
 

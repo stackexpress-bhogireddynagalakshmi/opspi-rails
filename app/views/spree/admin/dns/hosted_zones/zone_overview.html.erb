@@ -33,9 +33,9 @@
                      </a>
                   </li>
 
-                   <li class="nav-item">
+                  <!--  <li class="nav-item">
                      <a class="nav-link" id="backup-tab" data-bs-toggle="tab" href="#backup" role="tab" aria-controls="backup" aria-selected="false">Backup</a>
-                  </li>
+                  </li> -->
                </ul>
             </div>
          </div>
@@ -271,7 +271,7 @@
             </div>
             <div class="col-auto">
                <%= button_link_to "Add New",
-                  new_admin_sites_isp_database_path(domain_name: params[:zone_name]), 
+                  new_admin_sites_isp_database_path(domain_name: params[:zone_name],user_domain_id: params[:user_domain_id]), 
                   class: "btn btn-primary lift",
                     icon: 'add.svg',
                     id: 'new_admin_database',
@@ -280,31 +280,31 @@
          </div>
          <%= render partial: 'spree/admin/dns/hosted_zones/database_index' %>
       </div>
-      <div class="tab-pane fade" id="backup" role="tabpanel" aria-labelledby="backup-tab">
+     <!--  <div class="tab-pane fade" id="backup" role="tabpanel" aria-labelledby="backup-tab">
        <div class="card mb-5">
         <div class="card-body">
-          <%=form_for(@user_domain.user_website, url: admin_sites_backup_path(@user_domain.user_website), remote: true) do |form|%>
-            <%= hidden_field_tag :user_domain_id, @user_domain.id%>
+          <%#if @user_domain.user_website.present?%>
+            <%#=form_for(@user_domain.user_website, url: admin_sites_backup_path(@user_domain.user_website), remote: true) do |form|%>
+              <%#= hidden_field_tag :user_domain_id, @user_domain.id%>
 
-            <div class="flex-container mb-2">
-               <div class="flex-child">
-                <label class="mr-3">Enable Backup</label> 
-               </div>
-                <div class="form-check form-switch flex-child">
-                  <%= form.check_box :enable_backup, class: "form-check-input" %> <br/>
-
-                </div>       
-                <br/> 
-                  
-            </div>
-            <p class="text-muted"><%=t('backup.enable_site_backup')%></p> 
-           
-            <div class="row">
-              <div class="col-md-12">
-                  <%=form.submit "Start Backup", class: 'btn btn-primary'%>
+              <div class="flex-container mb-2">
+                 <div class="flex-child">
+                  <label class="mr-3">Enable Backup</label> 
+                 </div>
+                  <div class="form-check form-switch flex-child">
+                    <%#= form.check_box :enable_backup, class: "form-check-input" %> <br/>
+                  </div>       
+                  <br/> 
               </div>
-            </div>
-          <%end%>
+              <p class="text-muted"><%#=t('backup.enable_site_backup')%></p> 
+             
+              <div class="row">
+                <div class="col-md-12">
+                    <%#=form.submit "Start Backup", class: 'btn btn-primary'%>
+                </div>
+              </div>
+            <%#end%>
+          <%#end%>
         </div>
        </div>
 
@@ -319,37 +319,25 @@
             </div>
          </div>
          <div class="card mt-4">
-            <div class="table-responsive">
-              <table class="table table-sm card-table" style="width:100%">
-                 <thead>
-                   <tr>
-                     <th> Date </th>
-                     <th> Type </th>
-                     <th> Format </th>
-                     <th> File Size </th>
-                     <th> Filename </th>
-                   </tr>
-                 </thead>
-                 <tbody id="site_backup_list">
-                 </tbody>
-              </table>
+            <div class="table-responsive" id="site_backup_list">
+              
             </div>
           </div>
-      </div>
+      </div> -->
    </div>
 </div>
 
 <%= render partial: '/spree/admin/shared/spinner/spinner' %>
 <script type="text/javascript">
 
-$(document).ready(function(){
+/*$(document).ready(function(){
 
   $('#backup-tab').on('click', function(){
-    $.get("<%=admin_sites_backup_index_path(user_domain_id: @user_domain.id)%>", function(data){
+    $.get("<%#=admin_sites_backup_index_path(user_domain_id: @user_domain.id)%>", function(data){
       $('#site_backup_list').html(data)
     })
   });
-});
+});*/
 
 var body = document.body;
 

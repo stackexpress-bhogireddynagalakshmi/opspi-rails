@@ -38,20 +38,19 @@ module Spree
 
         store_admin = StoreManager::StoreAdminCreator.new(self, account: account).call
 
-        unless store_admin.account_id.blank?
-          chat_agent = ChatWoot::Agent.new(self).create
-          chat_inbox = ChatWoot::Inbox.new(self).create
-          if chat_agent[:success] && chat_inbox[:success]
-            chatwoot_user = ChatwootUser.new({ store_account_id: account.id, inbox_id: chat_inbox[:response].id, website_token: chat_inbox[:response].website_token})
-            chatwoot_user.save!
-            ChatWoot::Inbox.new(chatwoot_user,agent_id: chat_agent[:response].id).add_agent_to_inbox
-          end
-        end
+        create_chatwoot_resources(store_admin)
 
         if TenantManager::TenantHelper.current_tenant.blank? || store_admin.account_id.blank?
           store_admin.update_column :account_id, account.id
         end
       end
+    end
+
+    def create_chatwoot_resources(store_admin)
+      return nil if store_admin.account_id == ::TenantManager::TenantHelper.admin_tenant_id
+      return nil if ChatwootUser.where(store_account_id: store_admin.account_id).any?
+
+      StoreManager::ChatWootResourceCreator.new(self).call
     end
   end
 end

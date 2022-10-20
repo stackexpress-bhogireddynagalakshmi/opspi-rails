@@ -6,7 +6,6 @@ module Spree
     
     def self.prepended(base)
       base.validate :ensure_valid_store_params, on: [:create]
-      base.validate :ensure_terms_and_condition_accepted, on: [:create]
 
       base.belongs_to :account, class_name: '::Account'
       base.has_many :subscriptions, class_name: 'Subscription'
@@ -146,13 +145,7 @@ module Spree
     end
 
     def reject_if_key_blank(attrs)
-      attrs['reseller_club_account_key_enc'].blank?
-    end
-
-    def ensure_terms_and_condition_accepted
-      return if TenantManager::TenantHelper.current_tenant.blank?
-      
-      errors.add(:_, "Please accept the terms and conditions") unless terms_and_conditions
+      attrs['reseller_club_account_key_enc'].blank? && attrs['reseller_club_account_id'].blank?
     end
 
     def have_linux_access?
@@ -173,7 +166,7 @@ module Spree
 
     def get_purchased_plans
       TenantManager::TenantHelper.unscoped_query do
-        orders.collect do |o|
+        orders.where(payment_state: 'paid').collect do |o|
           o.products.pluck(:server_type)
         end.flatten
       end

@@ -3,6 +3,11 @@
 module Spree
   module Admin
     module ProductsControllerDecorator
+
+      def self.prepended(base)
+        base.after_action :create_product_config, only: [:create]
+      end
+
       def collection
         @collection = super
         @collection = @collection.where(account_id: current_spree_user.account_id) rescue []
@@ -11,6 +16,10 @@ module Spree
       protected
       def location_after_save
         params.key?(:done) ? admin_products_path : edit_admin_product_url(@product)
+      end
+
+      def create_product_config
+        AppManager::ProductConfigCreator.new(@product,params).call
       end
     end
   end

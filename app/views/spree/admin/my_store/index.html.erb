@@ -87,7 +87,7 @@
   <div class="card-body">
     <%= f.field_container :mail_from_address, class: ['form-group'] do %>
       <%= f.label :mail_from_address, raw(Spree.t(:mail_from_address)  + required_span_tag) %>
-      <%= f.text_field :mail_from_address, class: 'form-control', required: true %>
+      <%= f.text_field :mail_from_address, class: 'form-control', required: true ,readonly: true%>
       <%= f.error_message_on :mail_from_address %>
       <small class="form-text text-muted">
         <%= Spree.t('store_form.mail_from_address_help') %>
