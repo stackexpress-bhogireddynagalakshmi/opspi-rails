@@ -9,6 +9,7 @@ module Spree
         before_action :ensure_hosting_panel_access
         before_action :set_user_domain, only: [:new, :create, :update, :edit, :destroy]
         before_action :set_mailing_list, only: %i[edit update destroy]
+        before_action -> { resource_limit_check(@user_domain.web_hosting_type,'mailing_list') }, except: [:index, :new, :update, :edit, :destroy] 
         
 
         def index
@@ -27,7 +28,8 @@ module Spree
         def edit; end
 
         def create
-          # return @response = {success: false, message: I18n.t('spree.resource_limit_exceeds')} if resource_limit_exceeded("mailing_list")
+          return @response = @limit_exceed unless @limit_exceed[:success]
+          
           @response = mailing_list_api.create(mailing_list_params.merge({ domain: @user_domain.domain }), user_domain: @user_domain)
 
           if @response[:success]
@@ -37,7 +39,7 @@ module Spree
 
         def update
           list_params  = mailing_list_params
-          list_params.delete(:password) if list_params[:password] == 'dummypass'
+          list_params.delete(:password) if list_params[:password] == DUMMY_PASS
           
           @response = mailing_list_api.update(@mailing_list.id, list_params)
           @mailing_list.reload

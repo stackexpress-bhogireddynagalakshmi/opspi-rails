@@ -2,7 +2,7 @@ base_url: <%=ENV["SOLID_CP_REMOTE_URL"]%>
 user_url: <%=ENV["SOLID_CP_USER_URL"]%>
 username: <%= ENV["SOLID_CP_USERNAME"]%>
 password: <%= ENV["SOLID_CP_PASSWORD"]%>
-timeout: 30
+timeout: 60
 log: true
 register_users: true
 enabled: <%= ENV["SOLID_CP_ENABLED"]%>

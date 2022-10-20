@@ -11,16 +11,13 @@ module Spree
       base.validate :ensure_server_type_do_not_change, on: [:update]
       base.after_initialize :set_available_date, :set_validity
       base.acts_as_tenant :account, class_name: '::Account'
-
       base.has_many :plan_quota_groups, class_name: 'PlanQuotaGroup', dependent: :destroy, extend: FirstOrBuild
-
       base.has_many :plan_quotas, through: :plan_quota_groups, dependent: :destroy
       base.has_one :isp_config_limit, inverse_of: :product, autosave: true, dependent: :destroy
       base.after_commit :ensure_plan_id_or_template_id, on: [:create]
       base.after_commit :add_to_tenant, on: %i[create update]
       base.after_commit :update_solid_cp_plan, on: [:update]
       base.after_commit :update_stock_availibility, on: [:create]
-
       base.accepts_nested_attributes_for :plan_quota_groups, reject_if: :reject_if_not_windows, allow_destroy: true
       base.accepts_nested_attributes_for :isp_config_limit, reject_if: :reject_if_not_linux
 
@@ -37,7 +34,7 @@ module Spree
         reseller_plan: 4
       }
       base.has_one :product_config
-      base.after_create :create_product_config
+      # base.after_create :create_product_config
       base.whitelisted_ransackable_attributes = %w[description name slug discontinue_on account_id]
     end
 
@@ -45,9 +42,9 @@ module Spree
       self.validity = 1
     end
 
-    def create_product_config
-      AppManager::ProductConfigCreator.new(self,isp_config_limit.as_json,plan_quotas.as_json).call
-    end
+    # def create_product_config
+    #   AppManager::ProductConfigCreator.new(self,isp_config_limit.as_json,plan_quotas.as_json).call
+    # end
     
     def ensure_plan_id_or_template_id
       if windows?  #TODO we may remove windows and linux option as seprate plan later
@@ -87,7 +84,7 @@ module Spree
     end
 
     def reject_if_not_linux(_attrs)
-      !linux?
+      !(linux? || reseller_plan?)
     end
 
     def ensure_server_type_do_not_change

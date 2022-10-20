@@ -50,7 +50,7 @@ Rails.application.routes.draw do
       resources :domain_registrations do 
         collection do
           get :setup_reseller_club
-          post :setup_reseller_club
+          post :update_reseller_club
         end
       end
 
@@ -91,7 +91,7 @@ Rails.application.routes.draw do
 
       namespace :sites do
         resources :websites
-        resources :backup, only: [:index, :update]
+        # resources :backup, only: [:index, :update]
         resources :ftp_users do
           member do
             get :reset_password
