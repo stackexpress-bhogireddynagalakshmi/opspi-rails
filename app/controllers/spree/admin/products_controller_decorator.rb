@@ -3,10 +3,13 @@
 module Spree
   module Admin
     module ProductsControllerDecorator
+      include ApplicationHelper
 
       def self.prepended(base)
+        base.before_action :ensure_user_confirmed, except: [:show, :index, :new]
         base.after_action :create_product_config, only: [:create]
       end
+
 
       def collection
         @collection = super

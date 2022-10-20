@@ -9,6 +9,7 @@ module ApplicationHelper
     end
   end
 
+
   def current_admin_tenant?
     current_store.account.admin_tenant?
   end
