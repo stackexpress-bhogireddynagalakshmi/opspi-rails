@@ -5,9 +5,12 @@ module Spree
     class DomainRegistrationsController < Spree::Admin::BaseController
       helper Spree::Admin::NavigationHelper
       include Spree::Admin::DomainRegistrationsHelper
+      include ApplicationHelper
 
+      before_action :ensure_user_confirmed, except: [:show, :index, :new]
       before_action :set_tld_pricing, only: [:new]
       before_action :ensure_reseller_club_configured, except: [:setup_reseller_club]
+      
 
       def index
         
@@ -28,24 +31,26 @@ module Spree
       end
 
       def new
+        
         @order = current_domain_order
         cookies.signed[:token] = @order.token if @order.present?
         @product = TenantManager::TenantHelper.unscoped_query { Spree::Product.domain.first }
         @variant = @product.master
         if params[:domian_names].present?
-          domains = params[:domian_names].split(",")
-          tlds    = params[:tlds] || ["com"]
+            domains = params[:domian_names].split(",")
+            tlds    = params[:tlds] || ["com"]
 
-          @response = ResellerClub::Domain.available("domain-name" => domains, "tlds" => tlds,
-                                                     'email' => current_spree_user.email)[:response]
+            @response = ResellerClub::Domain.available("domain-name" => domains, "tlds" => tlds,
+                                                      'email' => current_spree_user.email)[:response]
 
-          @suggestions = ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds,
+            @suggestions = ResellerClub::Domain.v5_suggest_names("keyword" => params[:domian_names], "tlds" => tlds,
                                                                "hyphen-allowed" => "true", "add-related" => "true", "no-of-results" => "10", 'email' => current_spree_user.email)[:response]
         end
 
       end
 
       def create
+        
         TenantManager::TenantHelper.unscoped_query do
           @product = Spree::Product.domain.first
           
@@ -69,6 +74,11 @@ module Spree
       end
 
       def setup_reseller_club
+        if request.post?
+            spree_current_user.update(user_params)
+            flash.now[:success] = "ResellerClub credentials saved successfully"
+        end
+
         if current_spree_user.store_admin? || current_spree_user&.superadmin?
           render layout: "spree/layouts/admin"
         else

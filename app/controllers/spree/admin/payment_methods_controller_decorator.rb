@@ -3,6 +3,12 @@
 module Spree
   module Admin
     module PaymentMethodsControllerDecorator
+      include ApplicationHelper
+
+      def self.prepended(base)
+        base.before_action :ensure_user_confirmed, except: [:show, :index, :new]
+      end
+
       def index
         @payment_methods = @payment_methods.where(account_id: tenant_id)
       end

@@ -3,10 +3,12 @@
 module Spree
   module Admin
     module UsersControllerDecorator
+      include ApplicationHelper
       include UserAuthorizationConcern
 
       def self.prepended(base)
-        base.before_action :ensure_user_authorization!, except: [:index, :new, :create]
+        base.before_action :ensure_user_authorization!, except: [:index]
+        base.before_action :ensure_user_confirmed, except: [:show, :index, :new]
       end
 
 

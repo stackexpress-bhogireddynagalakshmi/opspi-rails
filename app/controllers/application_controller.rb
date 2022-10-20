@@ -11,6 +11,19 @@ class ApplicationController < ActionController::Base
     set_tenant
   end
 
+  def ensure_user_confirmed
+    return nil if current_spree_user.confirmed?
+    
+    respond_to do |format|
+      format.json { head :forbidden, content_type: 'text/html' }
+      format.html do 
+          
+        render 'spree/shared/not_confirmed'
+       end
+      format.js { head :forbidden, content_type: 'text/js' }
+    end
+  end
+  
   def set_user_domain
     @user_domain = current_spree_user.user_domains.find(params[:user_domain_id])
   end

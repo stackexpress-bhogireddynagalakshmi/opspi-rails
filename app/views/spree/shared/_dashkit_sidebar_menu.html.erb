@@ -71,7 +71,7 @@ width:230px
               <i class="fe fe-home" style="margin-right:10px"></i> Dashboard
             </a>
           </li>
-          <%if current_spree_user.confirmed?%>
+
 
           <% if can? :admin, Spree::Order %>
           <li class="nav-item">
@@ -569,7 +569,7 @@ width:230px
         </div>
         </li>
 
-        <%end%>
+        
 
         </ul>
 

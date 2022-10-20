@@ -5,6 +5,9 @@ module Spree
     class MyStoreController < Spree::Admin::BaseController
       helper Spree::Admin::NavigationHelper
       require 'store_domain_validator'
+      include ApplicationHelper
+
+      before_action :ensure_user_confirmed, except: [:show, :index, :new, :create]
 
       def index
         @store = current_store
