@@ -69,16 +69,18 @@ module Spree
       end
 
       def setup_reseller_club
-        if request.post?
-          spree_current_user.update(user_params)
-          flash.now[:success] = "ResellerClub credentials saved successfully"
-        end
-
         if current_spree_user.store_admin? || current_spree_user&.superadmin?
           render layout: "spree/layouts/admin"
         else
           render layout: "dashkit_admin_layout"
         end
+      end
+
+      def update_reseller_club
+        spree_current_user.update(user_params)
+        flash.now[:success] = I18n.t(:reseller_club_credentials_saved)
+
+        redirect_to setup_reseller_club_admin_domain_registrations_url
       end
 
       private
@@ -132,8 +134,14 @@ module Spree
       end
 
       def user_params
+        user_key_attributes = [:id, :reseller_club_account_id, :_destroy]
+
+        if params[:user][:user_key_attributes][:reseller_club_account_key_enc] != DUMMY_PASS
+          user_key_attributes << :reseller_club_account_key_enc
+        end
+
         params.require(:user).permit(:reseller_club_customer_id, :reseller_club_contact_id,
-                                     user_key_attributes: %i[id _destroy reseller_club_account_id reseller_club_account_key_enc])
+                                     user_key_attributes: user_key_attributes)
       end
 
       def customer_id

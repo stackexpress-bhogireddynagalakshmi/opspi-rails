@@ -8,7 +8,7 @@
 <% end %>
 
 
- <%=form_for spree_current_user, url: "/admin/domain_registrations/setup_reseller_club",html: {method: :post} do |f|%> 
+ <%=form_for spree_current_user, url: "/admin/domain_registrations/update_reseller_club",html: {method: :post} do |f|%> 
   <%f.object.build_user_key if f.object.user_key.blank? %>
   <%=f.fields_for :user_key do |ff|%>
   <fieldset>
@@ -19,7 +19,7 @@
 
     <div class="form-group field">
       <label >API Key</label>
-      <%=ff.password_field :reseller_club_account_key_enc,value: '', class: 'form-control',required: true%>
+      <%=ff.password_field :reseller_club_account_key_enc,value: DUMMY_PASS, class: 'form-control',required: true%>
     </div>
     <%end%>
     
