@@ -7,7 +7,7 @@ module Spree
         include ApisHelper
         include PanelConfiguration
 
-        before_action :set_user_domain, only: [:zone_overview]
+        before_action :set_user_domain, only: %i[zone_overview destroy]
         before_action :ensure_hosting_panel_access
         before_action :set_zone_list, only: %i[edit update destroy dns zone_overview]
 
@@ -71,11 +71,47 @@ module Spree
 
         def destroy
           @response = host_zone_api.destroy(@zone_list.isp_config_host_zone_id)
+
+          res2 = website_api.destroy(@user_domain.user_website.id)
+
+          @user_domain.user_ftp_users.each do |ftp_user|
+            res3 = ftp_user_api.destroy(ftp_user.id)
+          end
+          byebug
+          @user_domain.user_mail_domain.each do |mail_domain_id|
+            res4 = mail_domain_api.destroy(mail_domain_id)
+          end
+
+          byebug
           set_flash
           respond_to do |format|
             format.js { render inline: "location.reload();" }
             format.html { redirect_to  admin_dns_hosted_zones_path }
           end
+        end
+
+        def website_api
+          if @user_domain.linux?
+            current_spree_user.isp_config.website
+          else
+            current_spree_user.solid_cp.web_domain
+          end
+        end
+
+        def ftp_user_api
+          if @user_domain.linux?
+            current_spree_user.isp_config.ftp_user
+          else
+            current_spree_user.solid_cp.ftp_account
+          end
+        end
+
+        def mail_domain_api
+          current_spree_user.isp_config.mail_domain
+        end
+
+        def database_api
+          current_spree_user.isp_config.database
         end
 
         def dns
@@ -127,14 +163,14 @@ module Spree
           end
 
           if @user_domain.windows?
-            #TODO: Yet to implement/refactor
+          # TODO: Yet to implement/refactor
 
-           elsif @user_domain.linux?
-            user_remote_website_response =  current_spree_user.isp_config.website.find(@user_domain.user_website.try(:remote_website_id))
-            @user_remote_website = user_remote_website_response[:response][:response] 
+          elsif @user_domain.linux?
+            user_remote_website_response = current_spree_user.isp_config.website.find(@user_domain.user_website.try(:remote_website_id))
+            @user_remote_website = user_remote_website_response[:response][:response]
 
-           end
-          
+          end
+
           # User Mail boxes
           @mailboxes = @user_domain.user_mailboxes.order("created_at desc")
 

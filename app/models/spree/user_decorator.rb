@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 module Spree
   module UserDecorator
     attr_accessor :subdomain, :business_name

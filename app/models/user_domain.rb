@@ -3,7 +3,7 @@ class UserDomain < ApplicationRecord
   
   belongs_to :user, class_name: 'Spree::User',foreign_key: 'user_id'
   has_one :user_website, class_name: 'UserWebsite'
-  has_one :user_mail_domain
+  has_one :user_mail_domain 
   has_many :user_mailboxes
   has_many :user_mailing_lists
   has_many :user_mail_forwards

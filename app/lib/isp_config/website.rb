@@ -6,7 +6,7 @@ module IspConfig
 
     def initialize(user)
       @user = user
-      set_base_uri( user.panel_config["web_linux"] )
+      set_base_uri(user.panel_config["web_linux"])
     end
 
     def find(id)
@@ -38,37 +38,49 @@ module IspConfig
         user_domain = user.user_domains.where(domain: params[:domain], web_hosting_type: nil).last
 
         user_domain.update(web_hosting_type: 1)
-        user_domain.create_user_website({user_domain_id: user_domain.try(:id),hosting_type: 2, remote_website_id: response["response"]})
+        user_domain.create_user_website({ user_domain_id: user_domain.try(:id), hosting_type: 2,
+                                          remote_website_id: response["response"] })
       end
       formatted_response(response, 'create')
     end
 
-    def update(primary_id, params = {})
+    def update(id, params = {})
+      user_website = UserWebsite.find(id)
+
       params = sanitze(params)
       response = query({
                          endpoint: '/json.php?sites_web_domain_update',
                          method: :POST,
                          body: {
                            client_id: user.isp_config_id,
-                           primary_id: primary_id,
+                           primary_id: user_website.remote_website_id,
                            params: params.merge(server_params)
                          }
                        })
 
+      user_website.update(user_website_params(params)) if response.code == "ok"
+
       formatted_response(response, 'update')
     end
 
-    def destroy(primary_id)
+    def destroy(id)
+      user_website = UserWebsite.find(id)
+
       response = query({
                          endpoint: '/json.php?sites_web_domain_delete',
                          method: :DELETE,
                          body: {
                            client_id: user.isp_config_id,
-                           primary_id: primary_id
+                           primary_id: user_website.remote_website_id
                          }
                        })
 
-      user.websites.find_by_isp_config_website_id(primary_id).destroy if response.code == "ok"
+      if response.code == "ok"
+        user.websites.find_by_isp_config_website_id(id)&.destroy
+
+        user_website.destroy
+      end
+
       formatted_response(response, 'delete')
     end
 
@@ -110,23 +122,24 @@ module IspConfig
 
     def create_a_record(params)
       dns_id = HostedZone.where(name: params[:domain]).pluck(:isp_config_host_zone_id).first
-        a_record_params={
-          type: "A",
-          name: params[:domain],
-          hosted_zone_name: params[:domain],
-          ipv4: IspConfig::Config.api_web_server_ip(user),
-          ttl: "3600",
-          hosted_zone_id: dns_id,
-          client_id: user.isp_config_id
-        }
-        user.isp_config.hosted_zone_record.create(a_record_params)
+      a_record_params = {
+        type: "A",
+        name: params[:domain],
+        hosted_zone_name: params[:domain],
+        ipv4: IspConfig::Config.api_web_server_ip(user),
+        ttl: "3600",
+        hosted_zone_id: dns_id,
+        client_id: user.isp_config_id
+      }
+      user.isp_config.hosted_zone_record.create(a_record_params)
     end
 
     def sanitze(params)
       return params if  params[:domain].blank?
-      params[:domain] = params[:domain][0..-2]  if  params[:domain][-1] == '.'
 
-      return params
+      params[:domain] = params[:domain][0..-2] if params[:domain][-1] == '.'
+
+      params
     end
 
     def server_params
@@ -178,6 +191,12 @@ module IspConfig
         http_port: '80',
         https_port: '443'
       }
+    end
+
+    def user_website_params(_params)
+      {
+
+      }.reject { |_k, v| v.blank? }
     end
   end
 end
