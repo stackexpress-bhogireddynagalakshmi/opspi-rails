@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 
-RSpec.describe "Signup and Purchase" do
+RSpec.describe "#signup and purchase" do
   before(:each) { @routes = Spree::Core::Engine.routes }
   before { @request.env['devise.mapping'] = Devise.mappings[:spree_user] }
   #Super Admin Store
@@ -33,7 +33,6 @@ RSpec.describe "Signup and Purchase" do
 
 
     it 'payment capture by super admin' do
-      byebug
       # put :fire, params: { payment: {e: "capture", order_id: , id: }}
     end
 
