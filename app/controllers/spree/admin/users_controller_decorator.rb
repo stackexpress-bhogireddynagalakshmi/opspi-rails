@@ -8,10 +8,11 @@ module Spree
 
       def self.prepended(base)
         base.before_action :ensure_user_authorization!, except: [:index]
+        base.before_action :user_data_by_id, except: %i[create,addresses]
         base.before_action :ensure_user_confirmed, except: [:show, :index, :new]
       end
 
-
+      
       def collection
         super
         @collection = @collection.where(account_id: current_spree_user.account_id) if current_spree_user.store_admin?
@@ -43,11 +44,20 @@ module Spree
         end
       end
 
-      def primary_key
+    def primary_key
         params[:id]
+    end
+    
+    def user_data_by_id
+      if current_spree_user.superadmin?
+        @security_info = Spree::User.find_by(id: params[:id])
+      else
+        @security_info = current_store.account.users.find_by(id: params[:id])
       end
+      
     end
   end
+end
 end
 
 if ::Spree::Admin::UsersController.included_modules.exclude?(Spree::Admin::UsersControllerDecorator)

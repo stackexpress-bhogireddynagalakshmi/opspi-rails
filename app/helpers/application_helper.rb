@@ -286,7 +286,6 @@ module ApplicationHelper
     types
   end
 
-
   def html_boolean(boolean, opts={})
     if opts[:reverse] == true
       if boolean == true

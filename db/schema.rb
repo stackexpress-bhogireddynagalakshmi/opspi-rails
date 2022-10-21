@@ -1511,6 +1511,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
     t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
     t.index ["spree_api_key"], name: "index_spree_users_on_spree_api_key"
   end
+  
 
   create_table "spree_variants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "sku", default: "", null: false
