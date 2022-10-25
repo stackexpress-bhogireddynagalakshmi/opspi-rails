@@ -11,7 +11,7 @@ module TaskManager
       @tasks = []
           
       build_tasks
-      byebug
+      
 
       TaskManager::TaskProcessor.new(@user, @tasks).call
     end
@@ -50,6 +50,7 @@ module TaskManager
           id: SecureRandom.hex,
           type: "delete_ftp_account",
           user_domain_id: @user_domain.id,
+          server_type:  @user_domain.windows? ? 'windows' : 'linux',
           data: {
             id: object.id
           },
@@ -160,11 +161,11 @@ module TaskManager
         rescue Exception => e
           []
         end      
-        byebug  
+          
         current_domains = @all_domains.collect { |x| x if x[:domain_name].include?(@user_domain.domain) }.compact
         domain_id = current_domains.collect { |c| c[:domain_id] if c[:web_site_id].to_i.zero? }.compact.first
         website_id = current_domains.collect { |c| c[:web_site_id] if c[:web_site_id].to_i.positive? }.compact.first
-        byebug
+        
         { web_site_id: website_id, web_domain_id: domain_id, server_type: 'windows' }
       else
         { id: @user_domain.user_website.id, server_type: 'linux'  }
