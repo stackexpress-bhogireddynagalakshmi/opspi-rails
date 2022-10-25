@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_10_132055) do
+ActiveRecord::Schema.define(version: 2022_10_12_022017) do
 
   create_table "accounts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "orgainization_name"
@@ -77,6 +77,15 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "backup_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "user_domain_id"
+    t.text "notes"
+    t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "chatwoot_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -494,10 +503,9 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
     t.boolean "states_required", default: false
     t.datetime "updated_at"
     t.boolean "zipcode_required", default: true
-    t.index "(lower(`iso_name`))", name: "index_spree_countries_on_lower_iso_name", unique: true
-    t.index "(lower(`name`))", name: "index_spree_countries_on_lower_name", unique: true
     t.index ["iso"], name: "index_spree_countries_on_iso", unique: true
     t.index ["iso3"], name: "index_spree_countries_on_iso3", unique: true
+    t.index ["name"], name: "index_spree_countries_on_lower_name", unique: true
   end
 
   create_table "spree_credit_cards", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -1029,7 +1037,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
     t.boolean "mutable", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index "(lower(`name`))", name: "index_spree_refund_reasons_on_lower_name", unique: true
+    t.index ["name"], name: "index_spree_refund_reasons_on_lower_name", unique: true
   end
 
   create_table "spree_refunds", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -1061,8 +1069,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "type"
-    t.index "(lower(`name`))", name: "index_spree_reimbursement_types_on_lower_name", unique: true
-    t.index ["type"], name: "index_spree_reimbursement_types_on_type"
+    t.index ["name"], name: "index_spree_reimbursement_types_on_lower_name", unique: true
   end
 
   create_table "spree_reimbursements", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -1084,7 +1091,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
     t.boolean "mutable", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index "(lower(`name`))", name: "index_spree_return_authorization_reasons_on_lower_name", unique: true
+    t.index ["name"], name: "index_spree_return_authorization_reasons_on_lower_name", unique: true
   end
 
   create_table "spree_return_authorizations", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -1137,7 +1144,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
 
   create_table "spree_roles", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name"
-    t.index "(lower(`name`))", name: "index_spree_roles_on_lower_name", unique: true
+    t.index ["name"], name: "index_spree_roles_on_lower_name", unique: true
   end
 
   create_table "spree_shipments", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -1383,9 +1390,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
     t.boolean "solid_cp_access", default: false
     t.boolean "isp_config_access", default: false
     t.string "supported_locales"
-    t.index "(lower(`code`))", name: "index_spree_stores_on_lower_code", unique: true
-    t.index ["default"], name: "index_spree_stores_on_default"
-    t.index ["url"], name: "index_spree_stores_on_url"
+    t.index ["code"], name: "index_spree_stores_on_lower_code", unique: true
   end
 
   create_table "spree_tax_categories", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -1511,7 +1516,6 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
     t.index ["ship_address_id"], name: "index_spree_users_on_ship_address_id"
     t.index ["spree_api_key"], name: "index_spree_users_on_spree_api_key"
   end
-  
 
   create_table "spree_variants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "sku", default: "", null: false
@@ -1614,9 +1618,10 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "panel_id"
+    t.integer "web_domain_id"
   end
 
-  create_table "user_ftp_users", charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
+  create_table "user_ftp_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.integer "user_domain_id"
     t.integer "remote_ftp_user_id"
     t.string "username"
@@ -1696,6 +1701,7 @@ ActiveRecord::Schema.define(version: 2022_10_10_132055) do
     t.integer "user_domain_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "website_id"
     t.integer "remote_website_id"
     t.integer "hosting_type"
     t.boolean "enable_backup", default: false, null: false

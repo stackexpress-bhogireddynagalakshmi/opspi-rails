@@ -32,9 +32,9 @@ module TaskManager
 
       def website_api
         if @data[:server_type].present? && @data[:server_type] == 'windows'
-          current_spree_user.solid_cp.website
+          user.solid_cp.website
         else
-          current_spree_user.isp_config.website
+          user.isp_config.website
         end
       end
 

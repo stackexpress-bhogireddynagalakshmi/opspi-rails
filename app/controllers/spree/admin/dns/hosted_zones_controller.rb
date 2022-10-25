@@ -70,42 +70,43 @@ module Spree
         end
 
         def destroy
-          # Delete the Web Domains and Web Site
-          domain_res = website_api.destroy(delete_website_params)
+          # # Delete the Web Domains and Web Site
+          # domain_res = website_api.destroy(delete_website_params)
           
-          # Delete FTP users
-          @user_domain.user_ftp_users.each do |ftp_user|
-            res3 = ftp_user_api.destroy(ftp_user.id)
-          end
+          # # Delete FTP users
+          # @user_domain.user_ftp_users.each do |ftp_user|
+          #   res3 = ftp_user_api.destroy(ftp_user.id)
+          # end
 
-          # Delete Mail Domain
-          mail_domain_api.destroy(@user_domain.user_mail_domain.id)
+          # # Delete Mail Domain
+          # mail_domain_api.destroy(@user_domain.user_mail_domain.id)
 
-          # Delete Mailboxes
-          @user_domain.user_mailboxes.each do |mailbox|
-            mailbox_api.destroy(mailbox.id)
-          end
+          # # Delete Mailboxes
+          # @user_domain.user_mailboxes.each do |mailbox|
+          #   mailbox_api.destroy(mailbox.id)
+          # end
 
-          @user_domain.user_mailing_lists.each do |mailing_list|
-            mailing_list_api.destroy(mailing_list.id)
-          end
+          # @user_domain.user_mailing_lists.each do |mailing_list|
+          #   mailing_list_api.destroy(mailing_list.id)
+          # end
 
-          @user_domain.user_mail_forwards.each do |mail_forward|
-            mail_forward_api.destroy(mail_forward.id)
-          end
+          # @user_domain.user_mail_forwards.each do |mail_forward|
+          #   mail_forward_api.destroy(mail_forward.id)
+          # end
 
-          @user_domain.user_spam_filters.each do |spam_filter|
-            spam_filter_api.destroy(spam_filter.id)
-          end
+          # @user_domain.user_spam_filters.each do |spam_filter|
+          #   spam_filter_api.destroy(spam_filter.id)
+          # end
 
-          # user_databases
+          # # user_databases
 
-          # Delete DNS hosted zone
-          @response = dns_api.destroy(@zone_list.isp_config_host_zone_id)
+          # # Delete DNS hosted zone
+          # @response = dns_api.destroy(@zone_list.isp_config_host_zone_id)
 
-          @user_domain.destroy if domain_res[:success]
+          # @user_domain.destroy if domain_res[:success]
     
-          set_flash
+          TaskManager::HostingPanelTasks::DeleteDomainTaskBuilder.new(current_spree_user, user_domain_id: @user_domain.id).call
+          # set_flash
 
           respond_to do |format|
             format.js { render inline: "location.reload();" }
@@ -400,10 +401,6 @@ module Spree
 
         def mailing_list_api
           current_spree_user.isp_config.mailing_list
-        end
-
-        def ftp_user_api
-          current_spree_user.isp_config.ftp_user
         end
 
         def mail_user_api

@@ -18,7 +18,7 @@ module TaskManager
       end
 
       def delete_mail_domain
-        isp_config_api.destroy(@data[:id])
+          @response = isp_config_api.destroy(@data[:id])
       end
 
       def isp_config_api
