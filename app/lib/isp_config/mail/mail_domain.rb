@@ -70,8 +70,8 @@ module IspConfig
                          })
 
         if response.code == "ok"
-          user.mail_domains.find_by_isp_config_mail_domain_id(mail_domain_user.remote_mail_domain_id)&.destroy # TODO: legacy  table, to be removed
-          mail_domain_user.destroy
+          user.mail_domains.find_by_isp_config_mail_domain_id(user_mail_domain.remote_mail_domain_id)&.destroy # TODO: legacy  table, to be removed
+          user_mail_domain.destroy
         end
 
         formatted_response(response, 'delete')

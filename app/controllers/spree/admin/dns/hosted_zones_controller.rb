@@ -16,7 +16,7 @@ module Spree
         end
 
         def create
-          @response = host_zone_api.create(host_zone_params)
+          @response = dns_api.create(host_zone_params)
           set_flash
           if @response[:success]
             redirect_to admin_dns_hosted_zones_path
@@ -53,48 +53,92 @@ module Spree
         def new; end
 
         def edit
-          @response = host_zone_api.get_zone(@zone_list.isp_config_host_zone_id)
+          @response = dns_api.get_zone(@zone_list.isp_config_host_zone_id)
           @hosted_zone = @response[:response].response if @response[:success].present?
         end
 
         def update
-          @response = host_zone_api.update(host_zone_params, @zone_list.isp_config_host_zone_id)
+          @response = dns_api.update(host_zone_params, @zone_list.isp_config_host_zone_id)
           set_flash
           if @response[:success]
             redirect_to admin_dns_hosted_zones_path
           else
-            response = host_zone_api.get_zone(@zone_list.isp_config_host_zone_id)
+            response = dns_api.get_zone(@zone_list.isp_config_host_zone_id)
             @hosted_zone = response[:response].response  if response[:success].present?
             render :edit
           end
         end
 
         def destroy
-          @response = host_zone_api.destroy(@zone_list.isp_config_host_zone_id)
-
-          res2 = website_api.destroy(@user_domain.user_website.id)
-
+          # Delete the Web Domains and Web Site
+          domain_res = website_api.destroy(delete_website_params)
+          
+          # Delete FTP users
           @user_domain.user_ftp_users.each do |ftp_user|
             res3 = ftp_user_api.destroy(ftp_user.id)
           end
-          byebug
-          @user_domain.user_mail_domain.each do |mail_domain_id|
-            res4 = mail_domain_api.destroy(mail_domain_id)
+
+          # Delete Mail Domain
+          mail_domain_api.destroy(@user_domain.user_mail_domain.id)
+
+          # Delete Mailboxes
+          @user_domain.user_mailboxes.each do |mailbox|
+            mailbox_api.destroy(mailbox.id)
           end
 
-          byebug
+          @user_domain.user_mailing_lists.each do |mailing_list|
+            mailing_list_api.destroy(mailing_list.id)
+          end
+
+          @user_domain.user_mail_forwards.each do |mail_forward|
+            mail_forward_api.destroy(mail_forward.id)
+          end
+
+          @user_domain.user_spam_filters.each do |spam_filter|
+            spam_filter_api.destroy(spam_filter.id)
+          end
+
+          # user_databases
+
+          # Delete DNS hosted zone
+          @response = dns_api.destroy(@zone_list.isp_config_host_zone_id)
+
+          @user_domain.destroy if domain_res[:success]
+    
           set_flash
+
           respond_to do |format|
             format.js { render inline: "location.reload();" }
             format.html { redirect_to  admin_dns_hosted_zones_path }
           end
         end
 
+        def delete_website_params
+          if @user_domain.windows?
+          
+            @all_domains = begin
+              @all_domains = current_spree_user.solid_cp.
+              web_domain.all.body[:get_domains_response][:get_domains_result][:domain_info]  
+            rescue Exception => e
+              []
+            end        
+            current_domains = @all_domains.collect { |x| x if x[:domain_name].include?(@user_domain.domain) }.compact
+            domain_id = current_domains.collect { |c| c[:domain_id] if c[:web_site_id].to_i.zero? }.compact
+            website_id = current_domains.collect { |c| c[:web_site_id] if c[:web_site_id].to_i.positive? }.compact.first
+
+            { web_site_id: website_id, web_domain_id: domain_id }
+          else
+            @user_domain.user_website.id
+          end
+        end
+
+
+
         def website_api
           if @user_domain.linux?
             current_spree_user.isp_config.website
           else
-            current_spree_user.solid_cp.web_domain
+            current_spree_user.solid_cp.website
           end
         end
 
@@ -114,10 +158,14 @@ module Spree
           current_spree_user.isp_config.database
         end
 
+        def mailbox_api
+          current_spree_user.isp_config.mail_user
+        end
+
         def dns
           @hosted_zone_record = HostedZoneRecord.new
           @hosted_zone = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:id])
-          @hosted_zone_records_reponse = host_zone_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
+          @hosted_zone_records_reponse = dns_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
           @hosted_zone_records = @hosted_zone_records_reponse[:response][:response]
         end
 
@@ -128,7 +176,7 @@ module Spree
           @hosted_zone_record = HostedZoneRecord.new
           @hosted_zone = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:dns_id])
           @zone_list = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:dns_id])
-          @hosted_zone_records_reponse = host_zone_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
+          @hosted_zone_records_reponse = dns_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
           @hosted_zone_records = @hosted_zone_records_reponse[:response][:response]
 
           @hosted_zone_records_count = if @hosted_zone_records.present?
@@ -248,9 +296,9 @@ module Spree
         end
 
         def prepare_a_record_task
-          dns_response = host_zone_api.all_zones
+          dns_response = dns_api.all_zones
           dns_domain = dns_response[:response].response.map { |k| k.id if k[:origin] == "#{@domain}." }
-          dns_record_response = host_zone_api.get_all_hosted_zone_records(dns_domain.compact.first)
+          dns_record_response = dns_api.get_all_hosted_zone_records(dns_domain.compact.first)
           dns_a_recs = dns_record_response[:response].response.map { |k| k.id if k[:type] == "A" }
           task_data = {
             id: 2,
@@ -291,9 +339,9 @@ module Spree
         end
 
         def prepare_mx_record_task
-          dns_response = host_zone_api.all_zones
+          dns_response = dns_api.all_zones
           dns_domain = dns_response[:response].response.map { |k| k.id if k[:origin] == "#{@domain}." }
-          dns_record_response = host_zone_api.get_all_hosted_zone_records(dns_domain.compact.first)
+          dns_record_response = dns_api.get_all_hosted_zone_records(dns_domain.compact.first)
           dns_mx_recs = dns_record_response[:response].response.map { |k| k.id if k[:type] == "MX" }
           task_data = {
             id: 2,

@@ -11,7 +11,6 @@ module SolidCp
           set_configurations(user, SOAP_WEB_SERVER_WSDL)
         end
   
-      
         operations :delete_web_site,
                    :get_web_sites,
                    :install_certificate,
@@ -61,7 +60,7 @@ module SolidCp
         # <siteItemId>int</siteItemId>
         # <deleteWebsiteDirectory>boolean</deleteWebsiteDirectory>
         def delete_web_site(params)
-           response = super(message: { site_item_id: params[:web_site_id],delete_website_directory: true })
+           response = super(message: { site_item_id: params[:web_site_id], delete_website_directory: true })
   
            if response.success? 
             domain_response = Domain.new(user).destroy(params[:web_domain_id])

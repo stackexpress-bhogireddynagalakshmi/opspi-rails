@@ -107,6 +107,24 @@ class BatchJobsExecuter < ApplicationJob
       TaskManager::ChatWootTasks::InboxTask
     when 'create_chat_agent_with_inbox'
       TaskManager::ChatWootTasks::AgentWithInboxTask
+    when 'delete_dns_domain'
+      TaskManager::HostingPanelTasks::DnsDomainTask
+    when 'delete_web_domain'
+      TaskManager::HostingPanelTasks::WebDomainTask
+    when 'delete_mail_domain'
+      TaskManager::HostingPanelTasks::MailDomainTask
+    when 'delete_mail_box'
+      TaskManager::HostingPanelTasks::MailBoxTask
+    when 'delete_ftp_account'
+      TaskManager::HostingPanelTasks::FtpAccountTask
+    when 'delete_database'
+      TaskManager::HostingPanelTasks::DatabaseTask
+    when 'delete_mailing_list'
+      TaskManager::HostingPanelTasks::MailingListTask
+    when 'delete_mail_forward'
+      TaskManager::HostingPanelTasks::MailForwardTask
+    when 'delete_spam_filter'
+      TaskManager::HostingPanelTasks::SpamFilterTask
     else
       raise StandardError, "Unknown task type"
     end

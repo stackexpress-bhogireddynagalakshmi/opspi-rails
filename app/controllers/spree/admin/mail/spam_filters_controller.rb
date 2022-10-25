@@ -45,7 +45,6 @@ module Spree
           else
             current_spree_user.isp_config.spam_filter_whitelist
           end
-
         end
 
         def spam_filter_params

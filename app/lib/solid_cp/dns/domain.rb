@@ -137,12 +137,9 @@ module SolidCp
       # @params
       # <domainId>int</domainId>
       def delete_domain(id)
-        user_website = UserWebsite.find(id)
-
-        response = super(message: { domain_id: user_website.remote_website_id })
+        response = super(message: { domain_id: id })
 
         if response.success?
-           user_website.destroy
           { success: true, message: 'Domain deleted successfully', response: response }
         else
           { success: false, message:  SolidCp::ErrorHelper.log_solid_cp_error(response, __method__), response: response }
