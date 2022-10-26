@@ -7,6 +7,7 @@ module TaskManager
         when 'create_mailing_list'
         when 'update_mailing_list'
         when 'delete_mailing_list'
+          delete_mailing_list
         end
       end
 
