@@ -20,7 +20,6 @@ RSpec.describe Spree::Admin::ProductsController, type: :controller do
         post :create, params: { spree_user: { email: admin_user.email ,password: 'opspi@123'} }
         expect(flash[:error]).to eq(nil)
         expect(response.status).to eq(302)
-        # expect(flash[:success]).to eq("Logged in successfully")
       end
     end
 
@@ -39,7 +38,9 @@ RSpec.describe Spree::Admin::ProductsController, type: :controller do
       end
 
       # it "Delete a product" do
-      #   delete :destroy, params: { spree_product: { id: ""}}
+      #   product_new =  create(:spree_product)
+      #   byebug
+      #   delete :destroy, params: { spree_product: { id: product_new.name}}
       # end
 
       # it "updates a Product" do
