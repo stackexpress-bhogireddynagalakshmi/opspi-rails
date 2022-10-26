@@ -70,97 +70,13 @@ module Spree
         end
 
         def destroy
-          # # Delete the Web Domains and Web Site
-          # domain_res = website_api.destroy(delete_website_params)
-          
-          # # Delete FTP users
-          # @user_domain.user_ftp_users.each do |ftp_user|
-          #   res3 = ftp_user_api.destroy(ftp_user.id)
-          # end
-
-          # # Delete Mail Domain
-          # mail_domain_api.destroy(@user_domain.user_mail_domain.id)
-
-          # # Delete Mailboxes
-          # @user_domain.user_mailboxes.each do |mailbox|
-          #   mailbox_api.destroy(mailbox.id)
-          # end
-
-          # @user_domain.user_mailing_lists.each do |mailing_list|
-          #   mailing_list_api.destroy(mailing_list.id)
-          # end
-
-          # @user_domain.user_mail_forwards.each do |mail_forward|
-          #   mail_forward_api.destroy(mail_forward.id)
-          # end
-
-          # @user_domain.user_spam_filters.each do |spam_filter|
-          #   spam_filter_api.destroy(spam_filter.id)
-          # end
-
-          # # user_databases
-
-          # # Delete DNS hosted zone
-          # @response = dns_api.destroy(@zone_list.isp_config_host_zone_id)
-
-          # @user_domain.destroy if domain_res[:success]
     
           TaskManager::HostingPanelTasks::DeleteDomainTaskBuilder.new(current_spree_user, user_domain_id: @user_domain.id).call
-          # set_flash
 
           respond_to do |format|
             format.js { render inline: "location.reload();" }
             format.html { redirect_to  admin_dns_hosted_zones_path }
           end
-        end
-
-        def delete_website_params
-          if @user_domain.windows?
-          
-            @all_domains = begin
-              @all_domains = current_spree_user.solid_cp.
-              web_domain.all.body[:get_domains_response][:get_domains_result][:domain_info]  
-            rescue Exception => e
-              []
-            end        
-            current_domains = @all_domains.collect { |x| x if x[:domain_name].include?(@user_domain.domain) }.compact
-            domain_id = current_domains.collect { |c| c[:domain_id] if c[:web_site_id].to_i.zero? }.compact
-            website_id = current_domains.collect { |c| c[:web_site_id] if c[:web_site_id].to_i.positive? }.compact.first
-
-            { web_site_id: website_id, web_domain_id: domain_id }
-          else
-            @user_domain.user_website.id
-          end
-        end
-
-
-
-        def website_api
-          if @user_domain.linux?
-            current_spree_user.isp_config.website
-          else
-            current_spree_user.solid_cp.website
-          end
-        end
-
-        def ftp_user_api
-          if @user_domain.linux?
-            current_spree_user.isp_config.ftp_user
-          else
-            current_spree_user.solid_cp.ftp_account
-          end
-        end
-
-        def mail_domain_api
-          current_spree_user.isp_config.mail_domain
-        end
-
-        def database_api
-          current_spree_user.isp_config.database
-        end
-
-        def mailbox_api
-          current_spree_user.isp_config.mail_user
         end
 
         def dns

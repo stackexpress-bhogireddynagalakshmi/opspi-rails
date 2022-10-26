@@ -34,19 +34,4 @@ module ApisHelper
     current_spree_user.isp_config.website
   end
 
-  def mailing_list_api
-    current_spree_user.isp_config.mailing_list
-  end
-
-  def spamfilter_api(spam_filter)
-    if spam_filter&.persisted? && spam_filter.wb == 'B'
-      current_spree_user.isp_config.spam_filter_blacklist
-    else
-      current_spree_user.isp_config.spam_filter_whitelist
-    end
-  end
-
-  def mail_forward_api
-    current_spree_user.isp_config.mail_forward
-  end
 end
