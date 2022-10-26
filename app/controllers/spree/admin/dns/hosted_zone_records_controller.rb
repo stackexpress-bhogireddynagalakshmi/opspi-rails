@@ -29,8 +29,6 @@ module Spree
 
           res2 = website_api.destroy(@user_domain.user_website.id)
 
-          byebug
-
           # stepo 1 Delete Wev=bsite Domain
           # Step 2  Delete Mail Domain
           # Step 3 Delete FTP Users
