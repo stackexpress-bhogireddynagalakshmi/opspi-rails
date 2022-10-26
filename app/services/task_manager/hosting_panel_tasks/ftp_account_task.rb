@@ -20,7 +20,6 @@ module TaskManager
       end
 
       def delete_ftp_account
-        byebug
         @response = ftp_user_api.destroy(@data[:id])
       end
 
