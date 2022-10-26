@@ -27,8 +27,12 @@ module TaskManager
         end
       end
 
-      def windows?
-        @data[:server_type].present? && @data[:server_type] == 'windows'
+      # def windows?
+      #   @data[:server_type].present? && @data[:server_type] == 'windows'
+      # end
+
+      def windowss?
+          @user_domain.web_hosting_type=='windows'
       end
 
       def windows_api

@@ -50,9 +50,10 @@ module TaskManager
           id: SecureRandom.hex,
           type: "delete_ftp_account",
           user_domain_id: @user_domain.id,
-          server_type:  @user_domain.windows? ? 'windows' : 'linux',
+          
           data: {
-            id: object.id
+            id: object.id,
+            server_type:  @user_domain.windows? ? 'windows' : 'linux'
           },
           depends_on: nil,
           sidekiq_job_id: nil

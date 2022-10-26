@@ -20,7 +20,6 @@ module TaskManager
       end
 
       def delete_mail_box
-        byebug
         @response = mail_user_api.destroy(@data[:id])
       end
 
