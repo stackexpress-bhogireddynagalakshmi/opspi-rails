@@ -22,7 +22,6 @@
 </div>
 
 
-
 <% spree_current_user.subscriptions.order('created_at desc').each do |subscription| %>
   <!-- Card -->
   <div class="card">
@@ -38,17 +37,17 @@
         <div class="col ms-n2">
 
           <h4 class="mb-1">
-          <%=TenantManager::TenantHelper.unscoped_query{subscription.plan.name}%>
+          <%=subscription.plan.name%>
           </h4>
 
           <p class="small text-muted mb-1">
-          <span data-ransack-field="q_store_id_in" data-ransack-value="<%= Spree::Store.find_by(account_id: current_spree_user.account_id).try(:store_id) %>">
-          <%= Spree::Store.find_by(account_id: current_spree_user.account_id).try(:name) %>
+          <span data-ransack-field="q_store_id_in">
+          <%= current_store.name %>
           </span>
           </p>
 
           <p class="small mb-0">
-          <%= TenantManager::TenantHelper.unscoped_query{subscription.plan.server_type.titleize}%>
+          <%= subscription.plan.server_type.titleize%>
           <br/>
           <%if subscription.status? %>
           <span class="badge bg-success-soft">Active</span>
