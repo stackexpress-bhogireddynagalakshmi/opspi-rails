@@ -4,35 +4,40 @@
       Security Information
     </h5>
   </div>
-
   <div class="table-responsive border-0 rounded bg-white">
     <table class="table"  data-hook>
       <tr>
         <td width="30%"><%= Spree.t(:sign_in_count) %>:</td>
         <td>
-            <div><%= Spree::User.where(id: params[:id]).first.sign_in_count %></div>
+            <div><%= @security_info.sign_in_count %></div>
         </td>
       </tr>
       <tr>
         <td><%= Spree.t(:current_sign_in_at) %>:</td>
-        <td><%= Spree::User.where(id: params[:id]).first.current_sign_in_at %></td>
+        <td><%= @security_info.current_sign_in_at %></td>
       </tr>
       <tr>
         <td><%= Spree.t(:last_sign_in_at) %>:</td>
-        <td><%= Spree::User.where(id: params[:id]).first.last_sign_in_at %><td>
+        <td><%= @security_info.last_sign_in_at %><td>
       </tr>
       <tr>
         <td><%= Spree.t(:current_sign_in_ip) %>:</td>
         <td>
-            <div><%= Spree::User.where(id: params[:id]).first.current_sign_in_ip %></div>
+            <div><%= @security_info.current_sign_in_ip %></div>
         </td>
       </tr>
       <tr>
         <td><%= Spree.t(:last_sign_in_ip) %>:</td>
         <td>
-            <div><%= Spree::User.where(id: params[:id]).first.last_sign_in_ip %></div>
+            <div><%= @security_info.last_sign_in_ip %></div>
         </td>
       </tr>
+      <tr>
+      <td><%= Spree.t(:sign_up_ip) %>:</td>
+      <td>
+          <div><%= @security_info.sign_up_ip %></div>
+      </td>
+    </tr>
       
     </table>
   </div>

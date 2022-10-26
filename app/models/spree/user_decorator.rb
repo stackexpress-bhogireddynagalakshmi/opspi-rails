@@ -3,7 +3,7 @@
 module Spree
   module UserDecorator
     attr_accessor :subdomain, :business_name
-
+    
     def self.prepended(base)
       base.validate :ensure_valid_store_params, on: [:create]
 
@@ -231,3 +231,4 @@ Spree::PermittedAttributes.user_attributes.push << :subdomain
 Spree::PermittedAttributes.user_attributes.push << :reseller_signup
 Spree::PermittedAttributes.user_attributes.push << :business_name
 Spree::PermittedAttributes.user_attributes.push << :terms_and_conditions
+Spree::PermittedAttributes.user_attributes.push << :sign_up_ip
