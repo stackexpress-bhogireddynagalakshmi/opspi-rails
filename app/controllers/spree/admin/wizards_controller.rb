@@ -331,7 +331,8 @@ module Spree
       end
 
       def create_user_domain
-        @user_domain = current_spree_user.user_domains.create({domain: @domain})
+        user_domain_params = { domain: @domain, web_hosting_type: wizard_params[:server_type] }
+        @user_domain = current_spree_user.user_domains.create(user_domain_params)
       end
 
       def get_database_name(domain)

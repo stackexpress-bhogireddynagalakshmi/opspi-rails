@@ -18,8 +18,8 @@ module TaskManager
 
     private
     def build_tasks
-      prepare_delete_website_task
       prepare_delete_ftp_users_task
+      prepare_delete_website_task
       prepare_delete_mailboxes_task
       prepare_delete_mail_domain_task
       prepare_delete_mailing_lists_task
@@ -39,15 +39,17 @@ module TaskManager
           user_domain_id: @user_domain.id,
           data: delete_website_params,
           depends_on: nil,
-          sidekiq_job_id: nil
+          sidekiq_job_id: @last_ftp_child_id
         }
     end
 
     def prepare_delete_ftp_users_task
+      @last_ftp_child_id = nil
       @user_domain.user_ftp_users.each do |object|
+      @last_ftp_child_id = SecureRandom.hex
       @tasks <<
         {
-          id: SecureRandom.hex,
+          id: @last_ftp_child_id,
           type: "delete_ftp_account",
           user_domain_id: @user_domain.id,
           
@@ -71,16 +73,19 @@ module TaskManager
               id: @user_domain.user_mail_domain.id
             },
             depends_on: nil,
-            sidekiq_job_id: nil
+            sidekiq_job_id: @last_mailbox_child_id
           }
 
     end
 
     def prepare_delete_mailboxes_task
+      @last_mailbox_child_id = nil
+      
       @user_domain.user_mailboxes.each do |object|
+        @last_mailbox_child_id = SecureRandom.hex
         @tasks <<
           {
-            id: SecureRandom.hex,
+            id: @last_mailbox_child_id,
             type: "delete_mail_box",
             user_domain_id: @user_domain.id,
             data: {
