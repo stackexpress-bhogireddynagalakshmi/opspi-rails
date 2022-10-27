@@ -166,8 +166,8 @@ module Spree
 
     def get_purchased_plans
       TenantManager::TenantHelper.unscoped_query do
-        subscriptions.active.collect do |s|
-          s.plan.server_type
+        subscriptions.active.collect do |subscription|
+          subscription.plan.server_type
         end
       end
     end
