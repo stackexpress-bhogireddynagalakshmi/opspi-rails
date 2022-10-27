@@ -166,9 +166,9 @@ module Spree
 
     def get_purchased_plans
       TenantManager::TenantHelper.unscoped_query do
-        orders.where(payment_state: 'paid').collect do |o|
-          o.products.pluck(:server_type)
-        end.flatten
+        subscriptions.active.collect do |s|
+          s.plan.server_type
+        end
       end
     end
 
