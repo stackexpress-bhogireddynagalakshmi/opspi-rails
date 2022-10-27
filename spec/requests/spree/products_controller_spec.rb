@@ -15,6 +15,10 @@ RSpec.describe Spree::Admin::ProductsController, type: :controller do
       @request.host = admin_store.url #example.com
     end
 
+    before(:each) do
+      @product = Spree::Product.create(name: "nsbsb" ,available_on: Date.today, server_type: "reseller_plan", price: 100, account_id: admin_store.account.id)
+    end
+
     context '#create session for super admin' do
       it 'using correct login information on admin store' do
         post :create, params: { spree_user: { email: admin_user.email ,password: 'opspi@123'} }
@@ -37,17 +41,19 @@ RSpec.describe Spree::Admin::ProductsController, type: :controller do
         # expect(flash[:success]).to eq("")  
       end
 
-      # it "Delete a product" do
-      #   product_new =  create(:spree_product)
-      #   byebug
-      #   delete :destroy, params: { spree_product: { id: product_new.name}}
-      # end
+      it "Delete a product" do
+        @product.destroy
+        # post :create, params: { spree_product: { name: "nsbsb" ,available_on: Date.today, server_type: "reseller_plan", price: 100, account_id: admin_store.account.id} }
+        # product_new =  Spree::Product.find_by_name("nsbsb")
+        # delete :destroy, params: { spree_product: { id: "nsbsb"}}
+        expect(response.status).to eq(302)
+      end
 
-      # it "updates a Product" do
-      #   put :update, params: { spree_product: { name: "nsbsb" ,available_on: Date.today, server_type: "reseller_plan", price: 110, account_id: admin_store.account.id} }
-      #   expect(flash[:error]).to eq(nil)
-      #   expect(response.status).to eq(302)
-      # end
+      it "updates a Product" do
+        put :update, params: { spree_product: { price: 110, account_id: admin_store.account.id} }
+        expect(flash[:error]).to eq(nil)
+        expect(response.status).to eq(302)
+      end
     end
   end
 
