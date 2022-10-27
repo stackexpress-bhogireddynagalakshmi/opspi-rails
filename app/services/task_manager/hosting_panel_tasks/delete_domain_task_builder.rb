@@ -38,8 +38,8 @@ module TaskManager
           type: "delete_web_domain",
           user_domain_id: @user_domain.id,
           data: delete_website_params,
-          depends_on: nil,
-          sidekiq_job_id: @last_ftp_child_id
+          depends_on: @last_ftp_child_id,
+          sidekiq_job_id: nil
         }
     end
 
@@ -72,15 +72,15 @@ module TaskManager
             data: {
               id: @user_domain.user_mail_domain.id
             },
-            depends_on: nil,
-            sidekiq_job_id: @last_mailbox_child_id
+            depends_on: last_mailbox_child_id,
+            sidekiq_job_id: nil
           }
 
     end
 
     def prepare_delete_mailboxes_task
       @last_mailbox_child_id = nil
-      
+
       @user_domain.user_mailboxes.each do |object|
         @last_mailbox_child_id = SecureRandom.hex
         @tasks <<
