@@ -5,8 +5,8 @@ module Spree
     module Mail
       # Mail Domain controller
       class DomainsController < Spree::Admin::IspConfigResourcesController
-        before_action :get_zone_list, only: [:new, :edit]
-        
+        before_action :get_zone_list, only: %i[new edit]
+
         def create
           @response = current_spree_user.isp_config.mail_domain.create(resource_params)
           set_flash
@@ -32,7 +32,7 @@ module Spree
                 current_spree_user.isp_config.mail_user.update(
                   mail_user.mailuser_id,
                   {
-                    postfix:  active,
+                    postfix: active,
                     disablesmtp: dis,
                     disableimap: dis,
                     disablepop3: dis,
@@ -48,14 +48,12 @@ module Spree
         def destroy
           super do
             if @response[:response].code == "ok"
-
-              domain = params[:mail_domian]
-              
+              domain = params[:mail_domain] # before correction params[:mail_domian]
               result = current_spree_user.isp_config.mail_user.all
               result[:response].response.each do |mail_user|
                 if mail_user.email.include?(domain)
                   current_spree_user.isp_config.mail_user.destroy(mail_user.mailuser_id)
-                  
+
                 end
               end
 

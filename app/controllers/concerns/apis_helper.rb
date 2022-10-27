@@ -24,6 +24,7 @@ module ApisHelper
   def host_zone_api
     current_spree_user.isp_config.hosted_zone
   end
+  alias dns_api host_zone_api
 
   def host_zone_record_api
     current_spree_user.isp_config.hosted_zone_record
@@ -32,4 +33,5 @@ module ApisHelper
   def isp_website_api
     current_spree_user.isp_config.website
   end
+
 end

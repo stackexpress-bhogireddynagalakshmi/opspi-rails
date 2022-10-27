@@ -129,7 +129,6 @@ module IspConfig
           active: params[:active] == 'y',
           wb:   params[:wb]
         }
-
       end
     end
   end

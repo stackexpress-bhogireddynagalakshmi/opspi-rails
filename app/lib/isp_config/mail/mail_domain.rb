@@ -7,7 +7,7 @@ module IspConfig
 
       def initialize(user)
         @user = user
-        set_base_uri( user.panel_config["mail"] )
+        set_base_uri(user.panel_config["mail"])
       end
 
       def find(id)
@@ -33,16 +33,18 @@ module IspConfig
                          })
         if response.code == "ok"
           create_mx_records(params)
-          user.mail_domains.create({ isp_config_mail_domain_id: response["response"] })  #TODO: legacy table to be removed 
-         
+          user.mail_domains.create({ isp_config_mail_domain_id: response["response"] }) # TODO: legacy table to be removed
+
           user_domain = user.user_domains.where(domain: params[:domain]).last
-          user_domain.create_user_mail_domain({user_domain_id: user_domain.try(:id), remote_mail_domain_id: response["response"]})
+          user_domain.create_user_mail_domain({ user_domain_id: user_domain.try(:id),
+                                                remote_mail_domain_id: response["response"] })
         end
 
         formatted_response(response, 'create')
       end
 
-      def update(primary_id, params = {})
+      def update(id, params = {})
+        user_domain_mail = UserMailDomain.find(id)
         response = query({
                            endpoint: '/json.php?mail_domain_update',
                            method: :POST,
@@ -56,19 +58,20 @@ module IspConfig
         formatted_response(response, 'update')
       end
 
-      def destroy(primary_id)
+      def destroy(id)
+        user_mail_domain = UserMailDomain.find(id)
         response = query({
                            endpoint: '/json.php?mail_domain_delete',
                            method: :DELETE,
                            body: {
                              client_id: user.isp_config_id,
-                             primary_id: primary_id
+                             primary_id: user_mail_domain.remote_mail_domain_id
                            }
                          })
+
         if response.code == "ok"
-          user.mail_domains.find_by_isp_config_mail_domain_id(primary_id).destroy #TODO: legacy  table, to be removed
-         
-          UserMailDomain.find_by_remote_mail_domain_id(primary_id)&.destroy
+          user.mail_domains.find_by_isp_config_mail_domain_id(user_mail_domain.remote_mail_domain_id)&.destroy # TODO: legacy  table, to be removed
+          user_mail_domain.destroy
         end
 
         formatted_response(response, 'delete')
@@ -89,11 +92,11 @@ module IspConfig
 
       private
 
-      def create_mx_records(params)   
+      def create_mx_records(params)
         dns_id = HostedZone.where(name: params[:domain]).pluck(:isp_config_host_zone_id).first
         mx_records = [IspConfig::Config.api_mx_server_1(user), IspConfig::Config.api_mx_server_1(user)]
         mx_records.each do |mx|
-          mx_record_params={
+          mx_record_params = {
             type: "MX",
             name: params[:domain],
             mailserver: mx,
@@ -104,7 +107,7 @@ module IspConfig
           }
           user.isp_config.hosted_zone_record.create(mx_record_params)
         end
-      end  
+      end
 
       def mail_domain_ids
         user.mail_domains.pluck(:isp_config_mail_domain_id)
@@ -131,7 +134,6 @@ module IspConfig
           server_id: IspConfig::Config.api_web_server_id(user)
         }
       end
-
     end
   end
 end

@@ -7,7 +7,9 @@ module TaskManager
         when 'create_ftp_account'
           create_ftp_account
         when 'update_ftp_account'
+          
         when 'delete_ftp_account'
+          delete_ftp_account
         end 
       end
 
@@ -15,6 +17,10 @@ module TaskManager
 
       def create_ftp_account
         @response = ftp_user_api.create(resource_params, user_domain: @user_domain)
+      end
+
+      def delete_ftp_account
+        @response = ftp_user_api.destroy(@data[:id])
       end
 
       def ftp_user_api

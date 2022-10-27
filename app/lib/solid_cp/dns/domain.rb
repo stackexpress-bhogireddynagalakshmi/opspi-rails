@@ -189,7 +189,7 @@ module SolidCp
         
         if response.success? && code.positive?
           create_a_record(params)
-          user_domain = user.user_domains.where(domain: sanitze_domain(params[:domain_name]), web_hosting_type: nil).last
+          user_domain = user.user_domains.where(domain: sanitze_domain(params[:domain_name])).last
           user_domain.update(web_hosting_type: 0)
 
           all_domains = user.solid_cp.web_domain.all.body

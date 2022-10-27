@@ -8,6 +8,7 @@ module TaskManager
           create_web_domain
         when 'update_web_domain'
         when 'delete_web_domain'
+          delete_web_domain
         end
       end
 
@@ -17,16 +18,24 @@ module TaskManager
         @response = web_domain_api.create(resource_params)
       end
 
+      def delete_web_domain
+        @response = website_api.destroy(@data)
+      end
+
       def web_domain_api
         if @data[:server_type].present? && @data[:server_type] == 'windows'
-          windows_api
+          @user.solid_cp.web_domain
         else
           @user.isp_config.website
         end
       end
 
-      def windows_api
-        @user.solid_cp.web_domain
+      def website_api
+        if @data[:server_type].present? && @data[:server_type] == 'windows'
+          user.solid_cp.website
+        else
+          user.isp_config.website
+        end
       end
 
       def resource_params
@@ -50,7 +59,6 @@ module TaskManager
       def windows_resource_params
         { domain_name:  @data[:domain], create_webSite: "1", enable_dns: "0", allow_subdomains: "1" }
       end
-
     end
   end
 end

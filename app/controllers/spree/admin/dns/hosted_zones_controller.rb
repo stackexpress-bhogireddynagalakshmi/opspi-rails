@@ -7,7 +7,7 @@ module Spree
         include ApisHelper
         include PanelConfiguration
 
-        before_action :set_user_domain, only: [:zone_overview]
+        before_action :set_user_domain, only: %i[zone_overview destroy]
         before_action :ensure_hosting_panel_access
         before_action :set_zone_list, only: %i[edit update destroy dns zone_overview]
 
@@ -16,7 +16,7 @@ module Spree
         end
 
         def create
-          @response = host_zone_api.create(host_zone_params)
+          @response = dns_api.create(host_zone_params)
           set_flash
           if @response[:success]
             redirect_to admin_dns_hosted_zones_path
@@ -53,25 +53,26 @@ module Spree
         def new; end
 
         def edit
-          @response = host_zone_api.get_zone(@zone_list.isp_config_host_zone_id)
+          @response = dns_api.get_zone(@zone_list.isp_config_host_zone_id)
           @hosted_zone = @response[:response].response if @response[:success].present?
         end
 
         def update
-          @response = host_zone_api.update(host_zone_params, @zone_list.isp_config_host_zone_id)
+          @response = dns_api.update(host_zone_params, @zone_list.isp_config_host_zone_id)
           set_flash
           if @response[:success]
             redirect_to admin_dns_hosted_zones_path
           else
-            response = host_zone_api.get_zone(@zone_list.isp_config_host_zone_id)
+            response = dns_api.get_zone(@zone_list.isp_config_host_zone_id)
             @hosted_zone = response[:response].response  if response[:success].present?
             render :edit
           end
         end
 
         def destroy
-          @response = host_zone_api.destroy(@zone_list.isp_config_host_zone_id)
-          set_flash
+    
+          TaskManager::HostingPanelTasks::DeleteDomainTaskBuilder.new(current_spree_user, user_domain_id: @user_domain.id).call
+
           respond_to do |format|
             format.js { render inline: "location.reload();" }
             format.html { redirect_to  admin_dns_hosted_zones_path }
@@ -81,7 +82,7 @@ module Spree
         def dns
           @hosted_zone_record = HostedZoneRecord.new
           @hosted_zone = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:id])
-          @hosted_zone_records_reponse = host_zone_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
+          @hosted_zone_records_reponse = dns_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
           @hosted_zone_records = @hosted_zone_records_reponse[:response][:response]
         end
 
@@ -92,7 +93,7 @@ module Spree
           @hosted_zone_record = HostedZoneRecord.new
           @hosted_zone = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:dns_id])
           @zone_list = current_spree_user.hosted_zones.find_by_isp_config_host_zone_id(params[:dns_id])
-          @hosted_zone_records_reponse = host_zone_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
+          @hosted_zone_records_reponse = dns_api.get_all_hosted_zone_records(@zone_list.isp_config_host_zone_id)
           @hosted_zone_records = @hosted_zone_records_reponse[:response][:response]
 
           @hosted_zone_records_count = if @hosted_zone_records.present?
@@ -127,14 +128,14 @@ module Spree
           end
 
           if @user_domain.windows?
-            #TODO: Yet to implement/refactor
+          # TODO: Yet to implement/refactor
 
-           elsif @user_domain.linux?
-            user_remote_website_response =  current_spree_user.isp_config.website.find(@user_domain.user_website.try(:remote_website_id))
-            @user_remote_website = user_remote_website_response[:response][:response] 
+          elsif @user_domain.linux?
+            user_remote_website_response = current_spree_user.isp_config.website.find(@user_domain.user_website.try(:remote_website_id))
+            @user_remote_website = user_remote_website_response[:response][:response]
 
-           end
-          
+          end
+
           # User Mail boxes
           @mailboxes = @user_domain.user_mailboxes.order("created_at desc")
 
@@ -212,9 +213,9 @@ module Spree
         end
 
         def prepare_a_record_task
-          dns_response = host_zone_api.all_zones
+          dns_response = dns_api.all_zones
           dns_domain = dns_response[:response].response.map { |k| k.id if k[:origin] == "#{@domain}." }
-          dns_record_response = host_zone_api.get_all_hosted_zone_records(dns_domain.compact.first)
+          dns_record_response = dns_api.get_all_hosted_zone_records(dns_domain.compact.first)
           dns_a_recs = dns_record_response[:response].response.map { |k| k.id if k[:type] == "A" }
           task_data = {
             id: 2,
@@ -255,9 +256,9 @@ module Spree
         end
 
         def prepare_mx_record_task
-          dns_response = host_zone_api.all_zones
+          dns_response = dns_api.all_zones
           dns_domain = dns_response[:response].response.map { |k| k.id if k[:origin] == "#{@domain}." }
-          dns_record_response = host_zone_api.get_all_hosted_zone_records(dns_domain.compact.first)
+          dns_record_response = dns_api.get_all_hosted_zone_records(dns_domain.compact.first)
           dns_mx_recs = dns_record_response[:response].response.map { |k| k.id if k[:type] == "MX" }
           task_data = {
             id: 2,
@@ -316,10 +317,6 @@ module Spree
 
         def mailing_list_api
           current_spree_user.isp_config.mailing_list
-        end
-
-        def ftp_user_api
-          current_spree_user.isp_config.ftp_user
         end
 
         def mail_user_api

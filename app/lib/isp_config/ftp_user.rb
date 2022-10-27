@@ -6,7 +6,7 @@ module IspConfig
 
     def initialize(user)
       @user = user
-      set_base_uri( user.panel_config["web_linux"] )
+      set_base_uri(user.panel_config["web_linux"])
     end
 
     def find(id)
@@ -21,7 +21,7 @@ module IspConfig
       formatted_response(response, 'find')
     end
 
-    def create(params = {}, opts={})
+    def create(params = {}, opts = {})
       response = query({
                          endpoint: '/json.php?sites_ftp_user_add',
                          method: :POST,
@@ -31,11 +31,12 @@ module IspConfig
                          }
                        })
 
-      
       if response.code == 'ok'
         user.ftp_users.create({ isp_config_ftp_user_id: response["response"] })
         user_domain = opts[:user_domain]
-        user_domain.user_ftp_users.create(ftp_user_params(params).merge({ remote_ftp_user_id: response["response"] })) if user_domain.present?
+        if user_domain.present?
+          user_domain.user_ftp_users.create(ftp_user_params(params).merge({ remote_ftp_user_id: response["response"] }))
+        end
       end
 
       formatted_response(response, 'create')
@@ -53,10 +54,7 @@ module IspConfig
                          }
                        })
 
-       if response.code == "ok"
-          ftp_user.update(ftp_user_params(params))
-        end
-
+      ftp_user.update(ftp_user_params(params)) if response.code == "ok"
 
       formatted_response(response, 'update')
     end
@@ -73,7 +71,7 @@ module IspConfig
                        })
 
       if response.code == "ok"
-        user.ftp_users.find_by_isp_config_ftp_user_id(ftp_user.remote_ftp_user_id).destroy 
+        user.ftp_users.find_by_isp_config_ftp_user_id(ftp_user.remote_ftp_user_id)&.destroy
         ftp_user.destroy
       end
 
@@ -127,8 +125,7 @@ module IspConfig
         username: params[:username],
         dir: params[:dir],
         active: params[:active] == 'y'
-      }.reject{|k, v| v.blank?}
-
+      }.reject { |_k, v| v.blank? }
     end
   end
 end

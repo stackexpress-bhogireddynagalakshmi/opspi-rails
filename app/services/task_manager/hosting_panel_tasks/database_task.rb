@@ -14,30 +14,21 @@ module TaskManager
       end
 
       private
-
+      
       def create_database
         @response = database_api.create(resource_params)
       end
 
       def database_api
-        if windows?
-          windows_api
+        if @user_domain.windows?
+          @user.solid_cp.sql_server
         else
           @user.isp_config.database
         end
       end
 
-      def windows?
-        @data[:server_type].present? && @data[:server_type] == 'windows'
-      end
-
-      def windows_api
-        @user.solid_cp.sql_server
-      end
-
-
       def resource_params
-        if windows?
+        if @user_domain.windows?
           @data[:group_name] = 'MsSQL2019'
           @data[:database_username] = database_username(task[:domain])
           @data[:database_type] = 'ms_sql2019'
@@ -58,7 +49,7 @@ module TaskManager
       end
 
       def database_username(database_name)
-        if windows?
+        if @user_domain.windows?
           "c#{@user.solid_cp_id}_#{database_name}"
         else
           "c#{@user.isp_config_id}_#{database_name}"
@@ -68,7 +59,6 @@ module TaskManager
       def get_folder_path
         { can_read: true, can_write: true, folder: "\\#{@data[:domain]}\\wwwroot" }
       end
-
     end
   end
 end

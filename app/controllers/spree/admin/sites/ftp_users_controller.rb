@@ -108,6 +108,10 @@ module Spree
           @user_domain.windows?
         end
 
+        def windows?
+          @user_domain.web_hosting_type=='windows'
+        end
+
       end
     end
   end

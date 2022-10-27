@@ -97,8 +97,9 @@ module SolidCp
       ftp_user = UserFtpUser.find_by_id(id)
 
       response = super(message: { itemId: ftp_user.remote_ftp_user_id })
+      code  = response.body["#{__method__}_response".to_sym]["#{__method__}_result".to_sym].to_i
 
-      if response.success?
+      if response.success? 
         ftp_user.try(:destroy)
 
         { success: true, message: 'Ftp User deleted successfully', response: response }

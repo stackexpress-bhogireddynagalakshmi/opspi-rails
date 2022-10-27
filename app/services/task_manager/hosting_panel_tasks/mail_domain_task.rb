@@ -8,12 +8,17 @@ module TaskManager
           create_mail_domain
         when 'update_mail_domain'
         when 'delete_mail_domain'
+          delete_mail_domain
         end 
       end
 
       private
       def create_mail_domain
         @response = isp_config_api.create(resource_params)
+      end
+
+      def delete_mail_domain
+          @response = isp_config_api.destroy(@data[:id])
       end
 
       def isp_config_api
