@@ -41,6 +41,7 @@ vendor/bundle
 .env
 .env.web
 .env.db
+.env.test
 
 /config/credentials/production.key
 

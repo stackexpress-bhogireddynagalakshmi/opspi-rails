@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :product, class: 'Spree::Product' do
+  factory :spree_product, class: 'Spree::Product' do
 
     # transient do
     #   stock_location_id nil
@@ -13,7 +13,6 @@ FactoryBot.define do
     description  { Faker::Lorem.sentence(word_count: 12) }
     available_on { Date.today }
     server_type  { 'windows'}
-    validity { 30 }
     price { 100 }
     shipping_category_id { Spree::ShippingCategory.find_or_create_by({:name=>'Default'}).id }
     account {::Account.last}
