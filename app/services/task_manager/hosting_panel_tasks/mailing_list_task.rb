@@ -1,6 +1,6 @@
 module TaskManager
   module HostingPanelTasks
-    class MailingTask < TaskManager::HostingPanelTasks::Base
+    class MailingListTask < TaskManager::HostingPanelTasks::Base
       
       def call
         case task[:type]
