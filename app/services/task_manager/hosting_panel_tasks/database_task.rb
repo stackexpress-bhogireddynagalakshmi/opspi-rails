@@ -18,7 +18,7 @@ module TaskManager
       private
 
       def delete_database
-        delete_database_api.destroy_database_and_user(@user_database.id)
+        @response = delete_database_api.destroy_database_and_user(@user_database.id)
       end
       
       def create_database

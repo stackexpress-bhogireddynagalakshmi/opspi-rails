@@ -143,7 +143,8 @@ module IspConfig
 
       if response.code == "ok"
         user.isp_databases.find_by_isp_config_database_id(primary_ids[:id]).destroy
-        user_database = UserDatabase.find_by_remote_database_id(primary_ids[:id])
+
+        user_database = UserDatabase.find_by_database_id(primary_ids[:id])
         user_database&.destroy
       end 
 
@@ -165,11 +166,14 @@ module IspConfig
 
     def destroy_database_and_user(id)
       @user_database = UserDatabase.find(id)
-      remote_db = database_api.find(@user_database.database_id)
+      
+      remote_db = find(@user_database.database_id)
+      
       remote_db = remote_db[:response].response
       database_user_id = remote_db[:database_user_id]
 
       destroy({db_user_id: database_user_id, id: @user_database.database_id})
+      
     end
 
     def find(id)

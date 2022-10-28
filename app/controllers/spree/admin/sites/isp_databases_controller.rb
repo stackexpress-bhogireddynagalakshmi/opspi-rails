@@ -45,10 +45,7 @@ module Spree
         end
 
         def destroy
-          database_api.destroy_database_and_user(@database.id)
-
-          set_flash
-          redirect_to request.referrer
+           @response = database_api.destroy_database_and_user(@database.id)
         end
 
         def show
@@ -58,6 +55,7 @@ module Spree
                       else
                         @response[:success] ? @response[:response].response : []
                       end
+          render "destroy"
         end
 
         def configurations

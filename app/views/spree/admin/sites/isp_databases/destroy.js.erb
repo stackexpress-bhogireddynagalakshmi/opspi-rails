@@ -1,0 +1,7 @@
+<% if @response[:success] == true %>
+  $("#myModal").modal('hide')
+  $('#databases_list_table #database_id_<%=@database.id%>').remove();
+<% else %>
+  $('#error_div').html("<%=j @response[:message].html_safe%>");
+<% end %>
+

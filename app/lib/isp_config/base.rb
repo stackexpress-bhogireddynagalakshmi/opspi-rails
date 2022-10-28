@@ -19,7 +19,7 @@ module IspConfig
       header = default_header
       header = header.merge(opts[:header]) if opts[:header].present?
       set_session_id opts[:body]
-      response = self.class.send(method, opts[:endpoint], body: opts[:body].to_json, headers: header, timeout: 30)
+      response = self.class.send(method, opts[:endpoint], body: opts[:body].to_json, headers: header, timeout: 60)
       data = response.parsed_response
 
       if response.success?

@@ -73,7 +73,7 @@ module TaskManager
             data: {
               id: @user_domain.user_mail_domain.id
             },
-            depends_on: last_mailbox_child_id,
+            depends_on: @last_mailbox_child_id,
             sidekiq_job_id: nil
           }
 
@@ -194,8 +194,6 @@ module TaskManager
         { id: @user_domain.user_website.id, server_type: 'linux'  }
       end
     end
-
-
    end
   end
 end
