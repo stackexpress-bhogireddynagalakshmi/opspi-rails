@@ -2,8 +2,8 @@ module Spree::Admin::ResourceLimitHelper
   
   def current_user_product
       TenantManager::TenantHelper.unscoped_query do
-        current_spree_user.orders.collect do |o|
-          o.products
+        current_spree_user.subscriptions.active.collect do |subscription|
+          subscription.plan
         end.flatten
       end.compact
     end
