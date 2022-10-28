@@ -1,10 +1,11 @@
 module TaskManager
   module HostingPanelTasks
-    class MailingTask < TaskManager::HostingPanelTasks::Base
+    class MailingListTask < TaskManager::HostingPanelTasks::Base
       
       def call
         case task[:type]
         when 'create_mailing_list'
+          create_mailing_list
         when 'update_mailing_list'
         when 'delete_mailing_list'
           delete_mailing_list
