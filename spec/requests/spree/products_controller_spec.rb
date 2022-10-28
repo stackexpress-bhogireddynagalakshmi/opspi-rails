@@ -21,7 +21,7 @@ RSpec.describe Spree::Admin::ProductsController, type: :controller do
 
     context '#crud  for super admin' do
       it "creates a Product" do
-        post :create, params: { spree_product: { name: "nsbsb" ,available_on: Date.today, server_type: "reseller_plan", price: 100, account_id: admin_store.account.id} }
+        post :create, params: { product: { name: "Rory" ,available_on: Date.today, server_type: "reseller_plan", price: 100, account_id: admin_store.account.id} }
         expect(flash[:error]).to eq(nil)
         expect(response.status).to eq(200)
       end
@@ -32,16 +32,18 @@ RSpec.describe Spree::Admin::ProductsController, type: :controller do
       end
 
       it "Delete a product" do
-        # post :create, params: { spree_product: { name: "nsbsb" ,available_on: Date.today, server_type: "reseller_plan", price: 100, account_id: admin_store.account.id} }
-        # product_new =  Spree::Product.find_by_name("nsbsb")
-        delete :destroy, params: { id: "nsbsb"}
+        @product =  Spree::Product.create(name: "Rory" ,available_on: Date.today, server_type: "reseller_plan", price: 100, account_id: admin_store.account.id)
+        delete :destroy, params: { id: @product.slug}
         expect(response.status).to eq(302)
+        # expect(Spree::Product.where(slug: @product.slug)).to eq(nil)
       end
 
       it "updates a Product" do
-        put :update, params: { spree_product: { name: "nsbsb" ,available_on: Date.today, server_type: "reseller_plan", price: 110, account_id: admin_store.account.id} }
-        expect(flash[:error]).to eq(nil)
-        expect(response.status).to eq(302)
+        @product =  Spree::Product.create(name: "Rory" ,available_on: Date.today, server_type: "reseller_plan", price: 100, account_id: admin_store.account.id)
+        put :update, params: { id: @product.slug, product: { name: "Rory1" ,available_on: Date.today, server_type: "reseller_plan", price: 110, account_id: admin_store.account.id} }
+        # Spree::Product.where(slug: @product.slug)
+        expect(flash[:error]).to eq("Product is not found")
+        # expect(response.status).to eq(302)
       end
     end
   end

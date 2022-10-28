@@ -18,37 +18,37 @@ module AppManager
         name: product.name,
         services: {
           domain:{
-            domain_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_zone"] : windows_os_attributes("OS.Domains", "quota_value")
+            domain_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_dns_zone") : windows_os_attributes("OS.Domains", "quota_value")
           },
           dns: {
-            enabled: true,
-            dns_zones_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_zone"] : windows_os_attributes("OS.Domains", "quota_value"),  ##copy from domain_count_limit (default)
-            default_secondary_dns_server: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["default_slave_dnsserver"] : nil,
-            secondary_dns_zones_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_slave_zone"] : windows_os_attributes("OS.SubDomains", "quota_value"),
-            dns_records_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_record"] : nil
+            enabled: not_a_reseller_or_end_user_plan? ? false : true,
+            dns_zones_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_dns_zone") : windows_os_attributes("OS.Domains", "quota_value"),  ##copy from domain_count_limit (default)
+            default_secondary_dns_server: linux_or_reseller? ? linux_config.try(:[],"default_slave_dnsserver") : nil,
+            secondary_dns_zones_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_dns_slave_zone") : windows_os_attributes("OS.SubDomains", "quota_value"),
+            dns_records_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_dns_record") : nil
           },
           mail: {
-            enabled: true,
-            mail_domains_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_zone"] : windows_os_attributes("OS.Domains", "quota_value"),  #copy from domain_count_limit (default)
-            mailbox_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailbox"] : windows_mail_attributes("Mail.MaxBoxSize", "quota_value"),
-            email_aliases_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailalias"] : nil,
-            domain_aliases_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailaliasdomain"] : nil,
-            mailing_list_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailmailinglist"] : windows_mail_attributes("Mail.Lists", "quota_value"),
-            email_forwarders_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailforward"] : windows_mail_attributes("Mail.Forwardings", "quota_value"),
-            email_catchall_accounts_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailcatchall"] : nil,
-            email_routes_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailrouting"] : nil,
-            email_filters_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailfilter"] : nil,
-            fetchmail_accounts_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_fetchmail"] : nil,
-            mailbox_size_quota_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_mailquota"] : nil,
-            spamfilter_white_blacklist_filters_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_spamfilter_wblist"] : nil,
-            spamfilter_users_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_spamfilter_user"] : nil,
-            spamfilter_policies_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_spamfilter_policy"] : nil
+            enabled: not_a_reseller_or_end_user_plan? ? false : true,
+            mail_domains_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_dns_zone") : windows_os_attributes("OS.Domains", "quota_value"),  #copy from domain_count_limit (default)
+            mailbox_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_mailbox") : windows_mail_attributes("Mail.MaxBoxSize", "quota_value"),
+            email_aliases_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_mailalias") : nil,
+            domain_aliases_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_mailaliasdomain") : nil,
+            mailing_list_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_mailmailinglist") : windows_mail_attributes("Mail.Lists", "quota_value"),
+            email_forwarders_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_mailforward") : windows_mail_attributes("Mail.Forwardings", "quota_value"),
+            email_catchall_accounts_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_mailcatchall") : nil,
+            email_routes_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_mailrouting") : nil,
+            email_filters_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_mailfilter") : nil,
+            fetchmail_accounts_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_fetchmail") : nil,
+            mailbox_size_quota_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_mailquota") : nil,
+            spamfilter_white_blacklist_filters_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_spamfilter_wblist") : nil,
+            spamfilter_users_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_spamfilter_user") : nil,
+            spamfilter_policies_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_spamfilter_policy") : nil
           },
           database_mysql: {
-            enabled: true,
-            database_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_database"] : windows_mysql_attributes("MySQL8.Databases", "quota_value"),
-            database_users_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_database_user"] : windows_mysql_attributes("MySQL8.Users", "quota_value"),
-            database_quota_size_quota: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_database_quota"] : windows_mysql_attributes("MySQL8.MaxDatabaseSize", "quota_value")
+            enabled: not_a_reseller_or_end_user_plan? ? false : true,
+            database_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_database") : windows_mysql_attributes("MySQL8.Databases", "quota_value"),
+            database_users_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_database_user") : windows_mysql_attributes("MySQL8.Users", "quota_value"),
+            database_quota_size_quota: linux_or_reseller? ? linux_config.try(:[],"limit_database_quota") : windows_mysql_attributes("MySQL8.MaxDatabaseSize", "quota_value")
           },
           database_mssql: {
             enabled: windows?,
@@ -60,31 +60,31 @@ module AppManager
           },
           web_linux: {
             enabled: linux_or_reseller?,
-            web_domains_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_dns_zone"] : nil,  #copy from domain_count_limit (default)
-            disk_size_quota: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_web_quota"] : nil,
-            traffic_quota: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_traffic_quota"] : nil,
-            cgi_available: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_cgi"] : nil,
-            ssi_available: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_ssi"] : nil,
-            perl_available: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_perl"] : nil,
-            php_available: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["web_php_options"] : nil,
-            ruby_available: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_ruby"] : nil,
-            python_available: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_python"] : nil,
-            SuEXEC_forced: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["force_suexec"] : nil,
-            custom_error_docs_available: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_hterror"] : nil,
-            Wildcard_subdomain_available: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_wildcard"] : nil,
-            ssl_available: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_ssl"] : nil,
-            lets_encrypt_available: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_ssl_letsencrypt"] : nil,
-            web_aliasdomains_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_web_aliasdomain"] : nil,
-            web_subdomains_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_web_subdomain"] : nil,
-            ftp_users_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_ftp_user"] : nil,
-            shell_users_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_shell_user"] : nil,
-            webdav_users_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_webdav_user"] : nil    
+            web_domains_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_dns_zone") : nil,  #copy from domain_count_limit (default)
+            disk_size_quota: linux_or_reseller? ? linux_config.try(:[],"limit_web_quota") : nil,
+            traffic_quota: linux_or_reseller? ? linux_config.try(:[],"limit_traffic_quota") : nil,
+            cgi_available: linux_or_reseller? ? linux_config.try(:[],"limit_cgi") : nil,
+            ssi_available: linux_or_reseller? ? linux_config.try(:[],"limit_ssi") : nil,
+            perl_available: linux_or_reseller? ? linux_config.try(:[],"limit_perl") : nil,
+            php_available: linux_or_reseller? ? linux_config.try(:[],"web_php_options") : nil,
+            ruby_available: linux_or_reseller? ? linux_config.try(:[],"limit_ruby") : nil,
+            python_available: linux_or_reseller? ? linux_config.try(:[],"limit_python") : nil,
+            SuEXEC_forced: linux_or_reseller? ? linux_config.try(:[],"force_suexec") : nil,
+            custom_error_docs_available: linux_or_reseller? ? linux_config.try(:[],"limit_hterror") : nil,
+            Wildcard_subdomain_available: linux_or_reseller? ? linux_config.try(:[],"limit_wildcard") : nil,
+            ssl_available: linux_or_reseller? ? linux_config.try(:[],"limit_ssl") : nil,
+            lets_encrypt_available: linux_or_reseller? ? linux_config.try(:[],"limit_ssl_letsencrypt") : nil,
+            web_aliasdomains_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_web_aliasdomain") : nil,
+            web_subdomains_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_web_subdomain") : nil,
+            ftp_users_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_ftp_user") : nil,
+            shell_users_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_shell_user") : nil,
+            webdav_users_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_webdav_user") : nil    
           },
           cron: {
             enabled: linux_or_reseller?,
-            cron_jobs_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_cron"] : nil,
-            type_of_cron_jobs_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_cron_type"] : nil,
-            min_delay_between_executions_count_limit: linux_or_reseller? ? resource["product"]["isp_config_limit_attributes"]["limit_cron_frequency"] : nil
+            cron_jobs_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_cron") : nil,
+            type_of_cron_jobs_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_cron_type") : nil,
+            min_delay_between_executions_count_limit: linux_or_reseller? ? linux_config.try(:[],"limit_cron_frequency") : nil
           },
           web_windows: {
             enabled: windows?,
@@ -126,10 +126,15 @@ module AppManager
       }
     end
 
+    def linux_config
+      resource["product"].try(:[],"isp_config_limit_attributes")
+    end
+
 
     def windows_os_attributes(name, value_type)
       return nil if linux_or_reseller?
 
+      return nil if resource[:product][:plan_quota_groups_attributes].blank?
       type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'OS'}
       value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
       value.dig(value.keys.first, value_type)
@@ -138,6 +143,7 @@ module AppManager
     def windows_mail_attributes(name, value_type)
       return nil if linux_or_reseller?
 
+      return nil if resource[:product][:plan_quota_groups_attributes].blank?
       type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'Mail'}
       value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
       value.dig(value.keys.first, value_type)
@@ -146,6 +152,7 @@ module AppManager
     def windows_mysql_attributes(name, value_type)
       return nil if linux_or_reseller?
 
+      return nil if resource[:product][:plan_quota_groups_attributes].blank?
       type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'MySQL8'}
       value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
       value.dig(value.keys.first, value_type)
@@ -154,6 +161,7 @@ module AppManager
     def windows_mssql_attributes(name, value_type)
       return nil if linux_or_reseller?
 
+      return nil if resource[:product][:plan_quota_groups_attributes].blank?
       type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'MsSQL2019'}
       value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
       value.dig(value.keys.first, value_type)
@@ -162,6 +170,7 @@ module AppManager
     def windows_web_attributes(name, value_type)
       return nil if linux_or_reseller?
 
+      return nil if resource[:product][:plan_quota_groups_attributes].blank?
       type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'Web'}
       value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
       value.dig(value.keys.first, value_type)
@@ -170,6 +179,7 @@ module AppManager
     def windows_ftp_attributes(name, value_type)
       return nil if linux_or_reseller?
 
+      return nil if resource[:product][:plan_quota_groups_attributes].blank?
       type_value = resource[:product][:plan_quota_groups_attributes].select{|k,v| v[:group_name] == 'FTP'}
       value = type_value[type_value.keys.first].fetch("plan_quotas_attributes").select{|x,v| v[:quota_name] == name}
       value.dig(value.keys.first, value_type)
@@ -185,6 +195,10 @@ module AppManager
 
     def reseller_plan?
       product.server_type == 'reseller_plan'
+    end
+
+    def not_a_reseller_or_end_user_plan?
+      product.server_type == 'hsphere' || product.server_type == 'domain'
     end
 
     def linux_or_reseller?
