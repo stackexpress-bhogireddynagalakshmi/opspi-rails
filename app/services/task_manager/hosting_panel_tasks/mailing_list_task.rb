@@ -5,6 +5,7 @@ module TaskManager
       def call
         case task[:type]
         when 'create_mailing_list'
+          create_mailing_list
         when 'update_mailing_list'
         when 'delete_mailing_list'
           delete_mailing_list
