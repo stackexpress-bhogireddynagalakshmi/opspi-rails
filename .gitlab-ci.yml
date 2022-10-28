@@ -164,7 +164,8 @@ deploy-qa:
   only:
     - dev
   tags:
-    - opspi-prod-k8s01
+    - opspi
+    # - opspi-prod-k8s01
 
 
 deploy-staging:
