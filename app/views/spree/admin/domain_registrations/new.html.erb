@@ -48,7 +48,11 @@
 <div>
  
   <%if @response && @response["status"]=='ERROR'%>
-    <div style="color: red;" class="mt-3"><%=@response["message"]%></</div> 
+  <%if @response["response"]["message"].include?("Access Denied") %>
+    <div style="color: red;" class="mt-3"><%=Spree.t(:unauthorized_action)%></div> 
+  <%else%>
+  <div style="color: red;" class="mt-3"><%=@response["message"]%></div> 
+  <%end%>
   <%else%>
 
   <div class="card mt-4">

@@ -114,9 +114,9 @@ en:
     last_sign_in_at: 'Last Sign in'
     current_sign_in_ip: 'Current Sign in IP'
     last_sign_in_ip: 'Last Sign in IP'
-    sign_up_ip: 'Sign up IP'
-    confirmation_error: 'Email is not confirmed yet. Please check your inbox and click the confirmation link.'
+    email_confirmation_error: 'Email is not confirmed yet. Please check your inbox and click the confirmation link.'
     certificate_installed: 'Certificate Installed successfully.'
+    unauthorized_action: 'You are not authorized to perform this action.'
 
     list_of_solid_cp_users: 'List of SolidCP users'
     ist_of_solid_cp_plans: 'List of SolidCP plans'
