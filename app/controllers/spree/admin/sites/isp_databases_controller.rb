@@ -10,6 +10,8 @@ module Spree
         include ResourceLimitHelper
         before_action :set_user_domain, only: [:new, :create, :index, :destroy,:configurations]
         before_action -> { resource_limit_check(@user_domain.web_hosting_type,'database',{:db_type => resource_params[:database_type]}) }, except: [:new, :show, :index, :destroy,:configurations, :reset_password] 
+        before_action :set_database, only: [:destroy]
+
 
         def index
           response = database_api.all || []
@@ -43,7 +45,8 @@ module Spree
         end
 
         def destroy
-          @response = database_api.destroy(params[:id])
+          database_api.destroy_database_and_user(@database.id)
+
           set_flash
           redirect_to request.referrer
         end
@@ -135,7 +138,11 @@ module Spree
 
         def formatted_db_name(database_name)
           "#{UserDatabase.database_name_prefix(current_spree_user)}#{database_name}"
-        end        
+        end 
+
+        def set_database
+          @database = @user_domain.user_databases.find(params[:id])
+        end       
       end
     end
   end
