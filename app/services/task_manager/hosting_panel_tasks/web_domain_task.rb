@@ -19,7 +19,7 @@ module TaskManager
       end
 
       def delete_web_domain
-        @response = website_api.destroy(@data)
+        @response = website_api.destroy(params_data)
       end
 
       def web_domain_api
@@ -58,6 +58,14 @@ module TaskManager
 
       def windows_resource_params
         { domain_name:  @data[:domain], create_webSite: "1", enable_dns: "0", allow_subdomains: "1" }
+      end
+
+      def params_data
+        if @data[:server_type].present? && @data[:server_type] == 'windows'
+          @data
+        else
+          @data[:id]
+        end
       end
     end
   end

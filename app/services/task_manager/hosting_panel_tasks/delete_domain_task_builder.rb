@@ -25,6 +25,7 @@ module TaskManager
       prepare_delete_mailing_lists_task
       prepare_delete_mail_forwads_task
       prepare_delete_spamfilter_task
+      prepare_delete_database_task
       prepare_delete_user_domain_task
 
       @tasks = @tasks.flatten
@@ -72,7 +73,7 @@ module TaskManager
             data: {
               id: @user_domain.user_mail_domain.id
             },
-            depends_on: last_mailbox_child_id,
+            depends_on: @last_mailbox_child_id,
             sidekiq_job_id: nil
           }
 
@@ -160,6 +161,22 @@ module TaskManager
       end
     end
 
+    def prepare_delete_database_task
+      @user_domain.user_databases.each do |object|
+       @tasks <<
+        {
+          id: SecureRandom.hex,
+          type: "delete_database",
+          user_domain_id: @user_domain.id,
+          data: {
+            id: object.id
+          },
+          depends_on: nil,
+          sidekiq_job_id: nil
+        }
+      end
+    end
+
     def delete_website_params
       if @user_domain.windows?
         @all_domains = begin
@@ -177,8 +194,6 @@ module TaskManager
         { id: @user_domain.user_website.id, server_type: 'linux'  }
       end
     end
-
-
    end
   end
 end

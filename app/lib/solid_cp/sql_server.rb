@@ -180,6 +180,11 @@ module SolidCp
       end
     end
 
+    alias destroy_database_user delete_sql_user
+
+
+
+
     # <itemId>int</itemId>
     # <backupName>string</backupName>
     # <zipBackup>boolean</zipBackup>

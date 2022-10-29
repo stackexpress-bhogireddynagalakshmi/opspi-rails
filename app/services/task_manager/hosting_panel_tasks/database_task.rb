@@ -9,14 +9,28 @@ module TaskManager
         when 'update_database'
 
         when 'delete_database'
+          set_database
 
+          delete_database
         end 
       end
 
       private
+
+      def delete_database
+        @response = delete_database_api.destroy_database_and_user(@user_database.id)
+      end
       
       def create_database
         @response = database_api.create(resource_params)
+      end
+
+      def delete_database_api
+        if @user_database.my_sql?
+           @user.isp_config.database
+        elsif @user_database.ms_sql2019?
+           @user.solid_cp.sql_server
+        end
       end
 
       def database_api
@@ -58,6 +72,10 @@ module TaskManager
 
       def get_folder_path
         { can_read: true, can_write: true, folder: "\\#{@data[:domain]}\\wwwroot" }
+      end
+
+      def set_database
+        @user_database = @user_domain.user_databases.find(@data[:id])
       end
     end
   end

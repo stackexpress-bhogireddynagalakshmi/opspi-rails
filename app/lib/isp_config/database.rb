@@ -125,6 +125,7 @@ module IspConfig
     def destroy(primary_ids)
       ## destroy db user
       db_user_delete_response = destroy_database_user(primary_ids[:db_user_id])
+      
       unless db_user_delete_response[:success]
         return { success: false,
                  message: I18n.t('isp_config.something_went_wrong', message: db_user_delete_response[:message]), 
@@ -140,7 +141,12 @@ module IspConfig
                          }
                        })
 
-      user.isp_databases.find_by_isp_config_database_id(primary_ids[:id]).destroy if response.code == "ok"
+      if response.code == "ok"
+        user.isp_databases.find_by_isp_config_database_id(primary_ids[:id]).destroy
+
+        user_database = UserDatabase.find_by_database_id(primary_ids[:id])
+        user_database&.destroy
+      end 
 
       formatted_response(response, 'delete')
     end
@@ -158,6 +164,18 @@ module IspConfig
       formatted_response(response, 'delete')
     end
 
+    def destroy_database_and_user(id)
+      @user_database = UserDatabase.find(id)
+      
+      remote_db = find(@user_database.database_id)
+      
+      remote_db = remote_db[:response].response
+      database_user_id = remote_db[:database_user_id]
+
+      destroy({db_user_id: database_user_id, id: @user_database.database_id})
+      
+    end
+
     def find(id)
       response = query({
                          endpoint: '/json.php?sites_database_get',
@@ -171,7 +189,6 @@ module IspConfig
     end
 
     private
-
     def database_ids
       user.isp_databases.pluck(:isp_config_database_id)
     end
