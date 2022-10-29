@@ -158,7 +158,7 @@ deploy-qa:
     # - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
     # - chmod 644 ~/.ssh/known_hosts
   script:
-    - scp -r -P $APP_SERVER_SSH_PORT docker-compose.yml $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST:/srv/docker-apps/opspi/
+    - scp -o StrictHostKeyChecking=no -r -P $APP_SERVER_SSH_PORT docker-compose.yml $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST:/srv/docker-apps/opspi/
     - ssh -o StrictHostKeyChecking=no $APP_SERVER_SSH_USER@$APP_SERVER_SSH_HOST -p $APP_SERVER_SSH_PORT "bash -c ' cd /srv/docker-apps/opspi && APP_IMAGE=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA  /usr/local/bin/docker-compose up -d'"
     
   only:
