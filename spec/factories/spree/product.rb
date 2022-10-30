@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :spree_product, class: 'Spree::Product' do
+  factory :product, class: 'Spree::Product' do
 
     # transient do
     #   stock_location_id nil
@@ -8,7 +8,7 @@ FactoryBot.define do
     #   backorderable false
     # end
 
-
+    id {|number| number}
     name {Faker::Commerce.product_name }
     description  { Faker::Lorem.sentence(word_count: 12) }
     available_on { Date.today }
