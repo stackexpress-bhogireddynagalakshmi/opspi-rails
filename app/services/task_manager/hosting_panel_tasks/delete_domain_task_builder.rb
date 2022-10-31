@@ -155,17 +155,19 @@ module TaskManager
           data: {
             id: @user_domain.id
           },
-          depends_on: nil,
+          depends_on: @last_database_child_id,
           sidekiq_job_id: nil
         }
       end
     end
 
     def prepare_delete_database_task
+      @last_database_child_id = nil
       @user_domain.user_databases.each do |object|
+      @last_database_child_id = SecureRandom.hex
        @tasks <<
         {
-          id: SecureRandom.hex,
+          id: @last_database_child_id,
           type: "delete_database",
           user_domain_id: @user_domain.id,
           data: {
