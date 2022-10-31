@@ -32,6 +32,8 @@ module TaskManager
     end
 
     def prepare_delete_website_task
+      return nil if @user_domain.user_website.blank?
+
       
       @tasks <<
         {
