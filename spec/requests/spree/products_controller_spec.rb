@@ -39,8 +39,8 @@ RSpec.describe Spree::Admin::ProductsController, type: :controller do
       it "creates a Product" do
         post :create, params: { product: { id: 2, name: "Rory" ,available_on: Date.today, server_type: "reseller_plan", price: 100} }
         expect(flash[:error]).to eq(nil)
-        expect(response.status).to eq(302)
-        # expect(ProductConfig.find_by_product_id(2)).to be_truthy
+        expect(response.status).to eq(200)
+        expect(ProductConfig.find_by_product_id(2)).to be_truthy
       end
 
       it "list all products" do
@@ -61,8 +61,9 @@ RSpec.describe Spree::Admin::ProductsController, type: :controller do
 
       it "updates a Product" do
         put :update, params: { id: @product.slug, product: { name: "Rory", price: 110} }
-        # expect(flash[:error]).to eq(nil)
+        expect(flash[:error]).to eq(nil)
         expect(response.status).to eq(302)
+        expect(response).to redirect_to(edit_admin_product_path(@product.slug))
       end
     end
   end
