@@ -3,15 +3,26 @@
 module Spree
   module Admin
     class DashboardController < Spree::Admin::BaseController
+      include DashboardResorceLimitHelper
+      before_action :layout_type
+
       def index 
+
+
+        get_plan_details
+        
+        
+      end
+
+      def layout_type
         if current_spree_user.store_admin?
-          render layout: "spree/layouts/admin"
+            render layout: "spree/layouts/admin"
         elsif current_spree_user&.superadmin?
-          render layout: "spree/layouts/admin"
-        else
-          render layout: "dashkit_admin_layout"
+            render layout: "spree/layouts/admin"
         end
       end
+
+
     end
   end
 end

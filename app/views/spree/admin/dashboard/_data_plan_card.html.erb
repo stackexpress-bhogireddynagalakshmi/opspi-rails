@@ -1,0 +1,55 @@
+<div class="row">
+
+
+    <%current_spree_user.subscriptions.active.each do |subscription| %>
+        <div class="col-12 col-lg-6">
+        <!-- Card -->
+          <div class="card">
+            <div class="card-body">
+              <div class="row align-items-center">
+                <div class="col-auto">
+        
+                  <!-- Avatar -->
+        
+                  <%=image_tag "/assets/noimage/plp1.png", :alt => "rss feed" , class: "pos"%>
+                 
+                </div>
+                <div class="col ms-n2">
+        
+                  <h4 class="mb-1">
+                  <%=subscription.plan.name%>
+                  </h4>
+        
+                  <p class="small text-muted mb-1">
+                  <span data-ransack-field="q_store_id_in">
+                  <%= current_store.name %>
+                  </span>
+                  </p>
+        
+                  <p class="small mb-0">
+                  <%= subscription.plan.server_type.titleize%>
+                  <br/>
+                  <%if subscription.status? %>
+                  <span class="badge bg-success-soft">Active</span>
+                  <% else %>
+                  <span class="badge bg-danger-soft">Inactive</span>
+                  <% end %>
+                </div>
+                
+              </div> <!-- / .row -->
+
+              <%= render partial: 'spree/admin/dashboard/data_card' , locals: {subscription: subscription}%>
+              
+            </div> <!-- / .card-body -->
+            
+          </div>
+        
+          </div>
+        <%end%>
+
+
+
+</div><!-- row_end-->
+
+
+
