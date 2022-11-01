@@ -94,7 +94,7 @@ module IspConfig
 
       def create_mx_records(params)
         dns_id = HostedZone.where(name: params[:domain]).pluck(:isp_config_host_zone_id).first
-        mx_records = [IspConfig::Config.api_mx_server_1(user), IspConfig::Config.api_mx_server_1(user)]
+        mx_records = [IspConfig::Config.api_mx_server_1(user), IspConfig::Config.api_mx_server_2(user)]
         mx_records.each do |mx|
           mx_record_params = {
             type: "MX",
