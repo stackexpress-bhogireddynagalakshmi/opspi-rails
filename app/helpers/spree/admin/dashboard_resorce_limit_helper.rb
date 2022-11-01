@@ -25,7 +25,17 @@ def get_mail_count(id)
     UserMailbox.mail_box_count(current_spree_user, Spree::Product.find_by(id: id).server_type)
 end
 
+def get_ftp_count(id)
+    UserFtpUser.ftp_user_count(current_spree_user, Spree::Product.find_by(id: id).server_type)
+end
 
+def get_database_count_mysql(id)
+    UserDatabase.database_count(current_spree_user,Spree::Product.find_by(id: id).server_type, "my_sql")
+end
+
+def get_database_count_mssql(id)
+    UserDatabase.database_count(current_spree_user,Spree::Product.find_by(id: id).server_type, "ms_sql2019")
+end
 
 def get_plan_quota(id, type, quota_fields)
     @plan_quotas.flatten.compact.each do |quota|

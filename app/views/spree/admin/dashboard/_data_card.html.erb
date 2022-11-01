@@ -110,4 +110,221 @@
         </div>
       </div>
 
-     
+      <!-- Card -->
+      <div class="mt-n5" >
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
+  
+              <!-- Title -->
+              <h6 class="text-uppercase text-muted mb-2">
+                Database (MYSQL)
+              </h6>
+  
+            <div class="row align-items-center g-0">
+                <div class="col-auto">
+
+                <!-- Heading -->
+                <span class="h2 me-2 mb-0">
+                <%= get_database_count_mysql(subscription.product_id) %> / 
+                <% if get_plan_quota(subscription.product_id,'database_mysql', 'database_count_limit') == -1 %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-infinity" viewBox="0 0 16 16">
+                    <path d="M5.68 5.792 7.345 7.75 5.681 9.708a2.75 2.75 0 1 1 0-3.916ZM8 6.978 6.416 5.113l-.014-.015a3.75 3.75 0 1 0 0 5.304l.014-.015L8 8.522l1.584 1.865.014.015a3.75 3.75 0 1 0 0-5.304l-.014.015L8 6.978Zm.656.772 1.663-1.958a2.75 2.75 0 1 1 0 3.916L8.656 7.75Z"/>
+                  </svg>
+                  <% else %>
+                  <%= get_plan_quota(subscription.product_id,'database_mysql', 'database_count_limit') %>
+                <%end%>
+              </span>
+
+                  </div>
+                  <div class="col ml-2">
+                  <% if get_plan_quota(subscription.product_id,'database_mysql', 'database_count_limit') == -1 %>
+                  <div class="progress progress-sm" >
+                      <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="<%= get_database_count_mysql(subscription.product_id) %>" aria-valuemin="0" aria-valuemax="<%= get_plan_quota(subscription.product_id,'database_mysql', 'database_count_limit') %>">
+                      </div>
+                    </div>
+                  <% else %>
+                    <!-- Progress -->
+                    <div class="progress progress-sm" >
+                      <div class="progress-bar" role="progressbar" style="width: <%= get_database_count_mysql(subscription.product_id) %>%" aria-valuenow="<%= get_database_count_mysql(subscription.product_id) %>" aria-valuemin="0" aria-valuemax="<%= get_plan_quota(subscription.product_id,'database_mysql', 'database_count_limit') %>">
+                      </div>
+                    </div>
+                    <% end %>
+                  </div>
+                </div> <!-- / .row -->
+            </div>
+            <div class="col-auto pt-3">
+  
+              <!-- Icon -->
+              <span class="h2 fe fe-database text-muted mb-0"></span>
+  
+            </div>
+          </div> <!-- / .row -->
+  
+        </div>
+      </div>
+
+      <!-- Card -->
+      <%if Spree::Product.find_by(id: subscription.product_id).server_type == "windows" %>
+      <div class="mt-n5" >
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
+  
+              <!-- Title -->
+              <h6 class="text-uppercase text-muted mb-2">
+                Database (MSSQL)
+              </h6>
+  
+            <div class="row align-items-center g-0">
+                <div class="col-auto">
+
+                <!-- Heading -->
+                <span class="h2 me-2 mb-0">
+                <%= get_database_count_mssql(subscription.product_id) %> / 
+                <% if get_plan_quota(subscription.product_id,'database_mssql', 'database_count_limit') == -1 %>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-infinity" viewBox="0 0 16 16">
+                    <path d="M5.68 5.792 7.345 7.75 5.681 9.708a2.75 2.75 0 1 1 0-3.916ZM8 6.978 6.416 5.113l-.014-.015a3.75 3.75 0 1 0 0 5.304l.014-.015L8 8.522l1.584 1.865.014.015a3.75 3.75 0 1 0 0-5.304l-.014.015L8 6.978Zm.656.772 1.663-1.958a2.75 2.75 0 1 1 0 3.916L8.656 7.75Z"/>
+                  </svg>
+                  <% else %>
+                  <%= get_plan_quota(subscription.product_id,'database_mssql', 'database_count_limit') %>
+                <%end%>
+              </span>
+
+                  </div>
+                  <div class="col ml-2">
+                  <% if get_plan_quota(subscription.product_id,'database_mssql', 'database_count_limit') == -1 %>
+                  <div class="progress progress-sm" >
+                      <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="<%= get_database_count_mssql(subscription.product_id) %>" aria-valuemin="0" aria-valuemax="<%= get_plan_quota(subscription.product_id,'database_mssql', 'database_count_limit') %>">
+                      </div>
+                    </div>
+                  <% else %>
+                    <!-- Progress -->
+                    <div class="progress progress-sm" >
+                      <div class="progress-bar" role="progressbar" style="width: <%= get_database_count_mssql(subscription.product_id) %>%" aria-valuenow="<%= get_database_count_mssql(subscription.product_id) %>" aria-valuemin="0" aria-valuemax="<%= get_plan_quota(subscription.product_id,'database_mssql', 'database_count_limit') %>">
+                      </div>
+                    </div>
+                    <% end %>
+                  </div>
+                </div> <!-- / .row -->
+            </div>
+            <div class="col-auto pt-3">
+  
+              <!-- Icon -->
+              <span class="h2 fe fe-database text-muted mb-0"></span>
+  
+            </div>
+          </div> <!-- / .row -->
+  
+        </div>
+      </div>
+      <%end%>
+
+      <!-- Card -->
+      <%if Spree::Product.find_by(id: subscription.product_id).server_type == "linux" %>
+      <div class="mt-n5" >
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
+  
+              <!-- Title -->
+              <h6 class="text-uppercase text-muted mb-2">
+                FTP
+              </h6>
+  
+            <div class="row align-items-center g-0">
+            <div class="col-auto">
+
+            <!-- Heading -->
+            <span class="h2 mb-0">
+                <%= get_ftp_count(subscription.product_id) %> / 
+                <% if get_plan_quota(subscription.product_id,'web_linux', 'ftp_users_count_limit') == -1 %>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-infinity" viewBox="0 0 16 16">
+                <path d="M5.68 5.792 7.345 7.75 5.681 9.708a2.75 2.75 0 1 1 0-3.916ZM8 6.978 6.416 5.113l-.014-.015a3.75 3.75 0 1 0 0 5.304l.014-.015L8 8.522l1.584 1.865.014.015a3.75 3.75 0 1 0 0-5.304l-.014.015L8 6.978Zm.656.772 1.663-1.958a2.75 2.75 0 1 1 0 3.916L8.656 7.75Z"/>
+              </svg>
+              <% else %>
+                <%= get_plan_quota(subscription.product_id,'web_linux', 'ftp_users_count_limit') %>
+              <%end%>
+              </span>
+
+              </div>
+              <div class="col ml-2">
+              <% if get_plan_quota(subscription.product_id,'web_linux', 'ftp_users_count_limit') == -1 %>
+                <div class="progress progress-sm" >
+                    <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="<%= get_ftp_count(subscription.product_id) %>" aria-valuemin="0" aria-valuemax="<%= get_plan_quota(subscription.product_id,'web_linux', 'ftp_users_count_limit') %>">
+                    </div>
+                  </div>
+              <% else %>
+                <!-- Progress -->
+                <div class="progress progress-sm" >
+                  <div class="progress-bar" role="progressbar" style="width: <%= get_ftp_count(subscription.product_id) %>%" aria-valuenow="<%= get_ftp_count(subscription.product_id) %>" aria-valuemin="0" aria-valuemax="<%= get_plan_quota(subscription.product_id,'web_linux', 'ftp_users_count_limit') %>">
+                  </div>
+                </div>
+                <%end%>
+              </div>
+            </div> <!-- / .row -->
+        </div>
+  
+              <div class="col-auto pt-3">
+              <span class="h2 fe fe-users text-muted mb-0"></span>
+             </div>
+  
+          </div> <!-- / .row -->
+  
+        </div>
+      </div>
+
+<%else%>
+      <!-- Card -->
+      <div class="mt-n5" >
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
+  
+              <!-- Title -->
+              <h6 class="text-uppercase text-muted mb-2">
+                FTP
+              </h6>
+  
+            <div class="row align-items-center g-0">
+            <div class="col-auto">
+
+            <!-- Heading -->
+            <span class="h2 mb-0">
+                <%= get_ftp_count(subscription.product_id) %> / 
+                <% if get_plan_quota(subscription.product_id,'web_windows', 'ftp_users_count_limit') == -1 %>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-infinity" viewBox="0 0 16 16">
+                <path d="M5.68 5.792 7.345 7.75 5.681 9.708a2.75 2.75 0 1 1 0-3.916ZM8 6.978 6.416 5.113l-.014-.015a3.75 3.75 0 1 0 0 5.304l.014-.015L8 8.522l1.584 1.865.014.015a3.75 3.75 0 1 0 0-5.304l-.014.015L8 6.978Zm.656.772 1.663-1.958a2.75 2.75 0 1 1 0 3.916L8.656 7.75Z"/>
+              </svg>
+              <% else %>
+                <%= get_plan_quota(subscription.product_id,'web_windows', 'ftp_users_count_limit') %>
+              <%end%>
+              </span>
+
+              </div>
+              <div class="col ml-2">
+              <% if get_plan_quota(subscription.product_id,'web_windows', 'ftp_users_count_limit') == -1 %>
+                <div class="progress progress-sm" >
+                    <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="<%= get_ftp_count(subscription.product_id) %>" aria-valuemin="0" aria-valuemax="<%= get_plan_quota(subscription.product_id,'web_windows', 'ftp_users_count_limit') %>">
+                    </div>
+                  </div>
+              <% else %>
+                <!-- Progress -->
+                <div class="progress progress-sm" >
+                  <div class="progress-bar" role="progressbar" style="width: <%= get_ftp_count(subscription.product_id) %>%" aria-valuenow="<%= get_ftp_count(subscription.product_id) %>" aria-valuemin="0" aria-valuemax="<%= get_plan_quota(subscription.product_id,'web_windows', 'ftp_users_count_limit') %>">
+                  </div>
+                </div>
+                <%end%>
+              </div>
+            </div> <!-- / .row -->
+        </div>
+  
+              <div class="col-auto pt-3">
+              <span class="h2 fe fe-users text-muted mb-0"></span>
+             </div>
+  
+          </div> <!-- / .row -->
+  
+        </div>
+      </div>
+  <%end%>  
