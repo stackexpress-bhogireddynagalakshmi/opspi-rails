@@ -19,7 +19,6 @@ module TaskManager
       private
 
       def delete_database
-        byebug
         @response = delete_database_api.destroy_database_and_user(@user_database.id)
       end
       
@@ -28,7 +27,6 @@ module TaskManager
       end
 
       def delete_database_api
-        byebug
         if @user_database.my_sql?
            @user.isp_config.database
         elsif @user_database.ms_sql2019?

@@ -187,7 +187,6 @@ module SolidCp
 
 
     def destroy_database_and_user(id)
-      byebug
       @user_database = UserDatabase.find(id)
 
       db_users  = all_db_users
@@ -195,15 +194,15 @@ module SolidCp
     
       if db_users.present?
         db_users = [db_users] if db_users.is_a?(Hash)
-        db_user   = db_users.detect { |x| x[:name] == database.database_user }
+        db_user   = db_users.detect { |x| x[:name] == @user_database.database_user }
         @response = delete_sql_user(db_user[:id]) if db_user.present?
-
-        if @response[:success]
-            delete_sql_database(@user_database.database_id)
-        end
       end
-      byebug
-   
+
+      if @user_database.database_id.present?
+        delete_sql_database(@user_database.database_id)
+      else
+        {success: true}
+      end
     end
 
 
