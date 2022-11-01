@@ -11,7 +11,7 @@
   <td><%=database.database_user%></td>
   <td><%=database.database_type.try(:upcase)%></td>
   <td><%=database.status%></td>
-  <td id="database_id_<%=database.id%>" class="password-text1"></td>
+  <td class="password-text"></td>
 
   <td class="pull-right">
     <%= link_to  admin_sites_isp_database_path(id: database.id, user_domain_id: @user_domain.id),type: 'button',data: {confirm: t('general.delete')}, class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete, remote: true do %>
@@ -21,7 +21,7 @@
     <%=link_to reset_password_admin_sites_isp_database_path(database.id, user_domain_id: database.user_domain_id,type: 'database', div_class: "database_id_#{database.id}", replace: true), remote: true, class: 'btn btn-outline-primary btn-size', style: "margin-right:5px",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Reset Password' do %>
         <%= render partial: '/spree/admin/shared/icons/reset_password' %>
     <% end %>
-    <%= link_to configurations_admin_sites_isp_database_path(database.id), class: 'btn btn-outline-primary btn-size', style:"margin-right:5px", remote: true  do %>
+    <%= link_to configurations_admin_sites_isp_database_path(database.id, user_domain_id: database.user_domain_id), class: 'btn btn-outline-primary btn-size', style:"margin-right:5px", remote: true  do %>
         <%= render partial: '/spree/admin/shared/icons/gear' %>
     <% end %>
   </td>
