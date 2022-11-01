@@ -49,6 +49,7 @@ module Spree
     def create_chatwoot_resources(store_admin)
       return nil if store_admin.account_id == ::TenantManager::TenantHelper.admin_tenant_id
       return nil if ChatwootUser.where(store_account_id: store_admin.account_id).any?
+      return nil if Rails.env.test?
 
       StoreManager::ChatWootResourceCreator.new(self).call
     end

@@ -216,7 +216,7 @@ module AppManager
                               configs: product_config,
                               product_type: product_type,
                               status: 'active',
-                              product_id: product.id,
+                              product: product,
                               store_id: product&.account&.store_id
                               })
     end
