@@ -22,50 +22,7 @@
 </div>
 
 
-<% spree_current_user.subscriptions.order('created_at desc').each do |subscription| %>
-  <!-- Card -->
-  <div class="card">
-    <div class="card-body">
-      <div class="row align-items-center">
-        <div class="col-auto">
 
-          <!-- Avatar -->
-
-          <%=image_tag "/assets/noimage/plp1.png", :alt => "rss feed" , class: "pos"%>
-
-        </div>
-        <div class="col ms-n2">
-
-          <h4 class="mb-1">
-          <%=subscription.plan.name%>
-          </h4>
-
-          <p class="small text-muted mb-1">
-          <span data-ransack-field="q_store_id_in">
-          <%= current_store.name %>
-          </span>
-          </p>
-
-          <p class="small mb-0">
-          <%= subscription.plan.server_type.titleize%>
-          <br/>
-          <%if subscription.status? %>
-          <span class="badge bg-success-soft">Active</span>
-          <% else %>
-          <span class="badge bg-danger-soft">Inactive</span>
-          <% end %>
-          </p>
-
-        </div>
-        
-
-        
-        
-      </div> <!-- / .row -->
-    </div> <!-- / .card-body -->
-    
-    </div>
-
-<% end %>
+<%= render partial: 'spree/admin/dashboard/data_plan_card' %>
 
 <%end%> 
