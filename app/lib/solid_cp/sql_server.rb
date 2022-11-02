@@ -85,7 +85,6 @@ module SolidCp
 
 
     def add_sql_database(params = {})
-      byebug
       database = user.user_databases.find_by(
         {
           database_name: formatted_db_name(params[:database_name]),
@@ -97,11 +96,11 @@ module SolidCp
        if database.blank? || database.failed?
 
           database = user.user_databases.create(
-              {
-                database_name: formatted_db_name(params[:database_name]),
-                database_type: params[:database_type],
-                user_domain_id: params[:user_domain_id]
-              }
+            {
+              database_name: formatted_db_name(params[:database_name]),
+              database_type: params[:database_type],
+              user_domain_id: params[:user_domain_id]
+            }
           )
 
       else
