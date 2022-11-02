@@ -81,8 +81,10 @@ module SolidCp
     # </item>
     # <groupName>string</groupName>
 
-    def add_sql_database(params = {})
 
+
+
+    def add_sql_database(params = {})
       database = user.user_databases.find_by(
         {
           database_name: formatted_db_name(params[:database_name]),
@@ -94,11 +96,11 @@ module SolidCp
        if database.blank? || database.failed?
 
           database = user.user_databases.create(
-              {
-                database_name: formatted_db_name(params[:database_name]),
-                database_type: params[:database_type],
-                user_domain_id: params[:user_domain_id]
-              }
+            {
+              database_name: formatted_db_name(params[:database_name]),
+              database_type: params[:database_type],
+              user_domain_id: params[:user_domain_id]
+            }
           )
 
       else
@@ -181,6 +183,27 @@ module SolidCp
     end
 
     alias destroy_database_user delete_sql_user
+
+
+    def destroy_database_and_user(id)
+      @user_database = UserDatabase.find(id)
+
+      db_users  = all_db_users
+      db_users = db_users.body[:get_sql_users_response][:get_sql_users_result][:sql_user] || [] rescue []
+    
+      if db_users.present?
+        db_users = [db_users] if db_users.is_a?(Hash)
+        db_user   = db_users.detect { |x| x[:name] == @user_database.database_user }
+        @response = delete_sql_user(db_user[:id]) if db_user.present?
+      end
+
+      if @user_database.database_id.present?
+        delete_sql_database(@user_database.database_id)
+      else
+        {success: true}
+      end
+    end
+
 
 
 
