@@ -70,13 +70,16 @@ module Spree
         end
 
         def destroy
+
+          @user_domain.update(active: false)
     
           TaskManager::HostingPanelTasks::DeleteDomainTaskBuilder.new(current_spree_user, user_domain_id: @user_domain.id).call
-
           respond_to do |format|
             format.js { render inline: "location.reload();" }
-            format.html { redirect_to  admin_dns_hosted_zones_path }
+            format.html { redirect_to  admin_user_domains_path(deleted_domain_id: @user_domain.id) }
+          
           end
+          
         end
 
         def dns

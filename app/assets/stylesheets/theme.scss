@@ -29,3 +29,24 @@
 .ml-2{
   margin-left: 7px;
 }
+
+.mr-2{
+  margin-right: 7px;
+}
+
+.m-0 {
+  margin:0;
+}
+.pt-5{
+  padding-top:5px;
+}
+
+.disable-box {
+  padding: 3px 7px 6px 7px;
+  border: 1px solid;
+  border-radius: 6px;
+}
+
+.card.disabled {
+	background-color: lightgrey;
+}
