@@ -75,7 +75,7 @@ module Spree
 
           respond_to do |format|
             format.js { render inline: "location.reload();" }
-            format.html { redirect_to  admin_dns_hosted_zones_path }
+            format.html { redirect_to  admin_user_domains_path(deleted_domain_id: @user_domain.id) }
           end
         end
 
