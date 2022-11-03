@@ -10,7 +10,6 @@ module TaskManager
 
         when 'delete_database'
           set_database
-
           delete_database
           
         end 

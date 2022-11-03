@@ -168,12 +168,11 @@ module IspConfig
       @user_database = UserDatabase.find(id)
       
       remote_db = find(@user_database.database_id)
-      
       remote_db = remote_db[:response].response
       database_user_id = remote_db[:database_user_id]
-
-      destroy({db_user_id: database_user_id, id: @user_database.database_id})
       
+      destroy({db_user_id: database_user_id, id: @user_database.database_id})
+    
     end
 
     def find(id)
@@ -184,7 +183,6 @@ module IspConfig
                            primary_id: id
                          }
                        })
-
       formatted_response(response, 'find')
     end
 

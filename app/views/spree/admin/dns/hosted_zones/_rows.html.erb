@@ -8,7 +8,7 @@ p{
 <%user_domains.each do |user_domain|%>
   <% hosted_zone = user_domain.hosted_zone %>
   <% next if hosted_zone.blank?%>
-  <div class="card">
+  <div class="card <%= user_domain.active == false ? 'disabled' : ''%>">
     <div class="card-body">
       <!-- Text -->
       <div class="d-flex" style="justify-content: space-between;">
@@ -24,22 +24,29 @@ p{
       <%= render partial: '/spree/admin/shared/icons/windowsicon' %>
       </span>
       <%end%>
-      <%=link_to hosted_zone.name, "/admin/dns/hosted_zones/zone_overview?zone_name=#{hosted_zone.name}&dns_id=#{hosted_zone.isp_config_host_zone_id}&user_domain_id=#{user_domain.id}"%>
+
+      <% if user_domain.active? %>
+       <%=link_to hosted_zone.name, "/admin/dns/hosted_zones/zone_overview?zone_name=#{hosted_zone.name}&dns_id=#{hosted_zone.isp_config_host_zone_id}&user_domain_id=#{user_domain.id}"%>
+       <%else%>
+        <%= user_domain.domain%>
+       <%end%>
       </p>
       <span class="ml-2 justify-content-end">
 
-      <%if params[:deleted_domain_id].present? && params[:deleted_domain_id].to_i == user_domain.id %>
-         <span class="mr-2 disable-box"> <%=render :partial=> 'spree/admin/shared/icons/delete'%></span>
-      <%else%>
-         <%= link_to  admin_dns_hosted_zone_path(hosted_zone.isp_config_host_zone_id, user_domain_id: user_domain.id),type: 'button', data: {confirm: t('isp_config.host_zone.delete_alert')} , class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete do %>
-         <%=render :partial=> 'spree/admin/shared/icons/delete'%>
-        <% end %>
-      <%end%>
-               
-      <%= link_to 'javascript:void(0);', data: {origin: hosted_zone.name, ns1: user_domain.nameserver1, ns2: user_domain.nameserver2}, class: ' configure-dns-modal-link btn btn-outline-primary btn-size', id: "dns_config_details_#{hosted_zone.name}",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
-        <%= render partial: '/spree/admin/shared/icons/gear' %>
-      <% end %>
+          <%if user_domain.active?%>
+           
+              <%= link_to  admin_dns_hosted_zone_path(hosted_zone.isp_config_host_zone_id, user_domain_id: user_domain.id),type: 'button', data: {confirm: t('isp_config.host_zone.delete_alert')} , class: 'btn btn-outline-danger btn-size','data-toggle': 'tooltip', 'data-placement':'top' ,title: 'Delete',style:"margin-right:5px", method: :delete do %>
+             <%=render :partial=> 'spree/admin/shared/icons/delete'%>
+            <% end %>
+          <%#end%>
+                   
+          <%= link_to 'javascript:void(0);', data: {origin: hosted_zone.name, ns1: user_domain.nameserver1, ns2: user_domain.nameserver2}, class: ' configure-dns-modal-link btn btn-outline-primary btn-size', id: "dns_config_details_#{hosted_zone.name}",'data-toggle': 'tooltip', 'data-placement':'top' , title: 'Configuration Details' do  %>
+            <%= render partial: '/spree/admin/shared/icons/gear' %>
+          <% end %>
+          <%else%>
+            <span class="fe fe-clock disable-box"></span>
         </span>
+        <% end %>
         </div>
     </div>
   </div>
