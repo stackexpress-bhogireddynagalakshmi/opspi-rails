@@ -222,6 +222,10 @@ module Spree
 
     # end  after create callbacks
 
+
+    def remote_email
+      "opspi_#{self.id}@example.com"
+    end
   end
 end
 
