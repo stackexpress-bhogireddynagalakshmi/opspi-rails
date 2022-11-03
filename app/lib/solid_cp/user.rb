@@ -80,7 +80,7 @@ module SolidCp
             "LastName" => user.last_name,
             "Username" => user.login,
             "FirstName" => user.first_name,
-            "Email" => user.email,
+            "Email" => user.remote_email,
             "CompanyName" => user.company_name,
             "HtmlMail" => false
           }, password: get_password

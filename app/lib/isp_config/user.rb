@@ -229,7 +229,7 @@ module IspConfig
           telephone: "",
           mobile: address&.phone,
           "fax": "",
-          email: user.email,
+          email: user.remote_email,
           "internet": "",
           "icq": "",
           web_servers: IspConfig::Config.api_web_server_id(user),
