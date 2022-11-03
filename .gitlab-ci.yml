@@ -164,8 +164,10 @@ deploy-qa:
   only:
     - dev
   tags:
-    - opspi
+    # - opspi
     # - opspi-prod-k8s01
+    - apyl-lab02
+
 
 
 deploy-staging:
@@ -197,5 +199,7 @@ deploy-staging:
     - master
   # when: manual
   tags:
-    - opspi-prod-k8s01
+    # - opspi-prod-k8s01
+    - apyl-lab02
+
 
