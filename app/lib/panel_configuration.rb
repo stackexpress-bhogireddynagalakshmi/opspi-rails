@@ -48,6 +48,11 @@ module PanelConfiguration
     config_value_for(panel_id, name_server_2_key)
   end
 
+  def api_mysql_server_id(user)
+    panel_id = panel_id_for(user)
+    config_value_for(panel_id, mysql_server_key)
+  end
+
   def config_value_for(panel_id, key)
     value = PanelConfig.where(panel_id: panel_id, key: key).last&.value
 

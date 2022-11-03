@@ -219,7 +219,7 @@ module IspConfig
       {
         "client_id": user.isp_config_id,
         "params": {
-          server_id: IspConfig::Config.api_web_server_id(user),
+          server_id: IspConfig::Config.api_mysql_server_id(user),
           type: "mysql",
           parent_domain_id: database_params[:web_domain_id],
           database_name: database_params[:database_name],
