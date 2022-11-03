@@ -92,6 +92,7 @@ module Spree
         end
 
         def database_api
+
           if windows?
             windows_api
           else
@@ -108,7 +109,11 @@ module Spree
         end
 
         def windows?
-          params[:server_type].present? && params[:server_type] == 'windows'
+          return true if  @database.present? && @database.ms_sql2019?
+          
+          return true if params[:server_type].present? && params[:server_type] == 'windows'
+
+          return false
         end
 
         def set_flash
