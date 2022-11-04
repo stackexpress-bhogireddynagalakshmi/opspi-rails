@@ -64,7 +64,7 @@ module IspConfig
       DNS_NAMESERVER_2
     end
 
-    def self.mysql_server__id_key
+    def self.mysql_server_id_key
       ACTIVE_MYSQL_SERVER_ID
     end
 
