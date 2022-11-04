@@ -28,7 +28,7 @@
           <%=render :partial=>'spree/admin/mail/mail_boxes/row', locals: { mailbox: mailbox }%>
         <% end %>
         <% else %>
-          <tr>
+          <tr id="mailbox_no_data">
             <td><label class="form-label table_row_label"> No Mail Boxes Found </label></td>
           </tr>
         <% end %>
