@@ -131,7 +131,7 @@ module IspConfig
 
       def server_params
         {
-          server_id: IspConfig::Config.api_web_server_id(user)
+          server_id: IspConfig::Config.api_mail_server_id(user)
         }
       end
     end

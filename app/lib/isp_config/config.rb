@@ -22,6 +22,7 @@ module IspConfig
     DNS_NAMESERVER_2 = "ISPCONFIG_DNS_SERVER_NS2"
     WEB_SERVER_ID_KEY = "ISP_CONFIG_WEB_SERVER_ID"
     ACTIVE_MYSQL_SERVER_ID = 'ACTIVE_MYSQL_SERVER_ID'
+    ACTIVE_MAIL_SERVER_ID = 'ACTIVE_MAIL_SERVER_ID'
 
     def self.username_key
       USERNAME_KEY
@@ -63,8 +64,12 @@ module IspConfig
       DNS_NAMESERVER_2
     end
 
-    def self.mysql_server_key
+    def self.mysql_server__id_key
       ACTIVE_MYSQL_SERVER_ID
+    end
+
+    def self.mail_server_id_key
+      ACTIVE_MAIL_SERVER_ID
     end
 
     def self.server_type_key

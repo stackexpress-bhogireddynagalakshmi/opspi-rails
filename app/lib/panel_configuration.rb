@@ -50,7 +50,12 @@ module PanelConfiguration
 
   def api_mysql_server_id(user)
     panel_id = panel_id_for(user)
-    config_value_for(panel_id, mysql_server_key)
+    config_value_for(panel_id, mysql_server_id_key)
+  end
+
+   def api_mail_server_id(user)
+    panel_id = panel_id_for(user)
+    config_value_for(panel_id, mail_server_id_key)
   end
 
   def config_value_for(panel_id, key)
