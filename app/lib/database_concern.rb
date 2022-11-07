@@ -8,6 +8,6 @@ module DatabaseConcern
   end
 
   def formatted_db_name(database_name)
-    "#{UserDatabase.database_name_prefix(user)}#{database_name}"
+    "#{UserDatabase.database_name_prefix(user)}#{database_name}".strip
   end
 end

@@ -140,7 +140,7 @@ module Spree
         end
 
         def formatted_db_name(database_name)
-          "#{UserDatabase.database_name_prefix(current_spree_user)}#{database_name}"
+          "#{UserDatabase.database_name_prefix(current_spree_user)}#{database_name}".strip
         end 
 
         def set_database
